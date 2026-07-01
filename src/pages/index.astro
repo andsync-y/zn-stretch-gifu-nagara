@@ -1,0 +1,198 @@
+---
+import Base from '../layouts/Base.astro';
+import PriceHighlight from '../components/PriceHighlight.astro';
+import ReserveCTA from '../components/ReserveCTA.astro';
+import { SITE, BRAND, STAFF, SYMPTOMS } from '../consts';
+
+const title = '岐阜市長良の完全個室パーソナルストレッチ｜全力ストレッチ岐阜長良店';
+const description = '岐阜市長良の完全個室パーソナルストレッチ専門店。マンツーマンで肩こり・腰痛・姿勢のお悩みにアプローチ。初回75%OFF、駐車場10台以上、ヤマダデンキ長良そば。';
+
+const promises = [
+  { t: '完全個室・マンツーマン', d: '人目を気にせず、担当トレーナーとあなたの身体だけに向き合える空間です。' },
+  { t: 'ストレッチ専門', d: 'マッサージや整体とは違う、伸ばして動かすパーソナルストレッチに特化しています。' },
+  { t: '通いやすい立地', d: 'ヤマダデンキ長良のすぐそば。ビル東側に共同駐車場10台以上、車で通えます。' },
+];
+---
+<Base title={title} description={description} path="/">
+  <!-- ①ヒーロー -->
+  <section class="relative overflow-hidden">
+    <div class="container-x grid items-center gap-10 py-14 md:grid-cols-2 md:py-20">
+      <div class="animate-fadeup">
+        <p class="eyebrow">PERSONAL STRETCH ・ GIFU NAGARA</p>
+        <h1 class="mt-4 text-3xl font-black leading-[1.35] sm:text-4xl md:text-[2.7rem]">
+          岐阜市長良の<br class="hidden sm:block" /><span class="marker">完全個室</span>パーソナルストレッチ専門店
+        </h1>
+        <p class="prose-jp mt-6 max-w-xl">
+          肩こり・腰痛・姿勢のお悩みへ。<span class="hand">マンツーマン</span>で、あなたの身体にじっくり向き合います。
+          伸ばして、ゆるめて、動きやすい毎日へ。
+        </p>
+        <div class="mt-7 inline-flex flex-wrap items-baseline gap-2 rounded-xl border border-line bg-offwhite px-5 py-3">
+          <span class="text-sm text-charcoal">初回限定</span>
+          <span class="text-charcoal/60 line-through">13,200円</span>
+          <span aria-hidden="true">→</span>
+          <span class="text-2xl font-black text-amber-700">3,300円</span>
+          <span class="text-sm font-bold text-amber-700">（60分・75%OFF）</span>
+        </div>
+        <div class="mt-7 flex flex-col gap-3 sm:flex-row">
+          <a href={SITE.urls.reserve} target="_blank" rel="noopener" class="btn-amber">初回体験を予約する</a>
+          <a href="/menu" class="btn-outline">料金・メニューを見る</a>
+        </div>
+        <p class="mt-4 text-xs text-charcoal/70">※価格は変更となる場合があります。表示は税込。</p>
+      </div>
+      <div class="animate-fadeup">
+        <img
+          src="/images/placeholder-hero.svg"
+          alt="岐阜市長良の完全個室でパーソナルストレッチを受ける男性のイメージ"
+          width="1600" height="1000" fetchpriority="high" decoding="async"
+          class="w-full rounded-3xl border border-line bg-panel object-cover"
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- ②当店の考え／約束 -->
+  <section class="bg-offwhite">
+    <div class="container-x py-16">
+      <p class="eyebrow">CONCEPT</p>
+      <h2 class="mt-2 max-w-3xl text-2xl font-bold sm:text-3xl">「動ける身体」へ。長良の完全個室で、あなたの一回に全力を。</h2>
+      <p class="prose-jp mt-5 max-w-3xl">
+        デスクワークや立ち仕事、スポーツやゴルフ。頑張るほどに、筋肉はこわばり、動きは重くなりがちです。
+        全力ストレッチ岐阜長良店は、<span class="marker">完全個室・マンツーマン</span>のパーソナルストレッチ専門店。
+        担当トレーナーがあなたの状態に合わせて、深部の筋肉までていねいに伸ばしていきます。
+        素朴で確かな手ごたえを、静かで上質な個室で。
+      </p>
+      <div class="mt-10 grid gap-5 md:grid-cols-3">
+        {promises.map((p) => (
+          <div class="rounded-2xl border border-line bg-base p-6">
+            <p class="font-heading text-lg font-bold">{p.t}</p>
+            <p class="mt-3 text-sm text-charcoal">{p.d}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ③施術の3本柱 -->
+  <section class="container-x py-16">
+    <p class="eyebrow">METHOD</p>
+    <h2 class="mt-2 text-2xl font-bold sm:text-3xl">全力ストレッチの、3つのアプローチ</h2>
+    <p class="mt-4 max-w-3xl text-sm text-charcoal">
+      {BRAND.method}をベースにした、ブランド共通の考え方です。効果には個人差があります。
+    </p>
+    <div class="mt-10 grid gap-6 md:grid-cols-3">
+      {BRAND.pillars.map((p) => (
+        <div class="rounded-2xl border border-line p-7">
+          <span class="hand text-3xl">{p.no}</span>
+          <p class="mt-2 font-heading text-lg font-bold">{p.title}</p>
+          <p class="mt-3 text-sm text-charcoal">{p.body}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- ④症状別への導線 -->
+  <section class="bg-offwhite">
+    <div class="container-x py-16">
+      <p class="eyebrow">SYMPTOMS</p>
+      <h2 class="mt-2 text-2xl font-bold sm:text-3xl">お悩み別のご案内</h2>
+      <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {SYMPTOMS.map((s) => (
+          <a href={`/symptoms/${s.slug}`} class="group rounded-2xl border border-line bg-base p-6 transition hover:border-ink/40">
+            <p class="font-heading text-lg font-bold group-hover:text-amber-700">{s.label}</p>
+            <p class="mt-2 text-sm text-charcoal">{s.desc}</p>
+            <span class="mt-4 inline-block text-sm text-amber-700">詳しく見る →</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑤ブランド実績（ブランド主語） -->
+  <section class="container-x py-16">
+    <div class="rounded-3xl border border-line bg-ink px-6 py-12 text-base sm:px-12">
+      <p class="eyebrow text-base/60">BRAND</p>
+      <h2 class="mt-2 text-2xl font-bold text-base sm:text-3xl">
+        全国約70店舗・メディア掲載の<br class="sm:hidden" />ストレッチブランド
+      </h2>
+      <p class="mt-5 max-w-3xl text-base/85">
+        全力ストレッチは、全国に<span class="hand text-amber">約70店舗</span>を展開するパーソナルストレッチのブランドです。
+        テレビ・雑誌・YouTubeなどで紹介されてきたブランドの考え方とメソッドを、この岐阜長良店でもご体験いただけます。
+      </p>
+      <ul class="mt-7 flex flex-wrap gap-2 text-sm">
+        {BRAND.media.map((m) => (
+          <li class="rounded-full border border-base/25 px-4 py-1.5 text-base/85">{m}</li>
+        ))}
+      </ul>
+      <p class="mt-6 text-xs text-base/50">
+        ※上記はブランド全体（全力ストレッチ）の実績です。当店単独の実績ではありません。メディア名はテキストでの言及です。店舗数の最新値は本部確認のうえ更新します（{BRAND.storeCountPlaceholder}）。
+      </p>
+    </div>
+  </section>
+
+  <!-- ⑥スタッフ紹介 -->
+  <section class="bg-offwhite">
+    <div class="container-x py-16">
+      <p class="eyebrow">STAFF</p>
+      <h2 class="mt-2 text-2xl font-bold sm:text-3xl">担当するトレーナー</h2>
+      <p class="mt-3 text-sm text-charcoal">全員「体感軸調整トレーナー」。女性トレーナーも在籍しています。</p>
+      <div class="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {STAFF.slice(0, 3).map((s) => (
+          <figure class="rounded-2xl border border-line bg-base p-6">
+            <img src="/images/placeholder-staff.svg" alt={`スタッフ ${s.name}（${s.kana}）`} width="600" height="600" loading="lazy" decoding="async" class="aspect-square w-full rounded-xl border border-line bg-panel object-cover" />
+            <figcaption class="mt-4">
+              <p class="font-heading text-lg font-bold">{s.name} <span class="text-sm font-normal text-charcoal">/ {s.kana}</span></p>
+              <p class="mt-1 text-xs text-charcoal/70">{s.role}</p>
+              <p class="hand mt-3 text-[0.95rem] leading-relaxed text-charcoal">{s.word}</p>
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+      <div class="mt-8"><a href="/staff" class="btn-outline">スタッフ全員を見る</a></div>
+    </div>
+  </section>
+
+  <!-- ⑦お客様の声（プレースホルダ） -->
+  <section class="container-x py-16">
+    <p class="eyebrow">VOICE</p>
+    <h2 class="mt-2 text-2xl font-bold sm:text-3xl">お客様の声</h2>
+    <p class="mt-3 max-w-2xl text-sm text-charcoal">ご来店いただいた方の声を、許可のうえ順次掲載します（現在準備中・捏造はしません）。</p>
+    <div class="mt-8 grid gap-5 sm:grid-cols-3">
+      {['トップ_1', 'トップ_2', 'トップ_3'].map((k) => (
+        <figure class="rounded-2xl border border-dashed border-line p-6">
+          <p class="text-xs font-bold text-amber-700">プレースホルダ</p>
+          <blockquote class="mt-2 text-charcoal">{`{{お客様の声_${k}}}`}</blockquote>
+        </figure>
+      ))}
+    </div>
+    <div class="mt-8"><a href="/voice" class="btn-outline">お客様の声のページへ</a></div>
+  </section>
+
+  <!-- ⑧料金・アクセス・予約 -->
+  <section class="bg-offwhite">
+    <div class="container-x grid gap-10 py-16 md:grid-cols-2">
+      <div>
+        <p class="eyebrow">PRICE</p>
+        <h2 class="mt-2 text-2xl font-bold sm:text-3xl">料金</h2>
+        <div class="mt-6"><PriceHighlight /></div>
+      </div>
+      <div>
+        <p class="eyebrow">ACCESS</p>
+        <h2 class="mt-2 text-2xl font-bold sm:text-3xl">アクセス</h2>
+        <div class="mt-6 rounded-2xl border border-line bg-base p-6 text-sm leading-relaxed text-charcoal">
+          <p class="font-bold text-ink">{SITE.brand}</p>
+          <p class="mt-3">{SITE.addressFull}</p>
+          <p class="mt-1">{SITE.landmark}</p>
+          <dl class="mt-4 grid grid-cols-[6rem_1fr] gap-y-2">
+            <dt class="text-charcoal/70">電話</dt><dd><a href={`tel:${SITE.telLink}`} class="underline">{SITE.tel}</a></dd>
+            <dt class="text-charcoal/70">営業時間</dt><dd>{SITE.hours}</dd>
+            <dt class="text-charcoal/70">定休日</dt><dd>{SITE.closed}</dd>
+            <dt class="text-charcoal/70">駐車場</dt><dd>{SITE.parking}</dd>
+          </dl>
+          <a href="/access" class="btn-outline mt-6 w-full">地図・詳しいアクセス</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <ReserveCTA />
+</Base>
