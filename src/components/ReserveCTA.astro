@@ -1,0 +1,21 @@
+---
+import { SITE } from '../consts';
+export interface Props { title?: string; sub?: string; }
+const {
+  title = 'まずは初回体験から',
+  sub = '完全個室・マンツーマン。人目を気にせず、あなたの身体とじっくり向き合えます。',
+} = Astro.props;
+---
+<section class="bg-ink text-base">
+  <div class="container-x py-16 text-center">
+    <p class="eyebrow text-base/60">RESERVE</p>
+    <h2 class="mx-auto mt-3 max-w-2xl text-2xl font-bold text-base sm:text-3xl">{title}</h2>
+    <p class="mx-auto mt-4 max-w-xl text-base/80">{sub}</p>
+    <div class="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+      <a href={SITE.urls.reserve} target="_blank" rel="noopener" class="btn-amber w-full sm:w-auto">ホットペッパーで予約</a>
+      <a href={SITE.urls.line} target="_blank" rel="noopener" class="btn-outline w-full !border-base/40 !bg-transparent !text-base hover:!border-base sm:w-auto">LINEで相談・予約</a>
+      <a href={`tel:${SITE.telLink}`} class="btn-outline w-full !border-base/40 !bg-transparent !text-base hover:!border-base sm:w-auto">電話：{SITE.tel}</a>
+    </div>
+    <p class="mt-5 text-sm text-base/60">受付時間 {SITE.hours}／{SITE.landmark}</p>
+  </div>
+</section>

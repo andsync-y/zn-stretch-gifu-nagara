@@ -1,0 +1,23 @@
+---
+export interface QA { q: string; a: string; }
+export interface Props { items: QA[]; heading?: string; }
+const { items, heading = 'よくあるご質問' } = Astro.props;
+---
+<section class="container-x py-14" aria-labelledby="faq-heading">
+  <p class="eyebrow">FAQ</p>
+  <h2 id="faq-heading" class="mt-2 text-2xl font-bold sm:text-3xl">{heading}</h2>
+  <div class="mt-8 divide-y divide-line border-y border-line">
+    {items.map((qa) => (
+      <details class="group py-5">
+        <summary class="flex cursor-pointer list-none items-start gap-3 font-bold">
+          <span class="hand text-lg leading-none">Q</span>
+          <span class="flex-1">{qa.q}</span>
+          <span class="ml-2 shrink-0 text-amber transition group-open:rotate-45" aria-hidden="true">＋</span>
+        </summary>
+        <div class="prose-jp mt-4 pl-7">
+          <p>{qa.a}</p>
+        </div>
+      </details>
+    ))}
+  </div>
+</section>

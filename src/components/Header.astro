@@ -1,0 +1,34 @@
+---
+import { SITE, SYMPTOMS } from '../consts';
+---
+<header class="sticky top-0 z-40 border-b border-line bg-base/95 backdrop-blur">
+  <div class="container-x flex items-center justify-between gap-4 py-3">
+    <a href="/" class="flex items-baseline gap-2" aria-label={`${SITE.brand} トップへ`}>
+      <span class="font-heading text-lg font-black tracking-tight sm:text-xl">全力ストレッチ</span>
+      <span class="text-xs text-charcoal sm:text-sm">岐阜長良店</span>
+    </a>
+
+    <nav class="hidden items-center gap-6 lg:flex" aria-label="メインナビゲーション">
+      <a href="/symptoms" class="text-sm font-medium hover:text-amber-700">お悩み別</a>
+      <a href="/menu" class="text-sm font-medium hover:text-amber-700">メニュー・料金</a>
+      <a href="/staff" class="text-sm font-medium hover:text-amber-700">スタッフ</a>
+      <a href="/voice" class="text-sm font-medium hover:text-amber-700">お客様の声</a>
+      <a href="/access" class="text-sm font-medium hover:text-amber-700">アクセス</a>
+      <a href={SITE.urls.reserve} target="_blank" rel="noopener" class="btn-amber !px-5 !py-2.5 text-sm">初回予約</a>
+    </nav>
+
+    <a href={SITE.urls.reserve} target="_blank" rel="noopener" class="btn-amber !px-4 !py-2 text-sm lg:hidden">予約</a>
+  </div>
+
+  <!-- モバイル用の横スクロール・サブナビ（JSなしで到達性確保） -->
+  <nav class="border-t border-line lg:hidden" aria-label="お悩み別ナビゲーション">
+    <ul class="container-x flex gap-4 overflow-x-auto py-2 text-sm">
+      <li><a href="/symptoms" class="whitespace-nowrap font-medium">お悩み別</a></li>
+      {SYMPTOMS.map((s) => (
+        <li><a href={`/symptoms/${s.slug}`} class="whitespace-nowrap text-charcoal">{s.short}</a></li>
+      ))}
+      <li><a href="/menu" class="whitespace-nowrap text-charcoal">料金</a></li>
+      <li><a href="/access" class="whitespace-nowrap text-charcoal">アクセス</a></li>
+    </ul>
+  </nav>
+</header>

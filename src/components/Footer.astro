@@ -1,0 +1,50 @@
+---
+import { SITE, SYMPTOMS } from '../consts';
+---
+<footer class="mt-24 border-t border-line bg-offwhite">
+  <div class="container-x grid gap-10 py-14 md:grid-cols-3">
+    <div>
+      <p class="font-heading text-lg font-black">全力ストレッチ岐阜長良店</p>
+      <p class="mt-3 text-sm text-charcoal">{SITE.business}</p>
+      <address class="mt-4 not-italic text-sm leading-relaxed text-charcoal">
+        {SITE.addressFull}<br />
+        TEL：<a href={`tel:${SITE.telLink}`} class="underline">{SITE.tel}</a><br />
+        営業時間：{SITE.hours}／定休日：{SITE.closed}<br />
+        駐車場：{SITE.parking}
+      </address>
+      <p class="mt-4 text-xs text-charcoal/70">運営：{SITE.operator}（代表取締役 {SITE.representative}）</p>
+    </div>
+
+    <nav aria-label="お悩み別リンク">
+      <p class="eyebrow">SYMPTOMS</p>
+      <ul class="mt-4 space-y-2 text-sm">
+        {SYMPTOMS.map((s) => (
+          <li><a href={`/symptoms/${s.slug}`} class="text-charcoal hover:text-amber-700">{s.label}</a></li>
+        ))}
+      </ul>
+    </nav>
+
+    <nav aria-label="店舗情報リンク">
+      <p class="eyebrow">INFORMATION</p>
+      <ul class="mt-4 space-y-2 text-sm">
+        <li><a href="/menu" class="text-charcoal hover:text-amber-700">メニュー・料金</a></li>
+        <li><a href="/staff" class="text-charcoal hover:text-amber-700">スタッフ紹介</a></li>
+        <li><a href="/voice" class="text-charcoal hover:text-amber-700">お客様の声</a></li>
+        <li><a href="/access" class="text-charcoal hover:text-amber-700">アクセス・店舗案内</a></li>
+        <li><a href="/reserve" class="text-charcoal hover:text-amber-700">ご予約について</a></li>
+      </ul>
+      <p class="mt-6 flex flex-wrap gap-3 text-sm">
+        <a href={SITE.urls.instagram} target="_blank" rel="noopener" class="underline">Instagram</a>
+        <a href={SITE.urls.line} target="_blank" rel="noopener" class="underline">LINE</a>
+        <a href={SITE.urls.reserve} target="_blank" rel="noopener" class="underline">ホットペッパー予約</a>
+      </p>
+    </nav>
+  </div>
+
+  <div class="border-t border-line">
+    <div class="container-x flex flex-col items-start justify-between gap-2 py-5 text-xs text-charcoal/70 sm:flex-row sm:items-center">
+      <p>&copy; {new Date().getFullYear()} 全力ストレッチ岐阜長良店 / {SITE.operator}</p>
+      <p>岐阜市長良の完全個室パーソナルストレッチ</p>
+    </div>
+  </div>
+</footer>
