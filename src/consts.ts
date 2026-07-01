@@ -1,0 +1,124 @@
+// ============================================================
+// 全力ストレッチ岐阜長良店 — サイト共通データ
+// 既知の実データはここに集約。未確定は {{...}} プレースホルダ。
+// ============================================================
+
+export const SITE = {
+  brand: '全力ストレッチ岐阜長良店',
+  brandShort: '全力ストレッチ 岐阜長良店',
+  operator: '株式会社ANDSYNC',
+  representative: '多和田 雄仁',
+  area: '岐阜県岐阜市 長良エリア',
+  business: '完全個室のパーソナルストレッチ専門店',
+  // NAP（Googleビジネスプロフィールと完全一致させること）
+  postalCode: '502-0071', // ※要確認プレースホルダ相当。実郵便番号を morning-todo で確定
+  addressRegion: '岐阜県',
+  addressLocality: '岐阜市',
+  streetAddress: '長良東2-37 RSDビル2F南',
+  addressFull: '岐阜県岐阜市長良東2-37 RSDビル2F南',
+  tel: '058-215-5835',
+  telLink: '+81582155835',
+  hours: '10:00–22:00',
+  hoursOpen: '10:00',
+  hoursClose: '22:00',
+  closed: '不定休',
+  parking: 'ビル東側に10台以上の共同駐車場あり',
+  landmark: 'ヤマダデンキ テックランド岐阜長良のすぐそば',
+  openedOn: '2026年6月20日',
+  // 緯度経度は住所からGoogleマップで取得して差し替え（morning-todo）
+  geo: {
+    lat: '{{緯度}}',
+    lng: '{{経度}}',
+  },
+  // 外部URL（実データ）
+  urls: {
+    reserve: 'https://beauty.hotpepper.jp/kr/slnH000806541/?vos=cpahpbprosmaf131118006',
+    instagram: 'https://www.instagram.com/zngifunagara/',
+    instagramHandle: '@zngifunagara',
+    line: 'https://lin.ee/XyYJkAc',
+    lineHandle: '@208dxmfr',
+  },
+};
+
+// 料金（※変更の可能性あり・確定前）
+export const PRICING = {
+  note: '価格は変更となる場合があります。',
+  min60: {
+    label: '60分',
+    normal: '13,200円',
+    first: '3,300円',
+    discount: '初回75%OFF',
+  },
+  min90: {
+    label: '90分',
+    normal: '19,800円',
+    first: '4,900円',
+    discount: '初回75%OFF',
+  },
+  priceRange: '¥¥',
+};
+
+// ブランド実績（§1.5：ブランド主語で。長良店単独の数字にしない。逐語コピー禁止）
+export const BRAND = {
+  storeCount: '全国約70店舗', // 正確な数は {{本部_店舗数}} で確認
+  storeCountPlaceholder: '{{本部_店舗数}}',
+  // メディアはテキスト言及のみ（ロゴ・タレント写真の無断転用禁止）
+  media: [
+    'テレビ東京「出没！アド街ック天国」',
+    'フジテレビ「アウト×デラックス」',
+    'YouTube（ヒカル氏の動画）',
+    'ゴルフ雑誌「ALBA」',
+    'ウェルビーイングメディア「Wellulu」',
+  ],
+  method: '元格闘家オーナー・阿佐美ザウルス氏が考案した“ザウルス式”体幹軸調整ストレッチ',
+  // 施術の3本柱（ブランド共通コンセプト・効能は断定しない）
+  pillars: [
+    {
+      no: '01',
+      title: '骨盤へのアプローチ',
+      body: 'からだの土台となる骨盤まわりの筋肉にアプローチし、姿勢の軸を整えていきます。',
+    },
+    {
+      no: '02',
+      title: '猫背・巻き肩へのアプローチ',
+      body: '肩甲骨まわりの可動域や、内側に入りやすい肩の状態にアプローチします。',
+    },
+    {
+      no: '03',
+      title: '筋膜ほぐし＋深層筋ストレッチ',
+      body: '表層の筋膜をやさしくほぐしながら、届きにくい深部の筋肉までストレッチします。',
+    },
+  ],
+};
+
+// スタッフ（実在。全員「体感軸調整トレーナー」。一言は生成済み・薬機法調整済み）
+export const STAFF = [
+  { name: 'AINA', kana: 'アイナ', role: '体感軸調整トレーナー', word: '頑張るお身体こそ、しっかりゆるめて軽く。日々を動きやすくするお手伝いをします。' },
+  { name: 'DAYAN', kana: 'ダヤン', role: '体感軸調整トレーナー', word: '伸ばして、整える。無理なく続けられる健康な身体づくりを一緒に。' },
+  { name: 'HANA', kana: 'ハナ', role: '体感軸調整トレーナー', word: 'スポーツやゴルフの動きが、もっと快適に。可動域からコンディションを底上げします。' },
+  { name: 'MIYUKA', kana: 'ミユカ', role: '体感軸調整トレーナー', word: 'しっかり効かせる施術と、ほっと落ち着く時間。その両方を大切にしています。' },
+  { name: 'KIYO', kana: 'キヨ', role: '体感軸調整トレーナー', word: 'ただ整えるだけでなく、動ける身体へ。姿勢から軽やかさを引き出します。' },
+  { name: 'AYU', kana: 'アユ', role: '体感軸調整トレーナー', word: '「来てよかった」のひと言を全力で。一回一回、丁寧に向き合います。' },
+  { name: 'KAYO', kana: 'カヨ', role: '体感軸調整トレーナー', word: 'つらい肩や腰のお疲れに。丁寧なカウンセリングで、今の状態にじっくり向き合います。' },
+];
+
+// 症状ページのメタ情報（一覧・内部リンク・パンくずに使用。本文は各ページで書き分け）
+export const SYMPTOMS = [
+  { slug: 'katakori', label: '肩こり', short: '肩こり', desc: 'デスクワークや立ち仕事で重くなった肩・首まわりへ。' },
+  { slug: 'youtsu', label: '腰痛・お尻/脚の張り', short: '腰痛', desc: '腰の重だるさや、お尻・太もも裏のこわばりが気になる方へ。' },
+  { slug: 'kubi-ganseihiro', label: '首こり・眼精疲労', short: '首こり・眼精疲労', desc: '首すじの張りや、目の奥の疲れが気になる方へ。' },
+  { slug: 'mukumi', label: 'むくみ・冷え', short: 'むくみ・冷え', desc: '脚の重さやめぐりの停滞感が気になる方へ。' },
+  { slug: 'jiritsu', label: '疲れ・睡眠・リラックス', short: '疲れ・睡眠', desc: '抜けにくい疲れや、休んだ気がしない毎日に。' },
+  { slug: 'shisei', label: '姿勢・猫背', short: '姿勢・猫背', desc: '丸まりがちな背中や巻き肩の姿勢が気になる方へ。' },
+  { slug: 'sports', label: 'スポーツ後のケア・柔軟性', short: 'スポーツケア', desc: 'ゴルフやスポーツのあとのケア、柔軟性を高めたい方へ。' },
+];
+
+// sameAs（構造化データ用）
+export const SAME_AS = [
+  SITE.urls.instagram,
+  SITE.urls.line,
+  SITE.urls.reserve,
+  // GBP・エキテン等が発行されたら追記: '{{GoogleビジネスプロフィールURL}}', '{{エキテンURL}}'
+];
+
+export const LAST_UPDATED = '2026-07-01';

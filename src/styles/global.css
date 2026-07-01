@@ -1,0 +1,83 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-base text-ink font-sans;
+    /* 30-60代男性ターゲット：本文16px以上・行間ゆったり・高コントラスト */
+    font-size: 16px;
+    line-height: 1.9;
+    letter-spacing: 0.01em;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4 {
+    @apply font-heading text-ink;
+    line-height: 1.5;
+    letter-spacing: 0.02em;
+  }
+
+  a {
+    color: inherit;
+  }
+
+  :focus-visible {
+    outline: 3px solid #FF9C46;
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  .container-x {
+    @apply mx-auto w-full max-w-content px-5 sm:px-8;
+  }
+
+  /* 英語の小見出しラベル */
+  .eyebrow {
+    @apply font-heading text-xs tracking-[0.28em] text-charcoal/70 font-bold uppercase;
+  }
+
+  /* 手書きアクセント（骨太なマーカー/メモ的。ガーリーに振らない） */
+  .hand {
+    @apply font-hand text-amber;
+    font-weight: 400;
+  }
+
+  /* アンバー下線マーカー（手書き強調・1画面1〜2箇所） */
+  .marker {
+    background: linear-gradient(transparent 62%, rgba(255, 156, 70, 0.38) 62%);
+    padding: 0 0.05em;
+  }
+
+  /* CTA：アンバー */
+  .btn-amber {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-amber px-7 py-4 text-base font-bold text-ink shadow-sm transition hover:bg-amber-600 focus:bg-amber-600;
+  }
+
+  /* CTA：黒ベタ */
+  .btn-ink {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-ink px-7 py-4 text-base font-bold text-base transition hover:bg-charcoal;
+  }
+
+  .btn-outline {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-ink/25 bg-base px-7 py-4 text-base font-bold text-ink transition hover:border-ink/60;
+  }
+
+  .prose-jp p {
+    @apply mb-5 text-[1.0625rem] leading-[2] text-charcoal;
+  }
+  .prose-jp p:last-child {
+    @apply mb-0;
+  }
+}
