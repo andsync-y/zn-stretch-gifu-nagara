@@ -1,0 +1,37 @@
+# 全力ストレッチ岐阜長良店 robots.txt
+# 主要検索クローラ＋AI検索クローラを許可（AIO/LLMO/GEO対応）
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# --- AI / LLM 検索クローラ ---
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+# その他すべて許可
+User-agent: *
+Allow: /
+
+# サイトマップ（本番ドメイン確定後に astro.config.mjs の site を差し替えると自動で正しいURLになる）
+Sitemap: https://example-zn-gifu-nagara.pages.dev/sitemap-index.xml
