@@ -79,7 +79,6 @@ wrangler pages deploy dist --project-name=zn-stretch-gifu-nagara
 
 | プレースホルダ | 何を入れる | 差し込む場所 |
 |---|---|---|
-| `{{緯度}}` `{{経度}}` | Googleマップで住所検索して取得する緯度・経度 | `src/consts.ts` の `SITE.geo`（LocalBusiness schema・/accessに反映） |
 | `{{お客様の声_◯◯_n}}` | 実際にいただいた感想（**許可のうえ・捏造禁止**） | 各症状ページ・`/voice`・トップ |
 | `{{スタッフ_写真}}` | スタッフの実写真（webp推奨） | `public/images/placeholder-staff.svg` を差し替え |
 | `{{スタッフ_経歴_（氏名）}}` | 確認できたスタッフの経歴・資格（**創作禁止**） | `/staff` |

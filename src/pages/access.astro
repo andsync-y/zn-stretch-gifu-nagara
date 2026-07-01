@@ -48,9 +48,14 @@ const breadcrumb = {
     </div>
 
     <div>
-      <img src="/images/placeholder-map.svg" alt="全力ストレッチ岐阜長良店の周辺地図（岐阜市長良・ヤマダデンキ長良そば）" width="1200" height="700" loading="lazy" decoding="async" class="w-full rounded-2xl border border-line bg-panel object-cover" />
+      <iframe
+        src={`https://www.google.com/maps?q=${SITE.geo.lat},${SITE.geo.lng}&z=17&output=embed`}
+        title="全力ストレッチ岐阜長良店の周辺地図（岐阜市長良・ヤマダデンキ長良そば）"
+        width="1200" height="700" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen
+        class="aspect-[12/7] h-auto w-full rounded-2xl border border-line bg-panel"
+      ></iframe>
       <p class="mt-2 text-xs text-charcoal/60">
-        ※本番では緯度経度（{SITE.geo.lat} / {SITE.geo.lng}）取得後にGoogleマップ埋め込みへ差し替え予定。
+        地図が表示されない場合は「Googleマップで開く」ボタンをご利用ください。
       </p>
     </div>
   </section>

@@ -25,10 +25,10 @@ export const SITE = {
   parking: 'ビル東側に10台以上の共同駐車場あり',
   landmark: 'ヤマダデンキ テックランド岐阜長良のすぐそば',
   openedOn: '2026年6月20日',
-  // 緯度経度は住所からGoogleマップで取得して差し替え（morning-todo）
+  // 緯度経度（Googleマップ取得済み・実データ）
   geo: {
-    lat: '{{緯度}}',
-    lng: '{{経度}}',
+    lat: 35.447547,
+    lng: 136.784403,
   },
   // 外部URL（実データ）
   urls: {
