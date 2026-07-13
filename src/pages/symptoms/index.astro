@@ -2,7 +2,6 @@
 import Base from '../../layouts/Base.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import ReserveCTA from '../../components/ReserveCTA.astro';
-import SymptomIcon from '../../components/SymptomIcon.astro';
 import { SYMPTOMS } from '../../consts';
 
 const title = 'お悩み別のご案内｜岐阜市長良の完全個室パーソナルストレッチ専門店 全力ストレッチ岐阜長良店';
@@ -37,7 +36,6 @@ const itemList = {
       {SYMPTOMS.map((s, i) => (
         <a href={`/symptoms/${s.slug}`} class="group relative flex flex-col overflow-hidden border-t border-ink pt-6 no-underline sm:pt-7">
           <span class="absolute left-0 top-0 h-[3px] w-0 bg-[#92745e] transition-all duration-500 group-hover:w-full" aria-hidden="true"></span>
-          <span class="mb-5 block h-[88px] w-[88px] transition-transform duration-500 group-hover:-rotate-3 group-hover:scale-105 sm:h-[104px] sm:w-[104px]"><SymptomIcon slug={s.slug} /></span>
           <span class="mb-2 font-script text-[9px] font-extrabold tracking-[0.18em] text-[#92745e]">{String(i + 1).padStart(2, '0')}</span>
           <span class="mb-2 text-[17px] font-black leading-[1.5] sm:text-[20px]">{s.label}</span>
           <span class="mb-4 flex-1 text-[12px] leading-[1.9] text-sub sm:text-[14px]">{s.desc}</span>

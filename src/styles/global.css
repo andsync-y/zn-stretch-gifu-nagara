@@ -167,26 +167,6 @@
     overflow: hidden;
   }
 
-  .subpage-hero::before {
-    content: "MOVE";
-    position: absolute;
-    z-index: -1;
-    top: 44px;
-    right: -0.08em;
-    color: transparent;
-    -webkit-text-stroke: 1px rgba(21,23,25,0.12);
-    font-family: "Archivo Black", "Noto Sans JP", sans-serif;
-    font-size: clamp(120px, 22vw, 350px);
-    letter-spacing: -0.08em;
-    line-height: 0.8;
-    pointer-events: none;
-  }
-
-  .subpage-hero > * {
-    position: relative;
-    z-index: 1;
-  }
-
   .prose-jp p {
     @apply mb-5 text-[1.0625rem] leading-[2.1] text-sub;
   }
