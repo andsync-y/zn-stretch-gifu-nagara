@@ -46,43 +46,42 @@ const marqueeItems = [
 ];
 ---
 <Base title={title} description={description} path="/">
-  <!-- HERO -->
-  <section class="relative overflow-hidden px-5 pb-24 pt-10 sm:px-10 sm:pb-36 sm:pt-16 xl:px-14">
-    <div class="mx-auto max-w-[1440px]">
-      <div class="relative lg:min-h-[820px]">
-        <!-- 大きなブリード写真（PC:右、SP:上） -->
-        <div class="relative mb-10 ml-auto h-[420px] w-[calc(100%-28px)] lg:absolute lg:right-[-2.5rem] lg:top-0 lg:mb-0 lg:h-[820px] lg:w-[600px] xl:right-[-3.5rem] xl:w-[640px]">
-          <img src={PHOTOS.hero} alt="完全個室で行うパーソナルストレッチの施術シーン" width="1280" height="1720" fetchpriority="high" decoding="async" class="h-full w-full object-cover" style="object-position:center 74%" />
-          <CircleBadge class="absolute -bottom-14 -left-6 h-[132px] w-[132px] lg:-left-20 lg:bottom-6 lg:h-[220px] lg:w-[220px]" />
-        </div>
+  <!-- HERO（ファーストビュー1画面完結のコンパクト構成） -->
+  <section class="relative overflow-hidden px-5 pb-20 pt-8 sm:px-10 sm:pt-12 xl:px-14">
+    <div class="mx-auto grid max-w-[1440px] items-start gap-8 lg:grid-cols-[1fr_460px] lg:gap-14 xl:grid-cols-[1fr_500px]">
+      <div class="order-2 lg:order-1 lg:pt-4">
+        <h1 class="mb-5 text-[24px] font-black leading-[1.7] tracking-[0.04em] sm:text-[30px] lg:text-[36px]">
+          平日はタフに、週末はアクティブに。<br />本気の大人のための<span class="frame-word">身体改革</span>。
+          <span class="sr-only">｜全力ストレッチ岐阜長良店（岐阜市長良の完全個室パーソナルストレッチ専門店）</span>
+        </h1>
+        <p class="mb-8 text-[14px] leading-[2] tracking-[0.04em] text-muted sm:text-[15px]">
+          岐阜市長良の完全個室・マンツーマン、パーソナルストレッチ専門店。<br class="hidden sm:block" />Private &amp; personal stretch studio for your working body.
+        </p>
 
-        <div class="max-w-[760px] pt-2 lg:pt-10">
-          <h1 class="mb-10 mt-10 lg:mb-16 lg:mt-0">
-            <img src="/images/logo.png" alt="全力ストレッチ岐阜長良店｜岐阜市長良の完全個室パーソナルストレッチ専門店" width="1200" height="307" class="block h-auto w-[300px] sm:w-[440px] lg:w-[560px]" />
-          </h1>
-          <p class="mb-5 text-[21px] font-black leading-[1.75] tracking-[0.04em] sm:text-[28px] lg:text-[34px]">
-            平日はタフに、週末はアクティブに。<br />本気の大人のための<span class="frame-word">身体改革</span>。
-          </p>
-          <p class="mb-10 text-[15px] leading-[2.2] tracking-[0.04em] text-muted sm:mb-12 sm:text-base">
-            岐阜市長良の完全個室・マンツーマン、パーソナルストレッチ専門店。<br class="hidden sm:block" />Private &amp; personal stretch studio for your working body.
-          </p>
-
-          <div class="mb-10 flex max-w-[560px] flex-col gap-2">
-            <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-              <span class="text-[14px] font-bold tracking-[0.1em] sm:text-[17px]">初回限定 お試しコース 60分</span>
-              <span class="text-[15px] text-muted line-through sm:text-lg">13,200円</span>
-              <span class="ml-auto font-display text-[42px] font-extrabold leading-none sm:text-[46px]">¥3,300</span>
-            </div>
-            <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-              <span class="text-[14px] font-bold tracking-[0.1em] sm:text-[17px]">初回限定 全身ケアコース 90分</span>
-              <span class="text-[15px] text-muted line-through sm:text-lg">19,800円</span>
-              <span class="ml-auto font-display text-[42px] font-extrabold leading-none sm:text-[46px]">¥4,900</span>
-            </div>
+        <p class="mb-3 inline-block border-2 border-ink px-3 py-1 text-[12px] font-black tracking-[0.14em]">初回限定</p>
+        <div class="mb-8 flex max-w-[520px] flex-col gap-1.5">
+          <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+            <span class="w-[8em] shrink-0 whitespace-nowrap text-[13px] font-bold tracking-[0.06em] sm:text-[15px]">お試しコース</span>
+            <span class="text-[13px] font-bold sm:text-[15px]">60分</span>
+            <span class="text-[13px] text-muted line-through sm:text-[15px]">13,200円</span>
+            <span class="ml-auto font-display text-[38px] font-extrabold leading-none sm:text-[44px]">¥3,300</span>
           </div>
-
-          <a href={SITE.urls.reserve} target="_blank" rel="noopener" class="btn-ink block w-full text-center sm:inline-block sm:w-auto sm:px-[4.5rem] sm:py-6 sm:text-[19px] sm:tracking-[0.18em]">WEB予約はこちら</a>
-          <p class="mt-4 text-xs text-muted">※税込。初回価格はおひとり様1回限りです。価格は変更となる場合があります。</p>
+          <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+            <span class="w-[8em] shrink-0 whitespace-nowrap text-[13px] font-bold tracking-[0.06em] sm:text-[15px]">全身ケアコース</span>
+            <span class="text-[13px] font-bold sm:text-[15px]">90分</span>
+            <span class="text-[13px] text-muted line-through sm:text-[15px]">19,800円</span>
+            <span class="ml-auto font-display text-[38px] font-extrabold leading-none sm:text-[44px]">¥4,900</span>
+          </div>
         </div>
+
+        <a href={SITE.urls.reserve} target="_blank" rel="noopener" class="btn-ink block w-full text-center sm:inline-block sm:w-auto sm:px-14 sm:py-5 sm:text-[16px] sm:tracking-[0.18em]">WEB予約はこちら</a>
+        <p class="mt-3 text-[11px] text-muted">※税込。初回価格はおひとり様1回限りです。価格は変更となる場合があります。</p>
+      </div>
+
+      <!-- 写真（右・コンパクト） -->
+      <div class="relative order-1 h-[300px] w-[calc(100%-20px)] justify-self-end sm:h-[380px] lg:order-2 lg:h-[560px] lg:w-full">
+        <img src={PHOTOS.hero} alt="完全個室で行うパーソナルストレッチの施術シーン" width="1280" height="1720" fetchpriority="high" decoding="async" class="h-full w-full object-cover" style="object-position:center 30%" />
+        <CircleBadge class="absolute -bottom-12 -left-5 h-[110px] w-[110px] lg:-left-16 lg:bottom-[-40px] lg:h-[180px] lg:w-[180px]" />
       </div>
     </div>
   </section>
