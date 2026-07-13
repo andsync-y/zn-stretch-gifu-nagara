@@ -57,7 +57,7 @@ const FIRST_TICKETS: { min: string; note: string; items: (TicketItem & { normal:
     items: [
       { n: '3回券', normal: '36,300', price: '29,040', per: '9,680' },
       { n: '5回券', normal: '55,000', price: '44,000', per: '8,800' },
-      { n: '10回券', normal: '104,500', price: '88,000', per: '8,800', tag: 'いちばん選ばれています' },
+      { n: '10回券', normal: '104,500', price: '88,000', per: '8,800' },
       { n: '15回券', normal: '148,500', price: '132,000', per: '8,800' },
     ],
   },
@@ -66,7 +66,7 @@ const FIRST_TICKETS: { min: string; note: string; items: (TicketItem & { normal:
     items: [
       { n: '3回券', normal: '54,450', price: '43,560', per: '14,520' },
       { n: '5回券', normal: '82,500', price: '66,000', per: '13,200' },
-      { n: '10回券', normal: '154,000', price: '132,000', per: '13,200', tag: 'いちばん選ばれています' },
+      { n: '10回券', normal: '154,000', price: '132,000', per: '13,200' },
       { n: '15回券', normal: '222,750', price: '198,000', per: '13,200' },
     ],
   },
@@ -127,36 +127,37 @@ const breadcrumb = {
         続けて通われる方には、都度払いよりお得な回数券をご用意しています。男性コースは、初回ご来店時にご新規様キャンペーン価格（最大20%OFF）でご購入いただけます。
       </p>
 
-      <!-- タブ切り替え（デフォルト＝初回特別回数券） -->
-      <div role="tablist" aria-label="回数券の種類" class="mb-10 flex flex-wrap gap-3">
-        <button id="tab-first" type="button" role="tab" aria-selected="true" aria-controls="panel-first"
-          class="ticket-tab bg-ink px-7 py-3.5 text-[14px] font-black tracking-[0.08em] text-paper sm:px-9 sm:text-[15px]">
-          初回特別回数券 <span class="ml-1 rounded bg-amber px-2 py-0.5 text-[10px] font-bold text-ink">最大20%OFF</span>
-        </button>
+      <!-- 男性料金：セグメント型タブ（デフォルト＝初回特別回数券） -->
+      <h3 class="mb-6 border-l-4 border-ink pl-4 text-[20px] font-black sm:text-[24px]">男性料金</h3>
+      <div role="tablist" aria-label="男性回数券の種類" class="mb-8 flex w-full max-w-[720px] border border-ink">
         <button id="tab-regular" type="button" role="tab" aria-selected="false" aria-controls="panel-regular"
-          class="ticket-tab border border-ink bg-paper px-7 py-3.5 text-[14px] font-black tracking-[0.08em] text-ink sm:px-9 sm:text-[15px]">
+          class="flex-1 bg-paper px-3 py-3.5 text-[13px] font-black tracking-[0.06em] text-ink sm:text-[15px]">
           通常回数券
+        </button>
+        <button id="tab-first" type="button" role="tab" aria-selected="true" aria-controls="panel-first"
+          class="flex-1 bg-ink px-3 py-3.5 text-[13px] font-black tracking-[0.06em] text-paper sm:text-[15px]">
+          初回特別回数券 <span class="ml-1 rounded bg-amber px-1.5 py-0.5 text-[10px] font-bold text-ink">最大20%OFF</span>
         </button>
       </div>
 
-      <!-- パネル1：初回特別回数券（デフォルト表示・男性コース） -->
+      <!-- パネル1：初回特別回数券（デフォルト表示） -->
       <div id="panel-first" role="tabpanel" aria-labelledby="tab-first">
-        <div class="border-2 border-ink bg-ink p-6 text-inkpaper sm:p-10">
+        <div class="border-2 border-ink bg-ink p-5 text-inkpaper sm:p-10">
           <p class="mb-2 inline-block bg-amber px-3 py-1 text-[12px] font-black tracking-[0.1em] text-ink">ご新規様キャンペーン 最大20%OFF</p>
-          <h3 class="mb-1 text-[22px] font-black text-white sm:text-[26px]">初回特別価格の回数券（男性コース）</h3>
-          <p class="mb-10 text-[13px] text-inkmuted">初回ご来店のお客様限定。女性コースの回数券は「通常回数券」タブをご覧ください。</p>
-          <div class="grid gap-10 lg:grid-cols-2 lg:gap-16">
+          <h4 class="mb-1 text-[20px] font-black text-white sm:text-[26px]">初回特別価格の回数券（男性コース）</h4>
+          <p class="mb-8 text-[13px] text-inkmuted sm:mb-10">初回ご来店のお客様限定です。</p>
+          <div class="grid gap-8 lg:grid-cols-2 lg:gap-16">
             {FIRST_TICKETS.map((row) => (
               <div>
                 <p class="mb-1 border-l-4 border-amber pl-3 text-[17px] font-black text-white">{row.min}</p>
-                <p class="mb-3 text-[12px] leading-[1.9] text-inkmuted">{row.note}</p>
+                <p class="mb-2 text-[12px] leading-[1.9] text-inkmuted">{row.note}</p>
                 <div class="border-t border-inkpaper/40">
                   {row.items.map((t) => (
-                    <div class="flex flex-wrap items-baseline gap-x-3 gap-y-0.5 border-b border-inkpaper/20 py-2.5 px-1">
+                    <div class="flex flex-wrap items-baseline gap-x-3 gap-y-0.5 border-b border-inkpaper/20 py-2 px-1">
                       <span class="w-16 text-[14px] font-black text-white">{t.n}</span>
                       {t.tag && <span class="rounded bg-amber px-2 py-0.5 text-[10px] font-bold text-ink">{t.tag}</span>}
                       <span class="text-[12px] text-inkfaint line-through">{t.normal}円</span>
-                      <span class="ml-auto text-[20px] font-black leading-none text-amber">{t.price}<span class="text-[12px] font-bold">円</span></span>
+                      <span class="ml-auto text-[19px] font-black leading-none text-amber">{t.price}<span class="text-[12px] font-bold">円</span></span>
                       <span class="w-full text-right text-[11px] text-inkmuted sm:w-auto">（1回あたり {t.per}円）</span>
                     </div>
                   ))}
@@ -167,40 +168,21 @@ const breadcrumb = {
         </div>
       </div>
 
-      <!-- パネル2：通常回数券（女性・男性） -->
+      <!-- パネル2：通常回数券（男性） -->
       <div id="panel-regular" role="tabpanel" aria-labelledby="tab-regular" hidden>
-        <div class="grid items-start gap-10 lg:grid-cols-2 lg:gap-16">
-          <div class="border border-ink bg-paper p-6 sm:p-9">
-            <h3 class="mb-1 border-l-4 border-ink pl-3 text-[19px] font-black sm:text-[22px]">女性コース</h3>
-            <p class="mb-8 text-[13px] text-muted">女性コースの回数券は通常価格のみのご用意です。</p>
-            {LADIES_TICKETS.rows.map((row) => (
-              <div class="mb-8 last:mb-0">
-                <p class="mb-1 text-[15px] font-black">{row.min}<span class="ml-2 text-[12px] font-bold text-muted">（都度払い {row.per}）</span></p>
-                <div class="rule-top">
-                  {row.items.map((t) => (
-                    <div class="flex flex-wrap items-baseline gap-x-3 gap-y-0.5 border-b border-line py-2.5 px-1">
-                      <span class="w-16 text-[14px] font-black">{t.n}</span>
-                      {t.tag && <span class="rounded bg-amber px-2 py-0.5 text-[10px] font-bold">{t.tag}</span>}
-                      <span class="ml-auto text-[20px] font-black leading-none">{t.price}<span class="text-[12px] font-bold">円</span></span>
-                      <span class="w-full text-right text-[11px] text-muted sm:w-auto">（1回あたり {t.per}円）</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-          <div class="border border-ink bg-paper p-6 sm:p-9">
-            <h3 class="mb-1 border-l-4 border-ink pl-3 text-[19px] font-black sm:text-[22px]">男性コース</h3>
-            <p class="mb-8 text-[13px] text-muted">2回目以降のご購入。初回は「初回特別回数券」タブがお得です。</p>
+        <div class="border border-ink bg-paper p-5 sm:p-10">
+          <h4 class="mb-1 text-[20px] font-black sm:text-[26px]">通常回数券（男性コース）</h4>
+          <p class="mb-8 text-[13px] text-muted sm:mb-10">2回目以降のご購入。初回は「初回特別回数券」がお得です。</p>
+          <div class="grid gap-8 lg:grid-cols-2 lg:gap-16">
             {MEN_TICKETS.rows.map((row) => (
-              <div class="mb-8 last:mb-0">
-                <p class="mb-1 text-[15px] font-black">{row.min}<span class="ml-2 text-[12px] font-bold text-muted">（都度払い {row.per}）</span></p>
+              <div>
+                <p class="mb-2 border-l-4 border-ink pl-3 text-[17px] font-black">{row.min}<span class="ml-2 text-[12px] font-bold text-muted">（都度払い {row.per}）</span></p>
                 <div class="rule-top">
                   {row.items.map((t) => (
-                    <div class="flex flex-wrap items-baseline gap-x-3 gap-y-0.5 border-b border-line py-2.5 px-1">
+                    <div class="flex flex-wrap items-baseline gap-x-3 gap-y-0.5 border-b border-line py-2 px-1">
                       <span class="w-16 text-[14px] font-black">{t.n}</span>
                       {t.tag && <span class="rounded bg-amber px-2 py-0.5 text-[10px] font-bold">{t.tag}</span>}
-                      <span class="ml-auto text-[20px] font-black leading-none">{t.price}<span class="text-[12px] font-bold">円</span></span>
+                      <span class="ml-auto text-[19px] font-black leading-none">{t.price}<span class="text-[12px] font-bold">円</span></span>
                       <span class="w-full text-right text-[11px] text-muted sm:w-auto">（1回あたり {t.per}円）</span>
                     </div>
                   ))}
@@ -211,8 +193,32 @@ const breadcrumb = {
         </div>
       </div>
 
+      <!-- 女性料金（通常回数券のみ・常時表示） -->
+      <h3 class="mb-6 mt-16 border-l-4 border-ink pl-4 text-[20px] font-black sm:mt-20 sm:text-[24px]">女性料金</h3>
+      <div class="border border-ink bg-paper p-5 sm:p-10">
+        <h4 class="mb-1 text-[20px] font-black sm:text-[26px]">通常回数券（女性コース）</h4>
+        <p class="mb-8 text-[13px] text-muted sm:mb-10">女性コースの回数券は通常価格のみのご用意です。</p>
+        <div class="grid gap-8 lg:grid-cols-2 lg:gap-16">
+          {LADIES_TICKETS.rows.map((row) => (
+            <div>
+              <p class="mb-2 border-l-4 border-ink pl-3 text-[17px] font-black">{row.min}<span class="ml-2 text-[12px] font-bold text-muted">（都度払い {row.per}）</span></p>
+              <div class="rule-top">
+                {row.items.map((t) => (
+                  <div class="flex flex-wrap items-baseline gap-x-3 gap-y-0.5 border-b border-line py-2 px-1">
+                    <span class="w-16 text-[14px] font-black">{t.n}</span>
+                    {t.tag && <span class="rounded bg-amber px-2 py-0.5 text-[10px] font-bold">{t.tag}</span>}
+                    <span class="ml-auto text-[19px] font-black leading-none">{t.price}<span class="text-[12px] font-bold">円</span></span>
+                    <span class="w-full text-right text-[11px] text-muted sm:w-auto">（1回あたり {t.per}円）</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
       <script>
-        // 回数券タブ切り替え
+        // 回数券タブ切り替え（セグメント型）
         const tabs = [
           { tab: document.getElementById('tab-first'), panel: document.getElementById('panel-first') },
           { tab: document.getElementById('tab-regular'), panel: document.getElementById('panel-regular') },
@@ -226,8 +232,6 @@ const breadcrumb = {
               t.tab?.classList.toggle('text-paper', active);
               t.tab?.classList.toggle('bg-paper', !active);
               t.tab?.classList.toggle('text-ink', !active);
-              t.tab?.classList.toggle('border', !active);
-              t.tab?.classList.toggle('border-ink', !active);
               if (t.panel) t.panel.hidden = !active;
             }
           });
