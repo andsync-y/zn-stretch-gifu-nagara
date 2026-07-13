@@ -259,25 +259,31 @@
   pointer-events: none;
 }
 
+/* 添付デザイン準拠：背景なし・極太斜体・2行目を大きく（1行目は約0.7倍で右に少し寄せる） */
 .hero-copy h1 {
   margin: 0;
-  font-size: clamp(38px, 4.7vw, 74px);
+  color: #26272a;
+  font-size: clamp(46px, 5.4vw, 88px);
   font-weight: 900;
   letter-spacing: -0.03em;
-  line-height: 1.16;
+  line-height: 1.08;
+  transform: skewX(-8deg);
+  text-shadow: 0 0 26px rgba(247, 247, 244, 0.65);
 }
 
 .hero-line {
   display: block;
   width: max-content;
   overflow: hidden;
-  padding: 0 0.14em;
-  background: rgba(248, 248, 245, 0.9);
+}
+
+.hero-line:first-child {
+  margin-left: 0.32em;
+  font-size: 0.7em;
 }
 
 .hero-line-second {
-  margin-top: 0.14em;
-  margin-left: 0.55em;
+  margin-top: 0.04em;
 }
 
 .hero-line-inner {
@@ -292,13 +298,12 @@
 .hero-copy-sub {
   width: max-content;
   max-width: 88vw;
-  margin: 22px 0 0 4px;
-  padding: 5px 10px;
-  background: rgba(248, 248, 245, 0.85);
-  color: #3f4a4e;
+  margin: 24px 0 0 6px;
+  color: #35383c;
   font-size: clamp(11px, 1vw, 14px);
-  font-weight: 700;
+  font-weight: 800;
   letter-spacing: 0.12em;
+  text-shadow: 0 0 18px rgba(247, 247, 244, 0.75);
   opacity: 0;
   animation: heroSubIn 0.8s ease 1.15s forwards;
 }
@@ -448,9 +453,8 @@
   .hero-scrub { height: 360svh; }
   .hero-scrub-stage { top: 64px; height: calc(100svh - 64px); min-height: 480px; }
   .hero-copy { top: 13%; left: 5%; }
-  .hero-copy h1 { font-size: clamp(34px, 9.6vw, 56px); }
-  .hero-line-second { margin-left: 0.4em; }
-  .hero-copy-sub { margin-top: 14px; font-size: 10px; letter-spacing: 0.09em; }
+  .hero-copy h1 { font-size: clamp(42px, 11.5vw, 64px); }
+  .hero-copy-sub { max-width: 60vw; margin-top: 16px; font-size: 10px; letter-spacing: 0.09em; line-height: 1.9; }
   .hero-offer {
     left: 5%;
     bottom: 5%;
