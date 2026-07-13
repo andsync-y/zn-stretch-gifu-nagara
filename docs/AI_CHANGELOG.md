@@ -219,6 +219,28 @@ Git履歴が「何を変更したか」、このファイルが「なぜ変更�
 - 確認結果：`npm run build` 成功。Chromium検証で、SPメニューの開閉（タッチ・スクロール後含む）、明背景での黒文字表示、暗背景（SYMPTOMSセクション）での白反転をPC/SPともに確認。
 - 未対応・次の作業：`.price-first` の1024px横はみ出し修正、4Kアップスケール（クレジット確保後）。
 
+## 2026-07-14 04:30 JST — Claude Code
+
+- ブランチ：`claude/apply-design-patch-xbq1gz`
+- 関連PR：MVをPC/SP別動画（コピーなし素材）に差し替え、キャッチコピーをテキストアニメーション化
+- 変更内容：
+  - キャッチコピー抜きで制作されたPC版（1920×1080・24fps・169枚）とSP版（1080×1920縦・30fps）の2本の動画からフレームを抽出し、MVをデバイス別素材に刷新。
+  - SP版はモバイル向けに幅720px・15fps（106枚・約5.5MB）へ最適化し、`public/frames/sp/` に配置。旧 `public/frames/sm/`（PC素材の縮小版）は廃止。
+  - キャッチコピー「もっと動ける、軽い身体へ。」をHTMLテキスト（可視のh1）として実装し、行マスクのステップイン→サブコピーのフェードアップのテキストアニメーションを追加。スクロール開始でコピーはフェードアウト。
+  - h1が可視テキストになったためSEO・アクセシビリティも改善。`prefers-reduced-motion` 時はアニメーションなしで静的表示。
+  - canvas描画はPC=横/SP=縦で画面向きと一致するため常にcover中央配置に簡素化。フォールバック画像もpictureでPC/SP出し分け。
+  - 元動画を `assets/hero-source-v5-pc.mp4` / `assets/hero-source-v5-sp.mp4` として保管（v3は削除）。
+- 主な変更ファイル：
+  - `public/frames/`（PC 169枚）／`public/frames/sp/`（SP 106枚・新設）
+  - `src/pages/index.astro`
+  - `src/styles/global.css`
+  - `assets/hero-source-v5-pc.mp4`／`assets/hero-source-v5-sp.mp4`
+- 判断・注意点：
+  - フレーム枚数はPC/SPで異なる（169/106）。スクリプトの `cfg` で分岐しているため、素材差し替え時は両方のcountを更新すること。
+  - コピーの白帯（背景 rgba(248,248,245,0.9)）は動画のどのカット上でも可読性を確保するための設計。
+- 確認結果：`npm run build` 成功。Chromium検証でPC/SPともに専用フレームのみが読み込まれること（相互の誤読込なし）、テキストアニメーション、スクロール時のフェードアウト、オファーカード出現を確認。
+- 未対応・次の作業：`.price-first` の1024px横はみ出し修正、4Kアップスケール（クレジット確保後）。
+
 ## 2026-07-14 00:20 JST — ChatGPT Codex
 
 - ブランチ：`codex/interactive-symptoms`
@@ -353,4 +375,22 @@ Git履歴が「何を変更したか」、このファイルが「なぜ変更�
   - 全幅で人体画像が1枚のみであること、7症状すべてで画像URLが変化しないことを確認。
   - hover・focus・click・tapと患部レイヤー数の同期、コネクター線0件を確認。
   - reduced motionでは発光アニメーションが停止することを確認。
+
+## 2026-07-14 04:25 JST — ChatGPT Codex
+
+- ブランチ：`codex/interactive-symptoms`
+- 関連PR：[PR #4 SYMPTOMSを人体連動型UIへ刷新](https://github.com/andsync-y/zn-stretch-gifu-nagara/pull/4)
+- 変更内容：
+  - 全身人体の表示倍率を110%から96%へ変更し、頭頂部と足先に安全余白を確保。
+  - SYMPTOMSセクションと人体表示枠の背景色を `#151719` に統一。
+  - リード文を実装仕様に合わせ、「該当する部位が赤く光ります」へ修正。
+- 主な変更ファイル：
+  - `src/components/InteractiveSymptoms.astro`
+  - `src/pages/index.astro`
+  - `docs/AI_CHANGELOG.md`
+- 確認結果：
+  - `npm run build` と `git diff --check` 成功。
+  - 1440／1024／768／390／375pxで頭頂部・足先が表示枠内に収まることを確認。
+  - 7状態の発光同期、固定画像1枚、reduced motion対応を再確認。
+  - セクションと人体表示枠に `#151719` が指定されていることを確認。
 
