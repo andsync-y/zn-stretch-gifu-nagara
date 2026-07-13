@@ -24,7 +24,7 @@ const breadcrumb = {
 };
 ---
 <Base title={title} description={description} path="/staff" jsonld={[...personSchemas, breadcrumb]}>
-  <section class="mx-auto max-w-content px-5 pb-24 pt-16 sm:px-10 sm:pb-32 sm:pt-[120px]">
+  <section class="subpage-hero section-grid mx-auto max-w-content border-b border-ink/20 px-5 pb-24 pt-16 sm:px-10 sm:pb-32 sm:pt-[120px]">
     <div class="mb-10 sm:mb-14"><Breadcrumbs items={[{ label: 'トップ', href: '/' }, { label: 'スタッフ紹介' }]} /></div>
     <h1 class="display-title mb-6">STAFF</h1>
     <p class="mb-4 text-[26px] font-black sm:text-[36px]">体のこと、任せてください。</p>
@@ -34,7 +34,7 @@ const breadcrumb = {
     <div class="grid grid-cols-2 gap-x-5 gap-y-12 sm:gap-x-7 lg:grid-cols-3 lg:gap-y-16">
       {STAFF.map((s, i) => (
         <figure class={i % 2 === 1 ? 'sm:mt-11' : ''}>
-          <img src={s.photo} alt={`トレーナー ${s.name}（${s.kana}）`} width="800" height="1069" loading="lazy" decoding="async" class="mb-5 aspect-[3/4] w-full object-cover object-top shadow-hard-sm" />
+          <img src={s.photo} alt={`トレーナー ${s.name}（${s.kana}）`} width="800" height="1069" loading="lazy" decoding="async" class="mb-5 aspect-[3/4] w-full object-cover object-top grayscale transition duration-700 hover:grayscale-0" />
           <figcaption class="text-center">
             <p class="text-lg font-black tracking-[0.1em] sm:text-xl">{s.name}<span class="ml-3 text-sm font-medium text-muted">{s.kana}</span></p>
             <p class="mt-1 text-xs tracking-[0.08em] text-muted">{s.role}</p>

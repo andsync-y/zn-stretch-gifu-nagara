@@ -3,13 +3,52 @@ export interface Crumb { label: string; href?: string; }
 export interface Props { items: Crumb[]; }
 const { items } = Astro.props;
 ---
-<nav aria-label="パンくずリスト" class="text-sm text-muted">
-  <ol class="flex flex-wrap items-center gap-2">
-    {items.map((c, i) => (
-      <li class="flex items-center gap-2">
-        {c.href ? <a href={c.href} class="hover:text-amber-700">{c.label}</a> : <span aria-current="page" class="font-bold text-ink">{c.label}</span>}
-        {i < items.length - 1 && <span aria-hidden="true">／</span>}
+<nav aria-label="パンくずリスト" class="breadcrumbs">
+  <ol>
+    {items.map((item, index) => (
+      <li>
+        <span class="crumb-no">{String(index + 1).padStart(2, '0')}</span>
+        {item.href ? <a href={item.href}>{item.label}</a> : <span aria-current="page">{item.label}</span>}
+        {index < items.length - 1 && <b aria-hidden="true">↗</b>}
       </li>
     ))}
   </ol>
 </nav>
+
+<style>
+  ol {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 12px;
+    list-style: none;
+  }
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #7a8084;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+  }
+
+  .crumb-no {
+    color: #92745e;
+    font-family: "Inter", sans-serif;
+    font-size: 7px;
+    transform: translateY(-3px);
+  }
+
+  a { text-decoration: none; }
+  a:hover { color: #151719; }
+  b { color: #a8adb0; font-size: 10px; font-weight: 400; }
+
+  [aria-current="page"] {
+    color: #151719;
+    font-weight: 900;
+  }
+</style>

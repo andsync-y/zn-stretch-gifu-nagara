@@ -71,3 +71,38 @@ Git履歴が「何を変更したか」、このファイルが「なぜ変更�
 - 判断・注意点：任意のMarkdownは自動で読まれる保証がないため、各エージェントが自動参照する指示ファイルから変更履歴を読むよう明記。
 - 確認結果：`git diff --check` 成功。Markdownのみの変更のため、アプリケーションビルドは省略。
 - 未対応・次の作業：PR #2のデザイン確認とマージ。
+
+## 2026-07-13 23:32 JST — ChatGPT Codex
+
+- ブランチ：`codex/hero-symptom-visuals`
+- 関連PR：[PR #2 サイト全体をメインビジュアル基準で刷新](https://github.com/andsync-y/zn-stretch-gifu-nagara/pull/2)
+- 変更内容：
+  - メインビジュアルの極太タイポグラフィと写真表現を基準に、全ページのデザインシステムを再構築。
+  - ヘッダーを連番付きナビゲーションと全面モバイルメニューへ変更。
+  - フッターを巨大アウトライン文字、予約導線、サイトマップを備えた構成へ変更。
+  - トップのCONCEPT、METHOD、SYMPTOMS、STAFF、VOICE、SOCIAL、PRICE・ACCESSを、罫線・グリッド・大見出し・モノクロ写真中心に再構成。
+  - 料金表、予約CTA、FAQ、パンくず、下層ページ見出しを共通のエディトリアルデザインへ統一。
+  - 悩み別アイコンと発生サイクル図のアクセントカラーも全体トーンへ統一。
+- 主な変更ファイル：
+  - `tailwind.config.mjs`
+  - `src/styles/global.css`
+  - `src/layouts/Base.astro`
+  - `src/layouts/SymptomLayout.astro`
+  - `src/components/Header.astro`
+  - `src/components/Footer.astro`
+  - `src/components/ReserveCTA.astro`
+  - `src/components/PriceRows.astro`
+  - `src/components/FAQ.astro`
+  - `src/components/Breadcrumbs.astro`
+  - `src/components/SymptomIcon.astro`
+  - `src/components/SymptomCycle.astro`
+  - `src/pages/index.astro` および各下層ページ
+- 判断・注意点：
+  - ブルーは使用しない。黒・白・グレーを主役にし、写真内のタオルから拾った低彩度のウォームトープだけを限定的な差し色として使用。
+  - 英字見出しはセリフ体から極太サンセリフのArchivo Blackへ変更。
+  - 角丸や装飾的な影を減らし、直線・罫線・連番・大胆な写真トリミングを共通ルールにした。
+- 確認結果：
+  - `git diff --check` 成功。
+  - `npm run build` 成功。Astro静的ページ15件の生成を確認。
+  - 旧ブルー系カラーコードと旧セリフ体指定が残っていないことを検索確認。
+- 未対応・次の作業：VercelプレビューでPC・スマホの実機デザインを確認し、必要に応じて余白や画像位置を微調整してからマージする。
