@@ -220,7 +220,7 @@
 .hero-scrub {
   --hero-progress: 0;
   position: relative;
-  height: 320vh;
+  height: 420vh;
   background: #f7f7f4;
 }
 
@@ -390,7 +390,7 @@
 }
 
 @media (max-width: 1023px) {
-  .hero-scrub { height: 280svh; }
+  .hero-scrub { height: 360svh; }
   .hero-scrub-stage { top: 64px; height: calc(100svh - 64px); min-height: 480px; }
   .hero-offer {
     left: 5%;

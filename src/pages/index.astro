@@ -79,7 +79,7 @@ const marqueeItems = [
     const ctx = canvas?.getContext('2d');
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-    const FRAME_COUNT = 121;
+    const FRAME_COUNT = 193;
     const OFFER_AT = 0.72; // オファーカードを出すスクロール進捗
     const SCRUB_END = 0.85; // ここまでで最終フレームに到達し、残りは静止
     const dir = window.innerWidth <= 768 ? '/frames/sm' : '/frames';
@@ -118,7 +118,7 @@ const marqueeItems = [
       const dh = ih * scale;
       // 縦画面では帯をやや上寄せにして、下部のオファーカードと重ならないようにする
       const dy = (canvas.height - dh) * (portrait ? 0.38 : 0.5);
-      ctx.fillStyle = '#f4f5f2';
+      ctx.fillStyle = '#f7f7f4';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       ctx.drawImage(img, (canvas.width - dw) / 2, dy, dw, dh);
       drawnFrame = idx;
