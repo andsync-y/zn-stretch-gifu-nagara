@@ -5,8 +5,8 @@ import PriceRows from '../components/PriceRows.astro';
 import InteractiveSymptoms from '../components/InteractiveSymptoms.astro';
 import { SITE, BRAND, STAFF, PHOTOS, REVIEWS } from '../consts';
 
-const title = '岐阜市長良の完全個室パーソナルストレッチ｜全力ストレッチ岐阜長良店';
-const description = '岐阜市長良の完全個室・マンツーマンのパーソナルストレッチ専門店。元格闘家考案・独自の「体感軸調整法」で動ける身体へ。初回60分3,300円、駐車場10台以上、22時まで営業。';
+const title = '岐阜市長良の個室パーソナルストレッチ｜全力ストレッチ岐阜長良店';
+const description = '岐阜市長良の個室・マンツーマンのパーソナルストレッチ専門店。元格闘家考案・独自の「体感軸調整法」で動ける身体へ。初回60分3,300円、駐車場10台以上、22時まで営業。';
 
 const mapQuery = encodeURIComponent(SITE.addressFull);
 
@@ -22,8 +22,8 @@ const concepts = [
   },
   {
     no: '02',
-    title: '全席完全個室・マンツーマン',
-    body: '施術はすべて完全個室のプライベート空間で、マンツーマンで行います。着替えもご用意しております。',
+    title: '全席個室・マンツーマン',
+    body: '施術はすべて個室のプライベート空間で、マンツーマンで行います。着替えもご用意しております。',
   },
   {
     no: '03',
@@ -40,7 +40,7 @@ const methods = [
 ];
 
 const marqueeWords = [
-  '#完全個室',
+  '#個室',
   '#マンツーマン',
   '#完全女性トレーナー',
   '#全く新しいストレッチサロン',
@@ -56,7 +56,7 @@ const marqueeWords = [
     <div class="hero-scrub-stage">
       <picture>
         <source media="(max-width: 768px)" srcset="/frames/sp/frame_0001.jpg" />
-        <img class="hero-scrub-fallback" data-hero-fallback src="/frames/frame_0001.jpg" width="1920" height="1080" alt="完全個室で行う体感軸パーソナルストレッチの施術シーン" fetchpriority="high" decoding="async" />
+        <img class="hero-scrub-fallback" data-hero-fallback src="/frames/frame_0001.jpg" width="1920" height="1080" alt="個室で行う体感軸パーソナルストレッチの施術シーン" fetchpriority="high" decoding="async" />
       </picture>
       <canvas data-hero-canvas aria-hidden="true"></canvas>
 
@@ -65,9 +65,9 @@ const marqueeWords = [
         <h1>
           <span class="hero-line"><span class="hero-line-inner">もっと動ける</span></span>
           <span class="hero-line hero-line-second"><span class="hero-line-inner">軽い身体へ。</span></span>
-          <span class="sr-only">｜全力ストレッチ岐阜長良店（岐阜市長良の完全個室パーソナルストレッチ専門店）</span>
+          <span class="sr-only">｜全力ストレッチ岐阜長良店（岐阜市長良の個室パーソナルストレッチ専門店）</span>
         </h1>
-        <p class="hero-copy-sub">岐阜市長良・完全個室のパーソナルストレッチ専門店</p>
+        <p class="hero-copy-sub">岐阜市長良・個室の<br class="lg:hidden" />パーソナルストレッチ専門店</p>
       </div>
 
       <div class="hero-offer">
@@ -231,7 +231,7 @@ const marqueeWords = [
             大人のための<span class="frame-word">体感軸</span><br />パーソナルストレッチ。
           </p>
           <p class="mb-10 text-[15px] leading-[2.2] tracking-[0.03em] text-muted sm:mb-12 sm:text-[17px]">
-            日々の疲労、姿勢の崩れからゴルフの飛距離まで。元格闘家考案の独自メソッドが、完全個室のプライベート空間であなたの身体の可動域を引き出します。
+            日々の疲労、姿勢の崩れからゴルフの飛距離まで。元格闘家考案の独自メソッドが、個室のプライベート空間であなたの身体の可動域を引き出します。
           </p>
           <div class="rule-top">
             {concepts.map((c) => (

@@ -4,8 +4,8 @@ import Breadcrumbs from '../components/Breadcrumbs.astro';
 import ReserveCTA from '../components/ReserveCTA.astro';
 import { STAFF } from '../consts';
 
-const title = 'スタッフ紹介｜岐阜市長良の完全個室パーソナルストレッチ専門店 全力ストレッチ岐阜長良店';
-const description = '全力ストレッチ岐阜長良店のトレーナー紹介。全員女性の体感軸調整トレーナーが、完全個室・マンツーマンで施術します。岐阜市長良。';
+const title = 'スタッフ紹介｜岐阜市長良の個室パーソナルストレッチ専門店 全力ストレッチ岐阜長良店';
+const description = '全力ストレッチ岐阜長良店のトレーナー紹介。全員女性の体感軸調整トレーナーが、個室・マンツーマンで施術します。岐阜市長良。';
 
 const personSchemas = STAFF.map((s) => ({
   '@context': 'https://schema.org', '@type': 'Person',
@@ -29,7 +29,7 @@ const breadcrumb = {
     <h1 class="display-title mb-6">STAFF</h1>
     <p class="mb-4 text-[26px] font-black sm:text-[36px]">体のこと、任せてください。</p>
     <p class="mb-16 max-w-[820px] text-[15px] leading-[2.1] text-sub sm:mb-20 sm:text-[17px]">
-      担当するのは、全員女性の体感軸調整トレーナー。完全個室でマンツーマン、最初から最後まで一人のトレーナーがあなたの体と向き合います。ご希望のトレーナーがいれば、ご予約時にご指名いただけます（指名料3,300円）。</p>
+      担当するのは、全員女性の体感軸調整トレーナー。個室でマンツーマン、最初から最後まで一人のトレーナーがあなたの体と向き合います。ご希望のトレーナーがいれば、ご予約時にご指名いただけます（指名料3,300円）。</p>
 
     <div class="grid grid-cols-2 gap-x-5 gap-y-12 sm:gap-x-7 lg:grid-cols-3 lg:gap-y-16">
       {STAFF.map((s, i) => (

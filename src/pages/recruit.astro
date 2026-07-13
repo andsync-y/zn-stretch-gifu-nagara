@@ -4,7 +4,7 @@ import Breadcrumbs from '../components/Breadcrumbs.astro';
 import { SITE, STAFF, PHOTOS } from '../consts';
 
 const title = '採用情報｜体感軸調整トレーナー募集｜全力ストレッチ岐阜長良店';
-const description = '全力ストレッチ岐阜長良店では、一緒に働く体感軸調整トレーナー（ストレッチセラピスト）を募集しています。完全個室・マンツーマンのパーソナルストレッチ専門店。岐阜市長良・2026年6月オープン。ご応募はIndeedから。';
+const description = '全力ストレッチ岐阜長良店では、一緒に働く体感軸調整トレーナー（ストレッチセラピスト）を募集しています。個室・マンツーマンのパーソナルストレッチ専門店。岐阜市長良・2026年6月オープン。ご応募はIndeedから。';
 
 // 募集要項（2026-07-13 オーナー確認済みの実データ）
 const requirements = [
@@ -20,7 +20,7 @@ const requirements = [
 
 const attractions = [
   { no: '01', t: '独自メソッドが身につく', d: '元格闘家考案・ZST協会認定「体感軸調整法」の研修を受けて、もみほぐしとは違う「伸ばす」技術を基礎から習得できます。' },
-  { no: '02', t: '完全個室でお客様と1対1', d: '流れ作業ではなく、カウンセリングから施術まで一人のお客様とじっくり向き合えます。「来てよかった」の声が直接届く仕事です。' },
+  { no: '02', t: '個室でお客様と1対1', d: '流れ作業ではなく、カウンセリングから施術まで一人のお客様とじっくり向き合えます。「来てよかった」の声が直接届く仕事です。' },
   { no: '03', t: 'オープンしたての店舗', d: '2026年6月オープン。お店の空気も、働き方も、これから一緒につくっていくフェーズです。全国約70店舗のブランドの仕組みも活かせます。' },
   { no: '04', t: '女性トレーナーが活躍中', d: '現在のトレーナーは全員女性。年齢や経験よりも、目の前の人の体に丁寧に向き合えることを大切にしています。' },
 ];
@@ -39,7 +39,7 @@ const jobPosting = {
   '@type': 'JobPosting',
   title: '体感軸調整トレーナー（ストレッチセラピスト）',
   description:
-    '<p>完全個室・マンツーマンのパーソナルストレッチ専門店「全力ストレッチ岐阜長良店」で、一緒に働く体感軸調整トレーナー（ストレッチセラピスト）を募集しています。約40時間（6日間）の研修で、ストレッチ施術や接客マナーを基礎から学べます。認定試験合格後はディプロマを発行します。ご応募はIndeedの求人ページから受け付けています。</p>',
+    '<p>個室・マンツーマンのパーソナルストレッチ専門店「全力ストレッチ岐阜長良店」で、一緒に働く体感軸調整トレーナー（ストレッチセラピスト）を募集しています。約40時間（6日間）の研修で、ストレッチ施術や接客マナーを基礎から学べます。認定試験合格後はディプロマを発行します。ご応募はIndeedの求人ページから受け付けています。</p>',
   datePosted: '2026-07-13',
   employmentType: 'PART_TIME',
   hiringOrganization: { '@type': 'Organization', name: SITE.operator, sameAs: Astro.site!.href },
@@ -68,7 +68,7 @@ const jobPosting = {
     <p class="mb-4 text-[26px] font-black leading-[1.6] sm:text-[36px]">あなたの手で、<br class="sm:hidden" />「動ける身体」をつくる仕事。</p>
     <p class="mb-14 max-w-[820px] text-[15px] leading-[2.1] text-sub sm:mb-16 sm:text-[17px]">
       全力ストレッチ岐阜長良店では、一緒に働く体感軸調整トレーナー（ストレッチセラピスト）を募集しています。
-      完全個室・マンツーマンで、お客様一人ひとりの体とじっくり向き合える環境です。
+      個室・マンツーマンで、お客様一人ひとりの体とじっくり向き合える環境です。
     </p>
     <div class="flex flex-col gap-4 sm:flex-row">
       <a href={SITE.urls.recruit} target="_blank" rel="noopener" class="btn-amber-pill sm:px-14">Indeedで応募する</a>
@@ -106,7 +106,7 @@ const jobPosting = {
           </div>
         ))}
       </div>
-      <img src={PHOTOS.method3} alt="完全個室での施術の様子" width="1400" height="930" loading="lazy" decoding="async" class="mt-10 h-[240px] w-full object-cover sm:h-[380px]" />
+      <img src={PHOTOS.method3} alt="個室での施術の様子" width="1400" height="930" loading="lazy" decoding="async" class="mt-10 h-[240px] w-full object-cover sm:h-[380px]" />
     </div>
   </section>
 

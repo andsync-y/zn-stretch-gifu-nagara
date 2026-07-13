@@ -5,8 +5,8 @@ import PriceRows from '../components/PriceRows.astro';
 import ReserveCTA from '../components/ReserveCTA.astro';
 import { SITE, PAYMENTS } from '../consts';
 
-const title = 'メニュー・料金｜岐阜市長良の完全個室パーソナルストレッチ専門店 全力ストレッチ岐阜長良店';
-const description = '全力ストレッチ岐阜長良店の料金。集中ケアコース60分・全身ケアコース90分・ヘッドスパ付き120分。初回限定最大75%OFF。完全個室・マンツーマン、岐阜市長良・駐車場10台以上。';
+const title = 'メニュー・料金｜岐阜市長良の個室パーソナルストレッチ専門店 全力ストレッチ岐阜長良店';
+const description = '全力ストレッチ岐阜長良店の料金。集中ケアコース60分・全身ケアコース90分・ヘッドスパ付き120分。初回限定最大75%OFF。個室・マンツーマン、岐阜市長良・駐車場10台以上。';
 
 // 回数券（コース別メニュー表PDF準拠・すべて税込）
 type TicketItem = { n: string; price: string; per: string; tag?: string };
@@ -91,7 +91,7 @@ const TICKET_NOTES = [
 ];
 
 const points = [
-  { t: '完全個室・マンツーマン', d: '完全個室のプライベート空間で、担当トレーナーが最初から最後まで対応します。' },
+  { t: '個室・マンツーマン', d: '個室のプライベート空間で、担当トレーナーが最初から最後まで対応します。' },
   { t: '独自の「体感軸調整法」', d: '元格闘家考案の独自メソッド。もみほぐしではなく、軸をつくる筋肉を伸ばします。' },
   { t: 'トレーナーは全員女性', d: '全員女性の体感軸調整トレーナーが、その日の状態に合わせて丁寧に施術します。' },
   { t: '通いやすさ', d: '22時まで営業・駐車場10台以上。仕事帰りやゴルフ帰りにも。着替えのご用意もあります。' },
@@ -111,7 +111,7 @@ const breadcrumb = {
     <h1 class="display-title mb-6">PRICE</h1>
     <p class="mb-4 text-[26px] font-black sm:text-[36px]">まずは、初回3,300円から。</p>
     <p class="mb-14 max-w-[820px] text-[15px] leading-[2.1] text-sub sm:mb-16 sm:text-[17px]">
-      メニューはパーソナルストレッチのみ。時間と内容で3つのコースからお選びいただけます。どのコースも完全個室・マンツーマンです。
+      メニューはパーソナルストレッチのみ。時間と内容で3つのコースからお選びいただけます。どのコースも個室・マンツーマンです。
     </p>
 
     <div class="max-w-[900px]"><PriceRows /></div>
