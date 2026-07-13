@@ -152,3 +152,29 @@ Git履歴が「何を変更したか」、このファイルが「なぜ変更�
   - 1440／1024／768／390／375pxをChromiumで確認。
   - mouse pointerenter、keyboard focus、touch click、7詳細URL、SP展開、reduced motionを確認。
 - 未対応・次の作業：Vercelプレビューで実機フォント読み込み後の和文幅と、赤い部位マスクの見え方を最終確認する。
+
+## 2026-07-14 01:05 JST — ChatGPT Codex
+
+- ブランチ：`codex/interactive-symptoms`
+- 関連PR：[PR #4 SYMPTOMSを人体連動型UIへ刷新](https://github.com/andsync-y/zn-stretch-gifu-nagara/pull/4)
+- 変更内容：
+  - ユーザーフィードバックに合わせ、単一人体の回転・拡大とSVG部位マスクを廃止。
+  - 添付された7状態の見本から、姿勢と該当部位ハイライトが異なる中央人体素材を作成。
+  - PCのhover／focus、SPのtapに合わせ、中央画像を620msのクロスフェードで切り替える方式へ変更。
+- 主な変更ファイル：
+  - `src/components/InteractiveSymptoms.astro`
+  - `public/images/symptoms/anatomy-*.webp`（7点）
+  - `docs/SYMPTOMS_INTERACTION_IMPLEMENTATION.md`
+  - `docs/AI_CHANGELOG.md`
+- 判断・注意点：
+  - 赤い円、コネクター、文字などは画像へ焼き込まず、人体と解剖学的ハイライトのみを素材化。
+  - 画像はすべて768 × 1152pxの透過WebPへ統一し、1点約78〜102KB、7点合計約620KBに抑制。
+  - アクティブ項目、詳細リンク、既存URL、PCコネクター、SP展開の仕様は維持。
+- 確認結果：
+  - `npm run build` 成功。Astro静的ページ15件を生成。
+  - `git diff --check` 成功。
+  - 1440／1024／768／390／375pxで、7画像の読み込み、アクティブ同期、レイアウト幅を確認。
+  - PC hover、キーボードfocus、クリック、SP tapで画像が切り替わることを確認。
+  - フェード途中に新旧画像が同時表示され、620ms後に新画像だけが不透明度1になることを確認。
+  - reduced motionではフェードが180msへ短縮され、コネクター線描画が停止することを確認。
+- 未対応・次の作業：Vercelプレビューでクロスフェードと各部位の見え方を確認する。

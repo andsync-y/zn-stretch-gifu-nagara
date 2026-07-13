@@ -45,54 +45,19 @@ const right = symptoms.filter((_, index) => index % 2 === 1);
   </div>
 
   <div class="symptoms-anatomy" aria-hidden="true">
-    <div class="symptoms-orbit symptoms-orbit--outer"></div>
-    <div class="symptoms-orbit symptoms-orbit--inner"></div>
     <div class="symptoms-anatomy-figure">
-      <img src="/images/symptoms/anatomy-base.webp" alt="" width="921" height="1708" loading="lazy" decoding="async" />
-      <svg class="symptoms-glows" viewBox="0 0 100 180" preserveAspectRatio="xMidYMid meet">
-        <defs>
-          <filter id="symptom-soft-glow" x="-70%" y="-70%" width="240%" height="240%">
-            <feGaussianBlur stdDeviation="2.7" result="blur"></feGaussianBlur>
-            <feMerge><feMergeNode in="blur"></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode></feMerge>
-          </filter>
-        </defs>
-
-        <g class="symptom-glow is-active" data-glow="shoulder" filter="url(#symptom-soft-glow)">
-          <ellipse cx="36" cy="38" rx="10" ry="8"></ellipse>
-          <path d="M38 30 C43 35 49 38 57 39"></path>
-        </g>
-        <g class="symptom-glow" data-glow="lower-back" filter="url(#symptom-soft-glow)">
-          <path d="M48 66 C52 73 52 82 50 91"></path>
-          <ellipse cx="49" cy="91" rx="15" ry="10"></ellipse>
-          <path d="M42 96 C40 105 37 112 34 120"></path>
-        </g>
-        <g class="symptom-glow" data-glow="neck-eyes" filter="url(#symptom-soft-glow)">
-          <ellipse cx="38" cy="15" rx="5" ry="3"></ellipse>
-          <path d="M44 20 C48 23 50 29 50 34"></path>
-        </g>
-        <g class="symptom-glow" data-glow="lower-legs" filter="url(#symptom-soft-glow)">
-          <path d="M39 124 C38 140 38 154 36 169"></path>
-          <path d="M58 124 C59 140 58 154 61 167"></path>
-          <ellipse cx="36" cy="171" rx="8" ry="4"></ellipse>
-          <ellipse cx="62" cy="169" rx="7" ry="4"></ellipse>
-        </g>
-        <g class="symptom-glow symptom-glow--soft" data-glow="whole-body" filter="url(#symptom-soft-glow)">
-          <path d="M47 20 C53 45 52 72 50 100"></path>
-          <ellipse cx="49" cy="53" rx="18" ry="22"></ellipse>
-          <circle cx="36" cy="39" r="5"></circle><circle cx="63" cy="39" r="5"></circle>
-          <circle cx="40" cy="119" r="5"></circle><circle cx="58" cy="119" r="5"></circle>
-        </g>
-        <g class="symptom-glow" data-glow="upper-back" filter="url(#symptom-soft-glow)">
-          <path d="M32 36 C39 31 45 36 49 44 C54 35 61 32 67 38"></path>
-          <ellipse cx="49" cy="43" rx="19" ry="12"></ellipse>
-        </g>
-        <g class="symptom-glow" data-glow="kinetic-chain" filter="url(#symptom-soft-glow)">
-          <ellipse cx="49" cy="97" rx="16" ry="9"></ellipse>
-          <path d="M39 101 C40 110 40 116 40 123 M58 101 C58 110 58 116 58 123"></path>
-          <circle cx="40" cy="123" r="5"></circle><circle cx="58" cy="123" r="5"></circle>
-          <circle cx="36" cy="168" r="4"></circle><circle cx="61" cy="167" r="4"></circle>
-        </g>
-      </svg>
+      {symptoms.map((item, index) => (
+        <img
+          class:list={['symptoms-anatomy-image', index === 0 && 'is-active']}
+          data-anatomy={item.key}
+          src={`/images/symptoms/anatomy-${item.key}.webp`}
+          alt=""
+          width="768"
+          height="1152"
+          loading="lazy"
+          decoding="async"
+        />
+      ))}
     </div>
     <p class="symptoms-focus-label"><span>ACTIVE FOCUS</span><strong data-focus-label>僧帽筋・肩関節</strong></p>
   </div>
@@ -145,26 +110,23 @@ const right = symptoms.filter((_, index) => index % 2 === 1);
 
   if (explorer) {
     const buttons = [...explorer.querySelectorAll<HTMLButtonElement>('[data-symptom-trigger]')];
-    const glows = [...explorer.querySelectorAll<SVGGElement>('[data-glow]')];
+    const anatomyImages = [...explorer.querySelectorAll<HTMLImageElement>('[data-anatomy]')];
     const connectorSvg = explorer.querySelector<SVGSVGElement>('[data-connector-svg]');
     const connectorPath = explorer.querySelector<SVGPathElement>('[data-connector-path]');
     const connectorDot = explorer.querySelector<SVGCircleElement>('[data-connector-dot]');
     const focusLabel = explorer.querySelector<HTMLElement>('[data-focus-label]');
     const anatomy = explorer.querySelector<HTMLElement>('.symptoms-anatomy');
-    const anatomyFigure = explorer.querySelector<HTMLElement>('.symptoms-anatomy-figure');
     const desktopLayout = matchMedia('(min-width: 768px)');
     const desktopHover = matchMedia('(min-width: 768px) and (hover: hover)');
-    const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
-    let fadeTimer = 0;
 
-    const states: Record<string, { focus: string; x: number; y: number; transform: string }> = {
-      shoulder: { focus: '僧帽筋・肩関節', x: 0.39, y: 0.28, transform: 'translate3d(3%, 0, 0) scale(1.035) rotate(4deg)' },
-      'lower-back': { focus: '腰椎・仙腸部・臀部', x: 0.50, y: 0.50, transform: 'translate3d(-2%, -1%, 0) scale(1.06) rotate(-5deg)' },
-      'neck-eyes': { focus: '頸椎・後頭下・眼窩', x: 0.42, y: 0.17, transform: 'translate3d(2%, 5%, 0) scale(1.14) rotate(3deg)' },
-      'lower-legs': { focus: 'ふくらはぎ・足首・足先', x: 0.50, y: 0.78, transform: 'translate3d(0, -4%, 0) scale(1.04) rotate(-2deg)' },
-      'whole-body': { focus: '背骨・胸郭・主要関節', x: 0.50, y: 0.45, transform: 'translate3d(0, 0, 0) scale(.97) rotate(0deg)' },
-      'upper-back': { focus: '胸椎上部・肩甲骨・巻き肩', x: 0.51, y: 0.31, transform: 'translate3d(-3%, 1%, 0) scale(1.07) rotate(-6deg)' },
-      'kinetic-chain': { focus: '股関節・膝・足首', x: 0.50, y: 0.64, transform: 'translate3d(2%, -2%, 0) scale(1.03) rotate(5deg)' },
+    const states: Record<string, { focus: string; x: number; y: number }> = {
+      shoulder: { focus: '僧帽筋・肩関節', x: 0.39, y: 0.26 },
+      'lower-back': { focus: '腰椎・仙腸部・臀部', x: 0.52, y: 0.48 },
+      'neck-eyes': { focus: '頸椎・後頭下・眼窩', x: 0.45, y: 0.18 },
+      'lower-legs': { focus: 'ふくらはぎ・足首・足先', x: 0.50, y: 0.78 },
+      'whole-body': { focus: '背骨・胸郭・主要関節', x: 0.50, y: 0.45 },
+      'upper-back': { focus: '胸椎上部・肩甲骨・巻き肩', x: 0.50, y: 0.29 },
+      'kinetic-chain': { focus: '股関節・膝・足首', x: 0.55, y: 0.62 },
     };
 
     const updateConnector = (key: string) => {
@@ -196,23 +158,15 @@ const right = symptoms.filter((_, index) => index % 2 === 1);
     const setActive = (key: string) => {
       const state = states[key];
       if (!state) return;
-      const changed = explorer.dataset.active !== key;
       explorer.dataset.active = key;
-      explorer.style.setProperty('--anatomy-transform', state.transform);
       if (focusLabel) focusLabel.textContent = state.focus;
-
-      if (changed && anatomyFigure && !reducedMotion.matches) {
-        clearTimeout(fadeTimer);
-        anatomyFigure.classList.add('is-changing');
-        fadeTimer = window.setTimeout(() => anatomyFigure.classList.remove('is-changing'), 90);
-      }
 
       buttons.forEach((button) => {
         const active = button.dataset.symptomTrigger === key;
         button.setAttribute('aria-pressed', String(active));
         if (button.hasAttribute('aria-expanded')) button.setAttribute('aria-expanded', String(active));
       });
-      glows.forEach((glow) => glow.classList.toggle('is-active', glow.dataset.glow === key));
+      anatomyImages.forEach((image) => image.classList.toggle('is-active', image.dataset.anatomy === key));
       requestAnimationFrame(() => updateConnector(key));
     };
 
@@ -234,7 +188,6 @@ const right = symptoms.filter((_, index) => index % 2 === 1);
 <style>
   .symptoms-explorer {
     --symptom-red: #e5443f;
-    --anatomy-transform: translate3d(3%, 0, 0) scale(1.035) rotate(4deg);
     position: relative;
     display: grid;
     grid-template-columns: minmax(230px, 1fr) minmax(350px, 520px) minmax(230px, 1fr);
@@ -350,31 +303,35 @@ const right = symptoms.filter((_, index) => index % 2 === 1);
   .symptom-trigger[aria-pressed='true'] .symptom-arrow { transform: translateX(4px); }
 
   .symptom-detail-link {
-    display: grid;
-    grid-template-rows: 0fr;
-    overflow: hidden;
+    position: absolute;
+    left: 50px;
+    bottom: 7px;
     color: var(--symptom-red);
     font-size: 11px;
     font-weight: 800;
     letter-spacing: .08em;
-    line-height: 0;
+    line-height: 1.5;
     opacity: 0;
+    pointer-events: none;
     text-decoration: none;
-    transition: grid-template-rows 300ms ease, padding 300ms ease, opacity 240ms ease, line-height 300ms ease;
+    transform: translateY(4px);
+    transition: opacity 240ms ease, transform 300ms cubic-bezier(.22, 1, .36, 1);
   }
 
   .symptom-entry:has(.symptom-trigger[aria-pressed='true']) > .symptom-detail-link {
-    grid-template-rows: 1fr;
-    padding: 0 2px 14px 50px;
-    line-height: 1.5;
     opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
   }
+
+  .symptoms-desktop-list .symptom-entry { padding-bottom: 22px; }
 
   .symptoms-anatomy {
     position: relative;
     z-index: 2;
     min-width: 0;
     overflow: hidden;
+    background: #151719;
   }
 
   .symptoms-anatomy::after {
@@ -391,60 +348,23 @@ const right = symptoms.filter((_, index) => index % 2 === 1);
     transform: translateX(-50%);
   }
 
-  .symptoms-orbit {
-    position: absolute;
-    z-index: -1;
-    top: 50%;
-    left: 50%;
-    border: 1px solid rgba(255, 255, 255, .09);
-    border-radius: 50%;
-    transform: translate(-50%, -50%) rotate(-18deg);
-    pointer-events: none;
-  }
-
-  .symptoms-orbit--outer { width: 106%; height: 58%; }
-  .symptoms-orbit--inner { width: 82%; height: 44%; transform: translate(-50%, -50%) rotate(22deg); }
-
   .symptoms-anatomy-figure {
     position: absolute;
     inset: 2% 0 8%;
-    transform: var(--anatomy-transform);
-    transform-origin: 50% 52%;
-    transition: transform 640ms cubic-bezier(.22, 1, .36, 1), opacity 260ms ease;
-    will-change: transform;
   }
 
-  .symptoms-anatomy-figure.is-changing { opacity: .58; }
-
-  .symptoms-anatomy-figure > img,
-  .symptoms-glows {
+  .symptoms-anatomy-image {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
     object-fit: contain;
-  }
-
-  .symptoms-glows {
-    z-index: 2;
-    overflow: visible;
-    pointer-events: none;
-  }
-
-  .symptom-glow {
-    fill: rgba(229, 50, 45, .34);
-    stroke: #f24a44;
-    stroke-width: 1.3;
-    stroke-linecap: round;
-    stroke-linejoin: round;
     opacity: 0;
-    transform: scale(.95);
-    transform-origin: center;
-    transition: opacity 260ms ease 180ms, transform 420ms cubic-bezier(.22, 1, .36, 1) 160ms;
+    transition: opacity 620ms cubic-bezier(.22, 1, .36, 1);
+    will-change: opacity;
   }
 
-  .symptom-glow--soft { fill: rgba(229, 50, 45, .12); stroke-width: .9; }
-  .symptom-glow.is-active { opacity: .92; transform: scale(1); }
+  .symptoms-anatomy-image.is-active { z-index: 1; opacity: 1; }
 
   .symptoms-focus-label {
     position: absolute;
@@ -481,7 +401,7 @@ const right = symptoms.filter((_, index) => index % 2 === 1);
     .symptom-trigger { grid-template-columns: 28px minmax(0, 1fr) 18px; gap: 8px; }
     .symptom-copy strong { font-size: 13px; }
     .symptom-copy small { display: none; }
-    .symptom-entry:has(.symptom-trigger[aria-pressed='true']) > .symptom-detail-link { padding-left: 38px; }
+    .symptom-detail-link { left: 38px; }
   }
 
   @media (max-width: 767px) {
@@ -505,8 +425,6 @@ const right = symptoms.filter((_, index) => index % 2 === 1);
     }
 
     .symptoms-anatomy-figure { inset: 0 -5% 8%; }
-    .symptoms-orbit--outer { width: 120%; height: 58%; }
-    .symptoms-orbit--inner { width: 92%; height: 43%; }
     .symptoms-focus-label { right: 8%; bottom: 5px; }
 
     .symptoms-mobile-list {
@@ -557,8 +475,7 @@ const right = symptoms.filter((_, index) => index % 2 === 1);
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .symptoms-anatomy-figure { transition: opacity 180ms ease; transform: none !important; }
-    .symptom-glow { transition: opacity 180ms ease; transform: none; }
+    .symptoms-anatomy-image { transition-duration: 180ms; }
     .symptoms-connector path { animation: none !important; stroke-dashoffset: 0; }
     .symptom-arrow { transition: color 180ms ease; }
   }
