@@ -263,7 +263,7 @@
 .hero-copy h1 {
   margin: 0;
   color: #26272a;
-  font-size: clamp(46px, 15vw, 240px);
+  font-size: clamp(46px, 11.5vw, 176px);
   font-weight: 900;
   letter-spacing: -0.03em;
   line-height: 1.08;

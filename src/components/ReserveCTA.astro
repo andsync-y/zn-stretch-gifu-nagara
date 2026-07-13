@@ -26,8 +26,14 @@ const {
         <b>OFF</b>
       </div>
       <div class="trial">
-        <p>集中ケアコース <b>60 MIN.</b></p>
-        <p><del>¥13,200</del><strong>¥3,300</strong><small>税込</small></p>
+        <div class="trial-row">
+          <p>集中ケアコース <b>60 MIN.</b></p>
+          <p><del>¥13,200</del><strong>¥3,300</strong><small>税込</small></p>
+        </div>
+        <div class="trial-row">
+          <p>全身ケアコース <b>90 MIN.</b></p>
+          <p><del>¥19,800</del><strong>¥4,900</strong><small>税込</small></p>
+        </div>
       </div>
       <a href={SITE.urls.reserve} target="_blank" rel="noopener">
         <span>WEB予約はこちら</span><b aria-hidden="true">↗</b>
@@ -131,17 +137,29 @@ const {
 
   .trial {
     display: flex;
-    padding: 20px 24px;
+    padding: 18px 24px;
+    flex-direction: column;
+    justify-content: center;
+    gap: 12px;
+  }
+
+  .trial-row {
+    display: flex;
     align-items: flex-end;
     justify-content: space-between;
     gap: 18px;
   }
 
+  .trial-row + .trial-row {
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.18);
+  }
+
   .trial p { margin: 0; line-height: 1; }
-  .trial p:first-child { font-size: 11px; font-weight: 800; }
-  .trial p:first-child b { display: block; margin-top: 9px; font-family: "Archivo Black", sans-serif; font-size: 20px; }
+  .trial-row p:first-child { font-size: 11px; font-weight: 800; }
+  .trial-row p:first-child b { display: block; margin-top: 9px; font-family: "Archivo Black", sans-serif; font-size: 18px; }
   .trial del { display: block; margin-bottom: 4px; color: #91989d; font-size: 10px; }
-  .trial strong { font-family: "Archivo Black", sans-serif; font-size: clamp(36px, 4vw, 54px); letter-spacing: -0.06em; }
+  .trial strong { font-family: "Archivo Black", sans-serif; font-size: clamp(30px, 3vw, 42px); letter-spacing: -0.06em; }
   .trial small { margin-left: 5px; color: #b5babd; font-size: 8px; }
 
   .reserve-offer > a {
@@ -198,13 +216,11 @@ const {
     .discount strong { font-size: 43px; }
     .discount b { font-size: 15px; }
 
-    .trial {
-      display: block;
-      padding: 15px 14px;
-    }
-
-    .trial p + p { margin-top: 10px; }
-    .trial strong { font-size: 35px; }
+    .trial { padding: 14px; gap: 10px; }
+    .trial-row { display: block; }
+    .trial-row + .trial-row { padding-top: 10px; }
+    .trial-row p + p { margin-top: 8px; }
+    .trial strong { font-size: 30px; }
 
     .reserve-contact {
       display: grid;
