@@ -123,6 +123,15 @@ export const SYMPTOMS = [
   { slug: 'sports', label: 'スポーツケア', short: 'スポーツケア', note: 'ゴルフ・ランニングの前後に', desc: 'ゴルフ・ランニングなど、運動前後のコンディション作りに。' },
 ];
 
+// お支払い方法（現金＋Squareキャッシュレス決済）
+export const PAYMENTS = [
+  { label: '現金', detail: '' },
+  { label: 'クレジットカード', detail: 'Visa／Mastercard／American Express／JCB／Diners Club／Discover／銀聯（UnionPay）' },
+  { label: '交通系電子マネー', detail: 'Suica／PASMO／manaca／ICOCA／Kitaca／toica／SUGOCA／nimoca／はやかけん（※PiTaPaを除く）' },
+  { label: 'QRコード決済', detail: 'PayPay／d払い／楽天ペイ／au PAY／メルペイ／Alipay+／WeChat Pay' },
+  { label: '電子マネー', detail: 'iD／QUICPay' },
+];
+
 // お客様の声（Googleマップに投稿された実際のクチコミ。本文は原文のまま・捏造禁止）
 // ※Googleマップ由来のためReview/AggregateRatingのschema化はしない（Googleのガイドライン上、
 //   構造化データにできるのは自サイトで直接収集したレビューのみ）

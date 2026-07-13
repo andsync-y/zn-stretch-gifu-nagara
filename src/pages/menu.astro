@@ -3,7 +3,7 @@ import Base from '../layouts/Base.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import PriceRows from '../components/PriceRows.astro';
 import ReserveCTA from '../components/ReserveCTA.astro';
-import { SITE, LAST_UPDATED } from '../consts';
+import { SITE, PAYMENTS, LAST_UPDATED } from '../consts';
 
 const title = 'メニュー・料金｜岐阜市長良の完全個室パーソナルストレッチ専門店 全力ストレッチ岐阜長良店';
 const description = '全力ストレッチ岐阜長良店の料金。お試しコース60分・全身ケアコース90分・ヘッドスパ付き120分。初回限定最大75%OFF。完全個室・マンツーマン、岐阜市長良・駐車場10台以上。';
@@ -82,7 +82,7 @@ const NOMINATE = [
 
 const TICKET_NOTES = [
   'すべて税込価格です。有効期限は購入日より6ヶ月です。',
-  'クレジットカード決済に対応しております。',
+  'クレジットカード・交通系電子マネー・QRコード決済・iD／QUICPayに対応しております（詳細は下記「お支払い方法」）。',
   '全力ストレッチの他店舗でのチケットの併用はできません。',
   '当日キャンセルはチケット1回分の消化となりますのでご注意ください。',
   'ご購入後の返金は原則いたしかねます（クーリングオフ等、法令に基づく場合を除きます）。',
@@ -253,6 +253,25 @@ const breadcrumb = {
     </div>
   </section>
 
+  <!-- お支払い方法 -->
+  <section class="px-5 py-24 sm:px-10 sm:py-32">
+    <div class="mx-auto max-w-content">
+      <p class="en-label mb-8">Payment</p>
+      <h2 class="jp-title mb-4">お支払い方法</h2>
+      <p class="mb-12 max-w-[820px] text-[15px] leading-[2.1] text-sub sm:text-base">
+        現金のほか、Squareのキャッシュレス決済に対応しています。
+      </p>
+      <div class="rule-top max-w-[900px]">
+        {PAYMENTS.map((p) => (
+          <div class="rule-row grid gap-1 px-1 py-5 sm:grid-cols-[180px_1fr] sm:gap-6">
+            <span class="text-[15px] font-black sm:text-base">{p.label}</span>
+            <span class="text-[14px] leading-[2] text-sub sm:text-[15px]">{p.detail}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
   <section class="border-t border-ink/15 bg-paper2 px-5 py-24 sm:px-10 sm:py-32">
     <div class="mx-auto max-w-content">
       <p class="en-label mb-8">Feature</p>
@@ -267,7 +286,7 @@ const breadcrumb = {
         ))}
       </div>
       <p class="mt-14 text-[13px] leading-[2] text-sub">
-        ※お支払い方法などの詳細は、ご予約時またはご来店時にご案内します。<br />最終更新：{LAST_UPDATED}
+        最終更新：{LAST_UPDATED}
       </p>
     </div>
   </section>
