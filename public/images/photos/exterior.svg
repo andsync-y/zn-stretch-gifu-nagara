@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900" role="img" aria-label="店舗外観（写真準備中）">
+  <rect width="1600" height="900" fill="#ECEAE4"/>
+  <rect x="24" y="24" width="1552" height="852" fill="none" stroke="#1A1A1A" stroke-opacity="0.25" stroke-width="2"/>
+  <text x="50%" y="48%" text-anchor="middle" font-family="serif" font-style="italic" font-size="40" letter-spacing="10" fill="#999">Exterior</text>
+  <text x="50%" y="56%" text-anchor="middle" font-family="sans-serif" font-size="26" fill="#555">店舗外観写真（実写に差し替え予定）</text>
+</svg>

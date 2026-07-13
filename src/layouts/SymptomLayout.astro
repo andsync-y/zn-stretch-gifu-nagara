@@ -4,7 +4,7 @@ import Breadcrumbs from '../components/Breadcrumbs.astro';
 import FAQ from '../components/FAQ.astro';
 import PriceRows from '../components/PriceRows.astro';
 import ReserveCTA from '../components/ReserveCTA.astro';
-import { SITE, PHOTOS, LAST_UPDATED } from '../consts';
+import { SITE, PHOTOS, REVIEWS, LAST_UPDATED } from '../consts';
 
 export interface QA { q: string; a: string; }
 export interface Part { title: string; desc: string; }
@@ -46,20 +46,25 @@ export interface Props {
   faqs: QA[];
   related: Related[];
   serviceName: string;
+  /** 表示するクチコミのインデックス（consts.REVIEWSの添字） */
+  reviewPicks?: number[];
 }
 
 const {
   slug, label, enNo, h1Frame, h1Tail, title, description, lead, compare,
   whyHeading, cycleTitle, cycleSteps, cycleNote, causes, whyText,
   approach, parts, priceLead, reserveHeadline, faqs, related, serviceName,
+  reviewPicks = [0, 1, 2],
 } = Astro.props;
+
+const pageReviews = reviewPicks.map((i) => REVIEWS[i]).filter(Boolean);
 
 const pagePath = `/symptoms/${slug}`;
 
 const flow = [
   { no: '01', t: 'カウンセリング', d: '気になる部位や生活習慣を、個室でゆっくり伺います。' },
   { no: '02', t: '体の状態チェック', d: '姿勢や可動域を確認し、その日の内容を組み立てます。' },
-  { no: '03', t: 'ザウルス式ストレッチ', d: '痛気持ちいい強さで、深層の筋肉までマンツーマンで伸ばします。' },
+  { no: '03', t: '独自の体感軸調整ストレッチ', d: '痛気持ちいい強さで、深層の筋肉までマンツーマンで伸ばします。' },
   { no: '04', t: 'アフターチェック', d: '施術前との違いを確認し、セルフケアをご提案します。' },
 ];
 
@@ -192,15 +197,25 @@ const breadcrumbSchema = {
     </div>
   </section>
 
-  <!-- お客様の声（掲載準備中・捏造しない） -->
+  <!-- お客様の声（Googleマップの実クチコミ） -->
   <section class="px-5 py-24 sm:px-10 sm:py-32">
     <div class="mx-auto max-w-content">
       <p class="en-label mb-8">Voice</p>
-      <h2 class="jp-title mb-14">お客様の声</h2>
-      <div class="rounded border border-dashed border-[#D9D9D5] px-8 py-14 text-center">
-        <p class="mb-3 text-lg font-black text-sub">掲載準備中</p>
-        <p class="text-[15px] leading-[2.1] text-sub">{label}でご来店いただいたお客様の声を、準備が整いしだい掲載します。<br />※実際のお客様の声のみを掲載します。</p>
+      <h2 class="jp-title mb-4">お客様の声</h2>
+      <p class="mb-12 text-sm tracking-[0.08em] text-muted">Google マップのクチコミより</p>
+      <div class="grid gap-x-14 gap-y-10 md:grid-cols-3">
+        {pageReviews.map((r) => (
+          <div>
+            <div class="mb-3.5 flex items-baseline justify-between gap-3">
+              <span class="text-[15px] font-black tracking-[0.06em]">{r.name}</span>
+              <span class="text-sm tracking-[0.12em] text-amber" aria-label={`星${r.stars}つ`}>{'★'.repeat(r.stars)}{'☆'.repeat(5 - r.stars)}</span>
+            </div>
+            <p class="border-t border-ink/25 pt-4 text-[15px] leading-[2.1] text-muted">{r.text}</p>
+          </div>
+        ))}
       </div>
+      <p class="mt-10 text-[12px] text-muted">※Googleマップに投稿された実際のクチコミを、原文のまま掲載しています。効果には個人差があります。</p>
+      <p class="mt-3"><a href="/voice" class="text-[15px] font-bold underline-offset-4 hover:underline">お客様の声をもっと見る →</a></p>
     </div>
   </section>
 
@@ -212,7 +227,7 @@ const breadcrumbSchema = {
         <h2 class="jp-title mb-6">まずは、初回3,300円から。</h2>
         <p class="mb-10 text-[15px] leading-[2.1] text-sub sm:text-base">{priceLead}</p>
         <div class="flex flex-wrap items-center gap-7">
-          <a href={SITE.urls.reserve} target="_blank" rel="noopener" class="btn-ink-pill">初回価格で予約する</a>
+          <a href={SITE.urls.coupon} target="_blank" rel="noopener" class="btn-ink-pill">初回価格で予約する</a>
           <a href={SITE.urls.line} target="_blank" rel="noopener" class="border-b border-sub pb-1 text-sm text-sub">LINEで相談</a>
         </div>
       </div>

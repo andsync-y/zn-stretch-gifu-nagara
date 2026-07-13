@@ -14,8 +14,8 @@ export const SITE = {
   postalCode: '502-0071', // ※要確認プレースホルダ相当。実郵便番号を morning-todo で確定
   addressRegion: '岐阜県',
   addressLocality: '岐阜市',
-  streetAddress: '長良東2-37 RSDビル2F南',
-  addressFull: '岐阜県岐阜市長良東2-37 RSDビル2F南',
+  streetAddress: '長良東２丁目３７ RSDビル2F南',
+  addressFull: '岐阜県岐阜市長良東２丁目３７ RSDビル2F南',
   tel: '058-215-5835',
   telLink: '+81582155835',
   hours: '10:00–22:00',
@@ -35,6 +35,7 @@ export const SITE = {
   // 外部URL（実データ）
   urls: {
     reserve: 'https://beauty.hotpepper.jp/kr/slnH000806541/?vos=cpahpbprosmaf131118006',
+    coupon: 'https://beauty.hotpepper.jp/kr/slnH000806541/coupon/',
     instagram: 'https://www.instagram.com/zngifunagara/',
     instagramHandle: '@zngifunagara',
     line: 'https://lin.ee/XyYJkAc',
@@ -66,7 +67,7 @@ export const BRAND = {
     'ゴルフ雑誌「ALBA」',
     'ウェルビーイングメディア「Wellulu」',
   ],
-  method: '元格闘家オーナー・阿佐美ザウルス氏が考案した“ザウルス式”体幹軸調整ストレッチ',
+  method: '元格闘家オーナーが考案した独自の「体感軸調整法」',
   // 施術の3本柱（ブランド共通コンセプト・効能は断定しない）
   pillars: [
     {
@@ -90,13 +91,13 @@ export const BRAND = {
 // スタッフ（実在。全員「体感軸調整トレーナー」。一言は生成済み・薬機法調整済み）
 // 掲載順はTOP v5デザイン準拠。photo は実写（design-reference/uploads から圧縮済み）
 export const STAFF = [
-  { name: 'KAYO', kana: 'カヨ', role: '体感軸調整トレーナー', photo: '/images/staff/kayo.webp', word: 'つらい肩や腰のお疲れに。丁寧なカウンセリングで、今の状態にじっくり向き合います。' },
-  { name: 'KIYO', kana: 'キヨ', role: '体感軸調整トレーナー', photo: '/images/staff/kiyo.webp', word: 'ただ整えるだけでなく、動ける身体へ。姿勢から軽やかさを引き出します。' },
-  { name: 'MIYUKA', kana: 'ミユカ', role: '体感軸調整トレーナー', photo: '/images/staff/miyuka.webp', word: 'しっかり効かせる施術と、ほっと落ち着く時間。その両方を大切にしています。' },
   { name: 'AINA', kana: 'アイナ', role: '体感軸調整トレーナー', photo: '/images/staff/aina.webp', word: '頑張るお身体こそ、しっかりゆるめて軽く。日々を動きやすくするお手伝いをします。' },
-  { name: 'AYU', kana: 'アユ', role: '体感軸調整トレーナー', photo: '/images/staff/ayu.webp', word: '「来てよかった」のひと言を全力で。一回一回、丁寧に向き合います。' },
   { name: 'DAYAN', kana: 'ダヤン', role: '体感軸調整トレーナー', photo: '/images/staff/dayan.webp', word: '伸ばして、整える。無理なく続けられる健康な身体づくりを一緒に。' },
   { name: 'HANA', kana: 'ハナ', role: '体感軸調整トレーナー', photo: '/images/staff/hana.webp', word: 'スポーツやゴルフの動きが、もっと快適に。可動域からコンディションを底上げします。' },
+  { name: 'MIYUKA', kana: 'ミユカ', role: '体感軸調整トレーナー', photo: '/images/staff/miyuka.webp', word: 'しっかり効かせる施術と、ほっと落ち着く時間。その両方を大切にしています。' },
+  { name: 'KIYO', kana: 'キヨ', role: '体感軸調整トレーナー', photo: '/images/staff/kiyo.webp', word: 'ただ整えるだけでなく、動ける身体へ。姿勢から軽やかさを引き出します。' },
+  { name: 'AYU', kana: 'アユ', role: '体感軸調整トレーナー', photo: '/images/staff/ayu.webp', word: '「来てよかった」のひと言を全力で。一回一回、丁寧に向き合います。' },
+  { name: 'KAYO', kana: 'カヨ', role: '体感軸調整トレーナー', photo: '/images/staff/kayo.webp', word: 'つらい肩や腰のお疲れに。丁寧なカウンセリングで、今の状態にじっくり向き合います。' },
 ];
 
 // 店舗写真（本部支給素材より。顔が写らないようトリミング済み・元データは photos-src/）
@@ -136,16 +137,16 @@ export const PAYMENTS = [
 // ※Googleマップ由来のためReview/AggregateRatingのschema化はしない（Googleのガイドライン上、
 //   構造化データにできるのは自サイトで直接収集したレビューのみ）
 export const REVIEWS = [
-  { name: 'N.M さん', stars: 5, text: 'ストレッチで身体がほぐれて普段運動しないけど、運動したくなりました。' },
-  { name: 'I.J さん', stars: 5, text: '普段ストレッチ出来ない箇所もしっかり伸ばせて気持ち良かったです。また利用したいです。' },
-  { name: 'Y.K さん', stars: 4, text: '身体がものすごく伸びました。施術されている時は、とても疲れましたが血流が良くなり、心地よい疲労感で、とても良かったです。' },
+  { name: 'N さん', stars: 5, text: 'ストレッチで身体がほぐれて普段運動しないけど、運動したくなりました。' },
+  { name: 'I さん', stars: 5, text: '普段ストレッチ出来ない箇所もしっかり伸ばせて気持ち良かったです。また利用したいです。' },
+  { name: 'Y さん', stars: 4, text: '身体がものすごく伸びました。施術されている時は、とても疲れましたが血流が良くなり、心地よい疲労感で、とても良かったです。' },
   { name: 'Q さん', stars: 5, text: '知人から紹介頂きお邪魔させて頂きました。マッサージ＋ストレッチという今まで経験した事が無い施術で終わった後は血行が良くなってポカポカしました🔥スタッフの方もとても感じ良くリラックスして過ごす事が出来ました。満足度が高かったので私の友人にも紹介させて頂きました。これからも頑張ってください。応援してます📣' },
-  { name: 'M.F さん', stars: 5, text: 'いろいろな角度からアプローチしてもらいました。とにかくよかったです。' },
-  { name: 'S.K さん', stars: 5, text: '一回の施術で体が楽になった' },
+  { name: 'M さん', stars: 5, text: 'いろいろな角度からアプローチしてもらいました。とにかくよかったです。' },
+  { name: 'S さん', stars: 5, text: '一回の施術で体が楽になった' },
   { name: 'A さん', stars: 5, text: '通常のマッサージよりもスッキリ感があり、効果も期待できそうです♪痛気持ちよくて最高でした！' },
-  { name: 'H.S さん', stars: 4, text: 'よくある揉みほぐしではなく、伸ばす感じで自分が求めているタイプのマッサージだった。終わった後は身体が温まって、スッキリしました。' },
+  { name: 'H さん', stars: 4, text: 'よくある揉みほぐしではなく、伸ばす感じで自分が求めているタイプのマッサージだった。終わった後は身体が温まって、スッキリしました。' },
   { name: 'B さん', stars: 5, text: '体が軽い✨ありがとうございます✨' },
-  { name: 'T.H さん', stars: 5, text: '腰回り重点でやってもらいました。状態を確認してもらいながら施術してくださり、親切で良かったです。筋肉の場所の説明もありました。終わって、腰回りの感覚が楽になりました。ありがとうございます。' },
+  { name: 'T さん', stars: 5, text: '腰回り重点でやってもらいました。状態を確認してもらいながら施術してくださり、親切で良かったです。筋肉の場所の説明もありました。終わって、腰回りの感覚が楽になりました。ありがとうございます。' },
 ];
 
 // sameAs（構造化データ用）

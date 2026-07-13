@@ -5,7 +5,7 @@ import ReserveCTA from '../components/ReserveCTA.astro';
 import { SITE, LAST_UPDATED } from '../consts';
 
 const title = 'アクセス・店舗案内｜岐阜市長良｜全力ストレッチ岐阜長良店';
-const description = '全力ストレッチ岐阜長良店へのアクセス。岐阜県岐阜市長良東2-37 RSDビル2F南、ヤマダデンキ テックランド岐阜長良のすぐそば。駐車場10台以上、営業10:00-22:00・不定休。';
+const description = '全力ストレッチ岐阜長良店へのアクセス。岐阜県岐阜市長良東２丁目３７ RSDビル2F南、ヤマダデンキ テックランド岐阜長良のすぐそば。駐車場10台以上、営業10:00-22:00・不定休。';
 
 const mapQuery = encodeURIComponent(SITE.addressFull);
 
@@ -30,9 +30,17 @@ const breadcrumb = {
     <div class="mb-10 sm:mb-14"><Breadcrumbs items={[{ label: 'トップ', href: '/' }, { label: 'アクセス・店舗案内' }]} /></div>
     <h1 class="display-title mb-6">ACCESS</h1>
     <p class="mb-4 text-[26px] font-black sm:text-[36px]">ヤマダデンキ長良の、すぐそば。</p>
-    <p class="mb-16 max-w-[820px] text-[15px] leading-[2.1] text-sub sm:mb-20 sm:text-[17px]">
+    <p class="mb-12 max-w-[820px] text-[15px] leading-[2.1] text-sub sm:mb-14 sm:text-[17px]">
       全力ストレッチ岐阜長良店は、岐阜市長良エリア・長良東のRSDビル2F南にあります。ビル東側に共同駐車場が10台以上あり、岐阜市外からもお車で通いやすい立地です。
     </p>
+
+    <!-- 店舗外観（実写が用意でき次第 exterior.webp に差し替え） -->
+    <img
+      src="/images/photos/exterior.svg"
+      alt="全力ストレッチ岐阜長良店の外観（RSDビル2F南・ヤマダデンキ テックランド岐阜長良そば）"
+      width="1600" height="900" loading="lazy" decoding="async"
+      class="mb-16 h-[260px] w-full object-cover sm:mb-20 sm:h-[440px]"
+    />
 
     <div class="grid items-start gap-14 lg:grid-cols-2 lg:gap-[88px]">
       <div>
@@ -70,5 +78,5 @@ const breadcrumb = {
     </div>
   </section>
 
-  <ReserveCTA title="通いやすい長良で、まずは初回3,300円から。" />
+  <ReserveCTA title="通いやすい長良で、まずは初回限定75%OFFでお試し。" />
 </Base>

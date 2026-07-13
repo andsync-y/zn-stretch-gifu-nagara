@@ -145,11 +145,25 @@
   }
 }
 
+/* ヒーロー写真のクロスフェード（5枚×5秒＝25秒ループ） */
+@keyframes heroFade {
+  0% { opacity: 0; }
+  6% { opacity: 1; }
+  24% { opacity: 1; }
+  30% { opacity: 0; }
+  100% { opacity: 0; }
+}
+.hero-slide {
+  opacity: 0;
+  animation: heroFade 25s linear infinite;
+}
+
 /* 動きを減らす設定の尊重 */
 @media (prefers-reduced-motion: reduce) {
   .animate-marquee,
   .animate-marquee-sp,
-  .animate-spin-slow {
+  .animate-spin-slow,
+  .hero-slide {
     animation: none !important;
   }
 }

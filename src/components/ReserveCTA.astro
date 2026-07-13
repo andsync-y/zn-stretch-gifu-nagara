@@ -7,7 +7,7 @@ export interface Props {
   large?: boolean;
 }
 const {
-  title = 'まずは、初回3,300円から。',
+  title = 'まずは、初回限定75%OFFでお試し。',
   sub = '初回限定 60分 3,300円（税込）／完全個室・マンツーマン',
   large = false,
 } = Astro.props;
@@ -23,7 +23,7 @@ const {
     <h2 class="mx-auto mb-5 max-w-3xl text-[26px] font-black leading-[1.5] text-white sm:text-4xl">{title}</h2>
     <p class="mx-auto mb-12 max-w-xl text-[15px] leading-[2] text-inkmuted sm:mb-16 sm:text-base">{sub}</p>
     <div class="flex flex-col items-center gap-9">
-      <a href={SITE.urls.reserve} target="_blank" rel="noopener" class="btn-amber-pill w-full max-w-md sm:w-auto sm:px-16 sm:py-6 sm:text-lg">WEB予約はこちら（ホットペッパー）</a>
+      <a href={SITE.urls.reserve} target="_blank" rel="noopener" class="btn-amber-pill w-full max-w-md sm:w-auto sm:px-16 sm:py-6 sm:text-lg">WEB予約はこちら</a>
       <div class="flex flex-col items-center gap-4 text-[15px] text-inkpaper/90 sm:flex-row sm:gap-12">
         <a href={SITE.urls.line} target="_blank" rel="noopener" class="border-b border-white/50 pb-1">LINEで予約・相談</a>
         <a href={`tel:${SITE.telLink}`}>TEL {SITE.tel}（{SITE.hours}・{SITE.closed}）</a>
