@@ -1,0 +1,119 @@
+---
+import Base from '../layouts/Base.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { SITE, STAFF, PHOTOS, LAST_UPDATED } from '../consts';
+
+const title = '採用情報｜体感軸調整トレーナー募集｜全力ストレッチ岐阜長良店';
+const description = '全力ストレッチ岐阜長良店では、一緒に働く体感軸調整トレーナー（ストレッチセラピスト）を募集しています。完全個室・マンツーマンのパーソナルストレッチ専門店。岐阜市長良・2026年6月オープン。ご応募はIndeedから。';
+
+// 募集要項（{{...}}はIndeedの掲載内容を確認して差し替える。創作しない）
+const requirements = [
+  { t: '職種', d: '体感軸調整トレーナー（ストレッチセラピスト）' },
+  { t: '雇用形態', d: '{{雇用形態}}' },
+  { t: '給与', d: '{{給与}}' },
+  { t: '勤務時間', d: '{{勤務時間}}（営業時間 10:00–22:00内のシフト制）' },
+  { t: '休日', d: '{{休日}}' },
+  { t: '勤務地', d: `${SITE.addressFull}（${SITE.landmark}・車通勤可/駐車場あり）` },
+  { t: '応募資格', d: '{{応募資格}}' },
+  { t: '研修', d: 'ZST協会認定「体感軸調整法」の研修があります。' },
+  { t: '待遇・福利厚生', d: '{{待遇}}' },
+];
+
+const attractions = [
+  { no: '01', t: '独自メソッドが身につく', d: '元格闘家考案・ZST協会認定「体感軸調整法」の研修を受けて、もみほぐしとは違う「伸ばす」技術を基礎から習得できます。' },
+  { no: '02', t: '完全個室でお客様と1対1', d: '流れ作業ではなく、カウンセリングから施術まで一人のお客様とじっくり向き合えます。「来てよかった」の声が直接届く仕事です。' },
+  { no: '03', t: 'オープンしたての店舗', d: '2026年6月オープン。お店の空気も、働き方も、これから一緒につくっていくフェーズです。全国約70店舗のブランドの仕組みも活かせます。' },
+  { no: '04', t: '女性トレーナーが活躍中', d: '現在のトレーナーは全員女性。年齢や経験よりも、目の前の人の体に丁寧に向き合えることを大切にしています。' },
+];
+
+const breadcrumb = {
+  '@context': 'https://schema.org', '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'トップ', item: Astro.site!.href },
+    { '@type': 'ListItem', position: 2, name: '採用情報', item: new URL('/recruit', Astro.site).href },
+  ],
+};
+
+// NOTE: JobPosting構造化データは、給与・雇用形態などの必須項目が確定してから追加する
+// （不完全なJobPosting schemaはリッチリザルトのエラーになるため）
+---
+<Base title={title} description={description} path="/recruit" jsonld={[breadcrumb]}>
+  <section class="mx-auto max-w-content px-5 pb-24 pt-16 sm:px-10 sm:pb-32 sm:pt-[120px]">
+    <div class="mb-10 sm:mb-14"><Breadcrumbs items={[{ label: 'トップ', href: '/' }, { label: '採用情報' }]} /></div>
+    <h1 class="display-title mb-6">RECRUIT</h1>
+    <p class="mb-4 text-[26px] font-black leading-[1.6] sm:text-[36px]">あなたの手で、<br class="sm:hidden" />「動ける身体」をつくる仕事。</p>
+    <p class="mb-14 max-w-[820px] text-[15px] leading-[2.1] text-sub sm:mb-16 sm:text-[17px]">
+      全力ストレッチ岐阜長良店では、一緒に働く体感軸調整トレーナー（ストレッチセラピスト）を募集しています。
+      完全個室・マンツーマンで、お客様一人ひとりの体とじっくり向き合える環境です。
+    </p>
+    <div class="flex flex-col gap-4 sm:flex-row">
+      <a href={SITE.urls.recruit} target="_blank" rel="noopener" class="btn-amber-pill sm:px-14">Indeedで応募する</a>
+      <a href="#requirements" class="btn-ink-pill sm:px-10">募集要項を見る</a>
+    </div>
+  </section>
+
+  <!-- 働く魅力 -->
+  <section class="border-t border-ink/15 bg-paper2 px-5 py-24 sm:px-10 sm:py-32">
+    <div class="mx-auto max-w-content">
+      <p class="en-label mb-8">Why Join Us</p>
+      <h2 class="jp-title mb-14">この店で働く、4つの理由。</h2>
+      <div class="grid gap-10 sm:grid-cols-2 sm:gap-12 lg:grid-cols-4">
+        {attractions.map((a) => (
+          <div class="rule-top pt-7">
+            <p class="mb-4 font-display text-[26px] italic leading-none text-faint">{a.no}</p>
+            <h3 class="mb-3 text-[19px] font-black">{a.t}</h3>
+            <p class="text-[15px] leading-[2] text-sub">{a.d}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 職場の様子 -->
+  <section class="px-5 py-24 sm:px-10 sm:py-32">
+    <div class="mx-auto max-w-content">
+      <p class="en-label mb-8">Workplace</p>
+      <h2 class="jp-title mb-14">一緒に働く仲間</h2>
+      <div class="grid grid-cols-3 gap-4 sm:grid-cols-4 sm:gap-6 lg:grid-cols-7">
+        {STAFF.map((s) => (
+          <div>
+            <img src={s.photo} alt={`トレーナー ${s.name}`} width="800" height="1069" loading="lazy" decoding="async" class="aspect-[3/4] w-full object-cover object-top" />
+            <p class="mt-2 text-center text-[12px] font-black tracking-[0.08em]">{s.name}</p>
+          </div>
+        ))}
+      </div>
+      <img src={PHOTOS.method3} alt="完全個室での施術の様子" width="1400" height="930" loading="lazy" decoding="async" class="mt-10 h-[240px] w-full object-cover sm:h-[380px]" />
+    </div>
+  </section>
+
+  <!-- 募集要項 -->
+  <section id="requirements" class="border-t border-ink/15 bg-paper2 px-5 py-24 sm:px-10 sm:py-32">
+    <div class="mx-auto max-w-content">
+      <p class="en-label mb-8">Requirements</p>
+      <h2 class="jp-title mb-4">募集要項</h2>
+      <p class="mb-12 text-[14px] leading-[2] text-sub">最新の募集条件・詳細は、Indeedの求人ページをご確認ください。</p>
+      <div class="rule-top max-w-[900px]">
+        {requirements.map((r) => (
+          <div class="rule-row grid gap-1 px-1 py-5 sm:grid-cols-[180px_1fr] sm:gap-6">
+            <span class="text-[15px] font-black sm:text-base">{r.t}</span>
+            <span class="text-[14px] leading-[2] text-sub sm:text-[15px]">{r.d}</span>
+          </div>
+        ))}
+      </div>
+      <p class="mt-8 text-[12px] text-muted">※条件の詳細・最新情報はIndeedの掲載をご確認ください。面接時にもご説明します。</p>
+    </div>
+  </section>
+
+  <!-- 応募CTA -->
+  <section class="bg-ink text-inkpaper">
+    <div class="container-x py-24 text-center sm:py-32">
+      <p class="en-label-dark mb-8" style="font-size:18px;letter-spacing:0.3em">Entry</p>
+      <h2 class="mx-auto mb-5 max-w-3xl text-[26px] font-black leading-[1.5] text-white sm:text-4xl">まずは、話を聞くだけでも。</h2>
+      <p class="mx-auto mb-12 max-w-xl text-[15px] leading-[2] text-inkmuted sm:text-base">
+        ご応募・ご質問はIndeedの求人ページから受け付けています。見学のご相談もお気軽にどうぞ。
+      </p>
+      <a href={SITE.urls.recruit} target="_blank" rel="noopener" class="btn-amber-pill w-full max-w-md sm:w-auto sm:px-16 sm:py-6 sm:text-lg">Indeedで応募する</a>
+      <p class="mt-8 text-xs text-inkfaint">最終更新：{LAST_UPDATED}</p>
+    </div>
+  </section>
+</Base>

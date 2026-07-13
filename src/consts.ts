@@ -40,6 +40,7 @@ export const SITE = {
     instagramHandle: '@zngifunagara',
     line: 'https://lin.ee/XyYJkAc',
     lineHandle: '@208dxmfr',
+    recruit: 'https://jp.indeed.com/viewjob?jk=bfa8a8302df55342',
   },
 };
 
@@ -47,7 +48,7 @@ export const SITE = {
 export const PRICING = {
   note: '価格は変更となる場合があります。',
   courses: [
-    { name: 'お試しコース', label: '60分', normal: '13,200円', first: '¥3,300', firstPlain: '3,300', discount: '初回限定75%OFF', primary: true },
+    { name: '集中ケアコース', label: '60分', normal: '13,200円', first: '¥3,300', firstPlain: '3,300', discount: '初回限定75%OFF', primary: true },
     { name: '全身ケアコース', label: '90分', normal: '19,800円', first: '¥4,900', firstPlain: '4,900', discount: '初回限定75%OFF', primary: true },
     { name: '全身ケア＋ヘッドスパ', label: '120分', normal: '26,400円', first: '¥13,200', firstPlain: '13,200', discount: '初回限定50%OFF', primary: false },
   ],
