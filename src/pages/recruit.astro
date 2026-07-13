@@ -6,17 +6,16 @@ import { SITE, STAFF, PHOTOS, LAST_UPDATED } from '../consts';
 const title = '採用情報｜体感軸調整トレーナー募集｜全力ストレッチ岐阜長良店';
 const description = '全力ストレッチ岐阜長良店では、一緒に働く体感軸調整トレーナー（ストレッチセラピスト）を募集しています。完全個室・マンツーマンのパーソナルストレッチ専門店。岐阜市長良・2026年6月オープン。ご応募はIndeedから。';
 
-// 募集要項（{{...}}はIndeedの掲載内容を確認して差し替える。創作しない）
+// 募集要項（2026-07-13 オーナー確認済みの実データ）
 const requirements = [
   { t: '職種', d: '体感軸調整トレーナー（ストレッチセラピスト）' },
-  { t: '雇用形態', d: '{{雇用形態}}' },
-  { t: '給与', d: '{{給与}}' },
-  { t: '勤務時間', d: '{{勤務時間}}（営業時間 10:00–22:00内のシフト制）' },
-  { t: '休日', d: '{{休日}}' },
+  { t: '雇用形態', d: 'アルバイト' },
+  { t: '給与', d: '時給1,600円〜3,000円\n※試用期間は時給1,400円（1〜3ヶ月）\nインセンティブあり（指名1名につき3,000円全額還元／回数券販売枚数に応じたバックあり）' },
+  { t: '勤務時間', d: '09:30〜22:30内のシフト制' },
+  { t: '休日', d: '週休二日制' },
   { t: '勤務地', d: `${SITE.addressFull}（${SITE.landmark}・車通勤可/駐車場あり）` },
-  { t: '応募資格', d: '{{応募資格}}' },
-  { t: '研修', d: 'ZST協会認定「体感軸調整法」の研修があります。' },
-  { t: '待遇・福利厚生', d: '{{待遇}}' },
+  { t: '応募資格', d: '18歳以上' },
+  { t: '研修', d: '約40時間（6日間）の講習で、ストレッチ施術や接客マナーなど、基礎から学びます。独自の「体感軸調整ストレッチ」の技術はもちろん、お客様に選ばれる接客・コミュニケーションまで丁寧に指導します。\n決して楽な研修ではありませんが、認定試験をクリアした暁にはディプロマを発行。「体のプロ」として自信を持ってデビューできます！' },
 ];
 
 const attractions = [
@@ -34,10 +33,35 @@ const breadcrumb = {
   ],
 };
 
-// NOTE: JobPosting構造化データは、給与・雇用形態などの必須項目が確定してから追加する
-// （不完全なJobPosting schemaはリッチリザルトのエラーになるため）
+// JobPosting構造化データ（募集条件確定済み・2026-07-13）
+const jobPosting = {
+  '@context': 'https://schema.org',
+  '@type': 'JobPosting',
+  title: '体感軸調整トレーナー（ストレッチセラピスト）',
+  description:
+    '<p>完全個室・マンツーマンのパーソナルストレッチ専門店「全力ストレッチ岐阜長良店」で、一緒に働く体感軸調整トレーナー（ストレッチセラピスト）を募集しています。約40時間（6日間）の研修で、ストレッチ施術や接客マナーを基礎から学べます。認定試験合格後はディプロマを発行します。ご応募はIndeedの求人ページから受け付けています。</p>',
+  datePosted: '2026-07-13',
+  employmentType: 'PART_TIME',
+  hiringOrganization: { '@type': 'Organization', name: SITE.operator, sameAs: Astro.site!.href },
+  jobLocation: {
+    '@type': 'Place',
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: SITE.streetAddress,
+      addressLocality: SITE.addressLocality,
+      addressRegion: SITE.addressRegion,
+      postalCode: SITE.postalCode,
+      addressCountry: 'JP',
+    },
+  },
+  baseSalary: {
+    '@type': 'MonetaryAmount',
+    currency: 'JPY',
+    value: { '@type': 'QuantitativeValue', minValue: 1600, maxValue: 3000, unitText: 'HOUR' },
+  },
+};
 ---
-<Base title={title} description={description} path="/recruit" jsonld={[breadcrumb]}>
+<Base title={title} description={description} path="/recruit" jsonld={[breadcrumb, jobPosting]}>
   <section class="mx-auto max-w-content px-5 pb-24 pt-16 sm:px-10 sm:pb-32 sm:pt-[120px]">
     <div class="mb-10 sm:mb-14"><Breadcrumbs items={[{ label: 'トップ', href: '/' }, { label: '採用情報' }]} /></div>
     <h1 class="display-title mb-6">RECRUIT</h1>
@@ -96,7 +120,7 @@ const breadcrumb = {
         {requirements.map((r) => (
           <div class="rule-row grid gap-1 px-1 py-5 sm:grid-cols-[180px_1fr] sm:gap-6">
             <span class="text-[15px] font-black sm:text-base">{r.t}</span>
-            <span class="text-[14px] leading-[2] text-sub sm:text-[15px]">{r.d}</span>
+            <span class="whitespace-pre-line text-[14px] leading-[2] text-sub sm:text-[15px]">{r.d}</span>
           </div>
         ))}
       </div>
