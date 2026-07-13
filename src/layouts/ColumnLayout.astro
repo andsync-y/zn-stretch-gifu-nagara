@@ -1,0 +1,117 @@
+---
+import Base from './Base.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import ReserveCTA from '../components/ReserveCTA.astro';
+
+export interface Related { label: string; href: string; }
+
+export interface Props {
+  slug: string;
+  title: string;
+  description: string;
+  /** 記事の見出し（h1） */
+  heading: string;
+  /** 公開日（YYYY-MM-DD） */
+  datePublished: string;
+  /** 記事に関連するお悩みページ等 */
+  related: Related[];
+}
+
+const { slug, title, description, heading, datePublished, related } = Astro.props;
+const pagePath = `/column/${slug}`;
+
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: heading,
+  description,
+  datePublished,
+  inLanguage: 'ja',
+  author: {
+    '@type': 'Organization',
+    name: '全力ストレッチ岐阜長良店',
+    url: new URL('/staff', Astro.site).href,
+  },
+  publisher: { '@id': new URL('/#localbusiness', Astro.site).href },
+  mainEntityOfPage: new URL(pagePath, Astro.site).href,
+};
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'トップ', item: Astro.site!.href },
+    { '@type': 'ListItem', position: 2, name: 'コラム', item: new URL('/column', Astro.site).href },
+    { '@type': 'ListItem', position: 3, name: heading, item: new URL(pagePath, Astro.site).href },
+  ],
+};
+---
+<Base title={title} description={description} path={pagePath} jsonld={[articleSchema, breadcrumbSchema]}>
+  <article class="section-grid mx-auto max-w-content border-b border-ink/20 px-5 pb-24 pt-16 sm:px-10 sm:pb-32 sm:pt-[120px]">
+    <div class="mb-10 sm:mb-14"><Breadcrumbs items={[{ label: 'トップ', href: '/' }, { label: 'コラム', href: '/column' }, { label: heading }]} /></div>
+    <p class="en-label mb-8">Column</p>
+    <h1 class="mb-6 max-w-[980px] text-[28px] font-black leading-[1.5] sm:text-[44px]">{heading}</h1>
+    <p class="mb-12 text-[12px] tracking-[0.08em] text-muted sm:mb-16">公開日：{datePublished}／執筆・監修：全力ストレッチ岐阜長良店 体感軸調整トレーナーチーム</p>
+
+    <div class="column-body max-w-[820px]">
+      <slot />
+    </div>
+
+    <p class="rule-top mt-16 max-w-[820px] pt-5 text-[13px] leading-[1.9] text-muted">
+      監修：<a href="/staff" class="font-bold underline underline-offset-4">全力ストレッチ岐阜長良店 体感軸調整トレーナーチーム</a>（ZST協会認定／岐阜市長良・個室のパーソナルストレッチ専門店）<br />
+      ※本記事は一般的なセルフケアの情報であり、効果には個人差があります。強い痛みやしびれがある場合は医療機関にご相談ください。
+    </p>
+
+    {related.length > 0 && (
+      <div class="mt-14 max-w-[820px]">
+        <h2 class="mb-6 text-[19px] font-black">あわせて読みたい・関連ページ</h2>
+        <div class="rule-top">
+          {related.map((r) => (
+            <a href={r.href} class="group flex items-baseline justify-between gap-4 border-b border-line px-2 py-5 no-underline">
+              <span class="text-[15px] font-bold sm:text-[17px]">{r.label}</span>
+              <span class="text-lg font-bold transition group-hover:text-amber-700" aria-hidden="true">↗</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    )}
+  </article>
+
+  <ReserveCTA title="セルフケアで追いつかない張りは、プロにおまかせください。" />
+</Base>
+
+<style is:global>
+  .column-body h2 {
+    margin: 44px 0 18px;
+    font-size: clamp(20px, 2.4vw, 26px);
+    font-weight: 900;
+    line-height: 1.6;
+    border-top: 1px solid #151719;
+    padding-top: 22px;
+  }
+  .column-body h3 {
+    margin: 30px 0 12px;
+    font-size: clamp(17px, 1.9vw, 20px);
+    font-weight: 900;
+    line-height: 1.6;
+  }
+  .column-body p {
+    margin: 0 0 18px;
+    font-size: 15px;
+    line-height: 2.1;
+    color: #43494d;
+  }
+  .column-body ul,
+  .column-body ol {
+    margin: 0 0 22px;
+    padding-left: 1.4em;
+    font-size: 15px;
+    line-height: 2;
+    color: #43494d;
+  }
+  .column-body ul { list-style: disc; }
+  .column-body ol { list-style: decimal; }
+  .column-body li { margin-bottom: 6px; }
+  .column-body strong { color: #151719; }
+  .column-body a { font-weight: 700; text-decoration: underline; text-underline-offset: 4px; }
+</style>
