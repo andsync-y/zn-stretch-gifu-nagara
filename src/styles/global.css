@@ -12,6 +12,11 @@
     -webkit-text-size-adjust: 100%;
   }
 
+  /* フローティングヘッダー分、アンカー着地位置を下げる */
+  [id] {
+    scroll-margin-top: 90px;
+  }
+
   body {
     @apply bg-paper text-ink font-sans;
     font-size: 16px;
