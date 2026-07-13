@@ -45,40 +45,13 @@ const marqueeItems = [
 ];
 ---
 <Base title={title} description={description} path="/">
-  <!-- HERO：スクロールに合わせてレイヤーが再構成されるエディトリアル演出 -->
-  <section class="hero-scroll" data-hero>
-    <div class="hero-stage">
-      <div class="hero-grid" aria-hidden="true"></div>
-      <p class="hero-ghost" aria-hidden="true">MOVE</p>
-      <p class="hero-outline" aria-hidden="true">YOUR BODY</p>
+  <!-- HERO：連番フレーム（動画のコマ）をスクロールに同期してスクラブ再生する3Dスクロール演出 -->
+  <section class="hero-scrub" data-hero>
+    <div class="hero-scrub-stage">
+      <img class="hero-scrub-fallback" data-hero-fallback src="/frames/frame_0001.jpg" width="1920" height="1080" alt="動くカラダで、生きる。完全個室で行う体感軸パーソナルストレッチ" fetchpriority="high" decoding="async" />
+      <canvas data-hero-canvas aria-hidden="true"></canvas>
 
-      <div class="hero-orbit" aria-hidden="true">
-        <span></span>
-      </div>
-
-      <figure class="hero-visual hero-visual-main">
-        <img src={PHOTOS.concept} alt="完全個室で行う体感軸パーソナルストレッチ" width="1060" height="1700" fetchpriority="high" decoding="async" />
-      </figure>
-      <figure class="hero-visual hero-visual-sub" aria-hidden="true">
-        <img src={PHOTOS.hero2} alt="" width="1085" height="1458" loading="eager" decoding="async" />
-      </figure>
-      <figure class="hero-visual hero-visual-detail" aria-hidden="true">
-        <img src={PHOTOS.method2} alt="" width="1400" height="1050" loading="eager" decoding="async" />
-      </figure>
-
-      <div class="hero-copy">
-        <p class="hero-kicker"><span>Gifu Nagara</span><span>Physical Conditioning</span></p>
-        <h1>
-          <span class="hero-line">動くカラダで、</span>
-          <span class="hero-line hero-line-indent">生きる。</span>
-          <span class="sr-only">全力ストレッチ岐阜長良店｜岐阜市長良の完全個室パーソナルストレッチ専門店</span>
-        </h1>
-        <p class="hero-lead">伸ばすだけじゃない。<br />毎日を軽やかに動くための、身体改革。</p>
-      </div>
-
-      <div class="hero-facts" aria-label="店舗の特長">
-        <span>完全個室</span><span>女性トレーナー</span><span>10:00–22:00</span>
-      </div>
+      <h1 class="sr-only">動くカラダで、生きる。｜全力ストレッチ岐阜長良店（岐阜市長良の完全個室パーソナルストレッチ専門店）</h1>
 
       <div class="hero-offer">
         <div class="hero-offer-heading">
@@ -94,36 +67,115 @@ const marqueeItems = [
       </div>
 
       <div class="hero-scroll-sign" aria-hidden="true"><span>SCROLL TO MOVE</span><i></i></div>
-      <p class="hero-count" aria-hidden="true"><span>01</span> / 02</p>
     </div>
   </section>
 
   <script>
     const hero = document.querySelector<HTMLElement>('[data-hero]');
+    const canvas = hero?.querySelector<HTMLCanvasElement>('[data-hero-canvas]');
+    const fallback = hero?.querySelector<HTMLElement>('[data-hero-fallback]');
     const offer = hero?.querySelector<HTMLElement>('.hero-offer');
+    const ctx = canvas?.getContext('2d');
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    const FRAME_COUNT = 121;
+    const OFFER_AT = 0.72; // オファーカードを出すスクロール進捗
+    const SCRUB_END = 0.85; // ここまでで最終フレームに到達し、残りは静止
+    const dir = window.innerWidth <= 768 ? '/frames/sm' : '/frames';
+    const srcOf = (i: number) => `${dir}/frame_${String(i + 1).padStart(4, '0')}.jpg`;
+
+    const images: (HTMLImageElement | null)[] = new Array(FRAME_COUNT).fill(null);
+    let currentFrame = -1;
+    let drawnFrame = -1;
     let ticking = false;
 
+    // 表示中フレーム以下で読み込み済みの直近フレームを描く（読み込み中の飛びを防ぐ）
+    const nearestLoaded = (i: number) => {
+      for (let k = i; k >= 0; k--) if (images[k]?.complete) return k;
+      return -1;
+    };
+
+    const draw = () => {
+      if (!canvas || !ctx || !hero) return;
+      const stage = canvas.parentElement as HTMLElement;
+      const dpr = Math.min(2, window.devicePixelRatio || 1);
+      const cw = stage.clientWidth;
+      const ch = stage.clientHeight;
+      if (canvas.width !== Math.round(cw * dpr) || canvas.height !== Math.round(ch * dpr)) {
+        canvas.width = Math.round(cw * dpr);
+        canvas.height = Math.round(ch * dpr);
+      }
+      const idx = nearestLoaded(Math.max(0, currentFrame));
+      if (idx < 0) return;
+      const img = images[idx]!;
+      const iw = img.naturalWidth;
+      const ih = img.naturalHeight;
+      // 横長ビューポートはcover、縦長（スマホ縦）はcontainで文字が切れないように
+      const portrait = ch > cw;
+      const scale = (portrait ? Math.min : Math.max)(canvas.width / iw, canvas.height / ih);
+      const dw = iw * scale;
+      const dh = ih * scale;
+      // 縦画面では帯をやや上寄せにして、下部のオファーカードと重ならないようにする
+      const dy = (canvas.height - dh) * (portrait ? 0.38 : 0.5);
+      ctx.fillStyle = '#f4f5f2';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, (canvas.width - dw) / 2, dy, dw, dh);
+      drawnFrame = idx;
+      if (fallback && fallback.style.opacity !== '0') fallback.style.opacity = '0';
+    };
+
+    const load = (i: number, onload?: () => void) => {
+      if (images[i]) return;
+      const img = new Image();
+      img.decoding = 'async';
+      img.src = srcOf(i);
+      img.onload = () => onload?.();
+      images[i] = img;
+    };
+
     const updateHero = () => {
+      ticking = false;
       if (!hero) return;
       const rect = hero.getBoundingClientRect();
       const distance = Math.max(1, hero.offsetHeight - window.innerHeight);
       const progress = reduceMotion.matches ? 1 : Math.min(1, Math.max(0, -rect.top / distance));
       hero.style.setProperty('--hero-progress', progress.toFixed(4));
-      hero.classList.toggle('is-offer-visible', progress >= 0.56);
-      offer?.toggleAttribute('inert', progress < 0.56);
-      ticking = false;
+      hero.classList.toggle('is-offer-visible', progress >= OFFER_AT);
+      offer?.toggleAttribute('inert', progress < OFFER_AT && !reduceMotion.matches);
+      currentFrame = Math.min(FRAME_COUNT - 1, Math.floor((progress / SCRUB_END) * FRAME_COUNT));
+      if (currentFrame !== drawnFrame) draw();
     };
 
     const requestHeroUpdate = () => {
-      if (ticking || reduceMotion.matches) return;
+      if (ticking) return;
       ticking = true;
       requestAnimationFrame(updateHero);
     };
 
-    updateHero();
-    addEventListener('scroll', requestHeroUpdate, { passive: true });
-    addEventListener('resize', requestHeroUpdate, { passive: true });
+    if (hero && canvas && ctx) {
+      if (reduceMotion.matches) {
+        // 動きを減らす設定：スクラブせず1フレーム目を静止表示
+        currentFrame = 0;
+        load(0, draw);
+        updateHero();
+      } else {
+        load(0, () => { draw(); });
+        // 残りは同時6本ずつ順次プリロード
+        let next = 1;
+        const pump = () => {
+          if (next >= FRAME_COUNT) return;
+          const i = next++;
+          load(i, () => {
+            if (i <= currentFrame && drawnFrame < i) draw();
+            pump();
+          });
+        };
+        for (let c = 0; c < 6; c++) pump();
+        updateHero();
+        addEventListener('scroll', requestHeroUpdate, { passive: true });
+        addEventListener('resize', () => { drawnFrame = -1; requestHeroUpdate(); }, { passive: true });
+      }
+    }
   </script>
 
   <!-- MARQUEE -->
