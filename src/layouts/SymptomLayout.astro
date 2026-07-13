@@ -129,8 +129,8 @@ const breadcrumbSchema = {
       <p class="en-label mb-8">Why</p>
       <h2 class="jp-title mb-12">{whyHeading}</h2>
 
-      <!-- 発生サイクル図（症状別のPC/SP画像。画像内に見出し・説明文を含む） -->
-      <SymptomCycleFigure slug={slug} />
+      <!-- 発生サイクル図（症状別のPC/SP画像。ステップ文言はsr-onlyでDOMにも提供） -->
+      <SymptomCycleFigure slug={slug} steps={cycleSteps} note={cycleNote} />
 
       <!-- 原因カード -->
       <ul class="grid grid-cols-2 gap-7 lg:grid-cols-4">

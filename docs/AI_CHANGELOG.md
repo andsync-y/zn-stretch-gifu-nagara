@@ -168,3 +168,21 @@ Git履歴が「何を変更したか」、このファイルが「なぜ変更�
   - 幅1024pxの横スクロール（約28px）は変更前から存在する既存事象（`PriceRows` の `.price-first` 由来）で本件スコープ外・未修正。要別途対応。
 - 確認結果：`npm run build` 成功。7ページ×6幅=42ケースのChromium自動検証で全合格。ビルド出力の前後比較で差分はサイクル図ブロックと新画像のみ。
 - 未対応・次の作業：PR #6のマージと本番確認、`.price-first` の1024px横はみ出し修正。
+
+## 2026-07-14 03:20 JST — Claude Code
+
+- ブランチ：`claude/apply-design-patch-xbq1gz`
+- 関連PR：発生サイクル図のsr-onlyテキスト追加（PR番号はマージ時に確定）
+- 変更内容：
+  - 発生サイクル図（画像）のステップ文言を、SEO・アクセシビリティのため `sr-only` の `figcaption`（ol＋注記）としてDOMにも出力。
+  - 7ページの `cycleTitle` / `cycleSteps` / `cycleNote` を新画像の実文言に一致するよう更新（首こり・眼精疲労は目ルート/首ルートの分岐を反映）。
+  - `SymptomCycleFigure.astro` に `steps` / `note` プロパティを追加し、`SymptomLayout.astro` から受け渡し。
+- 主な変更ファイル：
+  - `src/components/SymptomCycleFigure.astro`
+  - `src/layouts/SymptomLayout.astro`
+  - `src/pages/symptoms/*.astro`（7ページの文言データのみ）
+- 判断・注意点：
+  - 視覚上の二重表示はなし（figcaptionは1×1pxのsr-only）。altと同文言の重複を避けるため、figcaptionにはタイトルを含めずステップ＋注記のみ。
+  - 文言は必ず画像内の実文言と同期させること（画像を差し替えたらcycleStepsも更新する）。
+- 確認結果：`npm run build` 成功。Chromiumでfigcaptionが視覚非表示かつDOMに存在すること、図の表示サイズに変化がないことを確認。
+- 未対応・次の作業：`.price-first` の1024px横はみ出し修正、ヒーロー動画の4Kアップスケール（クレジット確保後）。

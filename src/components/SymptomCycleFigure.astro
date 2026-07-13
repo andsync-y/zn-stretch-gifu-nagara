@@ -2,10 +2,13 @@
 /**
  * 悩み別ページの「発生サイクル」図（症状ごとのPC/SP別画像）。
  * PC: 1774x887 ／ SP: 941x1672（767px以下でSP版に切替）。
- * 画像内に見出し・説明文が含まれるため、周辺に同じ文言を重複表示しないこと。
+ * 画像内に見出し・説明文が含まれるため、周辺に同じ文言を視覚表示しないこと。
+ * steps/noteは画像内の実文言と一致させ、sr-onlyでSEO・スクリーンリーダーに提供する。
  */
 interface Props {
   slug: string;
+  steps?: string[];
+  note?: string;
 }
 
 const CYCLE_ALT: Record<string, string> = {
@@ -18,7 +21,7 @@ const CYCLE_ALT: Record<string, string> = {
   sports: '運動後の張り・動きにくさが続くサイクル',
 };
 
-const { slug } = Astro.props;
+const { slug, steps = [], note = '' } = Astro.props;
 const alt = CYCLE_ALT[slug];
 const base = `/images/symptoms/cycles/${slug}-cycle`;
 ---
@@ -30,6 +33,14 @@ const base = `/images/symptoms/cycles/${slug}-cycle`;
       <source srcset={`${base}-pc.webp`} type="image/webp" />
       <img src={`${base}-pc.png`} alt={alt} width="1774" height="887" loading="lazy" decoding="async" />
     </picture>
+    {steps.length > 0 && (
+      <figcaption class="sr-only">
+        <ol>
+          {steps.map((s) => <li>{s}</li>)}
+        </ol>
+        {note && <p>{note}</p>}
+      </figcaption>
+    )}
   </figure>
 )}
 
