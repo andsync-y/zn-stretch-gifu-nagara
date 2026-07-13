@@ -1,0 +1,69 @@
+---
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import ReserveCTA from '../../components/ReserveCTA.astro';
+
+const title = 'コラム｜岐阜市長良のパーソナルストレッチ専門店 全力ストレッチ岐阜長良店';
+const description = '肩こり・腰の重さ・スポーツ前後のケアなど、毎日を軽やかに動くためのセルフストレッチと体の知識を、岐阜市長良のパーソナルストレッチ専門店のトレーナーがお届けします。';
+
+const articles = [
+  {
+    slug: 'katakori-desk-stretch',
+    heading: 'デスクワークの肩こり対策｜肩甲骨をゆるめるセルフストレッチ5選',
+    desc: '肩が重くなる仕組みと、仕事の合間に椅子に座ったままできる肩甲骨まわりのストレッチをご紹介。',
+    date: '2026-07-14',
+  },
+  {
+    slug: 'youtsu-morning-stretch',
+    heading: '朝、腰が重い方へ｜股関節・お尻のセルフストレッチと座り方のコツ',
+    desc: '腰と関係の深い股関節・お尻まわりのゆるめ方と、腰への負担を減らす座り方のポイントを解説。',
+    date: '2026-07-14',
+  },
+  {
+    slug: 'golf-stretch-routine',
+    heading: 'ゴルフ前後のストレッチ｜スイングを支える股関節・肩甲骨ルーティン',
+    desc: 'ラウンド前のウォームアップと、翌日に張りを残しにくくするクールダウンの約5分ルーティン。',
+    date: '2026-07-14',
+  },
+];
+
+const breadcrumb = {
+  '@context': 'https://schema.org', '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'トップ', item: Astro.site!.href },
+    { '@type': 'ListItem', position: 2, name: 'コラム', item: new URL('/column', Astro.site).href },
+  ],
+};
+
+const itemList = {
+  '@context': 'https://schema.org', '@type': 'ItemList',
+  itemListElement: articles.map((a, i) => ({
+    '@type': 'ListItem', position: i + 1, name: a.heading, url: new URL(`/column/${a.slug}`, Astro.site).href,
+  })),
+};
+---
+<Base title={title} description={description} path="/column" jsonld={[breadcrumb, itemList]}>
+  <section class="section-grid mx-auto max-w-content border-b border-ink/20 px-5 pb-24 pt-16 sm:px-10 sm:pb-32 sm:pt-[120px]">
+    <div class="mb-10 sm:mb-14"><Breadcrumbs items={[{ label: 'トップ', href: '/' }, { label: 'コラム' }]} /></div>
+    <p class="display-title mb-6">COLUMN</p>
+    <h1 class="mb-4 text-[26px] font-black sm:text-[36px]">体のこと、ストレッチのこと。<span class="sr-only">｜岐阜市長良のパーソナルストレッチ専門店のコラム</span></h1>
+    <p class="mb-16 max-w-[820px] text-[15px] leading-[2.1] text-sub sm:mb-20 sm:text-[17px]">
+      毎日を軽やかに動くためのセルフストレッチや体の知識を、全力ストレッチ岐阜長良店のトレーナーがお届けします。
+    </p>
+
+    <div class="rule-top">
+      {articles.map((a) => (
+        <a href={`/column/${a.slug}`} class="group grid gap-2 border-b border-line px-2 py-7 no-underline sm:grid-cols-[110px_1fr_32px] sm:items-baseline sm:gap-8">
+          <span class="text-[11px] font-bold tracking-[0.1em] text-muted">{a.date}</span>
+          <span>
+            <span class="mb-1 block text-[17px] font-black leading-[1.6] sm:text-[20px]">{a.heading}</span>
+            <span class="block text-[13px] leading-[1.9] text-sub sm:text-[14px]">{a.desc}</span>
+          </span>
+          <span class="hidden text-right text-lg font-bold transition group-hover:text-amber-700 sm:block" aria-hidden="true">↗</span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <ReserveCTA title="読んで気になったら、一度体でお確かめください。" />
+</Base>

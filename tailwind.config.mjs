@@ -28,7 +28,6 @@ export default {
         sans: ['"Noto Sans JP"', 'system-ui', 'sans-serif'],
         display: ['"Archivo Black"', '"Noto Sans JP"', 'sans-serif'],
         script: ['"Inter"', '"Noto Sans JP"', 'sans-serif'],
-        hand: ['"Yomogi"', '"Noto Sans JP"', 'cursive'],
       },
       maxWidth: {
         content: '85rem', // 1360px

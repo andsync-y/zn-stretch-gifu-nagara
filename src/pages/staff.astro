@@ -5,7 +5,7 @@ import ReserveCTA from '../components/ReserveCTA.astro';
 import { STAFF } from '../consts';
 
 const title = 'スタッフ紹介｜岐阜市長良の個室パーソナルストレッチ専門店 全力ストレッチ岐阜長良店';
-const description = '全力ストレッチ岐阜長良店のトレーナー紹介。全員女性の体感軸調整トレーナーが、個室・マンツーマンで施術します。岐阜市長良。';
+const description = '全力ストレッチ岐阜長良店のトレーナー紹介。担当は全員女性の体感軸調整トレーナー。個室・マンツーマンで、カウンセリングから施術まで一人のトレーナーが担当します。ご指名も可能です。';
 
 const personSchemas = STAFF.map((s) => ({
   '@context': 'https://schema.org', '@type': 'Person',
@@ -26,8 +26,8 @@ const breadcrumb = {
 <Base title={title} description={description} path="/staff" jsonld={[...personSchemas, breadcrumb]}>
   <section class="subpage-hero section-grid mx-auto max-w-content border-b border-ink/20 px-5 pb-24 pt-16 sm:px-10 sm:pb-32 sm:pt-[120px]">
     <div class="mb-10 sm:mb-14"><Breadcrumbs items={[{ label: 'トップ', href: '/' }, { label: 'スタッフ紹介' }]} /></div>
-    <h1 class="display-title mb-6">STAFF</h1>
-    <p class="mb-4 text-[26px] font-black sm:text-[36px]">体のこと、任せてください。</p>
+    <p class="display-title mb-6">STAFF</p>
+    <h1 class="mb-4 text-[26px] font-black sm:text-[36px]">体のこと、任せてください。<span class="sr-only">｜岐阜市長良の女性ストレッチトレーナー紹介</span></h1>
     <p class="mb-16 max-w-[820px] text-[15px] leading-[2.1] text-sub sm:mb-20 sm:text-[17px]">
       担当するのは、全員女性の体感軸調整トレーナー。個室でマンツーマン、最初から最後まで一人のトレーナーがあなたの体と向き合います。ご希望のトレーナーがいれば、ご予約時にご指名いただけます（指名料3,300円）。</p>
 

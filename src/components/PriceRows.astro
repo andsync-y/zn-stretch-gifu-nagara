@@ -146,6 +146,16 @@ const courses = compact ? PRICING.courses.filter((course) => course.primary) : P
     line-height: 1.9;
   }
 
+  /* 2カラム配置時（〜1100px）にはみ出さないよう列を縮める */
+  @media (max-width: 1100px) and (min-width: 641px) {
+    .price-row {
+      grid-template-columns: 32px minmax(0, 1fr) auto auto;
+      gap: 10px;
+    }
+    .price-first strong { font-size: clamp(28px, 3vw, 40px); }
+    .price-before span { font-size: 7px; }
+  }
+
   @media (max-width: 640px) {
     .price-row {
       grid-template-columns: 28px 1fr auto;

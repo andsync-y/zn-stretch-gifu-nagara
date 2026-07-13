@@ -104,12 +104,29 @@ const breadcrumb = {
     { '@type': 'ListItem', position: 2, name: 'メニュー・料金', item: new URL('/menu', Astro.site).href },
   ],
 };
+const offerCatalog = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: 'パーソナルストレッチ',
+  serviceType: 'パーソナルストレッチ',
+  provider: { '@id': new URL('/#localbusiness', Astro.site).href },
+  areaServed: { '@type': 'City', name: '岐阜市' },
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: 'コース料金',
+    itemListElement: [
+      { '@type': 'Offer', name: '集中ケアコース（60分）', price: '3300', priceCurrency: 'JPY', description: '初回限定価格。通常13,200円' },
+      { '@type': 'Offer', name: '全身ケアコース（90分）', price: '4900', priceCurrency: 'JPY', description: '初回限定価格。通常19,800円' },
+      { '@type': 'Offer', name: '全身ケア＋ヘッドスパ（120分）', price: '13200', priceCurrency: 'JPY', description: '初回限定価格。通常26,400円' },
+    ],
+  },
+};
 ---
-<Base title={title} description={description} path="/menu" jsonld={[breadcrumb]}>
+<Base title={title} description={description} path="/menu" jsonld={[breadcrumb, offerCatalog]}>
   <section class="subpage-hero section-grid mx-auto max-w-content border-b border-ink/20 px-5 pb-24 pt-16 sm:px-10 sm:pb-32 sm:pt-[120px]">
     <div class="mb-10 sm:mb-14"><Breadcrumbs items={[{ label: 'トップ', href: '/' }, { label: 'メニュー・料金' }]} /></div>
-    <h1 class="display-title mb-6">PRICE</h1>
-    <p class="mb-4 text-[26px] font-black sm:text-[36px]">まずは、初回3,300円から。</p>
+    <p class="display-title mb-6">PRICE</p>
+    <h1 class="mb-4 text-[26px] font-black sm:text-[36px]">まずは、初回3,300円から。<span class="sr-only">｜岐阜市長良のパーソナルストレッチ料金・メニュー</span></h1>
     <p class="mb-14 max-w-[820px] text-[15px] leading-[2.1] text-sub sm:mb-16 sm:text-[17px]">
       メニューはパーソナルストレッチのみ。時間と内容で3つのコースからお選びいただけます。どのコースも個室・マンツーマンです。
     </p>

@@ -3,6 +3,7 @@ import Base from '../layouts/Base.astro';
 import ReserveCTA from '../components/ReserveCTA.astro';
 import PriceRows from '../components/PriceRows.astro';
 import InteractiveSymptoms from '../components/InteractiveSymptoms.astro';
+import FAQ from '../components/FAQ.astro';
 import { SITE, BRAND, STAFF, PHOTOS, REVIEWS } from '../consts';
 
 const title = '岐阜市長良の個室パーソナルストレッチ｜全力ストレッチ岐阜長良店';
@@ -39,6 +40,22 @@ const methods = [
   { no: '03', en: 'Deep Muscle', title: '筋膜ほぐし＋深層筋ストレッチ', body: '表層をほぐしてから、自分では届きにくい深層の筋肉までじっくりストレッチします。', photo: PHOTOS.method3, alt: '深層筋へのパーソナルストレッチ' },
 ];
 
+// TOPのよくある質問（FAQPage構造化データと一致させる）
+const faqs = [
+  { q: '予約は必要ですか？', a: '完全予約制です。ホットペッパービューティー・LINE・お電話からご予約いただけます。当日予約も空きがあれば可能です。' },
+  { q: '服装はどうすればいいですか？', a: '動きやすい服装でお越しください。上下の着替えを無料でご用意していますので、お仕事帰りでもそのままご来店いただけます。' },
+  { q: '駐車場はありますか？', a: 'ビル東側に共同駐車場が10台以上ございます。岐阜市外からもお車で通いやすい立地です。' },
+  { q: '男性でも利用できますか？', a: 'はい、男性のお客様も多くご利用いただいています。トレーナーは全員女性で、施術はすべて個室・マンツーマンで行います。' },
+  { q: '施術は痛くないですか？', a: '「痛気持ちいい」と感じる強さを目安に、その日の体の状態に合わせて調整します。強さのご希望は施術中いつでもお伝えください。' },
+  { q: '初回はどのコースを選べばいいですか？', a: '初めての方は集中ケアコース（60分）が人気です。全身をじっくりケアしたい方は全身ケアコース（90分）をおすすめしています。' },
+];
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+};
+
 const marqueeWords = [
   '#個室',
   '#マンツーマン',
@@ -50,13 +67,13 @@ const marqueeWords = [
   '#根本改善',
 ];
 ---
-<Base title={title} description={description} path="/">
+<Base title={title} description={description} path="/" jsonld={[faqSchema]}>
   <!-- HERO：連番フレーム（動画のコマ）をスクロールに同期してスクラブ再生する3Dスクロール演出 -->
   <section class="hero-scrub" data-hero>
     <div class="hero-scrub-stage">
       <picture>
-        <source media="(max-width: 768px)" srcset="/frames/sp/frame_0001.jpg" />
-        <img class="hero-scrub-fallback" data-hero-fallback src="/frames/frame_0001.jpg" width="1920" height="1080" alt="個室で行う体感軸パーソナルストレッチの施術シーン" fetchpriority="high" decoding="async" />
+        <source media="(max-width: 768px)" srcset="/frames/sp/frame_0001.webp" type="image/webp" />
+        <img class="hero-scrub-fallback" data-hero-fallback src="/frames/frame_0001.webp" width="1920" height="1080" alt="個室で行う体感軸パーソナルストレッチの施術シーン" fetchpriority="high" decoding="async" />
       </picture>
       <canvas data-hero-canvas aria-hidden="true"></canvas>
 
@@ -106,7 +123,7 @@ const marqueeWords = [
       ? { dir: '/frames/sp', count: 106 }
       : { dir: '/frames', count: 169 };
     const FRAME_COUNT = cfg.count;
-    const srcOf = (i: number) => `${cfg.dir}/frame_${String(i + 1).padStart(4, '0')}.jpg`;
+    const srcOf = (i: number) => `${cfg.dir}/frame_${String(i + 1).padStart(4, '0')}.webp`;
 
     const images: (HTMLImageElement | null)[] = new Array(FRAME_COUNT).fill(null);
     let currentFrame = -1;
@@ -462,6 +479,9 @@ const marqueeWords = [
       </div>
     </div>
   </section>
+
+  <!-- FAQ -->
+  <FAQ items={faqs} />
 
   <ReserveCTA large={true} sub="気になる肩や腰、そのままにせず一度ご相談ください。" />
 </Base>
