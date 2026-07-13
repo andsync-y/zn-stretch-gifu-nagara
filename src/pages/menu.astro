@@ -1,82 +1,59 @@
 ---
 import Base from '../layouts/Base.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
+import PriceRows from '../components/PriceRows.astro';
 import ReserveCTA from '../components/ReserveCTA.astro';
-import { SITE, PRICING, LAST_UPDATED } from '../consts';
+import { SITE, LAST_UPDATED } from '../consts';
 
-const title = 'メニュー・料金｜岐阜市長良のパーソナルストレッチ｜全力ストレッチ岐阜長良店';
-const description = '全力ストレッチ岐阜長良店の料金。パーソナルストレッチ60分・90分、初回限定75%OFF。完全個室・マンツーマン。岐阜市長良・駐車場あり。';
+const title = 'メニュー・料金｜岐阜市長良の完全個室パーソナルストレッチ専門店 全力ストレッチ岐阜長良店';
+const description = '全力ストレッチ岐阜長良店の料金。お試しコース60分・全身ケアコース90分・ヘッドスパ付き120分。初回限定最大75%OFF。完全個室・マンツーマン、岐阜市長良・駐車場10台以上。';
 
-const plans = [
-  { ...PRICING.min60, note: 'まずはお試しに。肩・腰など気になる部位を中心に。' },
-  { ...PRICING.min90, note: 'じっくり全身を。しっかりゆるめたい方に。' },
+const points = [
+  { t: '完全個室・マンツーマン', d: '他のお客様と顔を合わせないプライベート空間で、担当トレーナーが最初から最後まで対応します。' },
+  { t: 'ザウルス式 体幹軸調整', d: '元格闘家考案の独自メソッド。もみほぐしではなく、軸をつくる筋肉を伸ばします。' },
+  { t: '女性トレーナー在籍', d: 'もみほぐし×ストレッチで、その日の状態に合わせて丁寧に施術します。' },
+  { t: '通いやすさ', d: '22時まで営業・駐車場10台以上。仕事帰りやゴルフ帰りにも。着替えのご用意もあります。' },
 ];
 
 const breadcrumb = {
   '@context': 'https://schema.org', '@type': 'BreadcrumbList',
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'ホーム', item: Astro.site!.href },
+    { '@type': 'ListItem', position: 1, name: 'トップ', item: Astro.site!.href },
     { '@type': 'ListItem', position: 2, name: 'メニュー・料金', item: new URL('/menu', Astro.site).href },
   ],
 };
 ---
 <Base title={title} description={description} path="/menu" jsonld={[breadcrumb]}>
-  <Breadcrumbs items={[{ label: 'ホーム', href: '/' }, { label: 'メニュー・料金' }]} />
-  <header class="container-x pt-8 pb-10">
-    <p class="eyebrow">MENU & PRICE</p>
-    <h1 class="mt-3 text-3xl font-black sm:text-4xl">メニュー・料金</h1>
-    <p class="prose-jp mt-5 max-w-2xl">
-      全力ストレッチ岐阜長良店は、完全個室・マンツーマンのパーソナルストレッチ専門店です。
-      メニューは「パーソナルストレッチ」1本。時間で60分・90分をお選びいただけます。
-      初めての方は<span class="marker">初回限定75%OFF</span>でお試しいただけます。
+  <section class="mx-auto max-w-content px-5 pb-24 pt-16 sm:px-10 sm:pb-32 sm:pt-[120px]">
+    <div class="mb-10 sm:mb-14"><Breadcrumbs items={[{ label: 'トップ', href: '/' }, { label: 'メニュー・料金' }]} /></div>
+    <h1 class="display-title mb-6">PRICE</h1>
+    <p class="mb-4 text-[26px] font-black sm:text-[36px]">まずは、初回3,300円から。</p>
+    <p class="mb-14 max-w-[820px] text-[15px] leading-[2.1] text-sub sm:mb-16 sm:text-[17px]">
+      メニューはパーソナルストレッチのみ。時間と内容で3つのコースからお選びいただけます。どのコースも完全個室・マンツーマンです。
     </p>
-  </header>
 
-  <section class="container-x pb-6">
-    <div class="grid gap-6 md:grid-cols-2">
-      {plans.map((p) => (
-        <div class="rounded-3xl border border-line p-8">
-          <p class="font-heading text-xl font-bold">パーソナルストレッチ {p.label}</p>
-          <p class="mt-2 text-sm text-charcoal">{p.note}</p>
-          <div class="mt-6 flex flex-wrap items-baseline gap-3">
-            <span class="text-charcoal/60 line-through">通常 {p.normal}</span>
+    <div class="max-w-[900px]"><PriceRows /></div>
+    <a href={SITE.urls.reserve} target="_blank" rel="noopener" class="btn-ink-pill mt-10">初回価格で予約する</a>
+  </section>
+
+  <section class="border-t border-ink/15 bg-paper2 px-5 py-24 sm:px-10 sm:py-32">
+    <div class="mx-auto max-w-content">
+      <p class="en-label mb-8">Feature</p>
+      <h2 class="jp-title mb-14">料金以外に、選ばれる理由。</h2>
+      <div class="grid gap-10 sm:grid-cols-2 lg:grid-cols-4 sm:gap-12">
+        {points.map((p, i) => (
+          <div class="rule-top pt-7">
+            <p class="mb-4 font-display text-[26px] italic leading-none text-faint">{String(i + 1).padStart(2, '0')}</p>
+            <h3 class="mb-3 text-[19px] font-black">{p.t}</h3>
+            <p class="text-[15px] leading-[2] text-sub">{p.d}</p>
           </div>
-          <div class="mt-1 flex flex-wrap items-baseline gap-2">
-            <span class="text-4xl font-black text-amber-700">{p.first}</span>
-            <span class="text-sm font-bold text-amber-700">{p.discount}</span>
-          </div>
-          <a href={SITE.urls.reserve} target="_blank" rel="noopener" class="btn-amber mt-6 w-full">この内容で初回予約</a>
-        </div>
-      ))}
-    </div>
-    <div class="mt-6 rounded-2xl border border-line bg-offwhite p-6 text-sm text-charcoal">
-      <ul class="space-y-2">
-        <li>・表示はすべて税込です。</li>
-        <li>・初回価格は、初めてご来店の方が対象です。</li>
-        <li>・{PRICING.note}最新の料金は店頭・ご予約ページでご確認ください。</li>
-        <li>・お支払い方法など詳細は、ご予約時またはご来店時にご案内します（{`{{支払い方法}}`}）。</li>
-      </ul>
+        ))}
+      </div>
+      <p class="mt-14 text-[13px] leading-[2] text-sub">
+        ※お支払い方法などの詳細は、ご予約時またはご来店時にご案内します。<br />最終更新：{LAST_UPDATED}
+      </p>
     </div>
   </section>
 
-  <section class="container-x py-12">
-    <p class="eyebrow">POINT</p>
-    <h2 class="mt-2 text-2xl font-bold sm:text-3xl">料金以外に選ばれる理由</h2>
-    <div class="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-      {[
-        { t: '完全個室', d: '人目を気にせず集中できる空間。' },
-        { t: 'マンツーマン', d: '担当トレーナーが最初から最後まで対応。' },
-        { t: '女性トレーナー在籍', d: 'ご希望や状況に配慮します。' },
-        { t: '駐車場あり', d: 'ビル東側に共同駐車場10台以上。' },
-      ].map((x) => (
-        <div class="rounded-2xl border border-line p-6">
-          <p class="hand text-lg">{x.t}</p>
-          <p class="mt-2 text-sm text-charcoal">{x.d}</p>
-        </div>
-      ))}
-    </div>
-    <p class="mt-8 text-xs text-charcoal/60">最終更新：{LAST_UPDATED}</p>
-  </section>
-
-  <ReserveCTA title="初回75%OFFで、まず体験" />
+  <ReserveCTA />
 </Base>

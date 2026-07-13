@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800" role="img" aria-label="施術シーン(メイン)（写真準備中）">
+  <rect width="1200" height="800" fill="#ECEAE4"/>
+  <rect x="24" y="24" width="1152" height="752" fill="none" stroke="#1A1A1A" stroke-opacity="0.25" stroke-width="2"/>
+  <text x="50%" y="49%" text-anchor="middle" font-family="serif" font-style="italic" font-size="34" letter-spacing="8" fill="#999">Photo</text>
+  <text x="50%" y="57%" text-anchor="middle" font-family="sans-serif" font-size="22" fill="#555">施術シーン(メイン)（実写真に差し替え）</text>
+</svg>

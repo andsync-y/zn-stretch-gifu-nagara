@@ -13,19 +13,12 @@
   }
 
   body {
-    @apply bg-base text-ink font-sans;
-    /* 30-60代男性ターゲット：本文16px以上・行間ゆったり・高コントラスト */
+    @apply bg-paper text-ink font-sans;
     font-size: 16px;
-    line-height: 1.9;
-    letter-spacing: 0.01em;
+    line-height: 2;
+    letter-spacing: 0.02em;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
-  }
-
-  h1, h2, h3, h4 {
-    @apply font-heading text-ink;
-    line-height: 1.5;
-    letter-spacing: 0.02em;
   }
 
   a {
@@ -33,51 +26,125 @@
   }
 
   :focus-visible {
-    outline: 3px solid #FF9C46;
+    outline: 3px solid #ff9c46;
     outline-offset: 2px;
   }
 }
 
 @layer components {
   .container-x {
-    @apply mx-auto w-full max-w-content px-5 sm:px-8;
+    @apply mx-auto w-full max-w-content px-5 sm:px-10;
   }
 
-  /* 英語の小見出しラベル */
-  .eyebrow {
-    @apply font-heading text-xs tracking-[0.28em] text-charcoal/70 font-bold uppercase;
+  /* 英語イタリックの添えラベル（Cormorant Garamond） */
+  .en-label {
+    @apply font-script italic text-faint;
+    font-size: 15px;
+    letter-spacing: 0.35em;
+  }
+  .en-label-dark {
+    @apply font-script italic text-inkfaint;
+    font-size: 15px;
+    letter-spacing: 0.35em;
   }
 
-  /* 手書きアクセント（骨太なマーカー/メモ的。ガーリーに振らない） */
-  .hand {
-    @apply font-hand text-amber;
-    font-weight: 400;
+  /* Playfairの英字大見出し */
+  .display-title {
+    @apply font-display font-extrabold text-ink;
+    font-size: clamp(46px, 6vw, 76px);
+    letter-spacing: 0.06em;
+    line-height: 1.1;
+    mix-blend-mode: multiply;
   }
 
-  /* アンバー下線マーカー（手書き強調・1画面1〜2箇所） */
-  .marker {
-    background: linear-gradient(transparent 62%, rgba(255, 156, 70, 0.38) 62%);
-    padding: 0 0.05em;
+  /* 和文セクション見出し */
+  .jp-title {
+    @apply font-sans font-black text-ink;
+    font-size: clamp(26px, 3.2vw, 40px);
+    line-height: 1.5;
   }
 
-  /* CTA：アンバー */
-  .btn-amber {
-    @apply inline-flex items-center justify-center gap-2 rounded-full bg-amber px-7 py-4 text-base font-bold text-ink shadow-sm transition hover:bg-amber-600 focus:bg-amber-600;
+  /* 枠付き強調語（身体改革・肩こり など） */
+  .frame-word {
+    @apply inline-block border-2 sm:border-[3px] border-ink leading-[1.5];
+    padding: 0 0.4em;
+    margin: 0 0.15em;
   }
 
-  /* CTA：黒ベタ */
+  /* 黒ベタCTA（角なし・ハードシャドウ） */
   .btn-ink {
-    @apply inline-flex items-center justify-center gap-2 rounded-full bg-ink px-7 py-4 text-base font-bold text-base transition hover:bg-charcoal;
+    @apply inline-flex items-center justify-center bg-ink text-paper font-bold shadow-hard-btn transition hover:bg-black;
+    font-size: 16px;
+    letter-spacing: 0.16em;
+    padding: 1.25rem 3rem;
   }
 
-  .btn-outline {
-    @apply inline-flex items-center justify-center gap-2 rounded-full border border-ink/25 bg-base px-7 py-4 text-base font-bold text-ink transition hover:border-ink/60;
+  /* アンバーの丸型CTA（症状ページ・予約セクション用） */
+  .btn-amber-pill {
+    @apply inline-flex items-center justify-center rounded-full bg-amber text-ink font-black transition hover:bg-amber-600;
+    font-size: 16px;
+    letter-spacing: 0.06em;
+    padding: 1.25rem 3rem;
+  }
+  .btn-ink-pill {
+    @apply inline-flex items-center justify-center rounded-full bg-ink text-white font-black transition hover:bg-black;
+    font-size: 15px;
+    letter-spacing: 0.08em;
+    padding: 1.1rem 2.5rem;
+  }
+
+  /* 罫線リストの行 */
+  .rule-top {
+    @apply border-t border-ink;
+  }
+  .rule-row {
+    @apply border-b border-ink/20;
+  }
+
+  /* 縦書きの英字サイドラベル（PCのみ） */
+  .side-label {
+    writing-mode: vertical-rl;
+    @apply font-script italic text-faint absolute hidden xl:block;
+    font-size: 14px;
+    letter-spacing: 0.4em;
+    top: 120px;
+    right: 40px;
   }
 
   .prose-jp p {
-    @apply mb-5 text-[1.0625rem] leading-[2] text-charcoal;
+    @apply mb-5 text-[1.0625rem] leading-[2.1] text-sub;
   }
   .prose-jp p:last-child {
     @apply mb-0;
+  }
+}
+
+/* スクロール連動のフェードイン（対応ブラウザのみ・非対応は静的表示） */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .rise {
+      animation: rise both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 55%;
+    }
+    @keyframes rise {
+      from {
+        opacity: 0;
+        transform: translateY(44px);
+      }
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+  }
+}
+
+/* 動きを減らす設定の尊重 */
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee,
+  .animate-marquee-sp,
+  .animate-spin-slow {
+    animation: none !important;
   }
 }

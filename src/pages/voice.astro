@@ -4,16 +4,13 @@ import Breadcrumbs from '../components/Breadcrumbs.astro';
 import ReserveCTA from '../components/ReserveCTA.astro';
 import { LAST_UPDATED } from '../consts';
 
-const title = 'お客様の声｜岐阜市長良のパーソナルストレッチ｜全力ストレッチ岐阜長良店';
-const description = '全力ストレッチ岐阜長良店に寄せられたお客様の声（準備中）。ご来店いただいた方の感想を、許可のうえ順次掲載します。捏造はしません。';
-
-// お客様の声プレースホルダ（実データ投入まで空運用・捏造しない）
-const placeholders = ['肩こり_1', '腰痛_1', '姿勢_1', 'スポーツ_1', '疲れ_1', 'むくみ_1'];
+const title = 'お客様の声｜岐阜市長良の完全個室パーソナルストレッチ専門店 全力ストレッチ岐阜長良店';
+const description = '全力ストレッチ岐阜長良店に寄せられたお客様の声（準備中）。ご来店いただいた方の感想を、許可のうえ順次掲載します。実際のお客様の声のみを掲載します。';
 
 const breadcrumb = {
   '@context': 'https://schema.org', '@type': 'BreadcrumbList',
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'ホーム', item: Astro.site!.href },
+    { '@type': 'ListItem', position: 1, name: 'トップ', item: Astro.site!.href },
     { '@type': 'ListItem', position: 2, name: 'お客様の声', item: new URL('/voice', Astro.site).href },
   ],
 };
@@ -49,37 +46,34 @@ const breadcrumb = {
     </script>
     ============================================================
   */}
-  <Breadcrumbs items={[{ label: 'ホーム', href: '/' }, { label: 'お客様の声' }]} />
-  <header class="container-x pt-8 pb-10">
-    <p class="eyebrow">VOICE</p>
-    <h1 class="mt-3 text-3xl font-black sm:text-4xl">お客様の声</h1>
-    <p class="prose-jp mt-5 max-w-2xl">
-      2026年6月20日にオープンしたばかりの店舗です。ご来店いただいた方の声を、
-      <span class="marker">ご本人の許可のうえ</span>、これから順次掲載していきます。
-      当店では、事実にもとづかない感想の掲載（捏造）は一切行いません。
+  <section class="mx-auto max-w-content px-5 pb-24 pt-16 sm:px-10 sm:pb-32 sm:pt-[120px]">
+    <div class="mb-10 sm:mb-14"><Breadcrumbs items={[{ label: 'トップ', href: '/' }, { label: 'お客様の声' }]} /></div>
+    <h1 class="display-title mb-6">VOICE</h1>
+    <p class="mb-4 text-[26px] font-black sm:text-[36px]">お客様の声</p>
+    <p class="mb-16 max-w-[820px] text-[15px] leading-[2.1] text-sub sm:mb-20 sm:text-[17px]">
+      2026年6月20日にオープンした店舗です。ご来店いただいた方の声を、ご本人の許可のうえ順次掲載していきます。当店では、事実にもとづかない感想の掲載は一切行いません。
     </p>
-  </header>
 
-  <section class="container-x pb-10">
-    <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-      {placeholders.map((k) => (
-        <figure class="rounded-2xl border border-dashed border-line p-6">
-          <figcaption class="text-xs font-bold text-amber-700">掲載準備中（プレースホルダ）</figcaption>
-          <blockquote class="mt-3 text-charcoal">{`{{お客様の声_${k}}}`}</blockquote>
-          <p class="mt-4 text-xs text-charcoal/60">お悩みの種類：{k.split('_')[0]}</p>
-        </figure>
-      ))}
+    <div class="border border-ink p-2">
+      <div class="border border-ink px-6 py-14 sm:px-16 sm:py-[72px]">
+        <p class="mb-10 text-center text-sm tracking-[0.08em] text-muted">Google マップのクチコミより</p>
+        <div class="rounded border border-dashed border-[#D9D9D5] px-8 py-14 text-center">
+          <p class="mb-3 text-lg font-black text-sub">掲載準備中</p>
+          <p class="text-[15px] leading-[2.1] text-sub">
+            クチコミが集まりしだい、このページに掲載します。<br />※実際のお客様の声のみを掲載します（{`{{お客様の声_◯◯_n}}`} プレースホルダ運用中）。
+          </p>
+        </div>
+      </div>
     </div>
 
-    <div class="mt-10 rounded-2xl border border-line bg-offwhite p-6 text-sm text-charcoal">
-      <p class="font-bold text-ink">ご来店いただいた方へ</p>
-      <p class="mt-2">
-        施術のご感想をお聞かせいただけると励みになります。GoogleやホットペッパーのクチコミからもOKです。
-        いただいた声は、許可のうえ本ページや各お悩みページに掲載させていただくことがあります。
+    <div class="mt-14 max-w-[820px] border-t border-ink pt-8">
+      <h2 class="mb-3 text-[17px] font-black">ご来店いただいた方へ</h2>
+      <p class="text-[15px] leading-[2.1] text-sub">
+        施術のご感想をお聞かせいただけると励みになります。GoogleマップやホットペッパーのクチコミからもOKです。いただいた声は、許可のうえ本ページや各お悩みページに掲載させていただくことがあります。
       </p>
+      <p class="mt-8 text-xs text-muted">最終更新：{LAST_UPDATED}</p>
     </div>
-    <p class="mt-8 text-xs text-charcoal/60">最終更新：{LAST_UPDATED}</p>
   </section>
 
-  <ReserveCTA title="あなたの「来てよかった」を、全力で" />
+  <ReserveCTA title="あなたの「来てよかった」を、全力で。" />
 </Base>

@@ -40,22 +40,16 @@ export const SITE = {
   },
 };
 
-// 料金（※変更の可能性あり・確定前）
+// 料金（※変更の可能性あり）
 export const PRICING = {
   note: '価格は変更となる場合があります。',
-  min60: {
-    label: '60分',
-    normal: '13,200円',
-    first: '3,300円',
-    discount: '初回75%OFF',
-  },
-  min90: {
-    label: '90分',
-    normal: '19,800円',
-    first: '4,900円',
-    discount: '初回75%OFF',
-  },
-  priceRange: '¥¥',
+  courses: [
+    { name: 'お試しコース', label: '60分', normal: '13,200円', first: '¥3,300', firstPlain: '3,300', discount: '初回限定75%OFF', primary: true },
+    { name: '全身ケアコース', label: '90分', normal: '19,800円', first: '¥4,900', firstPlain: '4,900', discount: '初回限定75%OFF', primary: true },
+    { name: '全身ケア＋ヘッドスパ', label: '120分', normal: '26,400円', first: '¥13,200', firstPlain: '13,200', discount: '初回限定50%OFF', primary: false },
+  ],
+  caption: '※初回限定価格はおひとり様1回限りです。2回目以降は通常料金（60分 13,200円／90分 19,800円／120分 26,400円）となります。',
+  priceRange: '3300-26400JPY',
 };
 
 // ブランド実績（§1.5：ブランド主語で。長良店単独の数字にしない。逐語コピー禁止）
@@ -92,25 +86,39 @@ export const BRAND = {
 };
 
 // スタッフ（実在。全員「体感軸調整トレーナー」。一言は生成済み・薬機法調整済み）
+// 掲載順はTOP v5デザイン準拠。photo は実写（design-reference/uploads から圧縮済み）
 export const STAFF = [
-  { name: 'AINA', kana: 'アイナ', role: '体感軸調整トレーナー', word: '頑張るお身体こそ、しっかりゆるめて軽く。日々を動きやすくするお手伝いをします。' },
-  { name: 'DAYAN', kana: 'ダヤン', role: '体感軸調整トレーナー', word: '伸ばして、整える。無理なく続けられる健康な身体づくりを一緒に。' },
-  { name: 'HANA', kana: 'ハナ', role: '体感軸調整トレーナー', word: 'スポーツやゴルフの動きが、もっと快適に。可動域からコンディションを底上げします。' },
-  { name: 'MIYUKA', kana: 'ミユカ', role: '体感軸調整トレーナー', word: 'しっかり効かせる施術と、ほっと落ち着く時間。その両方を大切にしています。' },
-  { name: 'KIYO', kana: 'キヨ', role: '体感軸調整トレーナー', word: 'ただ整えるだけでなく、動ける身体へ。姿勢から軽やかさを引き出します。' },
-  { name: 'AYU', kana: 'アユ', role: '体感軸調整トレーナー', word: '「来てよかった」のひと言を全力で。一回一回、丁寧に向き合います。' },
-  { name: 'KAYO', kana: 'カヨ', role: '体感軸調整トレーナー', word: 'つらい肩や腰のお疲れに。丁寧なカウンセリングで、今の状態にじっくり向き合います。' },
+  { name: 'KAYO', kana: 'カヨ', role: '体感軸調整トレーナー', photo: '/images/staff/kayo.webp', word: 'つらい肩や腰のお疲れに。丁寧なカウンセリングで、今の状態にじっくり向き合います。' },
+  { name: 'KIYO', kana: 'キヨ', role: '体感軸調整トレーナー', photo: '/images/staff/kiyo.webp', word: 'ただ整えるだけでなく、動ける身体へ。姿勢から軽やかさを引き出します。' },
+  { name: 'MIYUKA', kana: 'ミユカ', role: '体感軸調整トレーナー', photo: '/images/staff/miyuka.webp', word: 'しっかり効かせる施術と、ほっと落ち着く時間。その両方を大切にしています。' },
+  { name: 'AINA', kana: 'アイナ', role: '体感軸調整トレーナー', photo: '/images/staff/aina.webp', word: '頑張るお身体こそ、しっかりゆるめて軽く。日々を動きやすくするお手伝いをします。' },
+  { name: 'AYU', kana: 'アユ', role: '体感軸調整トレーナー', photo: '/images/staff/ayu.webp', word: '「来てよかった」のひと言を全力で。一回一回、丁寧に向き合います。' },
+  { name: 'DAYAN', kana: 'ダヤン', role: '体感軸調整トレーナー', photo: '/images/staff/dayan.webp', word: '伸ばして、整える。無理なく続けられる健康な身体づくりを一緒に。' },
+  { name: 'HANA', kana: 'ハナ', role: '体感軸調整トレーナー', photo: '/images/staff/hana.webp', word: 'スポーツやゴルフの動きが、もっと快適に。可動域からコンディションを底上げします。' },
 ];
 
+// 店舗写真（現状プレースホルダSVG。実写が用意でき次第 同名の .jpg/.webp に差し替えて参照を更新）
+export const PHOTOS = {
+  hero: '/images/photos/hero.svg',
+  marquee1: '/images/photos/marquee-1.svg',
+  marquee2: '/images/photos/marquee-2.svg',
+  marquee3: '/images/photos/marquee-3.svg',
+  concept: '/images/photos/concept.svg',
+  method1: '/images/photos/method-1.svg',
+  method2: '/images/photos/method-2.svg',
+  method3: '/images/photos/method-3.svg',
+};
+
 // 症状ページのメタ情報（一覧・内部リンク・パンくずに使用。本文は各ページで書き分け）
+// ラベル・並び・注記はTOP v5デザイン準拠
 export const SYMPTOMS = [
-  { slug: 'katakori', label: '肩こり', short: '肩こり', desc: 'デスクワークや立ち仕事で重くなった肩・首まわりへ。' },
-  { slug: 'youtsu', label: '腰痛・お尻/脚の張り', short: '腰痛', desc: '腰の重だるさや、お尻・太もも裏のこわばりが気になる方へ。' },
-  { slug: 'kubi-ganseihiro', label: '首こり・眼精疲労', short: '首こり・眼精疲労', desc: '首すじの張りや、目の奥の疲れが気になる方へ。' },
-  { slug: 'mukumi', label: 'むくみ・冷え', short: 'むくみ・冷え', desc: '脚の重さやめぐりの停滞感が気になる方へ。' },
-  { slug: 'jiritsu', label: '疲れ・睡眠・リラックス', short: '疲れ・睡眠', desc: '抜けにくい疲れや、休んだ気がしない毎日に。' },
-  { slug: 'shisei', label: '姿勢・猫背', short: '姿勢・猫背', desc: '丸まりがちな背中や巻き肩の姿勢が気になる方へ。' },
-  { slug: 'sports', label: 'スポーツ後のケア・柔軟性', short: 'スポーツケア', desc: 'ゴルフやスポーツのあとのケア、柔軟性を高めたい方へ。' },
+  { slug: 'katakori', label: '肩こり', short: '肩こり', note: 'デスクワークの張りに', desc: 'デスクワークや立ち仕事で重くなった肩・首まわりへ。' },
+  { slug: 'youtsu', label: '腰痛・お尻や脚の張り', short: '腰痛', note: '', desc: '腰の重だるさや、お尻・太もも裏のこわばりが気になる方へ。' },
+  { slug: 'kubi-ganseihiro', label: '首こり・眼精疲労', short: '首こり・眼精疲労', note: '', desc: '首すじの張りや、目の奥の疲れが気になる方へ。' },
+  { slug: 'mukumi', label: 'むくみ・冷え', short: 'むくみ・冷え', note: '', desc: '脚の重さや冷え、めぐりの滞りが気になる方へ。' },
+  { slug: 'jiritsu', label: '疲れ・睡眠', short: '疲れ・睡眠', note: '', desc: '抜けにくい疲れや、休んだ気がしない毎日に。' },
+  { slug: 'shisei', label: '姿勢・猫背', short: '姿勢・猫背', note: '', desc: '丸まりがちな背中や巻き肩の姿勢が気になる方へ。' },
+  { slug: 'sports', label: 'スポーツケア', short: 'スポーツケア', note: 'ゴルフ・ランニングの前後に', desc: 'ゴルフ・ランニングなど、運動前後のコンディション作りに。' },
 ];
 
 // sameAs（構造化データ用）

@@ -3,21 +3,26 @@ export interface QA { q: string; a: string; }
 export interface Props { items: QA[]; heading?: string; }
 const { items, heading = 'よくあるご質問' } = Astro.props;
 ---
-<section class="container-x py-14" aria-labelledby="faq-heading">
-  <p class="eyebrow">FAQ</p>
-  <h2 id="faq-heading" class="mt-2 text-2xl font-bold sm:text-3xl">{heading}</h2>
-  <div class="mt-8 divide-y divide-line border-y border-line">
-    {items.map((qa) => (
-      <details class="group py-5">
-        <summary class="flex cursor-pointer list-none items-start gap-3 font-bold">
-          <span class="hand text-lg leading-none">Q</span>
-          <span class="flex-1">{qa.q}</span>
-          <span class="ml-2 shrink-0 text-amber transition group-open:rotate-45" aria-hidden="true">＋</span>
-        </summary>
-        <div class="prose-jp mt-4 pl-7">
-          <p>{qa.a}</p>
-        </div>
-      </details>
-    ))}
+<section class="py-24 sm:py-32" aria-labelledby="faq-heading">
+  <div class="mx-auto max-w-[1100px] px-5 sm:px-10">
+    <p class="en-label mb-8">FAQ</p>
+    <h2 id="faq-heading" class="jp-title mb-12 sm:mb-16">{heading}</h2>
+    <div class="rule-top">
+      {items.map((qa) => (
+        <details class="group border-b border-line">
+          <summary class="flex cursor-pointer list-none items-center justify-between gap-6 px-2 py-7">
+            <span class="flex items-baseline gap-5">
+              <span class="shrink-0 text-[15px] font-black text-faint">Q</span>
+              <span class="text-[17px] font-black leading-[1.7] sm:text-lg">{qa.q}</span>
+            </span>
+            <span class="shrink-0 text-[22px] font-black text-faint transition group-open:rotate-45" aria-hidden="true">＋</span>
+          </summary>
+          <div class="flex items-baseline gap-5 px-2 pb-8">
+            <span class="shrink-0 text-[15px] font-black text-faint">A</span>
+            <p class="text-base leading-[2.1] text-sub">{qa.a}</p>
+          </div>
+        </details>
+      ))}
+    </div>
   </div>
 </section>

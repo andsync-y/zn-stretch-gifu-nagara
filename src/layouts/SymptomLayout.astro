@@ -2,53 +2,65 @@
 import Base from './Base.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import FAQ from '../components/FAQ.astro';
-import PriceHighlight from '../components/PriceHighlight.astro';
+import PriceRows from '../components/PriceRows.astro';
 import ReserveCTA from '../components/ReserveCTA.astro';
-import { SITE, BRAND, LAST_UPDATED } from '../consts';
+import { SITE, PHOTOS, LAST_UPDATED } from '../consts';
 
 export interface QA { q: string; a: string; }
-export interface Related { label: string; href: string; }
+export interface Part { title: string; desc: string; }
+export interface Related { label: string; desc: string; href: string; }
 
 export interface Props {
   slug: string;
-  /** 症状の表示ラベル（例：肩こり） */
+  /** お悩みラベル（例：肩こり） */
   label: string;
-  /** H1・リード内の〔症状〕語 */
-  symptomWord: string;
+  /** Symptoms — 01 のような英字ラベル番号 */
+  enNo: string;
+  /** H1の枠囲み語＋接尾（例：{frame:'肩こり', tail:'でお悩みの方へ'}） */
+  h1Frame: string;
+  h1Tail: string;
   title: string;
   description: string;
-  /** 冒頭リード（結論を断言・効果は断定しない・300字以内） */
+  /** 冒頭リード */
   lead: string;
-  /** マッサージ/整体との比較（1文） */
-  compareLine: string;
-  /** 〔症状〕はなぜ起こる？ 段落配列 */
+  /** マッサージ・整体との違い 本文 */
+  compare: string;
+  /** なぜ起こるセクション：見出し */
+  whyHeading: string;
+  /** 発生サイクル：タイトルと5ステップ＋戻り注記 */
+  cycleTitle: string;
+  cycleSteps: string[];
+  cycleNote: string;
+  /** 原因カード4つ */
   causes: string[];
-  /** 当店のアプローチ 段落配列 */
+  /** なぜ起こるの締め段落 */
+  whyText: string;
+  /** アプローチ2段落 */
   approach: string[];
-  /** アプローチで重点的にほぐす部位（箇条書き） */
-  approachParts: string[];
-  /** ブランドメソッドの文脈（1〜2文） */
-  brandNote: string;
-  /** お客様の声プレースホルダのキー（例：肩こり_1） */
-  voiceKeys: string[];
+  /** アプローチする主な部位（4件） */
+  parts: Part[];
+  /** 料金の一言 */
+  priceLead: string;
+  /** 予約CTAの見出し */
+  reserveHeadline: string;
   faqs: QA[];
   related: Related[];
   serviceName: string;
 }
 
 const {
-  slug, label, symptomWord, title, description, lead, compareLine,
-  causes, approach, approachParts, brandNote, voiceKeys, faqs, related, serviceName,
+  slug, label, enNo, h1Frame, h1Tail, title, description, lead, compare,
+  whyHeading, cycleTitle, cycleSteps, cycleNote, causes, whyText,
+  approach, parts, priceLead, reserveHeadline, faqs, related, serviceName,
 } = Astro.props;
 
 const pagePath = `/symptoms/${slug}`;
 
-// 施術の流れ（構造は共通）
-const steps = [
-  { no: '01', t: 'ご来店・受付', d: '完全個室へご案内します。人目を気にせず、リラックスしてお過ごしください。' },
-  { no: '02', t: 'カウンセリング', d: 'お悩みや生活習慣、気になる部位を丁寧にうかがい、当日の内容をご提案します。' },
-  { no: '03', t: 'パーソナルストレッチ', d: '担当トレーナーがマンツーマンで、お一人おひとりの状態に合わせて施術します。' },
-  { no: '04', t: 'アフター・セルフケア', d: '当日の状態のご説明と、ご自宅でできるセルフケアのヒントをお伝えします。' },
+const flow = [
+  { no: '01', t: 'カウンセリング', d: '気になる部位や生活習慣を、個室でゆっくり伺います。' },
+  { no: '02', t: '体の状態チェック', d: '姿勢や可動域を確認し、その日の内容を組み立てます。' },
+  { no: '03', t: 'ザウルス式ストレッチ', d: '痛気持ちいい強さで、深層の筋肉までマンツーマンで伸ばします。' },
+  { no: '04', t: 'アフターチェック', d: '施術前との違いを確認し、セルフケアをご提案します。' },
 ];
 
 // JSON-LD: FAQPage（ページのFAQと一致）
@@ -79,137 +91,156 @@ const breadcrumbSchema = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'ホーム', item: Astro.site!.href },
+    { '@type': 'ListItem', position: 1, name: 'トップ', item: Astro.site!.href },
     { '@type': 'ListItem', position: 2, name: 'お悩み別', item: new URL('/symptoms', Astro.site).href },
     { '@type': 'ListItem', position: 3, name: label, item: new URL(pagePath, Astro.site).href },
   ],
 };
 ---
-<Base
-  title={title}
-  description={description}
-  path={pagePath}
-  jsonld={[faqSchema, serviceSchema, breadcrumbSchema]}
->
-  <Breadcrumbs items={[{ label: 'ホーム', href: '/' }, { label: 'お悩み別', href: '/symptoms' }, { label }]} />
-
-  <!-- ヒーロー / リード -->
-  <header class="container-x pt-8 pb-12">
-    <p class="eyebrow">SYMPTOM</p>
-    <h1 class="mt-3 max-w-3xl text-3xl font-black leading-tight sm:text-4xl">
-      岐阜市長良で{symptomWord}のストレッチなら｜全力ストレッチ岐阜長良店
+<Base title={title} description={description} path={pagePath} jsonld={[faqSchema, serviceSchema, breadcrumbSchema]}>
+  <!-- H1 + リード -->
+  <section class="mx-auto max-w-content px-5 pb-24 pt-16 sm:px-10 sm:pb-32 sm:pt-[120px]">
+    <div class="mb-10 sm:mb-14"><Breadcrumbs items={[{ label: 'トップ', href: '/' }, { label: 'お悩み別', href: '/symptoms' }, { label }]} /></div>
+    <p class="en-label mb-8">Symptoms — {enNo}</p>
+    <h1 class="mb-8 text-[32px] font-black leading-[1.45] sm:mb-10 sm:text-[56px]">
+      <span class="frame-word">{h1Frame}</span>{h1Tail}
     </h1>
-    <p class="prose-jp mt-6 max-w-2xl">{lead}</p>
-    <p class="mt-5 max-w-2xl rounded-xl border border-line bg-offwhite px-5 py-4 text-sm text-charcoal">
-      {compareLine}
-    </p>
-    <div class="mt-7 flex flex-col gap-3 sm:flex-row">
-      <a href={SITE.urls.reserve} target="_blank" rel="noopener" class="btn-amber">初回75%OFFで予約する</a>
-      <a href="/menu" class="btn-outline">料金を見る</a>
+    <p class="mb-10 max-w-[900px] text-[15px] leading-[2.1] text-sub sm:mb-14 sm:text-[17px]">{lead}</p>
+    <div class="rule-top max-w-[900px] pt-6 sm:pt-7">
+      <h2 class="mb-3 text-[17px] font-black">マッサージ・整体との違い</h2>
+      <p class="text-[15px] leading-[2.1] text-sub sm:text-base">{compare}</p>
     </div>
-  </header>
-
-  <!-- 画像プレースホルダ -->
-  <div class="container-x">
-    <img
-      src="/images/placeholder-symptom.svg"
-      alt={`岐阜市長良の完全個室で${label}へのパーソナルストレッチを受けるイメージ`}
-      width="1200" height="600" loading="lazy" decoding="async"
-      class="w-full rounded-2xl border border-line bg-panel object-cover"
-    />
-    <p class="mt-2 text-xs text-charcoal/60">※画像は実店舗の写真に差し替え予定（{`{{店内写真}}`}）</p>
-  </div>
+    <img src={PHOTOS.marquee1} alt={`${label}へのパーソナルストレッチの施術シーン`} width="1360" height="520" loading="lazy" decoding="async" class="mt-14 h-[280px] w-full object-cover sm:mt-[72px] sm:h-[520px]" style="object-position:center 50%" />
+  </section>
 
   <!-- なぜ起こる -->
-  <section class="container-x py-14" aria-labelledby="cause-h">
-    <p class="eyebrow">MECHANISM</p>
-    <h2 id="cause-h" class="mt-2 text-2xl font-bold sm:text-3xl">{symptomWord}はなぜ起こる？</h2>
-    <div class="prose-jp mt-6 max-w-3xl">
-      {causes.map((p) => <p>{p}</p>)}
+  <section class="border-t border-ink/15 bg-paper2 px-5 py-24 sm:px-10 sm:py-32">
+    <div class="mx-auto max-w-content">
+      <p class="en-label mb-8">Why</p>
+      <h2 class="jp-title mb-12">{whyHeading}</h2>
+
+      <!-- 発生サイクル図（デザインの円環をレスポンシブなステップ図に再構成） -->
+      <div class="mb-16 border border-ink bg-paper px-6 py-10 sm:px-12 sm:py-14">
+        <p class="mb-10 text-center text-[20px] font-black sm:text-[26px]">{cycleTitle}</p>
+        <ol class="grid gap-6 sm:grid-cols-5 sm:gap-4">
+          {cycleSteps.map((step, i) => (
+            <li class="relative flex flex-col items-center text-center">
+              <span class="mb-3 inline-flex h-8 w-8 items-center justify-center rounded-full bg-ink text-[13px] font-bold text-paper">{i + 1}</span>
+              <span class="text-[15px] font-black leading-[1.7] sm:text-base">{step}</span>
+              {i < cycleSteps.length - 1 && <span class="mt-3 text-[#C9C7C0] sm:absolute sm:-right-3 sm:top-1 sm:mt-0" aria-hidden="true">▼<span class="hidden sm:inline">︎</span></span>}
+            </li>
+          ))}
+        </ol>
+        <p class="mt-9 text-center text-[14px] text-muted sm:text-[15px]">
+          <span class="mr-3 inline-block border-2 border-ink bg-paper px-3 py-0.5 text-[13px] font-black">慢性化</span>{cycleNote}
+        </p>
+      </div>
+
+      <!-- 原因カード -->
+      <ul class="grid grid-cols-2 gap-7 lg:grid-cols-4">
+        {causes.map((c) => (
+          <li class="border-b border-ink pb-6 text-center text-[15px] font-black leading-[1.8] sm:text-[17px]" set:html={c} />
+        ))}
+      </ul>
+
+      <p class="mt-14 max-w-[900px] text-[15px] leading-[2.2] text-sub sm:mt-16 sm:text-base">{whyText}</p>
     </div>
   </section>
 
-  <!-- 当店のアプローチ -->
-  <section class="bg-offwhite">
-    <div class="container-x py-14" aria-labelledby="approach-h">
-      <p class="eyebrow">OUR APPROACH</p>
-      <h2 id="approach-h" class="mt-2 text-2xl font-bold sm:text-3xl">当店の{label}へのアプローチ</h2>
-      <div class="mt-8 grid gap-10 md:grid-cols-5">
-        <div class="prose-jp md:col-span-3">
-          {approach.map((p) => <p>{p}</p>)}
-          <p class="text-sm text-charcoal/80">{brandNote}</p>
+  <!-- アプローチ -->
+  <section class="px-5 py-24 sm:px-10 sm:py-32">
+    <div class="mx-auto max-w-content">
+      <p class="en-label mb-8">Approach</p>
+      <h2 class="jp-title mb-12">当店の{label}へのアプローチ</h2>
+      <div class="grid items-start gap-12 lg:grid-cols-[1fr_380px] lg:gap-[88px]">
+        <div>
+          {approach.map((p) => <p class="mb-6 text-[15px] leading-[2.2] text-sub sm:text-base">{p}</p>)}
+          <img src={PHOTOS.hero} alt={`${label}に関わる部位へのアプローチ（パーソナルストレッチ）`} width="940" height="380" loading="lazy" decoding="async" class="mt-6 h-[260px] w-full object-cover sm:h-[380px]" style="object-position:center 70%" />
         </div>
-        <div class="md:col-span-2">
-          <div class="rounded-2xl border border-line bg-base p-6">
-            <p class="font-bold">重点的にアプローチする部位の例</p>
-            <ul class="mt-4 space-y-2 text-sm text-charcoal">
-              {approachParts.map((x) => (
-                <li class="flex gap-2"><span class="hand" aria-hidden="true">✓</span><span>{x}</span></li>
-              ))}
-            </ul>
-            <p class="mt-4 text-xs text-charcoal/60">※内容はカウンセリングのうえ、お一人おひとりに合わせて調整します。効果には個人差があります。</p>
-          </div>
+        <div>
+          <h3 class="rule-top mb-8 pt-8 text-[21px] font-black sm:text-2xl">アプローチする主な部位</h3>
+          <ul class="flex flex-col gap-8">
+            {parts.map((p) => (
+              <li class="flex items-baseline gap-5">
+                <svg class="w-[26px] shrink-0 translate-y-1" viewBox="0 0 28 24" fill="none" aria-hidden="true"><path d="M4 13 L 11 20 L 25 4" stroke="#1A1A1A" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                <span class="leading-[1.9]">
+                  <span class="block text-[19px] font-black sm:text-[22px]">{p.title}</span>
+                  <span class="text-[15px] text-sub sm:text-[17px]">{p.desc}</span>
+                </span>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </div>
   </section>
 
   <!-- 施術の流れ -->
-  <section class="container-x py-14" aria-labelledby="flow-h">
-    <p class="eyebrow">FLOW</p>
-    <h2 id="flow-h" class="mt-2 text-2xl font-bold sm:text-3xl">施術の流れ</h2>
-    <ol class="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-      {steps.map((s) => (
-        <li class="rounded-2xl border border-line p-6">
-          <span class="hand text-2xl">{s.no}</span>
-          <p class="mt-2 font-bold">{s.t}</p>
-          <p class="mt-2 text-sm text-charcoal">{s.d}</p>
-        </li>
-      ))}
-    </ol>
+  <section class="border-t border-ink/15 bg-paper2 px-5 py-24 sm:px-10 sm:py-32">
+    <div class="mx-auto max-w-content">
+      <p class="en-label mb-8">Flow</p>
+      <h2 class="jp-title mb-14 sm:mb-[72px]">施術の流れ</h2>
+      <ol class="grid gap-10 sm:grid-cols-2 sm:gap-12 lg:grid-cols-4">
+        {flow.map((s) => (
+          <li class="rule-top pt-7">
+            <p class="mb-4 text-[13px] font-black tracking-[0.25em] text-faint">{s.no}</p>
+            <h3 class="mb-3 text-[19px] font-black">{s.t}</h3>
+            <p class="text-[15px] leading-[2] text-sub">{s.d}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
   </section>
 
-  <!-- お客様の声（プレースホルダ・捏造禁止） -->
-  <section class="bg-offwhite">
-    <div class="container-x py-14" aria-labelledby="voice-h">
-      <p class="eyebrow">VOICE</p>
-      <h2 id="voice-h" class="mt-2 text-2xl font-bold sm:text-3xl">お客様の声</h2>
-      <p class="mt-3 max-w-2xl text-sm text-charcoal">
-        実際にご来店いただいた方の声を掲載予定です（現在準備中）。いただいた許可のうえで、順次掲載します。
-      </p>
-      <div class="mt-8 grid gap-5 sm:grid-cols-2">
-        {voiceKeys.map((k) => (
-          <figure class="rounded-2xl border border-dashed border-line bg-base p-6">
-            <figcaption class="text-xs font-bold text-amber-700">プレースホルダ</figcaption>
-            <blockquote class="mt-2 text-charcoal">{`{{お客様の声_${k}}}`}</blockquote>
-            <p class="mt-3 text-xs text-charcoal/60">※実際のお客様の声を許可のうえ掲載します（捏造しません）。</p>
-          </figure>
-        ))}
+  <!-- お客様の声（掲載準備中・捏造しない） -->
+  <section class="px-5 py-24 sm:px-10 sm:py-32">
+    <div class="mx-auto max-w-content">
+      <p class="en-label mb-8">Voice</p>
+      <h2 class="jp-title mb-14">お客様の声</h2>
+      <div class="rounded border border-dashed border-[#D9D9D5] px-8 py-14 text-center">
+        <p class="mb-3 text-lg font-black text-sub">掲載準備中</p>
+        <p class="text-[15px] leading-[2.1] text-sub">{label}でご来店いただいたお客様の声を、準備が整いしだい掲載します。<br />※実際のお客様の声のみを掲載します。</p>
       </div>
     </div>
   </section>
 
-  <!-- 料金＋予約CTA -->
-  <section class="container-x py-14" aria-labelledby="price-h">
-    <p class="eyebrow">PRICE</p>
-    <h2 id="price-h" class="mt-2 text-2xl font-bold sm:text-3xl">料金・ご予約</h2>
-    <div class="mt-8"><PriceHighlight /></div>
+  <!-- 料金 -->
+  <section class="border-t border-ink/15 bg-paper2 px-5 py-24 sm:px-10 sm:py-32">
+    <div class="mx-auto grid max-w-content items-center gap-14 lg:grid-cols-2 lg:gap-[88px]">
+      <div>
+        <p class="en-label mb-8">Price</p>
+        <h2 class="jp-title mb-6">まずは、初回3,300円から。</h2>
+        <p class="mb-10 text-[15px] leading-[2.1] text-sub sm:text-base">{priceLead}</p>
+        <div class="flex flex-wrap items-center gap-7">
+          <a href={SITE.urls.reserve} target="_blank" rel="noopener" class="btn-ink-pill">初回価格で予約する</a>
+          <a href={SITE.urls.line} target="_blank" rel="noopener" class="border-b border-sub pb-1 text-sm text-sub">LINEで相談</a>
+        </div>
+      </div>
+      <div><PriceRows compact={true} /></div>
+    </div>
   </section>
 
   <!-- FAQ -->
   <FAQ items={faqs} />
 
   <!-- 関連リンク -->
-  <section class="container-x pb-8" aria-labelledby="rel-h">
-    <p class="eyebrow">RELATED</p>
-    <h2 id="rel-h" class="mt-2 text-xl font-bold">関連するお悩み・ご案内</h2>
-    <ul class="mt-5 flex flex-wrap gap-3">
-      {related.map((r) => (
-        <li><a href={r.href} class="inline-flex rounded-full border border-line px-4 py-2 text-sm hover:border-ink/50">{r.label}</a></li>
-      ))}
-    </ul>
-    <p class="mt-8 text-xs text-charcoal/60">最終更新：{LAST_UPDATED}</p>
+  <section class="border-t border-ink/15 bg-paper2 px-5 py-24 sm:px-10 sm:py-32">
+    <div class="mx-auto max-w-content">
+      <p class="en-label mb-8">Related</p>
+      <h2 class="jp-title mb-14">こちらのお悩みも。</h2>
+      <div class="rule-top">
+        {related.map((r) => (
+          <a href={r.href} class="group grid grid-cols-[1fr_32px] items-baseline gap-4 border-b border-line px-2 py-6 no-underline sm:grid-cols-[260px_1fr_32px] sm:gap-8 sm:py-7">
+            <span class="text-[18px] font-black sm:text-xl">{r.label}</span>
+            <span class="hidden text-[15px] leading-[2] text-sub sm:block">{r.desc}</span>
+            <span class="text-right text-lg font-bold transition group-hover:text-amber-700" aria-hidden="true">→</span>
+          </a>
+        ))}
+      </div>
+      <p class="mt-12"><a href="/" class="text-[15px] font-bold hover:text-amber-700">← トップページへ戻る</a></p>
+      <p class="mt-8 text-xs text-muted">最終更新：{LAST_UPDATED}</p>
+    </div>
   </section>
 
-  <ReserveCTA />
+  <ReserveCTA title={reserveHeadline} />
 </Base>

@@ -1,0 +1,26 @@
+---
+// 罫線スタイルの料金行（症状ページ・料金ページ共用）
+import { PRICING } from '../consts';
+export interface Props {
+  /** primaryのみ（60/90分）に絞るか */
+  compact?: boolean;
+  /** 大きい注記を出すか */
+  showCaption?: boolean;
+}
+const { compact = false, showCaption = true } = Astro.props;
+const courses = compact ? PRICING.courses.filter((c) => c.primary) : PRICING.courses;
+---
+<div>
+  <p class="mb-6 inline-block rounded bg-amber px-4 py-2 text-[13px] font-black tracking-[0.14em] text-ink">初回限定 最大75%OFF</p>
+  <div class="rule-top">
+    {courses.map((c) => (
+      <div class="flex flex-wrap items-baseline gap-x-4 gap-y-1 border-b border-line py-7 px-1">
+        <span class="w-full text-[17px] font-black sm:w-auto sm:min-w-[13rem]">{c.name} {c.label}</span>
+        <span class={`hidden rounded px-3 py-1 text-[11px] font-bold tracking-[0.1em] sm:inline-block ${c.primary ? 'bg-amber text-ink' : 'bg-ink text-paper'}`}>{c.discount}</span>
+        <span class="text-sm text-muted line-through">{c.normal}</span>
+        <span class="ml-auto font-sans text-[34px] font-black leading-none sm:text-[38px]">{c.firstPlain}<span class="text-[15px] font-bold">円（税込）</span></span>
+      </div>
+    ))}
+  </div>
+  {showCaption && <p class="mt-5 text-[13px] leading-[2] text-sub">{PRICING.caption}<br />※{PRICING.note}</p>}
+</div>

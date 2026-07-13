@@ -1,198 +1,284 @@
 ---
 import Base from '../layouts/Base.astro';
-import PriceHighlight from '../components/PriceHighlight.astro';
 import ReserveCTA from '../components/ReserveCTA.astro';
-import { SITE, BRAND, STAFF, SYMPTOMS } from '../consts';
+import PriceRows from '../components/PriceRows.astro';
+import CircleBadge from '../components/CircleBadge.astro';
+import { SITE, BRAND, STAFF, SYMPTOMS, PHOTOS } from '../consts';
 
 const title = '岐阜市長良の完全個室パーソナルストレッチ｜全力ストレッチ岐阜長良店';
-const description = '岐阜市長良の完全個室パーソナルストレッチ専門店。マンツーマンで肩こり・腰痛・姿勢のお悩みにアプローチ。初回75%OFF、駐車場10台以上、ヤマダデンキ長良そば。';
+const description = '岐阜市長良の完全個室・マンツーマンのパーソナルストレッチ専門店。元格闘家考案「ザウルス式」体幹軸調整ストレッチで動ける身体へ。初回60分3,300円、駐車場10台以上、22時まで営業。';
 
-const promises = [
-  { t: '完全個室・マンツーマン', d: '人目を気にせず、担当トレーナーとあなたの身体だけに向き合える空間です。' },
-  { t: 'ストレッチ専門', d: 'マッサージや整体とは違う、伸ばして動かすパーソナルストレッチに特化しています。' },
-  { t: '通いやすい立地', d: 'ヤマダデンキ長良のすぐそば。ビル東側に共同駐車場10台以上、車で通えます。' },
+const mapQuery = encodeURIComponent(SITE.addressFull);
+
+// CONCEPT 3つの特長（デザイン準拠・薬機法/景表法調整済み）
+const concepts = [
+  {
+    no: '01',
+    title: 'ZST協会認定『体幹軸調整法』',
+    body: '元格闘家考案の独自メソッド。骨盤角度と肩甲骨の可動域にアプローチし、姿勢やゴルフのアドレス・スイングの安定を目指します。',
+  },
+  {
+    no: '02',
+    title: '全席完全個室・マンツーマン',
+    body: '他のお客様と一切顔を合わせないプライベート空間。着替えもご用意しております。',
+  },
+  {
+    no: '03',
+    title: '女性トレーナー在籍',
+    body: '女性トレーナーが、もみほぐしと体幹軸調整法ストレッチを組み合わせ、その日の状態に合わせて丁寧に施術します。',
+  },
+];
+
+// METHOD 3本柱（ジグザグ）
+const methods = [
+  { no: '01', en: 'Pelvis', title: '骨盤へのアプローチ', body: '体の土台となる骨盤まわりの筋肉をゆるめ、軸を意識しやすい状態へ整えていきます。', photo: PHOTOS.method1, alt: '骨盤まわりへのパーソナルストレッチ' },
+  { no: '02', en: 'Posture', title: '猫背・巻き肩へのアプローチ', body: '縮こまりがちな胸や肩まわりの筋肉を伸ばし、胸を開きやすい状態を目指します。', photo: PHOTOS.method2, alt: '猫背・巻き肩へのパーソナルストレッチ', flip: true },
+  { no: '03', en: 'Deep Muscle', title: '筋膜ほぐし＋深層筋ストレッチ', body: '表層をほぐしてから、自分では届きにくい深層の筋肉までじっくりストレッチします。', photo: PHOTOS.method3, alt: '深層筋へのパーソナルストレッチ' },
+];
+
+const marqueeItems = [
+  { photo: PHOTOS.marquee1, word: 'Private Room' },
+  { photo: PHOTOS.marquee2, word: 'One on One' },
+  { photo: PHOTOS.marquee3, word: 'Deep Stretch' },
 ];
 ---
 <Base title={title} description={description} path="/">
-  <!-- ①ヒーロー -->
-  <section class="relative overflow-hidden">
-    <div class="container-x grid items-center gap-10 py-14 md:grid-cols-2 md:py-20">
-      <div class="animate-fadeup">
-        <p class="eyebrow">PERSONAL STRETCH ・ GIFU NAGARA</p>
-        <h1 class="mt-4 text-3xl font-black leading-[1.35] sm:text-4xl md:text-[2.7rem]">
-          岐阜市長良の<br class="hidden sm:block" /><span class="marker">完全個室</span>パーソナルストレッチ専門店
-        </h1>
-        <p class="prose-jp mt-6 max-w-xl">
-          肩こり・腰痛・姿勢のお悩みへ。<span class="hand">マンツーマン</span>で、あなたの身体にじっくり向き合います。
-          伸ばして、ゆるめて、動きやすい毎日へ。
-        </p>
-        <div class="mt-7 inline-flex flex-wrap items-baseline gap-2 rounded-xl border border-line bg-offwhite px-5 py-3">
-          <span class="text-sm text-charcoal">初回限定</span>
-          <span class="text-charcoal/60 line-through">13,200円</span>
-          <span aria-hidden="true">→</span>
-          <span class="text-2xl font-black text-amber-700">3,300円</span>
-          <span class="text-sm font-bold text-amber-700">（60分・75%OFF）</span>
+  <!-- HERO -->
+  <section class="relative overflow-hidden px-5 pb-24 pt-10 sm:px-10 sm:pb-36 sm:pt-16 xl:px-14">
+    <div class="mx-auto max-w-[1440px]">
+      <div class="relative lg:min-h-[820px]">
+        <!-- 大きなブリード写真（PC:右、SP:上） -->
+        <div class="relative mb-10 ml-auto h-[420px] w-[calc(100%-28px)] lg:absolute lg:right-[-2.5rem] lg:top-0 lg:mb-0 lg:h-[820px] lg:w-[600px] xl:right-[-3.5rem] xl:w-[640px]">
+          <img src={PHOTOS.hero} alt="完全個室で行うパーソナルストレッチの施術シーン" width="1280" height="1720" fetchpriority="high" decoding="async" class="h-full w-full object-cover" style="object-position:center 74%" />
+          <CircleBadge class="absolute -bottom-14 -left-6 h-[132px] w-[132px] lg:-left-20 lg:bottom-6 lg:h-[220px] lg:w-[220px]" />
         </div>
-        <div class="mt-7 flex flex-col gap-3 sm:flex-row">
-          <a href={SITE.urls.reserve} target="_blank" rel="noopener" class="btn-amber">初回体験を予約する</a>
-          <a href="/menu" class="btn-outline">料金・メニューを見る</a>
+
+        <div class="max-w-[760px] pt-2 lg:pt-10">
+          <h1 class="mb-10 mt-10 lg:mb-16 lg:mt-0">
+            <img src="/images/logo.png" alt="全力ストレッチ岐阜長良店｜岐阜市長良の完全個室パーソナルストレッチ専門店" width="1200" height="307" class="block h-auto w-[300px] sm:w-[440px] lg:w-[560px]" />
+          </h1>
+          <p class="mb-5 text-[21px] font-black leading-[1.75] tracking-[0.04em] sm:text-[28px] lg:text-[34px]">
+            平日はタフに、週末はアクティブに。<br />本気の大人のための<span class="frame-word">身体改革</span>。
+          </p>
+          <p class="mb-10 text-[15px] leading-[2.2] tracking-[0.04em] text-muted sm:mb-12 sm:text-base">
+            岐阜市長良の完全個室・マンツーマン、パーソナルストレッチ専門店。<br class="hidden sm:block" />Private &amp; personal stretch studio for your working body.
+          </p>
+
+          <div class="mb-10 flex max-w-[560px] flex-col gap-2">
+            <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+              <span class="text-[14px] font-bold tracking-[0.1em] sm:text-[17px]">初回限定 お試しコース 60分</span>
+              <span class="text-[15px] text-muted line-through sm:text-lg">13,200円</span>
+              <span class="ml-auto font-display text-[42px] font-extrabold leading-none sm:text-[46px]">¥3,300</span>
+            </div>
+            <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+              <span class="text-[14px] font-bold tracking-[0.1em] sm:text-[17px]">初回限定 全身ケアコース 90分</span>
+              <span class="text-[15px] text-muted line-through sm:text-lg">19,800円</span>
+              <span class="ml-auto font-display text-[42px] font-extrabold leading-none sm:text-[46px]">¥4,900</span>
+            </div>
+          </div>
+
+          <a href={SITE.urls.reserve} target="_blank" rel="noopener" class="btn-ink block w-full text-center sm:inline-block sm:w-auto sm:px-[4.5rem] sm:py-6 sm:text-[19px] sm:tracking-[0.18em]">WEB予約はこちら</a>
+          <p class="mt-4 text-xs text-muted">※税込。初回価格はおひとり様1回限りです。価格は変更となる場合があります。</p>
         </div>
-        <p class="mt-4 text-xs text-charcoal/70">※価格は変更となる場合があります。表示は税込。</p>
-      </div>
-      <div class="animate-fadeup">
-        <img
-          src="/images/placeholder-hero.svg"
-          alt="岐阜市長良の完全個室でパーソナルストレッチを受ける男性のイメージ"
-          width="1600" height="1000" fetchpriority="high" decoding="async"
-          class="w-full rounded-3xl border border-line bg-panel object-cover"
-        />
       </div>
     </div>
   </section>
 
-  <!-- ②当店の考え／約束 -->
-  <section class="bg-offwhite">
-    <div class="container-x py-16">
-      <p class="eyebrow">CONCEPT</p>
-      <h2 class="mt-2 max-w-3xl text-2xl font-bold sm:text-3xl">「動ける身体」へ。長良の完全個室で、あなたの一回に全力を。</h2>
-      <p class="prose-jp mt-5 max-w-3xl">
-        デスクワークや立ち仕事、スポーツやゴルフ。頑張るほどに、筋肉はこわばり、動きは重くなりがちです。
-        全力ストレッチ岐阜長良店は、<span class="marker">完全個室・マンツーマン</span>のパーソナルストレッチ専門店。
-        担当トレーナーがあなたの状態に合わせて、深部の筋肉までていねいに伸ばしていきます。
-        素朴で確かな手ごたえを、静かで上質な個室で。
-      </p>
-      <div class="mt-10 grid gap-5 md:grid-cols-3">
-        {promises.map((p) => (
-          <div class="rounded-2xl border border-line bg-base p-6">
-            <p class="font-heading text-lg font-bold">{p.t}</p>
-            <p class="mt-3 text-sm text-charcoal">{p.d}</p>
+  <!-- MARQUEE -->
+  <section class="overflow-hidden border-y border-ink bg-paper" aria-hidden="true">
+    <div class="flex w-max animate-marquee">
+      {[0, 1].map(() => (
+        <div class="flex">
+          {marqueeItems.map((m) => (
+            <>
+              <img src={m.photo} alt="" width="680" height="440" loading="lazy" decoding="async" class="h-[130px] w-[200px] object-cover sm:h-[220px] sm:w-[340px]" style="object-position:center 68%" />
+              <span class="flex h-[130px] w-[180px] items-center justify-center border-x border-ink font-script text-[17px] italic tracking-[0.16em] sm:h-[220px] sm:w-[340px] sm:text-[26px]">{m.word}</span>
+            </>
+          ))}
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- CONCEPT -->
+  <section id="concept" class="relative px-5 py-24 sm:px-10 sm:py-32 xl:px-14">
+    <span class="side-label">Concept — 01</span>
+    <div class="mx-auto max-w-[1440px]">
+      <h2 class="display-title rise mb-12 sm:mb-16">CONCEPT</h2>
+      <div class="grid items-center gap-12 lg:grid-cols-[520px_1fr] lg:gap-[88px]">
+        <div class="rise relative order-2 lg:order-1">
+          <img src={PHOTOS.concept} alt="マンツーマンで行う体幹軸調整ストレッチ" width="1060" height="1700" loading="lazy" decoding="async" class="h-[380px] w-full object-cover lg:h-[850px]" style="object-position:center 62%" />
+        </div>
+        <div class="rise order-1 lg:order-2">
+          <p class="mb-7 text-[23px] font-black leading-[1.8] sm:text-[32px] lg:text-[40px] lg:leading-[1.7]">
+            <span class="text-[30px] leading-[1.6] sm:text-[42px] lg:text-[54px] lg:leading-[1.5]">動ける身体を取り戻す。</span><br />
+            大人のための<span class="frame-word">体幹軸</span><br />パーソナルストレッチ。
+          </p>
+          <p class="mb-10 text-[15px] leading-[2.2] tracking-[0.03em] text-muted sm:mb-12 sm:text-[17px]">
+            日々の疲労、姿勢の崩れからゴルフの飛距離まで。元格闘家考案の独自メソッドが、完全個室のプライベート空間であなたの身体の可動域を引き出します。
+          </p>
+          <div class="rule-top">
+            {concepts.map((c) => (
+              <div class="rule-row flex items-baseline gap-4 px-1 py-5 sm:gap-6">
+                <span class="shrink-0 font-display text-[36px] italic leading-none text-faint sm:text-[44px]">{c.no}</span>
+                <div class="text-[15px] leading-[2] text-muted sm:text-[17px]">
+                  <span class="mb-1.5 block text-[21px] font-black text-ink sm:mb-2 sm:text-[28px]">{c.title}</span>
+                  {c.body}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- METHOD -->
+  <section id="method" class="relative px-5 pb-24 sm:px-10 sm:pb-32 xl:px-14">
+    <span class="side-label" style="top:40px">Method — 02</span>
+    <div class="mx-auto max-w-[1440px]">
+      <div class="rise">
+        <h2 class="display-title mb-6">METHOD</h2>
+        <p class="mb-16 max-w-[640px] text-[15px] leading-[2.1] tracking-[0.03em] text-muted sm:mb-[88px] sm:text-[17px]">
+          元格闘家のオーナーが考案した「ザウルス式」体幹軸調整ストレッチ。もみほぐしではなく、体の軸をつくる筋肉へのストレッチで深い部分からアプローチします。
+        </p>
+      </div>
+      <div class="flex flex-col gap-16 sm:gap-24">
+        {methods.map((m) => (
+          <div class={`rise grid items-center gap-8 lg:gap-20 ${m.flip ? 'lg:grid-cols-[1fr_460px]' : 'lg:grid-cols-[460px_1fr]'}`}>
+            <img
+              src={m.photo} alt={m.alt} width="920" height="660" loading="lazy" decoding="async"
+              class={`h-[240px] w-full object-cover sm:h-[330px] ${m.flip ? 'shadow-hard-l lg:order-2' : 'shadow-hard'}`}
+              style="object-position:center 68%"
+            />
+            <div class={m.flip ? 'lg:order-1 lg:flex lg:flex-col lg:items-end lg:text-right' : ''}>
+              <h3 class="mb-4 text-[22px] font-black sm:text-[31px]">
+                <span class="mr-4 font-display text-[20px] font-semibold italic text-faint sm:text-[26px]">{m.no}</span>{m.title}
+              </h3>
+              <p class="max-w-[560px] text-[15px] leading-[2.1] text-muted sm:text-[17px]">{m.body}</p>
+              <p class={`mt-6 flex items-center gap-3.5 text-[13px] font-medium tracking-[0.22em] sm:mt-7 ${m.flip ? 'lg:flex-row-reverse' : ''}`}>
+                <span class="inline-block h-px w-[52px] bg-ink"></span>{m.en}
+              </p>
+            </div>
           </div>
         ))}
       </div>
     </div>
   </section>
 
-  <!-- ③施術の3本柱 -->
-  <section class="container-x py-16">
-    <p class="eyebrow">METHOD</p>
-    <h2 class="mt-2 text-2xl font-bold sm:text-3xl">全力ストレッチの、3つのアプローチ</h2>
-    <p class="mt-4 max-w-3xl text-sm text-charcoal">
-      {BRAND.method}をベースにした、ブランド共通の考え方です。効果には個人差があります。
-    </p>
-    <div class="mt-10 grid gap-6 md:grid-cols-3">
-      {BRAND.pillars.map((p) => (
-        <div class="rounded-2xl border border-line p-7">
-          <span class="hand text-3xl">{p.no}</span>
-          <p class="mt-2 font-heading text-lg font-bold">{p.title}</p>
-          <p class="mt-3 text-sm text-charcoal">{p.body}</p>
-        </div>
-      ))}
-    </div>
-  </section>
-
-  <!-- ④症状別への導線 -->
-  <section class="bg-offwhite">
-    <div class="container-x py-16">
-      <p class="eyebrow">SYMPTOMS</p>
-      <h2 class="mt-2 text-2xl font-bold sm:text-3xl">お悩み別のご案内</h2>
-      <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {SYMPTOMS.map((s) => (
-          <a href={`/symptoms/${s.slug}`} class="group rounded-2xl border border-line bg-base p-6 transition hover:border-ink/40">
-            <p class="font-heading text-lg font-bold group-hover:text-amber-700">{s.label}</p>
-            <p class="mt-2 text-sm text-charcoal">{s.desc}</p>
-            <span class="mt-4 inline-block text-sm text-amber-700">詳しく見る →</span>
+  <!-- SYMPTOMS（黒） -->
+  <section id="symptoms" class="relative bg-ink px-5 py-24 text-inkpaper sm:px-10 sm:py-32 xl:px-14">
+    <span class="side-label" style="color:#777">Symptoms — 03</span>
+    <div class="mx-auto max-w-[1440px]">
+      <div class="rise">
+        <h2 class="display-title mb-6 !text-inkpaper" style="mix-blend-mode:normal">SYMPTOMS</h2>
+        <p class="mb-14 text-[15px] leading-[2.1] tracking-[0.03em] text-inkmuted sm:mb-20 sm:text-[17px]">お悩みから探す。気になるお悩みに合わせて、アプローチの内容をご紹介します。</p>
+      </div>
+      <div class="rise grid gap-x-[72px] md:grid-cols-2">
+        {SYMPTOMS.map((s, i) => (
+          <a href={`/symptoms/${s.slug}`} class="group flex items-baseline justify-between gap-5 border-b border-inkpaper/25 px-1 py-6 no-underline sm:py-[26px]">
+            <span class="flex flex-wrap items-baseline gap-x-5 gap-y-1">
+              <span class="font-display text-sm italic text-[#777]">{String(i + 1).padStart(2, '0')}</span>
+              <span class="text-lg font-bold text-inkpaper sm:text-xl">{s.label}</span>
+              {s.note && <span class="text-[13px] text-inkfaint">{s.note}</span>}
+            </span>
+            <span class="font-bold text-inkpaper transition group-hover:text-amber" aria-hidden="true">→</span>
           </a>
         ))}
       </div>
+
+      <!-- ブランド実績（ブランド主語） -->
+      <div class="rise mt-20 border border-inkpaper/30 p-8 text-center sm:mt-28 sm:p-14">
+        <p class="en-label-dark mb-5" style="letter-spacing:0.3em;font-size:16px">Nationwide Brand</p>
+        <p class="mb-4 text-[24px] font-black text-inkpaper sm:text-[36px]">全国約70店舗のパーソナルストレッチブランド。</p>
+        <p class="mb-7 text-[15px] leading-[2.1] text-inkmuted sm:text-base">全力ストレッチは、テレビや雑誌、YouTubeなど各種メディアでも紹介されているブランドです。</p>
+        <ul class="flex flex-wrap justify-center gap-3">
+          {['テレビ番組で紹介', '雑誌掲載', 'YouTube', '元格闘家オーナー考案「ザウルス式」'].map((t) => (
+            <li class="border border-inkpaper/35 px-5 py-2 text-xs tracking-[0.14em] text-inkmuted">{t}</li>
+          ))}
+        </ul>
+        <p class="mt-6 text-[11px] leading-[1.9] text-inkfaint">※ブランド全体（全力ストレッチ）の実績です。店舗数の最新値は本部確認のうえ更新します（{BRAND.storeCountPlaceholder}）。</p>
+      </div>
     </div>
   </section>
 
-  <!-- ⑤ブランド実績（ブランド主語） -->
-  <section class="container-x py-16">
-    <div class="rounded-3xl border border-line bg-ink px-6 py-12 text-base sm:px-12">
-      <p class="eyebrow text-base/60">BRAND</p>
-      <h2 class="mt-2 text-2xl font-bold text-base sm:text-3xl">
-        全国約70店舗・メディア掲載の<br class="sm:hidden" />ストレッチブランド
-      </h2>
-      <p class="mt-5 max-w-3xl text-base/85">
-        全力ストレッチは、全国に<span class="hand text-amber">約70店舗</span>を展開するパーソナルストレッチのブランドです。
-        テレビ・雑誌・YouTubeなどで紹介されてきたブランドの考え方とメソッドを、この岐阜長良店でもご体験いただけます。
-      </p>
-      <ul class="mt-7 flex flex-wrap gap-2 text-sm">
-        {BRAND.media.map((m) => (
-          <li class="rounded-full border border-base/25 px-4 py-1.5 text-base/85">{m}</li>
-        ))}
-      </ul>
-      <p class="mt-6 text-xs text-base/50">
-        ※上記はブランド全体（全力ストレッチ）の実績です。当店単独の実績ではありません。メディア名はテキストでの言及です。店舗数の最新値は本部確認のうえ更新します（{BRAND.storeCountPlaceholder}）。
-      </p>
-    </div>
-  </section>
-
-  <!-- ⑥スタッフ紹介 -->
-  <section class="bg-offwhite">
-    <div class="container-x py-16">
-      <p class="eyebrow">STAFF</p>
-      <h2 class="mt-2 text-2xl font-bold sm:text-3xl">担当するトレーナー</h2>
-      <p class="mt-3 text-sm text-charcoal">全員「体感軸調整トレーナー」。女性トレーナーも在籍しています。</p>
-      <div class="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {STAFF.slice(0, 3).map((s) => (
-          <figure class="rounded-2xl border border-line bg-base p-6">
-            <img src="/images/placeholder-staff.svg" alt={`スタッフ ${s.name}（${s.kana}）`} width="600" height="600" loading="lazy" decoding="async" class="aspect-square w-full rounded-xl border border-line bg-panel object-cover" />
-            <figcaption class="mt-4">
-              <p class="font-heading text-lg font-bold">{s.name} <span class="text-sm font-normal text-charcoal">/ {s.kana}</span></p>
-              <p class="mt-1 text-xs text-charcoal/70">{s.role}</p>
-              <p class="hand mt-3 text-[0.95rem] leading-relaxed text-charcoal">{s.word}</p>
-            </figcaption>
-          </figure>
+  <!-- STAFF -->
+  <section id="staff" class="relative px-5 py-24 sm:px-10 sm:py-32 xl:px-14">
+    <span class="side-label">Staff — 04</span>
+    <div class="mx-auto max-w-[1440px]">
+      <div class="rise">
+        <h2 class="display-title mb-6">STAFF</h2>
+        <p class="mb-14 text-[15px] leading-[2.1] tracking-[0.03em] text-muted sm:mb-20 sm:text-[17px]">体のこと、任せてください。</p>
+      </div>
+      <div class="rise grid grid-cols-2 gap-x-5 gap-y-10 sm:gap-x-7 sm:gap-y-14 lg:grid-cols-4">
+        {STAFF.map((s, i) => (
+          <div class={i % 2 === 1 ? 'lg:mt-11' : ''}>
+            <img src={s.photo} alt={`トレーナー ${s.name}（${s.kana}）`} width="800" height="1069" loading="lazy" decoding="async" class="mb-4 aspect-[3/4] w-full object-cover object-top shadow-hard-sm sm:mb-5" />
+            <p class="text-base font-black tracking-[0.1em] sm:text-lg">
+              {s.name}<span class="ml-2 text-xs font-medium tracking-[0.1em] text-muted sm:ml-3 sm:text-sm">{s.role}</span>
+            </p>
+          </div>
         ))}
       </div>
-      <div class="mt-8"><a href="/staff" class="btn-outline">スタッフ全員を見る</a></div>
+      <div class="mt-12"><a href="/staff" class="text-[15px] font-bold underline-offset-4 hover:underline">スタッフ紹介をもっと見る →</a></div>
     </div>
   </section>
 
-  <!-- ⑦お客様の声（プレースホルダ） -->
-  <section class="container-x py-16">
-    <p class="eyebrow">VOICE</p>
-    <h2 class="mt-2 text-2xl font-bold sm:text-3xl">お客様の声</h2>
-    <p class="mt-3 max-w-2xl text-sm text-charcoal">ご来店いただいた方の声を、許可のうえ順次掲載します（現在準備中・捏造はしません）。</p>
-    <div class="mt-8 grid gap-5 sm:grid-cols-3">
-      {['トップ_1', 'トップ_2', 'トップ_3'].map((k) => (
-        <figure class="rounded-2xl border border-dashed border-line p-6">
-          <p class="text-xs font-bold text-amber-700">プレースホルダ</p>
-          <blockquote class="mt-2 text-charcoal">{`{{お客様の声_${k}}}`}</blockquote>
-        </figure>
-      ))}
-    </div>
-    <div class="mt-8"><a href="/voice" class="btn-outline">お客様の声のページへ</a></div>
-  </section>
-
-  <!-- ⑧料金・アクセス・予約 -->
-  <section class="bg-offwhite">
-    <div class="container-x grid gap-10 py-16 md:grid-cols-2">
-      <div>
-        <p class="eyebrow">PRICE</p>
-        <h2 class="mt-2 text-2xl font-bold sm:text-3xl">料金</h2>
-        <div class="mt-6"><PriceHighlight /></div>
-      </div>
-      <div>
-        <p class="eyebrow">ACCESS</p>
-        <h2 class="mt-2 text-2xl font-bold sm:text-3xl">アクセス</h2>
-        <div class="mt-6 rounded-2xl border border-line bg-base p-6 text-sm leading-relaxed text-charcoal">
-          <p class="font-bold text-ink">{SITE.brand}</p>
-          <p class="mt-3">{SITE.addressFull}</p>
-          <p class="mt-1">{SITE.landmark}</p>
-          <dl class="mt-4 grid grid-cols-[6rem_1fr] gap-y-2">
-            <dt class="text-charcoal/70">電話</dt><dd><a href={`tel:${SITE.telLink}`} class="underline">{SITE.tel}</a></dd>
-            <dt class="text-charcoal/70">営業時間</dt><dd>{SITE.hours}</dd>
-            <dt class="text-charcoal/70">定休日</dt><dd>{SITE.closed}</dd>
-            <dt class="text-charcoal/70">駐車場</dt><dd>{SITE.parking}</dd>
-          </dl>
-          <a href="/access" class="btn-outline mt-6 w-full">地図・詳しいアクセス</a>
+  <!-- VOICE（枠組み・実クチコミ投入まで準備中表示） -->
+  <section class="px-5 pb-24 sm:px-10 sm:pb-32 xl:px-14">
+    <div class="mx-auto max-w-[1440px]">
+      <div class="rise border border-ink p-2">
+        <div class="border border-ink px-6 py-14 sm:px-16 sm:py-[72px]">
+          <h2 class="display-title mb-6 text-center">VOICE</h2>
+          <p class="mb-12 text-center text-sm tracking-[0.08em] text-muted">Google マップのクチコミより</p>
+          {/*
+            実際のクチコミが集まったら、下の「掲載準備中」ボックスを削除し、
+            このグリッドを有効化して本文を貼り付ける（捏造・星の創作は禁止）:
+            <div class="grid gap-12 md:grid-cols-3">
+              <div>
+                <div class="mb-3.5 flex items-baseline justify-between gap-3">
+                  <span class="text-[15px] font-black tracking-[0.06em]">◯ さん</span>
+                  <span class="text-sm tracking-[0.12em] text-amber">★★★★★</span>
+                </div>
+                <p class="border-t border-ink/25 pt-4 text-base leading-[2.1] text-muted">（クチコミ本文）</p>
+              </div>
+            </div>
+          */}
+          <div class="rounded border border-dashed border-[#D9D9D5] px-8 py-14 text-center">
+            <p class="mb-3 text-lg font-black text-sub">掲載準備中</p>
+            <p class="text-[15px] leading-[2.1] text-sub">ご来店いただいたお客様の声を、準備が整いしだい掲載します。<br />※実際のお客様の声のみを掲載します。</p>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <ReserveCTA />
+  <!-- PRICE + ACCESS -->
+  <section id="price" class="relative px-5 pb-24 sm:px-10 sm:pb-32 xl:px-14">
+    <div class="mx-auto grid max-w-[1440px] items-start gap-16 lg:grid-cols-2 lg:gap-[104px]">
+      <div class="rise">
+        <h2 class="display-title mb-10 sm:mb-14">PRICE</h2>
+        <PriceRows />
+        <a href={SITE.urls.reserve} target="_blank" rel="noopener" class="btn-ink-pill mt-8">初回価格で予約する</a>
+      </div>
+      <div class="rise" id="access">
+        <h2 class="display-title mb-10 sm:mb-14">ACCESS</h2>
+        <div class="rule-top text-base leading-[2]">
+          <div class="rule-row grid grid-cols-[92px_1fr] gap-4 px-1 py-5 sm:grid-cols-[120px_1fr]"><span class="font-bold">住所</span><span class="text-muted">{SITE.addressFull}<br />（{SITE.landmark}）</span></div>
+          <div class="rule-row grid grid-cols-[92px_1fr] gap-4 px-1 py-5 sm:grid-cols-[120px_1fr]"><span class="font-bold">駐車場</span><span class="text-muted">{SITE.parking}</span></div>
+          <div class="rule-row grid grid-cols-[92px_1fr] gap-4 px-1 py-5 sm:grid-cols-[120px_1fr]"><span class="font-bold">営業時間</span><span class="text-muted">{SITE.hours}（{SITE.closed}）</span></div>
+          <div class="rule-row grid grid-cols-[92px_1fr] gap-4 px-1 py-5 sm:grid-cols-[120px_1fr]"><span class="font-bold">電話</span><a href={`tel:${SITE.telLink}`} class="text-muted underline">{SITE.tel}</a></div>
+        </div>
+        <iframe
+          src={`https://www.google.com/maps?q=${SITE.geo.lat},${SITE.geo.lng}&z=17&output=embed`}
+          title="全力ストレッチ岐阜長良店の周辺地図"
+          width="1200" height="460" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen
+          class="mt-7 h-[230px] w-full border-0 bg-panel"
+        ></iframe>
+        <a href="/access" class="mt-5 inline-block text-[15px] font-bold underline-offset-4 hover:underline">アクセスの詳細 →</a>
+      </div>
+    </div>
+  </section>
+
+  <ReserveCTA large={true} sub="気になる肩や腰、そのままにせず一度ご相談ください。" />
 </Base>
