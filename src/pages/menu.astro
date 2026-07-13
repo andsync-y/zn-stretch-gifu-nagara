@@ -8,6 +8,85 @@ import { SITE, LAST_UPDATED } from '../consts';
 const title = 'メニュー・料金｜岐阜市長良の完全個室パーソナルストレッチ専門店 全力ストレッチ岐阜長良店';
 const description = '全力ストレッチ岐阜長良店の料金。お試しコース60分・全身ケアコース90分・ヘッドスパ付き120分。初回限定最大75%OFF。完全個室・マンツーマン、岐阜市長良・駐車場10台以上。';
 
+// 回数券（コース別メニュー表PDF準拠・すべて税込）
+type TicketItem = { n: string; price: string; per: string; tag?: string };
+type TicketRow = { min: string; per: string; items: TicketItem[] };
+
+const REGULAR_TICKETS: { gender: string; rows: TicketRow[] }[] = [
+  {
+    gender: '女性',
+    rows: [
+      { min: '60分', per: '8,800円', items: [
+        { n: '3回券', price: '23,100', per: '7,700' },
+        { n: '5回券', price: '33,000', per: '6,600' },
+        { n: '10回券', price: '63,800', per: '6,380', tag: '最もお得' },
+      ]},
+      { min: '90分', per: '13,200円', items: [
+        { n: '3回券', price: '34,650', per: '11,550' },
+        { n: '5回券', price: '49,500', per: '9,900' },
+        { n: '10回券', price: '95,700', per: '9,570', tag: '最もお得' },
+      ]},
+    ],
+  },
+  {
+    gender: '男性',
+    rows: [
+      { min: '60分', per: '13,200円', items: [
+        { n: '3回券', price: '36,300', per: '12,100' },
+        { n: '5回券', price: '55,000', per: '11,000' },
+        { n: '10回券', price: '104,500', per: '10,450', tag: '人気No.1' },
+        { n: '15回券', price: '148,500', per: '9,900' },
+      ]},
+      { min: '90分', per: '19,800円', items: [
+        { n: '3回券', price: '54,450', per: '18,150' },
+        { n: '5回券', price: '82,500', per: '16,500' },
+        { n: '10回券', price: '154,000', per: '15,400', tag: '人気No.1' },
+        { n: '15回券', price: '222,750', per: '14,850' },
+      ]},
+    ],
+  },
+];
+
+// 初回特別価格（ご新規様キャンペーン・最大20%OFF。現資料は男性用）
+const FIRST_TICKETS: { min: string; note: string; items: (TicketItem & { normal: string })[] }[] = [
+  {
+    min: '60分', note: '都度払い 13,200円 → 回数券なら1回あたり8,800円（5〜15回券）',
+    items: [
+      { n: '3回券', normal: '36,300', price: '29,040', per: '9,680' },
+      { n: '5回券', normal: '55,000', price: '44,000', per: '8,800' },
+      { n: '10回券', normal: '104,500', price: '88,000', per: '8,800', tag: 'いちばん選ばれています' },
+      { n: '15回券', normal: '148,500', price: '132,000', per: '8,800' },
+    ],
+  },
+  {
+    min: '90分', note: '都度払い 19,800円 → 回数券なら1回あたり13,200円（5〜15回券）',
+    items: [
+      { n: '3回券', normal: '54,450', price: '43,560', per: '14,520' },
+      { n: '5回券', normal: '82,500', price: '66,000', per: '13,200' },
+      { n: '10回券', normal: '154,000', price: '132,000', per: '13,200', tag: 'いちばん選ばれています' },
+      { n: '15回券', normal: '222,750', price: '198,000', per: '13,200' },
+    ],
+  },
+];
+
+const NOMINATE = [
+  { n: '都度', price: '3,300' },
+  { n: '3回', price: '9,900' },
+  { n: '5回', price: '16,500' },
+  { n: '10回', price: '33,000' },
+  { n: '15回', price: '49,500' },
+];
+
+const TICKET_NOTES = [
+  'すべて税込価格です。有効期限は購入日より6ヶ月です。',
+  'クレジットカード決済に対応しております。',
+  '全力ストレッチの他店舗でのチケットの併用はできません。',
+  '当日キャンセルはチケット1回分の消化となりますのでご注意ください。',
+  'ご購入後の返金は原則いたしかねます（クーリングオフ等、法令に基づく場合を除きます）。',
+  '初回特別価格は、新規（初回ご来店）のお客様限定です。割引率は券種により異なります（最大20%OFF）。',
+  '※効果には個人差があります。柔軟性・可動域・身体の軽さの体感を目的としたサービスです。',
+];
+
 const points = [
   { t: '完全個室・マンツーマン', d: '他のお客様と顔を合わせないプライベート空間で、担当トレーナーが最初から最後まで対応します。' },
   { t: 'ザウルス式 体幹軸調整', d: '元格闘家考案の独自メソッド。もみほぐしではなく、軸をつくる筋肉を伸ばします。' },
@@ -34,6 +113,87 @@ const breadcrumb = {
 
     <div class="max-w-[900px]"><PriceRows /></div>
     <a href={SITE.urls.reserve} target="_blank" rel="noopener" class="btn-ink-pill mt-10">初回価格で予約する</a>
+  </section>
+
+  <!-- 回数券（通常／初回特別の2カラム） -->
+  <section class="border-t border-ink/15 bg-paper2 px-5 py-24 sm:px-10 sm:py-32">
+    <div class="mx-auto max-w-content">
+      <p class="en-label mb-8">Ticket</p>
+      <h2 class="jp-title mb-4">回数券</h2>
+      <p class="mb-14 max-w-[820px] text-[15px] leading-[2.1] text-sub sm:mb-16 sm:text-base">
+        続けて通われる方には、都度払いよりお得な回数券をご用意しています。初回ご来店のお客様は、ご新規様キャンペーン価格（最大20%OFF）でご購入いただけます。
+      </p>
+
+      <div class="grid items-start gap-14 lg:grid-cols-2 lg:gap-16">
+        <!-- 左：通常回数券価格 -->
+        <div class="border border-ink bg-paper p-6 sm:p-9">
+          <h3 class="mb-1 text-[21px] font-black sm:text-2xl">通常回数券価格</h3>
+          <p class="mb-8 text-[13px] text-muted">2回目以降のご購入・どなたでも</p>
+          {REGULAR_TICKETS.map((g) => (
+            <div class="mb-9 last:mb-0">
+              <p class="mb-2 border-l-4 border-ink pl-3 text-[17px] font-black">{g.gender}</p>
+              {g.rows.map((row) => (
+                <div class="mb-5 last:mb-0">
+                  <p class="mb-1 mt-4 text-[13px] font-bold text-muted">{row.min}（都度払い {row.per}）</p>
+                  <div class="rule-top">
+                    {row.items.map((t) => (
+                      <div class="flex flex-wrap items-baseline gap-x-3 gap-y-0.5 border-b border-line py-2.5 px-1">
+                        <span class="w-16 text-[14px] font-black">{t.n}</span>
+                        {t.tag && <span class="rounded bg-amber px-2 py-0.5 text-[10px] font-bold">{t.tag}</span>}
+                        <span class="ml-auto text-[20px] font-black leading-none">{t.price}<span class="text-[12px] font-bold">円</span></span>
+                        <span class="w-full text-right text-[11px] text-muted sm:w-auto">（1回あたり {t.per}円）</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+
+        <!-- 右：初回特別価格 -->
+        <div class="border-2 border-ink bg-ink p-6 text-inkpaper sm:p-9">
+          <p class="mb-2 inline-block bg-amber px-3 py-1 text-[12px] font-black tracking-[0.1em] text-ink">ご新規様キャンペーン 最大20%OFF</p>
+          <h3 class="mb-1 text-[21px] font-black text-white sm:text-2xl">初回特別価格の回数券</h3>
+          <p class="mb-8 text-[13px] text-inkmuted">初回ご来店のお客様限定（男性向けコース）</p>
+          {FIRST_TICKETS.map((row) => (
+            <div class="mb-9 last:mb-0">
+              <p class="mb-1 border-l-4 border-amber pl-3 text-[17px] font-black text-white">{row.min}コース</p>
+              <p class="mb-3 text-[12px] leading-[1.9] text-inkmuted">{row.note}</p>
+              <div class="border-t border-inkpaper/40">
+                {row.items.map((t) => (
+                  <div class="flex flex-wrap items-baseline gap-x-3 gap-y-0.5 border-b border-inkpaper/20 py-2.5 px-1">
+                    <span class="w-16 text-[14px] font-black text-white">{t.n}</span>
+                    {t.tag && <span class="rounded bg-amber px-2 py-0.5 text-[10px] font-bold text-ink">{t.tag}</span>}
+                    <span class="text-[12px] text-inkfaint line-through">{t.normal}円</span>
+                    <span class="ml-auto text-[20px] font-black leading-none text-amber">{t.price}<span class="text-[12px] font-bold">円</span></span>
+                    <span class="w-full text-right text-[11px] text-inkmuted sm:w-auto">（1回あたり {t.per}円）</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+          <p class="text-[11px] leading-[1.9] text-inkfaint">※女性向けコースの初回特別価格は、店頭またはご予約時にご案内します。</p>
+        </div>
+      </div>
+
+      <!-- 指名チケット -->
+      <div class="mt-10 flex flex-col gap-4 border border-ink bg-ink px-6 py-6 text-inkpaper sm:flex-row sm:items-center sm:gap-8 sm:px-9">
+        <div>
+          <p class="text-[17px] font-black text-white">指名チケット <span class="ml-1 rounded bg-amber px-2 py-0.5 text-[10px] font-bold text-ink">単品販売</span></p>
+          <p class="text-[12px] text-inkmuted">毎回、専属トレーナーをご指名いただけます。</p>
+        </div>
+        <div class="flex flex-wrap gap-x-6 gap-y-1 text-[14px] sm:ml-auto">
+          {NOMINATE.map((n) => (
+            <span><span class="text-inkmuted">{n.n}</span> <span class="font-black text-amber">{n.price}円</span></span>
+          ))}
+        </div>
+      </div>
+
+      <ul class="mt-8 max-w-[900px] space-y-1 text-[12px] leading-[1.9] text-sub">
+        {TICKET_NOTES.map((n) => <li>・{n}</li>)}
+      </ul>
+    </div>
   </section>
 
   <section class="border-t border-ink/15 bg-paper2 px-5 py-24 sm:px-10 sm:py-32">

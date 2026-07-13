@@ -48,7 +48,7 @@ export const PRICING = {
     { name: '全身ケアコース', label: '90分', normal: '19,800円', first: '¥4,900', firstPlain: '4,900', discount: '初回限定75%OFF', primary: true },
     { name: '全身ケア＋ヘッドスパ', label: '120分', normal: '26,400円', first: '¥13,200', firstPlain: '13,200', discount: '初回限定50%OFF', primary: false },
   ],
-  caption: '※初回限定価格はおひとり様1回限りです。2回目以降は通常料金（60分 13,200円／90分 19,800円／120分 26,400円）となります。',
+  caption: '※初回限定価格はおひとり様1回限りです。2回目以降は通常料金（女性 60分8,800円〜／男性 60分13,200円〜）です。お得な回数券もご用意しています。',
   priceRange: '3300-26400JPY',
 };
 

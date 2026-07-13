@@ -10,6 +10,9 @@ const description = '岐阜市長良の完全個室・マンツーマンのパ�
 
 const mapQuery = encodeURIComponent(SITE.addressFull);
 
+// TikTokのユーザー名が確定したらここに設定（例: 'zngifunagara'）。空の間は準備中表示
+const TIKTOK_HANDLE = '';
+
 // CONCEPT 3つの特長（デザイン準拠・薬機法/景表法調整済み）
 const concepts = [
   {
@@ -252,6 +255,74 @@ const marqueeItems = [
       </div>
     </div>
   </section>
+
+  <!-- SNS（Instagram / TikTok 埋め込み・遅延読み込み） -->
+  <section id="sns" class="px-5 pb-24 sm:px-10 sm:pb-32 xl:px-14">
+    <div class="mx-auto max-w-[1440px]">
+      <h2 class="display-title mb-4">SNS</h2>
+      <p class="mb-12 text-[15px] leading-[2.1] text-muted sm:text-[17px]">店内の様子やストレッチのヒントを発信しています。</p>
+      <div class="grid items-start gap-10 md:grid-cols-2 lg:gap-16">
+        <!-- Instagram -->
+        <div>
+          <p class="mb-4 flex items-center gap-3 text-[15px] font-black tracking-[0.08em]">
+            Instagram <a href={SITE.urls.instagram} target="_blank" rel="noopener" class="text-[13px] font-medium text-muted underline underline-offset-4">{SITE.urls.instagramHandle}</a>
+          </p>
+          <blockquote
+            class="instagram-media !m-0 w-full border border-ink/15 bg-white"
+            data-instgrm-permalink={SITE.urls.instagram}
+            data-instgrm-version="14"
+            style="min-height:480px"
+          >
+            <a href={SITE.urls.instagram} target="_blank" rel="noopener" class="block p-8 text-center text-sm text-sub">Instagramで見る（{SITE.urls.instagramHandle}）</a>
+          </blockquote>
+        </div>
+        <!-- TikTok -->
+        <div>
+          <p class="mb-4 text-[15px] font-black tracking-[0.08em]">TikTok</p>
+          {TIKTOK_HANDLE ? (
+            <blockquote
+              class="tiktok-embed !m-0 w-full"
+              cite={`https://www.tiktok.com/@${TIKTOK_HANDLE}`}
+              data-unique-id={TIKTOK_HANDLE}
+              data-embed-type="creator"
+              style="min-height:480px"
+            >
+              <section><a target="_blank" rel="noopener" href={`https://www.tiktok.com/@${TIKTOK_HANDLE}`}>@{TIKTOK_HANDLE}</a></section>
+            </blockquote>
+          ) : (
+            <div class="flex min-h-[480px] items-center justify-center border border-dashed border-[#D9D9D5] p-8 text-center text-sm leading-[2] text-sub">
+              TikTokは準備中です。<br />アカウント公開後にこちらに表示されます。
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  </section>
+  <script>
+    // SNS埋め込みスクリプトはセクションが見えてから読み込む（表示速度優先）
+    const sns = document.getElementById('sns');
+    if (sns) {
+      const load = () => {
+        for (const src of ['https://www.instagram.com/embed.js', 'https://www.tiktok.com/embed.js']) {
+          const s = document.createElement('script');
+          s.src = src;
+          s.async = true;
+          document.body.appendChild(s);
+        }
+      };
+      if ('IntersectionObserver' in window) {
+        const io = new IntersectionObserver((entries) => {
+          if (entries.some((e) => e.isIntersecting)) {
+            load();
+            io.disconnect();
+          }
+        }, { rootMargin: '600px' });
+        io.observe(sns);
+      } else {
+        load();
+      }
+    }
+  </script>
 
   <!-- PRICE + ACCESS -->
   <section id="price" class="relative px-5 pb-24 sm:px-10 sm:pb-32 xl:px-14">
