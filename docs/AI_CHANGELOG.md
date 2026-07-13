@@ -178,3 +178,32 @@ Git履歴が「何を変更したか」、このファイルが「なぜ変更�
   - フェード途中に新旧画像が同時表示され、620ms後に新画像だけが不透明度1になることを確認。
   - reduced motionではフェードが180msへ短縮され、コネクター線描画が停止することを確認。
 - 未対応・次の作業：Vercelプレビューでクロスフェードと各部位の見え方を確認する。
+
+## 2026-07-14 02:25 JST — ChatGPT Codex
+
+- ブランチ：`codex/interactive-symptoms`
+- 関連PR：[PR #4 SYMPTOMSを人体連動型UIへ刷新](https://github.com/andsync-y/zn-stretch-gifu-nagara/pull/4)
+- 変更内容：
+  - ユーザーフィードバックに合わせ、スケルトン表現を全面的に廃止。
+  - 悩みページの参考イラストに登場するグレーヘアの男性を踏襲し、7症状の人物イラストを作成。
+  - 人物はモノクロの鉛筆画調に統一し、悩み箇所だけを赤く表示。
+  - PCを「左イラスト／右コンパクト一覧」の2カラムへ変更し、症状から伸びる線を削除。
+  - hover／focus／tapで中央ではなく左イラストがクロスフェードする仕様へ変更。
+- 主な変更ファイル：
+  - `src/components/InteractiveSymptoms.astro`
+  - `src/pages/index.astro`
+  - `public/images/symptoms/illustration-*.webp`（7点）
+  - `docs/SYMPTOMS_INTERACTION_IMPLEMENTATION.md`
+  - `docs/AI_CHANGELOG.md`
+- 判断・注意点：
+  - セクションを明るいニュートラルグレーへ変更し、人物イラストと悩みページのトーンを統一。
+  - PCでは見出しから一覧下端まで約773〜816pxとし、900px高の画面でほぼ1画面に収まるよう調整。
+  - 既存の7症状ページURLと右端の詳細リンクを維持。
+- 確認結果：
+  - `npm run build` 成功。Astro静的ページ15件を生成。
+  - `git diff --check` 成功。
+  - 1440／1024／768／390／375pxで、画像読み込み、レイアウト、既存リンクを確認。
+  - PC hover、キーボードfocus、クリック、SP tapで7イラストが切り替わることを確認。
+  - PCの見出しから一覧下端まで約773〜816px。左イラスト／右一覧の2カラムを確認。
+  - コネクター線・SVGが存在しないこと、reduced motionでフェードが160msへ短縮されることを確認。
+- 未対応・次の作業：Vercelプレビューで実機フォント読み込み後の人物サイズと一覧密度を確認する。
