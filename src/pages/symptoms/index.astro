@@ -3,7 +3,7 @@ import Base from '../../layouts/Base.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import ReserveCTA from '../../components/ReserveCTA.astro';
 import SymptomIcon from '../../components/SymptomIcon.astro';
-import { SYMPTOMS, LAST_UPDATED } from '../../consts';
+import { SYMPTOMS } from '../../consts';
 
 const title = 'お悩み別のご案内｜岐阜市長良の完全個室パーソナルストレッチ専門店 全力ストレッチ岐阜長良店';
 const description = '肩こり・腰痛・猫背・むくみ・疲れ・スポーツケアなど、お悩み別にアプローチをご紹介。岐阜市長良の完全個室・マンツーマンのパーソナルストレッチ専門店。';
@@ -45,7 +45,6 @@ const itemList = {
         </a>
       ))}
     </div>
-    <p class="mt-10 text-xs text-muted">最終更新：{LAST_UPDATED}</p>
   </section>
 
   <ReserveCTA title="どのお悩みも、まずは初回限定75%OFFでお試し。" />

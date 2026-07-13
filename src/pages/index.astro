@@ -447,7 +447,10 @@ const marqueeWords = [
   <section id="price" class="home-info section-grid relative bg-paper2 px-5 py-24 sm:px-10 sm:py-36 xl:px-14">
     <div class="mx-auto grid max-w-[1440px] items-start gap-16 lg:grid-cols-2 lg:gap-[104px]">
       <div class="rise">
-        <h2 class="display-title mb-10 sm:mb-14">PRICE</h2>
+        <div class="mb-10 flex items-center gap-4 sm:mb-14">
+          <h2 class="display-title">PRICE</h2>
+          <span class="bg-[#92745e] px-2.5 py-1.5 text-[11px] font-black tracking-[0.1em] text-white sm:hidden">初回特別価格</span>
+        </div>
         <PriceRows showBadge={false} />
         <a href={SITE.urls.coupon} target="_blank" rel="noopener" class="btn-ink-pill mt-8">初回価格で予約する</a>
       </div>

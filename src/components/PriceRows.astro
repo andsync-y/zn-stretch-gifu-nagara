@@ -88,6 +88,14 @@ const courses = compact ? PRICING.courses.filter((course) => course.primary) : P
     font-weight: 700;
   }
 
+  /* バッジと通常価格は右端で縦のラインを揃える */
+  .price-before {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    text-align: right;
+  }
+
   .price-before span {
     display: block;
     width: max-content;
@@ -98,6 +106,7 @@ const courses = compact ? PRICING.courses.filter((course) => course.primary) : P
     font-size: 8px;
     font-weight: 800;
     letter-spacing: 0.08em;
+    white-space: nowrap;
   }
 
   .price-before del {

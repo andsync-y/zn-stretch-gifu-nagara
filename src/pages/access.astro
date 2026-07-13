@@ -2,7 +2,7 @@
 import Base from '../layouts/Base.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import ReserveCTA from '../components/ReserveCTA.astro';
-import { SITE, LAST_UPDATED } from '../consts';
+import { SITE } from '../consts';
 
 const title = 'アクセス・店舗案内｜岐阜市長良｜全力ストレッチ岐阜長良店';
 const description = '全力ストレッチ岐阜長良店へのアクセス。岐阜県岐阜市長良東２丁目３７ RSDビル2F南、ヤマダデンキ テックランド岐阜長良のすぐそば。駐車場10台以上、営業10:00-22:00・不定休。';
@@ -74,7 +74,6 @@ const breadcrumb = {
         <p class="mb-5">お車の場合は、ヤマダデンキ テックランド岐阜長良を目指してお越しください。すぐそばのRSDビル2F南が当店です。ビル東側の共同駐車場（10台以上）をご利用いただけます。ご不明な場合はお電話でご案内します。</p>
         <p>公共交通機関の最寄り情報（バス停・所要時間など）は {`{{最寄り}}`} に記載予定です。</p>
       </div>
-      <p class="mt-10 text-xs text-muted">最終更新：{LAST_UPDATED}</p>
     </div>
   </section>
 
