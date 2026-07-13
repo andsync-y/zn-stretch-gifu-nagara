@@ -34,7 +34,7 @@ const breadcrumb = {
     <div class="grid grid-cols-2 gap-x-5 gap-y-12 sm:gap-x-7 lg:grid-cols-3 lg:gap-y-16">
       {STAFF.map((s, i) => (
         <figure class={i % 2 === 1 ? 'sm:mt-11' : ''}>
-          <img src={s.photo} alt={`トレーナー ${s.name}（${s.kana}）`} width="800" height="1069" loading="lazy" decoding="async" class="mb-5 aspect-[3/4] w-full object-cover object-top grayscale transition duration-700 hover:grayscale-0" />
+          <img src={s.photo} alt={`トレーナー ${s.name}（${s.kana}）`} width="800" height="1069" loading="lazy" decoding="async" class="mb-5 aspect-[3/4] w-full object-cover object-top" />
           <figcaption class="text-center">
             <p class="text-lg font-black tracking-[0.1em] sm:text-xl">{s.name}<span class="ml-3 text-sm font-medium text-muted">{s.kana}</span></p>
             <p class="mt-1 text-xs tracking-[0.08em] text-muted">{s.role}</p>
