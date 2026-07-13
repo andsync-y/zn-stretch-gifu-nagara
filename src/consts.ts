@@ -9,7 +9,7 @@ export const SITE = {
   operator: '株式会社ANDSYNC',
   representative: '多和田 雄仁',
   area: '岐阜県岐阜市 長良エリア',
-  business: '完全個室のパーソナルストレッチ専門店',
+  business: '個室のパーソナルストレッチ専門店',
   // NAP（Googleビジネスプロフィールと完全一致させること）
   postalCode: '502-0071', // ※要確認プレースホルダ相当。実郵便番号を morning-todo で確定
   addressRegion: '岐阜県',

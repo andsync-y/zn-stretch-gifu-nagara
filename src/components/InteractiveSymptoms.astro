@@ -283,17 +283,22 @@ const hotspots = [
   }
 
   @media (max-width: 767px) {
+    /* SPも2カラム：左にスケルトン、右に項目リスト */
     .symptoms-explorer {
-      grid-template-columns: 1fr;
-      gap: 28px;
+      grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
+      gap: 14px;
       min-height: 0;
+      align-items: stretch;
     }
 
-    .symptoms-visual { height: clamp(390px, 112vw, 500px); }
+    .symptoms-visual { height: auto; min-height: 430px; }
     .symptoms-list { width: 100%; }
-    .symptom-entry { min-height: 62px; }
-    .symptom-copy strong { font-size: 14px; }
-    .symptom-copy small { font-size: 9px; }
+    .symptom-entry { min-height: 58px; grid-template-columns: minmax(0, 1fr) 30px; }
+    .symptom-trigger { grid-template-columns: 22px minmax(0, 1fr); gap: 6px; padding: 8px 4px; }
+    .symptom-no { font-size: 8px; }
+    .symptom-copy strong { font-size: 12px; }
+    .symptom-copy small { font-size: 8px; }
+    .symptom-link { font-size: 14px; }
   }
 
   @media (prefers-reduced-motion: reduce) {

@@ -7,7 +7,7 @@ export interface Props {
 }
 const {
   title = 'まずは、初回限定75%OFFでお試し。',
-  sub = '初回限定75%OFFでご案内／完全個室・マンツーマン',
+  sub = '初回限定75%OFFでご案内／個室・マンツーマン',
   large = false,
 } = Astro.props;
 ---
@@ -41,7 +41,7 @@ const {
     </div>
 
     <div class="reserve-contact">
-      <span>完全個室</span><span>女性トレーナー</span><span>10:00–22:00</span>
+      <span>全席個室</span><span>女性トレーナー</span><span>10:00–22:00</span>
       <a href={SITE.urls.line} target="_blank" rel="noopener">LINEで相談 ↗</a>
       <a href={`tel:${SITE.telLink}`}>TEL {SITE.tel}</a>
     </div>
