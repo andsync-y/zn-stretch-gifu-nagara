@@ -126,3 +126,45 @@ Git履歴が「何を変更したか」、このファイルが「なぜ変更�
   - `git diff --check` 成功。
   - `npm run build` 成功。Astro静的ページ15件の生成を確認。
 - 未対応・次の作業：Vercelプレビューで連番スクラブの読み込み速度とスマホ表示を確認し、問題がなければPR #2をマージする。
+
+## 2026-07-14 02:15 JST — Claude Code
+
+- ブランチ：`claude/apply-design-patch-xbq1gz`
+- 関連PR：[PR #5 ヒーロー動画を8秒版（193フレーム）に差し替え](https://github.com/andsync-y/zn-stretch-gifu-nagara/pull/5)（マージ済み・本番反映済み）
+- 変更内容：
+  - TOPヒーローのスクラブ素材を新しい8秒版動画（1920×1080・24fps）由来の193フレームへ差し替え。
+  - `public/frames/`（PC用1920px）と `public/frames/sm/`（SP用960px）を全再生成。
+  - `FRAME_COUNT` を121→193へ更新し、スクロール距離を420vh（SP 360svh）へ拡大。
+  - 元動画を `assets/hero-source-v3.mp4` として保管。
+  - Codex側PR #2（サイト全体刷新）とのマージ競合（`global.css` のヒーロー高さ・背景色）を手動解消。背景トーンはCodex側の `#f7f7f4` を採用し、canvas描画色も同色へ統一。
+- 主な変更ファイル：
+  - `public/frames/`／`public/frames/sm/`
+  - `src/pages/index.astro`
+  - `src/styles/global.css`
+  - `assets/hero-source-v3.mp4`
+- 判断・注意点：
+  - 動画の4Kアップスケール（Higgsfield）は無料プラン・クレジット不足のため未実施。動画はHiggsfieldへ取り込み済みで、クレジット確保後に再実行可能。
+  - PC初回訪問時のフレーム総量は約29MB。体感が重い場合は品質調整で半減可能。
+- 確認結果：`npm run build` 成功。Chromium実機検証でPC/SPともスクラブ再生・オファーカード出現を確認。マージはGitHub上で完了し、Vercel自動デプロイまで確認依頼済み。
+- 未対応・次の作業：4Kアップスケール（クレジット確保後）、フレーム容量の最適化検討。
+
+## 2026-07-14 02:45 JST — Claude Code
+
+- ブランチ：`claude/apply-design-patch-xbq1gz`
+- 関連PR：[PR #6 悩み別7ページの発生サイクル図を症状別のPC/SP画像に差し替え](https://github.com/andsync-y/zn-stretch-gifu-nagara/pull/6)
+- 変更内容：
+  - CODEX_HANDOFF.md（ZIP受領）の指示に基づき、悩み別7ページの「発生サイクル」図を症状別のPC/SP画像14点へ差し替え。
+  - `SymptomCycleFigure.astro` を新規作成し、`SymptomLayout.astro` の旧 `SymptomCycle`（HTML/SVG共通図）参照をスラッグ分岐の `picture` へ置換。7ページのファイル自体は無変更。
+  - 提供PNGを `public/images/symptoms/cycles/` に保持し、配信用WebP（quality=90）を生成。767px以下でSP版へ切替。
+  - 検証結果を `CODEX_HANDOFF_RESULT.md` に記録。
+- 主な変更ファイル：
+  - `src/components/SymptomCycleFigure.astro`（新規）
+  - `src/layouts/SymptomLayout.astro`
+  - `public/images/symptoms/cycles/`（PNG+WebP 28点）
+  - `CODEX_HANDOFF_RESULT.md`（新規）
+- 判断・注意点：
+  - 旧 `SymptomCycle.astro` は参照ゼロだが、SYMPTOMS一覧インタラクションへの影響を避けるためファイルは残置。
+  - 図の下余白は旧図と同じ4remを維持。alt はハンドオフ指定文言。画像内テキストとの二重表示なし。
+  - 幅1024pxの横スクロール（約28px）は変更前から存在する既存事象（`PriceRows` の `.price-first` 由来）で本件スコープ外・未修正。要別途対応。
+- 確認結果：`npm run build` 成功。7ページ×6幅=42ケースのChromium自動検証で全合格。ビルド出力の前後比較で差分はサイクル図ブロックと新画像のみ。
+- 未対応・次の作業：PR #6のマージと本番確認、`.price-first` の1024px横はみ出し修正。
