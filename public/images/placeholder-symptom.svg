@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" width="1200" height="600" role="img" aria-label="完全個室でのパーソナルストレッチ">
-  <rect width="1200" height="600" fill="#F2F2F0"/>
-  <rect x="1" y="1" width="1198" height="598" fill="none" stroke="#EAEAEA" stroke-width="2"/>
-  <g fill="#FF9C46" opacity="0.9">
-    <circle cx="600" cy="276" r="18"/>
-  </g>
-  <text x="50%" y="58%" text-anchor="middle" font-family="sans-serif" font-size="22" font-weight="700" fill="#1A1A1A">完全個室でのパーソナルストレッチ</text>
-  <text x="50%" y="70%" text-anchor="middle" font-family="sans-serif" font-size="14" fill="#333333">placeholder 1200x600（実写に差し替え）</text>
-</svg>

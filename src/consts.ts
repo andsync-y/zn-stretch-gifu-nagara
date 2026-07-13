@@ -97,16 +97,16 @@ export const STAFF = [
   { name: 'HANA', kana: 'ハナ', role: '体感軸調整トレーナー', photo: '/images/staff/hana.webp', word: 'スポーツやゴルフの動きが、もっと快適に。可動域からコンディションを底上げします。' },
 ];
 
-// 店舗写真（現状プレースホルダSVG。実写が用意でき次第 同名の .jpg/.webp に差し替えて参照を更新）
+// 店舗写真（本部支給素材より。顔が写らないようトリミング済み・元データは photos-src/）
 export const PHOTOS = {
-  hero: '/images/photos/hero.svg',
-  marquee1: '/images/photos/marquee-1.svg',
-  marquee2: '/images/photos/marquee-2.svg',
-  marquee3: '/images/photos/marquee-3.svg',
-  concept: '/images/photos/concept.svg',
-  method1: '/images/photos/method-1.svg',
-  method2: '/images/photos/method-2.svg',
-  method3: '/images/photos/method-3.svg',
+  hero: '/images/photos/hero.webp', // pic-15 縦位置
+  marquee1: '/images/photos/marquee-1.webp', // pic-66
+  marquee2: '/images/photos/marquee-2.webp', // pic-9
+  marquee3: '/images/photos/marquee-3.webp', // pic-58 横位置・上部カット
+  concept: '/images/photos/concept.webp', // pic-58 縦位置・上部カット
+  method1: '/images/photos/method-1.webp', // pic-78
+  method2: '/images/photos/method-2.webp', // pic-49 上部カット
+  method3: '/images/photos/method-3.webp', // pic-33
 };
 
 // 症状ページのメタ情報（一覧・内部リンク・パンくずに使用。本文は各ページで書き分け）
