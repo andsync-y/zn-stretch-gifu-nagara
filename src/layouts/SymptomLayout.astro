@@ -5,7 +5,7 @@ import FAQ from '../components/FAQ.astro';
 import PriceRows from '../components/PriceRows.astro';
 import ReserveCTA from '../components/ReserveCTA.astro';
 import SymptomIcon from '../components/SymptomIcon.astro';
-import SymptomCycle from '../components/SymptomCycle.astro';
+import SymptomCycleFigure from '../components/SymptomCycleFigure.astro';
 import { SITE, PHOTOS, REVIEWS, LAST_UPDATED } from '../consts';
 
 export interface QA { q: string; a: string; }
@@ -129,8 +129,8 @@ const breadcrumbSchema = {
       <p class="en-label mb-8">Why</p>
       <h2 class="jp-title mb-12">{whyHeading}</h2>
 
-      <!-- 発生サイクル図 -->
-      <SymptomCycle title={cycleTitle} steps={cycleSteps} note={cycleNote} />
+      <!-- 発生サイクル図（症状別のPC/SP画像。ステップ文言はsr-onlyでDOMにも提供） -->
+      <SymptomCycleFigure slug={slug} steps={cycleSteps} note={cycleNote} />
 
       <!-- 原因カード -->
       <ul class="grid grid-cols-2 gap-7 lg:grid-cols-4">

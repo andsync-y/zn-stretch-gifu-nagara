@@ -1,0 +1,70 @@
+---
+/**
+ * 悩み別ページの「発生サイクル」図（症状ごとのPC/SP別画像）。
+ * PC: 1774x887 ／ SP: 941x1672（767px以下でSP版に切替）。
+ * 画像内に見出し・説明文が含まれるため、周辺に同じ文言を視覚表示しないこと。
+ * steps/noteは画像内の実文言と一致させ、sr-onlyでSEO・スクリーンリーダーに提供する。
+ */
+interface Props {
+  slug: string;
+  steps?: string[];
+  note?: string;
+}
+
+const CYCLE_ALT: Record<string, string> = {
+  katakori: '肩の重さ・凝りが続くサイクル',
+  youtsu: '腰・お尻の張りが続くサイクル',
+  'kubi-ganseihiro': '首こり・眼精疲労が続く目ルートと首ルート',
+  mukumi: '脚のむくみ・冷え感が続くサイクル',
+  jiritsu: '疲れが抜けにくくなるサイクル',
+  shisei: '猫背・巻き肩が定着するサイクル',
+  sports: '運動後の張り・動きにくさが続くサイクル',
+};
+
+const { slug, steps = [], note = '' } = Astro.props;
+const alt = CYCLE_ALT[slug];
+const base = `/images/symptoms/cycles/${slug}-cycle`;
+---
+{alt && (
+  <figure class="symptom-cycle">
+    <picture>
+      <source media="(max-width: 767px)" srcset={`${base}-sp.webp`} type="image/webp" />
+      <source media="(max-width: 767px)" srcset={`${base}-sp.png`} />
+      <source srcset={`${base}-pc.webp`} type="image/webp" />
+      <img src={`${base}-pc.png`} alt={alt} width="1774" height="887" loading="lazy" decoding="async" />
+    </picture>
+    {steps.length > 0 && (
+      <figcaption class="sr-only">
+        <ol>
+          {steps.map((s) => <li>{s}</li>)}
+        </ol>
+        {note && <p>{note}</p>}
+      </figcaption>
+    )}
+  </figure>
+)}
+
+<style>
+  .symptom-cycle {
+    width: 100%;
+    aspect-ratio: 1774 / 887;
+    margin: 0 0 4rem; /* 旧cycle-diagramと同じ下余白 */
+  }
+
+  .symptom-cycle picture,
+  .symptom-cycle img {
+    display: block;
+    width: 100%;
+  }
+
+  .symptom-cycle img {
+    height: 100%;
+    object-fit: contain;
+  }
+
+  @media (max-width: 767px) {
+    .symptom-cycle {
+      aspect-ratio: 941 / 1672;
+    }
+  }
+</style>
