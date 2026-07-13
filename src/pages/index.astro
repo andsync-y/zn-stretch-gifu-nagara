@@ -49,10 +49,10 @@ const marqueeItems = [
   <!-- HERO：連番フレーム（動画のコマ）をスクロールに同期してスクラブ再生する3Dスクロール演出 -->
   <section class="hero-scrub" data-hero>
     <div class="hero-scrub-stage">
-      <img class="hero-scrub-fallback" data-hero-fallback src="/frames/frame_0001.jpg" width="1920" height="1080" alt="動くカラダで、生きる。完全個室で行う体感軸パーソナルストレッチ" fetchpriority="high" decoding="async" />
+      <img class="hero-scrub-fallback" data-hero-fallback src="/frames/frame_0001.jpg" width="1920" height="1080" alt="もっと動ける、軽い身体へ。完全個室で行う体感軸パーソナルストレッチ" fetchpriority="high" decoding="async" />
       <canvas data-hero-canvas aria-hidden="true"></canvas>
 
-      <h1 class="sr-only">動くカラダで、生きる。｜全力ストレッチ岐阜長良店（岐阜市長良の完全個室パーソナルストレッチ専門店）</h1>
+      <h1 class="sr-only">もっと動ける、軽い身体へ。｜全力ストレッチ岐阜長良店（岐阜市長良の完全個室パーソナルストレッチ専門店）</h1>
 
       <div class="hero-offer">
         <div class="hero-offer-heading">
@@ -79,7 +79,7 @@ const marqueeItems = [
     const ctx = canvas?.getContext('2d');
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-    const FRAME_COUNT = 193;
+    const FRAME_COUNT = 169;
     const OFFER_AT = 0.72; // オファーカードを出すスクロール進捗
     const SCRUB_END = 0.85; // ここまでで最終フレームに到達し、残りは静止
     const dir = window.innerWidth <= 768 ? '/frames/sm' : '/frames';
