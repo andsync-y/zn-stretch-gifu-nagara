@@ -39,10 +39,15 @@ const methods = [
   { no: '03', en: 'Deep Muscle', title: '筋膜ほぐし＋深層筋ストレッチ', body: '表層をほぐしてから、自分では届きにくい深層の筋肉までじっくりストレッチします。', photo: PHOTOS.method3, alt: '深層筋へのパーソナルストレッチ' },
 ];
 
-const marqueeItems = [
-  { photo: PHOTOS.marquee1, word: '#完全個室' },
-  { photo: PHOTOS.marquee2, word: '#マンツーマン' },
-  { photo: PHOTOS.marquee3, word: '#完全女性トレーナー' },
+const marqueeWords = [
+  '#完全個室',
+  '#マンツーマン',
+  '#完全女性トレーナー',
+  '#全く新しいストレッチサロン',
+  '#岐阜初出店',
+  '#独自の体感軸調整法',
+  '#深層筋にアプローチ',
+  '#根本改善',
 ];
 ---
 <Base title={title} description={description} path="/">
@@ -58,7 +63,7 @@ const marqueeItems = [
       <!-- キャッチコピー（動画には文字が入っていないため、HTMLテキストで表示・アニメーション） -->
       <div class="hero-copy">
         <h1>
-          <span class="hero-line"><span class="hero-line-inner">もっと動ける、</span></span>
+          <span class="hero-line"><span class="hero-line-inner">もっと動ける</span></span>
           <span class="hero-line hero-line-second"><span class="hero-line-inner">軽い身体へ。</span></span>
           <span class="sr-only">｜全力ストレッチ岐阜長良店（岐阜市長良の完全個室パーソナルストレッチ専門店）</span>
         </h1>
@@ -190,16 +195,13 @@ const marqueeItems = [
     }
   </script>
 
-  <!-- MARQUEE -->
-  <section class="home-marquee overflow-hidden border-y border-ink bg-paper" aria-hidden="true">
+  <!-- MARQUEE（画像・背景なしのキーワードのみ） -->
+  <section class="home-marquee overflow-hidden py-10 sm:py-16" aria-hidden="true">
     <div class="flex w-max animate-marquee">
       {[0, 1].map(() => (
-        <div class="flex">
-          {marqueeItems.map((m) => (
-            <>
-              <img src={m.photo} alt="" width="680" height="440" loading="lazy" decoding="async" class="h-[130px] w-[210px] object-cover grayscale sm:h-[200px] sm:w-[360px]" style="object-position:center 68%" />
-              <span class="flex h-[130px] w-[220px] items-center justify-center border-x border-ink px-5 text-center text-[16px] font-black tracking-[0.08em] sm:h-[200px] sm:w-[360px] sm:text-[27px]">{m.word}</span>
-            </>
+        <div class="flex items-baseline">
+          {marqueeWords.map((word) => (
+            <span class="whitespace-nowrap px-7 text-[22px] font-black tracking-[0.06em] sm:px-12 sm:text-[38px]">{word}</span>
           ))}
         </div>
       ))}
