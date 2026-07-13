@@ -107,9 +107,9 @@ const symptoms = SYMPTOMS.map((item, index) => ({
     position: relative;
     min-width: 0;
     overflow: hidden;
-    border-top: 1px solid rgba(26, 26, 26, .24);
-    border-bottom: 1px solid rgba(26, 26, 26, .24);
-    background: #f0f0f0;
+    border-top: 1px solid rgba(255, 255, 255, .22);
+    border-bottom: 1px solid rgba(255, 255, 255, .22);
+    background: #111314;
   }
 
   .symptoms-visual-images {
@@ -136,19 +136,19 @@ const symptoms = SYMPTOMS.map((item, index) => ({
 
   .symptoms-list {
     align-self: center;
-    border-top: 1px solid rgba(26, 26, 26, .62);
+    border-top: 1px solid rgba(255, 255, 255, .5);
   }
 
   .symptom-entry {
     display: grid;
     grid-template-columns: minmax(0, 1fr) 48px;
     min-height: 68px;
-    border-bottom: 1px solid rgba(26, 26, 26, .24);
+    border-bottom: 1px solid rgba(255, 255, 255, .2);
     transition: background-color 220ms ease;
   }
 
   .symptom-entry:has(.symptom-trigger[aria-pressed='true']) {
-    background: rgba(223, 52, 47, .035);
+    background: rgba(223, 52, 47, .075);
   }
 
   .symptom-trigger {
@@ -160,7 +160,7 @@ const symptoms = SYMPTOMS.map((item, index) => ({
     padding: 10px 6px 10px 2px;
     border: 0;
     background: transparent;
-    color: #1a1a1a;
+    color: #f4f0e9;
     text-align: left;
     cursor: pointer;
   }
@@ -174,7 +174,7 @@ const symptoms = SYMPTOMS.map((item, index) => ({
   .symptom-no {
     align-self: start;
     padding-top: 4px;
-    color: #8b8984;
+    color: #85817c;
     font-family: 'Inter', sans-serif;
     font-size: 9px;
     font-weight: 900;
@@ -193,7 +193,7 @@ const symptoms = SYMPTOMS.map((item, index) => ({
   .symptom-copy small {
     display: block;
     margin-top: 2px;
-    color: #77746f;
+    color: #97928c;
     font-size: 10px;
     line-height: 1.45;
   }
@@ -201,8 +201,8 @@ const symptoms = SYMPTOMS.map((item, index) => ({
   .symptom-link {
     display: grid;
     place-items: center;
-    border-left: 1px solid rgba(26, 26, 26, .12);
-    color: #1a1a1a;
+    border-left: 1px solid rgba(255, 255, 255, .12);
+    color: #f4f0e9;
     font-size: 17px;
     text-decoration: none;
     transition: color 220ms ease, transform 220ms ease;

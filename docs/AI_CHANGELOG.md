@@ -207,3 +207,30 @@ Git履歴が「何を変更したか」、このファイルが「なぜ変更�
   - PCの見出しから一覧下端まで約773〜816px。左イラスト／右一覧の2カラムを確認。
   - コネクター線・SVGが存在しないこと、reduced motionでフェードが160msへ短縮されることを確認。
 - 未対応・次の作業：Vercelプレビューで実機フォント読み込み後の人物サイズと一覧密度を確認する。
+
+## 2026-07-14 03:10 JST — ChatGPT Codex
+
+- ブランチ：`codex/interactive-symptoms`
+- 関連PR：[PR #4 SYMPTOMSを人体連動型UIへ刷新](https://github.com/andsync-y/zn-stretch-gifu-nagara/pull/4)
+- 変更内容：
+  - SYMPTOMSセクションをライトグレーから黒背景へ戻した。
+  - 既存の人物イラスト6点を、同一人物・同一ポーズを維持した黒地の白線画へ変更。
+  - 悩み箇所のみ赤い発光エフェクトを残し、人物・服装の色は排除。
+  - スポーツケアは、同じ男性がゴルフ後にクラブを持ち、腰を押さえる専用イラストへ差し替え。
+  - 左イラスト／右一覧、hover・focus・tapのクロスフェード、コネクター線なしの仕様は維持。
+- 主な変更ファイル：
+  - `src/components/InteractiveSymptoms.astro`
+  - `src/pages/index.astro`
+  - `public/images/symptoms/illustration-*.webp`（7点）
+  - `docs/SYMPTOMS_INTERACTION_IMPLEMENTATION.md`
+  - `docs/AI_CHANGELOG.md`
+- 判断・注意点：
+  - 白線画は背景から自然に分離するよう、輪郭抽出後にWebPへ最適化。
+  - 赤 `#ff382f` は患部エフェクトとアクティブ項目のみに限定。
+  - 7点は960 × 1260px、合計約307KB。
+- 確認結果：
+  - `npm run build` 成功。Astro静的ページ15件を生成。
+  - `git diff --check` 成功。
+  - 1440／1024／768pxで左右2カラム、390／375pxで縦構成を確認。
+  - 7画像の読み込み、hover・focus・click・tapの状態同期、クロスフェードを確認。
+  - PCの主要部は約773〜816pxを維持し、コネクター線は0件。
