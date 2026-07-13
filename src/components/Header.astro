@@ -9,12 +9,12 @@ const nav = [
   { label: '料金', href: '/menu' },
 ];
 
+/* モバイルメニューでnavに続けて表示する追加リンク（navと重複するページは載せない） */
 const menuLinks = [
-  { label: 'メニュー・料金', href: '/menu' },
-  { label: 'スタッフ紹介', href: '/staff' },
   { label: 'お客様の声', href: '/voice' },
   { label: 'アクセス・店舗案内', href: '/access' },
   { label: 'ご予約について', href: '/reserve' },
+  { label: '採用情報', href: '/recruit' },
 ];
 ---
 <header class="site-header">
@@ -342,8 +342,8 @@ const menuLinks = [
 
     .mobile-menu {
       position: fixed;
-      z-index: 49; /* ヘッダー(50)のすぐ下：閉じるボタンを操作可能に保つ */
-      inset: 64px 0 0;
+      z-index: 49; /* ヘッダー(50)のすぐ下：ロゴと閉じるボタンはメニューの上に重なって見える */
+      inset: 0; /* 全画面表示 */
       display: block;
       overflow-y: auto;
       background: #151719;
@@ -353,8 +353,8 @@ const menuLinks = [
     .mobile-menu.hidden { display: none; }
 
     .mobile-menu-inner {
-      min-height: calc(100svh - 64px);
-      padding: 24px 20px 34px;
+      min-height: 100svh;
+      padding: 88px 20px 34px; /* 上部はヘッダー（ロゴ・閉じるボタン）と重ならない余白 */
       background-image:
         linear-gradient(rgba(255,255,255,0.055) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255,255,255,0.055) 1px, transparent 1px);
