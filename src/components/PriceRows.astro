@@ -6,12 +6,14 @@ export interface Props {
   compact?: boolean;
   /** 大きい注記を出すか */
   showCaption?: boolean;
+  /** 「初回限定 最大75%OFF」バッジを出すか */
+  showBadge?: boolean;
 }
-const { compact = false, showCaption = true } = Astro.props;
+const { compact = false, showCaption = true, showBadge = true } = Astro.props;
 const courses = compact ? PRICING.courses.filter((c) => c.primary) : PRICING.courses;
 ---
 <div>
-  <p class="mb-6 inline-block rounded bg-amber px-4 py-2 text-[13px] font-black tracking-[0.14em] text-ink">初回限定 最大75%OFF</p>
+  {showBadge && <p class="mb-6 inline-block rounded bg-amber px-4 py-2 text-[13px] font-black tracking-[0.14em] text-ink">初回限定 最大75%OFF</p>}
   <div class="rule-top">
     {courses.map((c) => (
       <div class="flex flex-wrap items-baseline gap-x-4 gap-y-1 border-b border-line py-7 px-1">

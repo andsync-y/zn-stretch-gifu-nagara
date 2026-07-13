@@ -117,11 +117,11 @@ export const PHOTOS = {
 // ラベル・並び・注記はTOP v5デザイン準拠
 export const SYMPTOMS = [
   { slug: 'katakori', label: '肩こり', short: '肩こり', note: 'デスクワークの張りに', desc: 'デスクワークや立ち仕事で重くなった肩・首まわりへ。' },
-  { slug: 'youtsu', label: '腰痛・お尻や脚の張り', short: '腰痛', note: '', desc: '腰の重だるさや、お尻・太もも裏のこわばりが気になる方へ。' },
-  { slug: 'kubi-ganseihiro', label: '首こり・眼精疲労', short: '首こり・眼精疲労', note: '', desc: '首すじの張りや、目の奥の疲れが気になる方へ。' },
-  { slug: 'mukumi', label: 'むくみ・冷え', short: 'むくみ・冷え', note: '', desc: '脚の重さや冷え、めぐりの滞りが気になる方へ。' },
-  { slug: 'jiritsu', label: '疲れ・睡眠', short: '疲れ・睡眠', note: '', desc: '抜けにくい疲れや、休んだ気がしない毎日に。' },
-  { slug: 'shisei', label: '姿勢・猫背', short: '姿勢・猫背', note: '', desc: '丸まりがちな背中や巻き肩の姿勢が気になる方へ。' },
+  { slug: 'youtsu', label: '腰痛・お尻や脚の張り', short: '腰痛', note: '長時間の運転・立ち仕事に', desc: '腰の重だるさや、お尻・太もも裏のこわばりが気になる方へ。' },
+  { slug: 'kubi-ganseihiro', label: '首こり・眼精疲労', short: '首こり・眼精疲労', note: 'スマホ・PC作業が多い方に', desc: '首すじの張りや、目の奥の疲れが気になる方へ。' },
+  { slug: 'mukumi', label: 'むくみ・冷え', short: 'むくみ・冷え', note: '夕方の脚の重だるさに', desc: '脚の重さや冷え、めぐりの滞りが気になる方へ。' },
+  { slug: 'jiritsu', label: '疲れ・睡眠', short: '疲れ・睡眠', note: '休んでも抜けにくい疲れに', desc: '抜けにくい疲れや、休んだ気がしない毎日に。' },
+  { slug: 'shisei', label: '姿勢・猫背', short: '姿勢・猫背', note: '丸まりがちな背中・巻き肩に', desc: '丸まりがちな背中や巻き肩の姿勢が気になる方へ。' },
   { slug: 'sports', label: 'スポーツケア', short: 'スポーツケア', note: 'ゴルフ・ランニングの前後に', desc: 'ゴルフ・ランニングなど、運動前後のコンディション作りに。' },
 ];
 
