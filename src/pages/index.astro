@@ -2,7 +2,6 @@
 import Base from '../layouts/Base.astro';
 import ReserveCTA from '../components/ReserveCTA.astro';
 import PriceRows from '../components/PriceRows.astro';
-import CircleBadge from '../components/CircleBadge.astro';
 import { SITE, BRAND, STAFF, SYMPTOMS, PHOTOS, REVIEWS } from '../consts';
 
 const title = '岐阜市長良の完全個室パーソナルストレッチ｜全力ストレッチ岐阜長良店';
@@ -46,56 +45,86 @@ const marqueeItems = [
 ];
 ---
 <Base title={title} description={description} path="/">
-  <!-- HERO（SP=写真にキャッチをオーバーレイ／PC=大きなキャッチ＋大きな写真） -->
-  <section class="relative overflow-hidden px-5 pb-20 pt-3 sm:px-10 sm:pt-12 xl:px-14">
-    <div class="relative mx-auto grid max-w-[1440px] items-start gap-6 lg:grid-cols-[1fr_540px] lg:gap-16 xl:grid-cols-[1fr_620px]">
-      <div class="order-2 lg:order-1 lg:pt-2">
-        <!-- SPではキャッチを写真の上に重ねる（absoluteの基準は外側のgridコンテナ） -->
-        <h1 class="absolute left-1 top-[22%] z-10 text-[30px] font-black leading-[1.7] tracking-[0.03em] lg:static lg:mb-7 lg:text-[40px] lg:leading-[1.65] lg:tracking-[0.02em] xl:text-[46px]">
-          <span class="inline-block">平日はタフに、</span><br class="lg:hidden" /><span class="inline-block">週末はアクティブに。</span><br /><span class="inline-block">本気の大人のための</span><br class="lg:hidden" /><span class="frame-word bg-paper/70 lg:bg-transparent">身体改革</span>。
-          <span class="sr-only">｜全力ストレッチ岐阜長良店（岐阜市長良の完全個室パーソナルストレッチ専門店）</span>
+  <!-- HERO：スクロールに合わせてレイヤーが再構成されるエディトリアル演出 -->
+  <section class="hero-scroll" data-hero>
+    <div class="hero-stage">
+      <div class="hero-grid" aria-hidden="true"></div>
+      <p class="hero-ghost" aria-hidden="true">MOVE</p>
+      <p class="hero-outline" aria-hidden="true">YOUR BODY</p>
+
+      <div class="hero-orbit" aria-hidden="true">
+        <span></span>
+      </div>
+
+      <figure class="hero-visual hero-visual-main">
+        <img src={PHOTOS.concept} alt="完全個室で行う体感軸パーソナルストレッチ" width="1060" height="1700" fetchpriority="high" decoding="async" />
+      </figure>
+      <figure class="hero-visual hero-visual-sub" aria-hidden="true">
+        <img src={PHOTOS.hero2} alt="" width="1085" height="1458" loading="eager" decoding="async" />
+      </figure>
+      <figure class="hero-visual hero-visual-detail" aria-hidden="true">
+        <img src={PHOTOS.method2} alt="" width="1400" height="1050" loading="eager" decoding="async" />
+      </figure>
+
+      <div class="hero-copy">
+        <p class="hero-kicker"><span>Gifu Nagara</span><span>Physical Conditioning</span></p>
+        <h1>
+          <span class="hero-line">動くカラダで、</span>
+          <span class="hero-line hero-line-indent">生きる。</span>
+          <span class="sr-only">全力ストレッチ岐阜長良店｜岐阜市長良の完全個室パーソナルストレッチ専門店</span>
         </h1>
+        <p class="hero-lead">伸ばすだけじゃない。<br />毎日を軽やかに動くための、身体改革。</p>
+      </div>
 
-        <p class="mb-8 hidden text-[15px] leading-[2.1] tracking-[0.04em] text-muted lg:mb-12 lg:block lg:text-base">
-          岐阜市長良の完全個室・マンツーマン、パーソナルストレッチ専門店。<br />Private &amp; personal stretch studio for your working body.
-        </p>
+      <div class="hero-facts" aria-label="店舗の特長">
+        <span>完全個室</span><span>女性トレーナー</span><span>10:00–22:00</span>
+      </div>
 
-        <p class="mb-3 inline-block border-2 border-ink px-3 py-1 text-[12px] font-black tracking-[0.14em] lg:mb-5 lg:px-4 lg:py-1.5 lg:text-[13px]">初回限定</p>
-        <div class="mb-8 flex max-w-[520px] flex-col gap-1.5 lg:mb-11 lg:max-w-[600px] lg:gap-3">
-          <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1 lg:gap-x-5">
-            <span class="w-[8em] shrink-0 whitespace-nowrap text-[13px] font-bold tracking-[0.06em] lg:text-[17px]">集中ケアコース</span>
-            <span class="text-[13px] font-bold lg:text-[17px]">60分</span>
-            <span class="text-[13px] text-muted line-through lg:text-[16px]">13,200円</span>
-            <span class="ml-auto font-display text-[38px] font-extrabold leading-none lg:text-[58px]">¥3,300</span>
-          </div>
-          <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1 lg:gap-x-5">
-            <span class="w-[8em] shrink-0 whitespace-nowrap text-[13px] font-bold tracking-[0.06em] lg:text-[17px]">全身ケアコース</span>
-            <span class="text-[13px] font-bold lg:text-[17px]">90分</span>
-            <span class="text-[13px] text-muted line-through lg:text-[16px]">19,800円</span>
-            <span class="ml-auto font-display text-[38px] font-extrabold leading-none lg:text-[58px]">¥4,900</span>
-          </div>
+      <div class="hero-offer">
+        <div class="hero-offer-heading">
+          <p><span>FIRST</span><span>SESSION</span></p>
+          <strong>初回限定</strong>
         </div>
-
-        <a href={SITE.urls.reserve} target="_blank" rel="noopener" class="btn-ink block w-full text-center sm:inline-block sm:w-auto sm:tracking-[0.18em] lg:px-20 lg:py-6 lg:text-[17px]">WEB予約はこちら</a>
-        <p class="mt-3 text-[11px] text-muted lg:mt-4 lg:text-xs">※税込。初回価格はおひとり様1回限りです。価格は変更となる場合があります。</p>
+        <div class="hero-offer-price">
+          <p><span>集中ケアコース</span><b>60 min.</b></p>
+          <p><del>¥13,200</del><strong>¥3,300</strong><small>税込</small></p>
+        </div>
+        <a href={SITE.urls.reserve} target="_blank" rel="noopener">WEB予約 <span aria-hidden="true">↗</span></a>
+        <p class="hero-offer-note">※初回価格はおひとり様1回限り。価格は変更となる場合があります。</p>
       </div>
 
-      <!-- 写真（SP=全幅・キャッチの下地／PC=大きく右側）5枚クロスフェード -->
-      <div class="relative order-1 h-[420px] w-full lg:order-2 lg:h-[700px] xl:h-[740px]">
-        <img src={PHOTOS.hero2} alt="完全個室で行うパーソナルストレッチの施術シーン" width="1085" height="1458" fetchpriority="high" decoding="async" class="h-full w-full object-cover" style="object-position:center 30%" />
-        {[PHOTOS.hero2, PHOTOS.concept, PHOTOS.method2, PHOTOS.method1, PHOTOS.method3].map((src, i) => (
-          <img
-            src={src} alt="" width="1280" height="1720" loading={i === 0 ? undefined : 'lazy'} decoding="async" aria-hidden="true"
-            class="hero-slide absolute inset-0 h-full w-full object-cover"
-            style={`object-position:center 30%;animation-delay:${i * 5}s`}
-          />
-        ))}
-        <!-- SPのみ：オーバーレイ文字の可読性を上げる淡いグラデーション -->
-        <div class="absolute inset-0 bg-gradient-to-t from-paper/70 via-paper/25 to-transparent lg:hidden" aria-hidden="true"></div>
-        <CircleBadge class="absolute bottom-[-56px] right-[-32px] h-[160px] w-[160px] lg:bottom-[-70px] lg:right-[-80px] lg:h-[300px] lg:w-[300px]" />
-      </div>
+      <div class="hero-scroll-sign" aria-hidden="true"><span>SCROLL TO MOVE</span><i></i></div>
+      <p class="hero-count" aria-hidden="true"><span>01</span> / 02</p>
     </div>
   </section>
+
+  <script>
+    const hero = document.querySelector<HTMLElement>('[data-hero]');
+    const offer = hero?.querySelector<HTMLElement>('.hero-offer');
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let ticking = false;
+
+    const updateHero = () => {
+      if (!hero) return;
+      const rect = hero.getBoundingClientRect();
+      const distance = Math.max(1, hero.offsetHeight - window.innerHeight);
+      const progress = reduceMotion.matches ? 1 : Math.min(1, Math.max(0, -rect.top / distance));
+      hero.style.setProperty('--hero-progress', progress.toFixed(4));
+      hero.classList.toggle('is-offer-visible', progress >= 0.56);
+      offer?.toggleAttribute('inert', progress < 0.56);
+      ticking = false;
+    };
+
+    const requestHeroUpdate = () => {
+      if (ticking || reduceMotion.matches) return;
+      ticking = true;
+      requestAnimationFrame(updateHero);
+    };
+
+    updateHero();
+    addEventListener('scroll', requestHeroUpdate, { passive: true });
+    addEventListener('resize', requestHeroUpdate, { passive: true });
+  </script>
 
   <!-- MARQUEE -->
   <section class="overflow-hidden border-y border-ink bg-paper" aria-hidden="true">
