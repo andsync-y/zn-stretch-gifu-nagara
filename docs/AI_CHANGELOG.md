@@ -106,3 +106,23 @@ Git履歴が「何を変更したか」、このファイルが「なぜ変更�
   - `npm run build` 成功。Astro静的ページ15件の生成を確認。
   - 旧ブルー系カラーコードと旧セリフ体指定が残っていないことを検索確認。
 - 未対応・次の作業：VercelプレビューでPC・スマホの実機デザインを確認し、必要に応じて余白や画像位置を微調整してからマージする。
+
+## 2026-07-13 23:41 JST — ChatGPT Codex
+
+- ブランチ：`codex/hero-symptom-visuals`
+- 関連PR：[PR #2 サイト全体をメインビジュアル基準で刷新](https://github.com/andsync-y/zn-stretch-gifu-nagara/pull/2)
+- 変更内容：Claude側で指定ブランチへ追加された、PC・スマホ各121枚の連番フレームとスクロールスクラブ型ヒーローを取り込み、サイト全体の新デザインと統合。
+- 主な変更ファイル：
+  - `public/frames/`
+  - `public/frames/sm/`
+  - `src/pages/index.astro`
+  - `src/styles/global.css`
+- 判断・注意点：
+  - Claude側の最新ヒーロー演出を優先し、Codex側の旧単一画像ヒーローは置き換えた。
+  - ヒーロー以降はCodex側の全体デザイン刷新を保持。
+  - ヒーロー内のフォント、背景色、オファーカードの影とホバー色を、黒・白・グレー＋ウォームトープの新トーンへ調整。
+- 確認結果：
+  - マージ競合は `src/pages/index.astro` と `src/styles/global.css` のみで、意図を分けて手動統合。
+  - `git diff --check` 成功。
+  - `npm run build` 成功。Astro静的ページ15件の生成を確認。
+- 未対応・次の作業：Vercelプレビューで連番スクラブの読み込み速度とスマホ表示を確認し、問題がなければPR #2をマージする。
