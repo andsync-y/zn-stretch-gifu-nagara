@@ -1,0 +1,565 @@
+---
+import { SYMPTOMS } from '../consts';
+
+const meta = {
+  katakori: { key: 'shoulder', focus: '僧帽筋・肩関節' },
+  youtsu: { key: 'lower-back', focus: '腰椎・仙腸部・臀部' },
+  'kubi-ganseihiro': { key: 'neck-eyes', focus: '頸椎・後頭下・眼窩' },
+  mukumi: { key: 'lower-legs', focus: 'ふくらはぎ・足首・足先' },
+  jiritsu: { key: 'whole-body', focus: '背骨・胸郭・主要関節' },
+  shisei: { key: 'upper-back', focus: '胸椎上部・肩甲骨・巻き肩' },
+  sports: { key: 'kinetic-chain', focus: '股関節・膝・足首' },
+} as const;
+
+const symptoms = SYMPTOMS.map((item, index) => ({
+  ...item,
+  id: String(index + 1).padStart(2, '0'),
+  href: `/symptoms/${item.slug}`,
+  ...meta[item.slug as keyof typeof meta],
+}));
+
+const left = symptoms.filter((_, index) => index % 2 === 0);
+const right = symptoms.filter((_, index) => index % 2 === 1);
+---
+
+<div class="symptoms-explorer" data-symptoms-explorer data-active="shoulder">
+  <svg class="symptoms-connector" data-connector-svg aria-hidden="true">
+    <path data-connector-path></path>
+    <circle data-connector-dot r="4"></circle>
+  </svg>
+
+  <div class="symptoms-desktop-list symptoms-desktop-list--left">
+    {left.map((item) => (
+      <div class="symptom-entry" data-entry={item.key} data-side="left">
+        <button type="button" class="symptom-trigger" data-symptom-trigger={item.key} aria-pressed={item.id === '01' ? 'true' : 'false'}>
+          <span class="symptom-no">{item.id}</span>
+          <span class="symptom-copy">
+            <strong>{item.label}</strong>
+            <small>{item.note}</small>
+          </span>
+          <span class="symptom-arrow" aria-hidden="true">→</span>
+        </button>
+        <a class="symptom-detail-link" href={item.href}>詳しく見る <span aria-hidden="true">↗</span></a>
+      </div>
+    ))}
+  </div>
+
+  <div class="symptoms-anatomy" aria-hidden="true">
+    <div class="symptoms-orbit symptoms-orbit--outer"></div>
+    <div class="symptoms-orbit symptoms-orbit--inner"></div>
+    <div class="symptoms-anatomy-figure">
+      <img src="/images/symptoms/anatomy-base.webp" alt="" width="921" height="1708" loading="lazy" decoding="async" />
+      <svg class="symptoms-glows" viewBox="0 0 100 180" preserveAspectRatio="xMidYMid meet">
+        <defs>
+          <filter id="symptom-soft-glow" x="-70%" y="-70%" width="240%" height="240%">
+            <feGaussianBlur stdDeviation="2.7" result="blur"></feGaussianBlur>
+            <feMerge><feMergeNode in="blur"></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode></feMerge>
+          </filter>
+        </defs>
+
+        <g class="symptom-glow is-active" data-glow="shoulder" filter="url(#symptom-soft-glow)">
+          <ellipse cx="36" cy="38" rx="10" ry="8"></ellipse>
+          <path d="M38 30 C43 35 49 38 57 39"></path>
+        </g>
+        <g class="symptom-glow" data-glow="lower-back" filter="url(#symptom-soft-glow)">
+          <path d="M48 66 C52 73 52 82 50 91"></path>
+          <ellipse cx="49" cy="91" rx="15" ry="10"></ellipse>
+          <path d="M42 96 C40 105 37 112 34 120"></path>
+        </g>
+        <g class="symptom-glow" data-glow="neck-eyes" filter="url(#symptom-soft-glow)">
+          <ellipse cx="38" cy="15" rx="5" ry="3"></ellipse>
+          <path d="M44 20 C48 23 50 29 50 34"></path>
+        </g>
+        <g class="symptom-glow" data-glow="lower-legs" filter="url(#symptom-soft-glow)">
+          <path d="M39 124 C38 140 38 154 36 169"></path>
+          <path d="M58 124 C59 140 58 154 61 167"></path>
+          <ellipse cx="36" cy="171" rx="8" ry="4"></ellipse>
+          <ellipse cx="62" cy="169" rx="7" ry="4"></ellipse>
+        </g>
+        <g class="symptom-glow symptom-glow--soft" data-glow="whole-body" filter="url(#symptom-soft-glow)">
+          <path d="M47 20 C53 45 52 72 50 100"></path>
+          <ellipse cx="49" cy="53" rx="18" ry="22"></ellipse>
+          <circle cx="36" cy="39" r="5"></circle><circle cx="63" cy="39" r="5"></circle>
+          <circle cx="40" cy="119" r="5"></circle><circle cx="58" cy="119" r="5"></circle>
+        </g>
+        <g class="symptom-glow" data-glow="upper-back" filter="url(#symptom-soft-glow)">
+          <path d="M32 36 C39 31 45 36 49 44 C54 35 61 32 67 38"></path>
+          <ellipse cx="49" cy="43" rx="19" ry="12"></ellipse>
+        </g>
+        <g class="symptom-glow" data-glow="kinetic-chain" filter="url(#symptom-soft-glow)">
+          <ellipse cx="49" cy="97" rx="16" ry="9"></ellipse>
+          <path d="M39 101 C40 110 40 116 40 123 M58 101 C58 110 58 116 58 123"></path>
+          <circle cx="40" cy="123" r="5"></circle><circle cx="58" cy="123" r="5"></circle>
+          <circle cx="36" cy="168" r="4"></circle><circle cx="61" cy="167" r="4"></circle>
+        </g>
+      </svg>
+    </div>
+    <p class="symptoms-focus-label"><span>ACTIVE FOCUS</span><strong data-focus-label>僧帽筋・肩関節</strong></p>
+  </div>
+
+  <div class="symptoms-desktop-list symptoms-desktop-list--right">
+    {right.map((item) => (
+      <div class="symptom-entry" data-entry={item.key} data-side="right">
+        <button type="button" class="symptom-trigger" data-symptom-trigger={item.key} aria-pressed="false">
+          <span class="symptom-no">{item.id}</span>
+          <span class="symptom-copy">
+            <strong>{item.label}</strong>
+            <small>{item.note}</small>
+          </span>
+          <span class="symptom-arrow" aria-hidden="true">→</span>
+        </button>
+        <a class="symptom-detail-link" href={item.href}>詳しく見る <span aria-hidden="true">↗</span></a>
+      </div>
+    ))}
+  </div>
+
+  <div class="symptoms-mobile-list">
+    {symptoms.map((item) => (
+      <div class="symptom-entry" data-entry={item.key}>
+        <button
+          type="button"
+          class="symptom-trigger"
+          data-symptom-trigger={item.key}
+          aria-pressed={item.id === '01' ? 'true' : 'false'}
+          aria-expanded={item.id === '01' ? 'true' : 'false'}
+          aria-controls={`symptom-panel-${item.key}`}
+        >
+          <span class="symptom-no">{item.id}</span>
+          <span class="symptom-copy"><strong>{item.label}</strong></span>
+          <span class="symptom-arrow" aria-hidden="true">→</span>
+        </button>
+        <div class="symptom-mobile-panel" id={`symptom-panel-${item.key}`}>
+          <div>
+            <p>{item.desc}</p>
+            <p class="symptom-mobile-focus">FOCUS — {item.focus}</p>
+            <a href={item.href}>詳しく見る <span aria-hidden="true">→</span></a>
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+</div>
+
+<script>
+  const explorer = document.querySelector<HTMLElement>('[data-symptoms-explorer]');
+
+  if (explorer) {
+    const buttons = [...explorer.querySelectorAll<HTMLButtonElement>('[data-symptom-trigger]')];
+    const glows = [...explorer.querySelectorAll<SVGGElement>('[data-glow]')];
+    const connectorSvg = explorer.querySelector<SVGSVGElement>('[data-connector-svg]');
+    const connectorPath = explorer.querySelector<SVGPathElement>('[data-connector-path]');
+    const connectorDot = explorer.querySelector<SVGCircleElement>('[data-connector-dot]');
+    const focusLabel = explorer.querySelector<HTMLElement>('[data-focus-label]');
+    const anatomy = explorer.querySelector<HTMLElement>('.symptoms-anatomy');
+    const anatomyFigure = explorer.querySelector<HTMLElement>('.symptoms-anatomy-figure');
+    const desktopLayout = matchMedia('(min-width: 768px)');
+    const desktopHover = matchMedia('(min-width: 768px) and (hover: hover)');
+    const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+    let fadeTimer = 0;
+
+    const states: Record<string, { focus: string; x: number; y: number; transform: string }> = {
+      shoulder: { focus: '僧帽筋・肩関節', x: 0.39, y: 0.28, transform: 'translate3d(3%, 0, 0) scale(1.035) rotate(4deg)' },
+      'lower-back': { focus: '腰椎・仙腸部・臀部', x: 0.50, y: 0.50, transform: 'translate3d(-2%, -1%, 0) scale(1.06) rotate(-5deg)' },
+      'neck-eyes': { focus: '頸椎・後頭下・眼窩', x: 0.42, y: 0.17, transform: 'translate3d(2%, 5%, 0) scale(1.14) rotate(3deg)' },
+      'lower-legs': { focus: 'ふくらはぎ・足首・足先', x: 0.50, y: 0.78, transform: 'translate3d(0, -4%, 0) scale(1.04) rotate(-2deg)' },
+      'whole-body': { focus: '背骨・胸郭・主要関節', x: 0.50, y: 0.45, transform: 'translate3d(0, 0, 0) scale(.97) rotate(0deg)' },
+      'upper-back': { focus: '胸椎上部・肩甲骨・巻き肩', x: 0.51, y: 0.31, transform: 'translate3d(-3%, 1%, 0) scale(1.07) rotate(-6deg)' },
+      'kinetic-chain': { focus: '股関節・膝・足首', x: 0.50, y: 0.64, transform: 'translate3d(2%, -2%, 0) scale(1.03) rotate(5deg)' },
+    };
+
+    const updateConnector = (key: string) => {
+      if (!connectorSvg || !connectorPath || !connectorDot || !anatomy || !desktopLayout.matches) return;
+      const activeButton = explorer.querySelector<HTMLButtonElement>(`.symptoms-desktop-list [data-symptom-trigger="${key}"]`);
+      if (!activeButton) return;
+
+      const rootRect = explorer.getBoundingClientRect();
+      const buttonRect = activeButton.getBoundingClientRect();
+      const anatomyRect = anatomy.getBoundingClientRect();
+      const side = activeButton.closest<HTMLElement>('[data-side]')?.dataset.side ?? 'left';
+      const state = states[key];
+      const startX = (side === 'left' ? buttonRect.right : buttonRect.left) - rootRect.left;
+      const startY = buttonRect.top - rootRect.top + buttonRect.height / 2;
+      const endX = anatomyRect.left - rootRect.left + anatomyRect.width * state.x;
+      const endY = anatomyRect.top - rootRect.top + anatomyRect.height * state.y;
+      const elbowX = startX + (side === 'left' ? 42 : -42);
+      const nearX = endX + (side === 'left' ? -28 : 28);
+
+      connectorSvg.setAttribute('viewBox', `0 0 ${rootRect.width} ${rootRect.height}`);
+      connectorPath.setAttribute('d', `M ${startX} ${startY} L ${elbowX} ${startY} L ${nearX} ${endY} L ${endX} ${endY}`);
+      connectorDot.setAttribute('cx', String(endX));
+      connectorDot.setAttribute('cy', String(endY));
+      connectorPath.classList.remove('is-drawing');
+      connectorPath.getBoundingClientRect();
+      connectorPath.classList.add('is-drawing');
+    };
+
+    const setActive = (key: string) => {
+      const state = states[key];
+      if (!state) return;
+      const changed = explorer.dataset.active !== key;
+      explorer.dataset.active = key;
+      explorer.style.setProperty('--anatomy-transform', state.transform);
+      if (focusLabel) focusLabel.textContent = state.focus;
+
+      if (changed && anatomyFigure && !reducedMotion.matches) {
+        clearTimeout(fadeTimer);
+        anatomyFigure.classList.add('is-changing');
+        fadeTimer = window.setTimeout(() => anatomyFigure.classList.remove('is-changing'), 90);
+      }
+
+      buttons.forEach((button) => {
+        const active = button.dataset.symptomTrigger === key;
+        button.setAttribute('aria-pressed', String(active));
+        if (button.hasAttribute('aria-expanded')) button.setAttribute('aria-expanded', String(active));
+      });
+      glows.forEach((glow) => glow.classList.toggle('is-active', glow.dataset.glow === key));
+      requestAnimationFrame(() => updateConnector(key));
+    };
+
+    buttons.forEach((button) => {
+      button.addEventListener('pointerenter', () => {
+        if (desktopHover.matches) setActive(button.dataset.symptomTrigger ?? 'shoulder');
+      });
+      button.addEventListener('focus', () => setActive(button.dataset.symptomTrigger ?? 'shoulder'));
+      button.addEventListener('click', () => setActive(button.dataset.symptomTrigger ?? 'shoulder'));
+    });
+
+    const resizeObserver = new ResizeObserver(() => updateConnector(explorer.dataset.active ?? 'shoulder'));
+    resizeObserver.observe(explorer);
+    addEventListener('resize', () => updateConnector(explorer.dataset.active ?? 'shoulder'), { passive: true });
+    setActive('shoulder');
+  }
+</script>
+
+<style>
+  .symptoms-explorer {
+    --symptom-red: #e5443f;
+    --anatomy-transform: translate3d(3%, 0, 0) scale(1.035) rotate(4deg);
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(230px, 1fr) minmax(350px, 520px) minmax(230px, 1fr);
+    gap: clamp(24px, 4vw, 72px);
+    align-items: stretch;
+    min-height: clamp(620px, 54vw, 860px);
+    isolation: isolate;
+  }
+
+  .symptoms-connector {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    pointer-events: none;
+  }
+
+  .symptoms-connector path {
+    fill: none;
+    stroke: var(--symptom-red);
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+    stroke-dasharray: 1500;
+    stroke-dashoffset: 1500;
+  }
+
+  .symptoms-connector path.is-drawing {
+    animation: draw-connector 620ms cubic-bezier(.22, 1, .36, 1) forwards;
+  }
+
+  .symptoms-connector circle {
+    fill: var(--symptom-red);
+    filter: drop-shadow(0 0 7px rgba(229, 68, 63, .65));
+  }
+
+  @keyframes draw-connector { to { stroke-dashoffset: 0; } }
+
+  .symptoms-desktop-list {
+    position: relative;
+    z-index: 4;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    padding: clamp(42px, 6vw, 90px) 0;
+  }
+
+  .symptom-entry {
+    position: relative;
+    border-bottom: 1px solid rgba(255, 255, 255, .22);
+  }
+
+  .symptom-trigger {
+    display: grid;
+    grid-template-columns: 38px minmax(0, 1fr) 22px;
+    width: 100%;
+    align-items: center;
+    gap: 12px;
+    padding: 20px 2px 18px;
+    border: 0;
+    color: #f4f3ef;
+    background: transparent;
+    text-align: left;
+    cursor: pointer;
+    transition: color 240ms ease;
+  }
+
+  .symptom-trigger:focus-visible {
+    outline: 2px solid var(--symptom-red);
+    outline-offset: 4px;
+  }
+
+  .symptom-no {
+    align-self: start;
+    padding-top: 3px;
+    color: #9d9d9a;
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: .16em;
+    transition: color 240ms ease;
+  }
+
+  .symptom-copy strong {
+    display: block;
+    font-size: clamp(14px, 1.25vw, 18px);
+    font-weight: 900;
+    line-height: 1.55;
+    transition: color 240ms ease;
+  }
+
+  .symptom-copy small {
+    display: block;
+    margin-top: 4px;
+    color: #858582;
+    font-size: 10px;
+    line-height: 1.6;
+  }
+
+  .symptom-arrow {
+    justify-self: end;
+    font-size: 18px;
+    transition: color 240ms ease, transform 240ms ease;
+  }
+
+  .symptom-trigger[aria-pressed='true'],
+  .symptom-trigger[aria-pressed='true'] .symptom-no,
+  .symptom-trigger[aria-pressed='true'] .symptom-copy strong {
+    color: var(--symptom-red);
+  }
+
+  .symptom-trigger[aria-pressed='true'] .symptom-arrow { transform: translateX(4px); }
+
+  .symptom-detail-link {
+    display: grid;
+    grid-template-rows: 0fr;
+    overflow: hidden;
+    color: var(--symptom-red);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .08em;
+    line-height: 0;
+    opacity: 0;
+    text-decoration: none;
+    transition: grid-template-rows 300ms ease, padding 300ms ease, opacity 240ms ease, line-height 300ms ease;
+  }
+
+  .symptom-entry:has(.symptom-trigger[aria-pressed='true']) > .symptom-detail-link {
+    grid-template-rows: 1fr;
+    padding: 0 2px 14px 50px;
+    line-height: 1.5;
+    opacity: 1;
+  }
+
+  .symptoms-anatomy {
+    position: relative;
+    z-index: 2;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .symptoms-anatomy::after {
+    content: '';
+    position: absolute;
+    z-index: -2;
+    left: 50%;
+    bottom: 4%;
+    width: 58%;
+    height: 7%;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, .8);
+    filter: blur(15px);
+    transform: translateX(-50%);
+  }
+
+  .symptoms-orbit {
+    position: absolute;
+    z-index: -1;
+    top: 50%;
+    left: 50%;
+    border: 1px solid rgba(255, 255, 255, .09);
+    border-radius: 50%;
+    transform: translate(-50%, -50%) rotate(-18deg);
+    pointer-events: none;
+  }
+
+  .symptoms-orbit--outer { width: 106%; height: 58%; }
+  .symptoms-orbit--inner { width: 82%; height: 44%; transform: translate(-50%, -50%) rotate(22deg); }
+
+  .symptoms-anatomy-figure {
+    position: absolute;
+    inset: 2% 0 8%;
+    transform: var(--anatomy-transform);
+    transform-origin: 50% 52%;
+    transition: transform 640ms cubic-bezier(.22, 1, .36, 1), opacity 260ms ease;
+    will-change: transform;
+  }
+
+  .symptoms-anatomy-figure.is-changing { opacity: .58; }
+
+  .symptoms-anatomy-figure > img,
+  .symptoms-glows {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .symptoms-glows {
+    z-index: 2;
+    overflow: visible;
+    pointer-events: none;
+  }
+
+  .symptom-glow {
+    fill: rgba(229, 50, 45, .34);
+    stroke: #f24a44;
+    stroke-width: 1.3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: 0;
+    transform: scale(.95);
+    transform-origin: center;
+    transition: opacity 260ms ease 180ms, transform 420ms cubic-bezier(.22, 1, .36, 1) 160ms;
+  }
+
+  .symptom-glow--soft { fill: rgba(229, 50, 45, .12); stroke-width: .9; }
+  .symptom-glow.is-active { opacity: .92; transform: scale(1); }
+
+  .symptoms-focus-label {
+    position: absolute;
+    z-index: 5;
+    right: 8px;
+    bottom: 14px;
+    padding-left: 36px;
+    color: #858582;
+    font-size: 9px;
+    letter-spacing: .14em;
+    line-height: 1.5;
+  }
+
+  .symptoms-focus-label::before {
+    content: '';
+    position: absolute;
+    top: 8px;
+    left: 0;
+    width: 25px;
+    height: 1px;
+    background: var(--symptom-red);
+  }
+
+  .symptoms-focus-label span,
+  .symptoms-focus-label strong { display: block; }
+  .symptoms-focus-label strong { color: #d0cfca; font-size: 10px; letter-spacing: .06em; }
+  .symptoms-mobile-list { display: none; }
+
+  @media (max-width: 1023px) and (min-width: 768px) {
+    .symptoms-explorer {
+      grid-template-columns: minmax(180px, 1fr) minmax(280px, 360px) minmax(180px, 1fr);
+      gap: 18px;
+    }
+    .symptom-trigger { grid-template-columns: 28px minmax(0, 1fr) 18px; gap: 8px; }
+    .symptom-copy strong { font-size: 13px; }
+    .symptom-copy small { display: none; }
+    .symptom-entry:has(.symptom-trigger[aria-pressed='true']) > .symptom-detail-link { padding-left: 38px; }
+  }
+
+  @media (max-width: 767px) {
+    .symptoms-explorer {
+      display: flex;
+      min-height: 0;
+      flex-direction: column;
+      gap: 34px;
+      overflow-x: clip;
+    }
+
+    .symptoms-connector,
+    .symptoms-desktop-list { display: none; }
+
+    .symptoms-anatomy {
+      order: 1;
+      width: min(112%, 480px);
+      height: clamp(500px, 142vw, 620px);
+      margin: -16px auto 0;
+      overflow: hidden;
+    }
+
+    .symptoms-anatomy-figure { inset: 0 -5% 8%; }
+    .symptoms-orbit--outer { width: 120%; height: 58%; }
+    .symptoms-orbit--inner { width: 92%; height: 43%; }
+    .symptoms-focus-label { right: 8%; bottom: 5px; }
+
+    .symptoms-mobile-list {
+      position: relative;
+      z-index: 4;
+      order: 2;
+      display: block;
+      border-top: 1px solid rgba(255, 255, 255, .35);
+    }
+
+    .symptom-trigger {
+      grid-template-columns: 42px minmax(0, 1fr) 24px;
+      padding: 20px 4px;
+    }
+
+    .symptom-copy strong { font-size: 15px; }
+    .symptom-mobile-panel {
+      display: grid;
+      grid-template-rows: 0fr;
+      padding: 0 4px 0 46px;
+      overflow: hidden;
+      color: #a8a7a2;
+      font-size: 13px;
+      line-height: 0;
+      opacity: 0;
+      transition: grid-template-rows 360ms cubic-bezier(.22, 1, .36, 1), padding 360ms ease, line-height 360ms ease, opacity 240ms ease;
+    }
+
+    .symptom-entry:has(.symptom-trigger[aria-expanded='true']) .symptom-mobile-panel {
+      grid-template-rows: 1fr;
+      padding-bottom: 22px;
+      line-height: 1.8;
+      opacity: 1;
+    }
+
+    .symptom-mobile-panel > div { min-height: 0; overflow: hidden; }
+    .symptom-mobile-focus { margin-top: 8px; color: #777; font-size: 9px; font-weight: 800; letter-spacing: .12em; }
+    .symptom-mobile-panel a {
+      display: inline-flex;
+      width: fit-content;
+      margin-top: 12px;
+      color: var(--symptom-red);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .06em;
+      text-decoration: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .symptoms-anatomy-figure { transition: opacity 180ms ease; transform: none !important; }
+    .symptom-glow { transition: opacity 180ms ease; transform: none; }
+    .symptoms-connector path { animation: none !important; stroke-dashoffset: 0; }
+    .symptom-arrow { transition: color 180ms ease; }
+  }
+</style>

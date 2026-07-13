@@ -2,8 +2,8 @@
 import Base from '../layouts/Base.astro';
 import ReserveCTA from '../components/ReserveCTA.astro';
 import PriceRows from '../components/PriceRows.astro';
-import SymptomIcon from '../components/SymptomIcon.astro';
-import { SITE, BRAND, STAFF, SYMPTOMS, PHOTOS, REVIEWS } from '../consts';
+import InteractiveSymptoms from '../components/InteractiveSymptoms.astro';
+import { SITE, BRAND, STAFF, PHOTOS, REVIEWS } from '../consts';
 
 const title = '岐阜市長良の完全個室パーソナルストレッチ｜全力ストレッチ岐阜長良店';
 const description = '岐阜市長良の完全個室・マンツーマンのパーソナルストレッチ専門店。元格闘家考案・独自の「体感軸調整法」で動ける身体へ。初回60分3,300円、駐車場10台以上、22時まで営業。';
@@ -275,19 +275,7 @@ const marqueeItems = [
         <h2 class="display-title mb-8 !text-inkpaper">SYMPTOMS</h2>
         <p class="mb-14 text-[15px] leading-[2.1] tracking-[0.03em] text-inkmuted sm:mb-20 sm:text-[17px]">お悩みから探す。気になるお悩みに合わせて、アプローチの内容をご紹介します。</p>
       </div>
-      <div class="rise grid border-t border-inkpaper/35 md:grid-cols-2">
-        {SYMPTOMS.map((s, i) => (
-          <a href={`/symptoms/${s.slug}`} class="group grid grid-cols-[72px_1fr_28px] items-center gap-4 border-b border-inkpaper/25 px-2 py-5 no-underline transition hover:bg-white/[0.04] sm:grid-cols-[92px_1fr_34px] sm:px-5 sm:py-7 md:odd:border-r">
-            <span class="block h-[62px] w-[62px] brightness-0 invert opacity-80 transition duration-500 group-hover:scale-105 group-hover:opacity-100 sm:h-[78px] sm:w-[78px]"><SymptomIcon slug={s.slug} /></span>
-            <span>
-              <span class="mb-2 block font-script text-[8px] font-extrabold tracking-[0.18em] text-[#c0aa98]">{String(i + 1).padStart(2, '0')} / CONDITION</span>
-              <span class="block text-[15px] font-black leading-[1.6] text-inkpaper sm:text-xl">{s.label}</span>
-              {s.note && <span class="mt-1 hidden text-[11px] text-inkfaint sm:block">{s.note}</span>}
-            </span>
-            <span class="text-right text-xl font-normal text-inkpaper transition group-hover:text-[#c0aa98]" aria-hidden="true">↗</span>
-          </a>
-        ))}
-      </div>
+      <InteractiveSymptoms />
 
       <!-- ブランド実績（ブランド主語） -->
       <div class="rise section-grid-dark mt-20 border border-inkpaper/30 p-8 text-center sm:mt-28 sm:p-14">

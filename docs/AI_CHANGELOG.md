@@ -126,3 +126,29 @@ Git履歴が「何を変更したか」、このファイルが「なぜ変更�
   - `git diff --check` 成功。
   - `npm run build` 成功。Astro静的ページ15件の生成を確認。
 - 未対応・次の作業：Vercelプレビューで連番スクラブの読み込み速度とスマホ表示を確認し、問題がなければPR #2をマージする。
+
+## 2026-07-14 00:20 JST — ChatGPT Codex
+
+- ブランチ：`codex/interactive-symptoms`
+- 関連PR：作成予定
+- 変更内容：
+  - 添付の `CODEX_HANDOFF.md` に沿い、トップページのSYMPTOMSを人体連動型UIへ刷新。
+  - PCでは左右の症状項目と中央の透過人体を3カラムで配置し、hover・focus・clickに応じて人体の移動、赤い部位発光、SVGコネクターを同期。
+  - SPでは人体と1カラム一覧へ切り替え、タップした症状の説明と既存詳細ページへの導線を展開。
+  - 単一の透過人体WebPを全状態で共有し、7種類の部位マスクをSVGレイヤーとして実装。
+- 主な変更ファイル：
+  - `src/components/InteractiveSymptoms.astro`
+  - `src/pages/index.astro`
+  - `public/images/symptoms/anatomy-base.webp`
+  - `docs/SYMPTOMS_INTERACTION_IMPLEMENTATION.md`
+  - `docs/AI_CHANGELOG.md`
+- 判断・注意点：
+  - サイト全体の黒・白・グレー＋ウォームトープは維持し、赤 `#e5443f` はアクティブ症状と解剖学的フォーカスのみに限定。
+  - 人体素材は約94KBの透過WebP。下層の遅延読み込みと寸法指定でCLSを抑制。
+  - `prefers-reduced-motion` では移動・回転・線描画を停止。
+- 確認結果：
+  - `npm run build` 成功。Astro静的ページ15件の生成を確認。
+  - `git diff --check` 成功。
+  - 1440／1024／768／390／375pxをChromiumで確認。
+  - mouse pointerenter、keyboard focus、touch click、7詳細URL、SP展開、reduced motionを確認。
+- 未対応・次の作業：Vercelプレビューで実機フォント読み込み後の和文幅と、赤い部位マスクの見え方を最終確認する。
