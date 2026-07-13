@@ -189,13 +189,13 @@ const marqueeItems = [
       </div>
       <div class="rise grid grid-cols-2 gap-x-6 md:gap-x-[72px]">
         {SYMPTOMS.map((s, i) => (
-          <a href={`/symptoms/${s.slug}`} class="group flex items-baseline justify-between gap-3 border-b border-inkpaper/25 px-1 py-5 no-underline sm:gap-5 sm:py-[26px]">
-            <span class="flex flex-wrap items-baseline gap-x-3 gap-y-1 sm:gap-x-5">
+          <a href={`/symptoms/${s.slug}`} class="group flex flex-col gap-1.5 border-b border-inkpaper/25 px-1 py-5 no-underline sm:py-[26px]">
+            <span class="flex items-baseline justify-between">
               <span class="font-display text-sm italic text-[#777]">{String(i + 1).padStart(2, '0')}</span>
-              <span class="text-[15px] font-bold leading-[1.6] text-inkpaper sm:text-xl">{s.label}</span>
-              {s.note && <span class="hidden text-[13px] text-inkfaint md:inline">{s.note}</span>}
+              <span class="shrink-0 font-bold text-inkpaper transition group-hover:text-amber" aria-hidden="true">→</span>
             </span>
-            <span class="shrink-0 font-bold text-inkpaper transition group-hover:text-amber" aria-hidden="true">→</span>
+            <span class="text-[15px] font-bold leading-[1.6] text-inkpaper sm:text-xl">{s.label}</span>
+            {s.note && <span class="hidden text-[13px] text-inkfaint md:block">{s.note}</span>}
           </a>
         ))}
       </div>
