@@ -192,15 +192,17 @@ const marqueeItems = [
 
       <!-- ブランド実績（ブランド主語） -->
       <div class="rise mt-20 border border-inkpaper/30 p-8 text-center sm:mt-28 sm:p-14">
-        <p class="en-label-dark mb-5" style="letter-spacing:0.3em;font-size:16px">Nationwide Brand</p>
+        <p class="en-label-dark mb-6" style="letter-spacing:0.3em;font-size:16px">Nationwide Brand</p>
+        <p class="mb-7 flex justify-center">
+          <img src="/images/logo.png" alt="全力ストレッチ PHYSICAL CONDITIONING SALON" width="1200" height="307" loading="lazy" decoding="async" class="h-auto w-[240px] invert sm:w-[340px]" />
+        </p>
         <p class="mb-4 text-[24px] font-black text-inkpaper sm:text-[36px]">全国約70店舗のパーソナルストレッチブランド。</p>
         <p class="mb-7 text-[15px] leading-[2.1] text-inkmuted sm:text-base">全力ストレッチは、テレビや雑誌、YouTubeなど各種メディアでも紹介されているブランドです。</p>
         <ul class="flex flex-wrap justify-center gap-3">
-          {['テレビ番組で紹介', '雑誌掲載', 'YouTube', '元格闘家オーナー考案「ザウルス式」'].map((t) => (
+          {['テレビ番組で紹介', '雑誌掲載', 'YouTube', '元格闘家オーナー考案「体感軸調整法」'].map((t) => (
             <li class="border border-inkpaper/35 px-5 py-2 text-xs tracking-[0.14em] text-inkmuted">{t}</li>
           ))}
         </ul>
-        <p class="mt-6 text-[11px] leading-[1.9] text-inkfaint">※ブランド全体（全力ストレッチ）の実績です。店舗数の最新値は本部確認のうえ更新します（{BRAND.storeCountPlaceholder}）。</p>
       </div>
     </div>
   </section>
