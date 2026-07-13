@@ -45,62 +45,59 @@ const marqueeItems = [
 ];
 ---
 <Base title={title} description={description} path="/">
-  <!-- HERO：スクロールに合わせてレイヤーが再構成されるエディトリアル演出 -->
-  <section class="hero-scroll" data-hero>
+  <!-- HERO：一枚のキービジュアルをスクロールで横断するシネマティック演出 -->
+  <section class="hero-cinematic" data-hero>
     <div class="hero-stage">
-      <div class="hero-grid" aria-hidden="true"></div>
-      <p class="hero-ghost" aria-hidden="true">MOVE</p>
-      <p class="hero-outline" aria-hidden="true">YOUR BODY</p>
-
-      <div class="hero-orbit" aria-hidden="true">
-        <span></span>
-      </div>
-
-      <figure class="hero-visual hero-visual-main">
-        <img src={PHOTOS.concept} alt="完全個室で行う体感軸パーソナルストレッチ" width="1060" height="1700" fetchpriority="high" decoding="async" />
-      </figure>
-      <figure class="hero-visual hero-visual-sub" aria-hidden="true">
-        <img src={PHOTOS.hero2} alt="" width="1085" height="1458" loading="eager" decoding="async" />
-      </figure>
-      <figure class="hero-visual hero-visual-detail" aria-hidden="true">
-        <img src={PHOTOS.method2} alt="" width="1400" height="1050" loading="eager" decoding="async" />
+      <figure class="hero-picture">
+        <img
+          src="/images/photos/hero-editorial.webp"
+          alt="女性トレーナーによるパーソナルストレッチと『動くカラダで生きる。』のメッセージ"
+          width="1672"
+          height="941"
+          fetchpriority="high"
+          decoding="async"
+          data-hero-image
+        />
       </figure>
 
-      <div class="hero-copy">
-        <p class="hero-kicker"><span>Gifu Nagara</span><span>Physical Conditioning</span></p>
-        <h1>
-          <span class="hero-line">動くカラダで、</span>
-          <span class="hero-line hero-line-indent">生きる。</span>
-          <span class="sr-only">全力ストレッチ岐阜長良店｜岐阜市長良の完全個室パーソナルストレッチ専門店</span>
-        </h1>
-        <p class="hero-lead">伸ばすだけじゃない。<br />毎日を軽やかに動くための、身体改革。</p>
+      <div class="hero-shade" aria-hidden="true"></div>
+      <div class="hero-scan" aria-hidden="true"></div>
+      <div class="hero-trace" aria-hidden="true"><span></span><i></i></div>
+
+      <h1 class="sr-only">動くカラダで生きる。全力ストレッチ岐阜長良店｜岐阜市長良の完全個室パーソナルストレッチ専門店</h1>
+
+      <div class="hero-meta" aria-label="店舗の特長">
+        <span>GIFU NAGARA</span>
+        <span>完全個室</span>
+        <span>女性トレーナー</span>
+        <span>10:00–22:00</span>
       </div>
 
-      <div class="hero-facts" aria-label="店舗の特長">
-        <span>完全個室</span><span>女性トレーナー</span><span>10:00–22:00</span>
-      </div>
-
-      <div class="hero-offer">
-        <div class="hero-offer-heading">
-          <p><span>FIRST</span><span>SESSION</span></p>
+      <div class="hero-offer" data-hero-offer>
+        <div class="hero-offer-title">
+          <span>FIRST SESSION</span>
           <strong>初回限定</strong>
         </div>
         <div class="hero-offer-price">
-          <p><span>集中ケアコース</span><b>60 min.</b></p>
+          <p><b>集中ケアコース</b><span>60 min.</span></p>
           <p><del>¥13,200</del><strong>¥3,300</strong><small>税込</small></p>
         </div>
-        <a href={SITE.urls.reserve} target="_blank" rel="noopener">WEB予約 <span aria-hidden="true">↗</span></a>
-        <p class="hero-offer-note">※初回価格はおひとり様1回限り。価格は変更となる場合があります。</p>
+        <a href={SITE.urls.reserve} target="_blank" rel="noopener">
+          WEB予約 <span aria-hidden="true">↗</span>
+        </a>
       </div>
 
-      <div class="hero-scroll-sign" aria-hidden="true"><span>SCROLL TO MOVE</span><i></i></div>
-      <p class="hero-count" aria-hidden="true"><span>01</span> / 02</p>
+      <div class="hero-scroll-sign" aria-hidden="true">
+        <span>SCROLL TO EXPLORE</span><i></i>
+      </div>
+      <p class="hero-scene" aria-hidden="true"><span>01</span><i></i><b>02</b></p>
     </div>
   </section>
 
   <script>
     const hero = document.querySelector<HTMLElement>('[data-hero]');
-    const offer = hero?.querySelector<HTMLElement>('.hero-offer');
+    const image = hero?.querySelector<HTMLImageElement>('[data-hero-image]');
+    const offer = hero?.querySelector<HTMLElement>('[data-hero-offer]');
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     let ticking = false;
 
@@ -109,9 +106,13 @@ const marqueeItems = [
       const rect = hero.getBoundingClientRect();
       const distance = Math.max(1, hero.offsetHeight - window.innerHeight);
       const progress = reduceMotion.matches ? 1 : Math.min(1, Math.max(0, -rect.top / distance));
+      const mobile = matchMedia('(max-width: 767px)').matches;
+      const imageWidth = image?.getBoundingClientRect().width ?? 0;
+      const shift = mobile ? Math.max(0, imageWidth - window.innerWidth) : window.innerWidth * 0.018;
       hero.style.setProperty('--hero-progress', progress.toFixed(4));
-      hero.classList.toggle('is-offer-visible', progress >= 0.56);
-      offer?.toggleAttribute('inert', progress < 0.56);
+      hero.style.setProperty('--hero-x', `${(-shift * progress).toFixed(2)}px`);
+      hero.classList.toggle('is-offer-visible', progress >= 0.57);
+      offer?.toggleAttribute('inert', progress < 0.57);
       ticking = false;
     };
 
@@ -121,7 +122,11 @@ const marqueeItems = [
       requestAnimationFrame(updateHero);
     };
 
-    updateHero();
+    requestAnimationFrame(() => {
+      hero?.classList.add('is-ready');
+      updateHero();
+    });
+    image?.addEventListener('load', updateHero, { once: true });
     addEventListener('scroll', requestHeroUpdate, { passive: true });
     addEventListener('resize', requestHeroUpdate, { passive: true });
   </script>
