@@ -4,7 +4,6 @@ import Breadcrumbs from '../components/Breadcrumbs.astro';
 import FAQ from '../components/FAQ.astro';
 import PriceRows from '../components/PriceRows.astro';
 import ReserveCTA from '../components/ReserveCTA.astro';
-import SymptomIcon from '../components/SymptomIcon.astro';
 import SymptomCycleFigure from '../components/SymptomCycleFigure.astro';
 import { SITE, PHOTOS, REVIEWS } from '../consts';
 
@@ -108,10 +107,7 @@ const breadcrumbSchema = {
   <!-- H1 + リード -->
   <section class="subpage-hero section-grid mx-auto max-w-content border-b border-ink/20 px-5 pb-24 pt-16 sm:px-10 sm:pb-32 sm:pt-[120px]">
     <div class="mb-10 sm:mb-14"><Breadcrumbs items={[{ label: 'トップ', href: '/' }, { label: 'お悩み別', href: '/symptoms' }, { label }]} /></div>
-    <div class="mb-8 flex items-center gap-5">
-      <span class="block h-[76px] w-[76px] shrink-0 sm:h-[92px] sm:w-[92px]"><SymptomIcon slug={slug} /></span>
-      <p class="en-label mb-0">Symptoms — {enNo}</p>
-    </div>
+    <p class="en-label mb-8">Symptoms — {enNo}</p>
     <h1 class="mb-8 text-[32px] font-black leading-[1.45] sm:mb-10 sm:text-[56px]">
       <span class="frame-word">{h1Frame}</span>{h1Tail}
     </h1>
