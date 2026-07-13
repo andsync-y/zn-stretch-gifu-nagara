@@ -17,69 +17,350 @@ const menuLinks = [
   { label: 'ご予約について', href: '/reserve' },
 ];
 ---
-<!-- フローティングヘッダー（スクロール追従・背景ぼかし） -->
-<header class="sticky top-0 z-50 border-b border-ink/10 bg-paper/90 backdrop-blur-md">
-  <div class="mx-auto flex h-16 max-w-[1440px] items-center justify-between px-5 sm:h-[76px] sm:px-10 xl:px-14">
-    <a href="/" class="flex items-center gap-3 sm:gap-4" aria-label={`${SITE.brand} トップへ`}>
-      <img src="/images/logo.png" alt="全力ストレッチ PHYSICAL CONDITIONING SALON" width="1200" height="307" class="h-7 w-auto sm:h-8" />
-      <span class="text-[13px] font-medium tracking-[0.18em] text-muted sm:text-[15px] sm:tracking-[0.24em]">岐阜長良店</span>
+<header class="site-header">
+  <div class="header-inner">
+    <a href="/" class="brand" aria-label={`${SITE.brand} トップへ`}>
+      <img src="/images/logo.png" alt="全力ストレッチ PHYSICAL CONDITIONING SALON" width="1200" height="307" />
+      <span>岐阜長良店</span>
     </a>
 
-    <nav class="hidden items-center gap-9 text-[13px] font-medium tracking-[0.12em] lg:flex" aria-label="メインナビゲーション">
-      {nav.map((n) => <a href={n.href} class="transition hover:text-amber-700">{n.label}</a>)}
-      <a href={SITE.urls.reserve} target="_blank" rel="noopener" class="bg-ink px-7 py-3 text-[13px] font-bold tracking-[0.14em] text-paper transition hover:bg-black">ご予約</a>
+    <nav class="desktop-nav" aria-label="メインナビゲーション">
+      {nav.map((item, index) => (
+        <a href={item.href}>
+          <small>{String(index + 1).padStart(2, '0')}</small>
+          <span>{item.label}</span>
+        </a>
+      ))}
+      <a href={SITE.urls.reserve} target="_blank" rel="noopener" class="header-cta">
+        <span>ご予約</span><b aria-hidden="true">↗</b>
+      </a>
     </nav>
 
-    <div class="flex items-center gap-4 lg:hidden">
-      <a href={SITE.urls.reserve} target="_blank" rel="noopener" class="bg-ink px-4 py-2.5 text-xs font-bold tracking-[0.12em] text-paper">ご予約</a>
-      <button id="menu-toggle" type="button" class="flex flex-col items-center gap-1 pt-0.5" aria-expanded="false" aria-controls="mobile-menu" aria-label="メニューを開く">
-        <span class="flex flex-col gap-[5px]">
-          <span class="block h-[1.5px] w-[24px] bg-ink"></span>
-          <span class="block h-[1.5px] w-[24px] bg-ink"></span>
-        </span>
-        <span class="text-[10px] tracking-[0.08em]">menu</span>
-      </button>
+    <button id="menu-toggle" type="button" class="menu-toggle" aria-expanded="false" aria-controls="mobile-menu" aria-label="メニューを開く">
+      <span class="menu-lines" aria-hidden="true"><i></i><i></i></span>
+      <span>MENU</span>
+    </button>
+  </div>
+
+  <div id="mobile-menu" class="mobile-menu hidden">
+    <div class="mobile-menu-inner">
+      <div class="mobile-menu-head">
+        <p><span>MENU</span><b>全力ストレッチ<br />岐阜長良店</b></p>
+        <p>PHYSICAL<br />CONDITIONING<br />SALON</p>
+      </div>
+
+      <nav aria-label="モバイルメニュー">
+        <div class="mobile-primary">
+          {[...nav, ...menuLinks].map((item, index) => (
+            <a href={item.href}>
+              <small>{String(index + 1).padStart(2, '0')}</small>
+              <span>{item.label}</span>
+              <b aria-hidden="true">↗</b>
+            </a>
+          ))}
+        </div>
+        <div class="mobile-symptoms">
+          <p>SYMPTOMS</p>
+          {SYMPTOMS.map((item) => <a href={`/symptoms/${item.slug}`}>{item.label}</a>)}
+        </div>
+      </nav>
+
+      <a href={SITE.urls.reserve} target="_blank" rel="noopener" class="mobile-reserve">WEB予約はこちら <span aria-hidden="true">↗</span></a>
     </div>
   </div>
-
-  <!-- モバイル：ドロワーメニュー -->
-  <div id="mobile-menu" class="hidden border-t border-ink/10 bg-paper lg:!hidden">
-    <nav class="px-5 py-6" aria-label="モバイルメニュー">
-      <p class="en-label mb-3" style="font-size:12px">Symptoms</p>
-      <ul class="mb-6 grid grid-cols-2 gap-x-4 gap-y-2.5 text-[14px]">
-        {SYMPTOMS.map((s) => (
-          <li><a href={`/symptoms/${s.slug}`} class="text-sub">{s.label}</a></li>
-        ))}
-      </ul>
-      <p class="en-label mb-3" style="font-size:12px">Information</p>
-      <ul class="mb-6 grid grid-cols-2 gap-x-4 gap-y-2.5 text-[14px]">
-        {menuLinks.map((m) => (
-          <li><a href={m.href} class="text-sub">{m.label}</a></li>
-        ))}
-      </ul>
-      <a href={SITE.urls.reserve} target="_blank" rel="noopener" class="btn-ink block w-full text-center !py-4 text-[14px]">WEB予約はこちら</a>
-    </nav>
-  </div>
 </header>
-
-<!-- モバイル：お悩み別サブナビ（固定しない・JSなしで到達性確保） -->
-<nav class="border-b border-ink/10 bg-paper lg:hidden" aria-label="お悩み別ナビゲーション">
-  <ul class="flex gap-5 overflow-x-auto px-5 py-2.5 text-[13px]">
-    <li><a href="/symptoms" class="whitespace-nowrap font-bold">お悩み別</a></li>
-    {SYMPTOMS.map((s) => (
-      <li><a href={`/symptoms/${s.slug}`} class="whitespace-nowrap text-sub">{s.short}</a></li>
-    ))}
-    <li><a href="/menu" class="whitespace-nowrap text-sub">料金</a></li>
-    <li><a href="/access" class="whitespace-nowrap text-sub">アクセス</a></li>
-  </ul>
-</nav>
 
 <script>
   const btn = document.getElementById('menu-toggle');
   const menu = document.getElementById('mobile-menu');
+  const closeMenu = () => {
+    menu?.classList.add('hidden');
+    btn?.setAttribute('aria-expanded', 'false');
+    btn?.setAttribute('aria-label', 'メニューを開く');
+    document.body.style.overflow = '';
+  };
+
   btn?.addEventListener('click', () => {
     const open = menu?.classList.toggle('hidden') === false;
     btn.setAttribute('aria-expanded', String(open));
     btn.setAttribute('aria-label', open ? 'メニューを閉じる' : 'メニューを開く');
+    document.body.style.overflow = open ? 'hidden' : '';
   });
+
+  menu?.querySelectorAll('a').forEach((link) => link.addEventListener('click', closeMenu));
 </script>
+
+<style>
+  .site-header {
+    position: sticky;
+    z-index: 50;
+    top: 0;
+    border-bottom: 1px solid rgba(21, 23, 25, 0.16);
+    background: rgba(247, 247, 244, 0.94);
+    backdrop-filter: blur(16px);
+  }
+
+  .header-inner {
+    display: flex;
+    width: min(100%, 1600px);
+    height: 76px;
+    margin: 0 auto;
+    padding: 0 28px;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    text-decoration: none;
+  }
+
+  .brand img {
+    width: auto;
+    height: 28px;
+  }
+
+  .brand span {
+    padding-left: 15px;
+    border-left: 1px solid rgba(21, 23, 25, 0.35);
+    color: #555b5f;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    white-space: nowrap;
+  }
+
+  .desktop-nav {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    gap: 33px;
+  }
+
+  .desktop-nav > a:not(.header-cta) {
+    position: relative;
+    display: flex;
+    height: 100%;
+    align-items: center;
+    gap: 7px;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-decoration: none;
+  }
+
+  .desktop-nav > a:not(.header-cta)::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    bottom: -1px;
+    left: 0;
+    height: 3px;
+    background: #92745e;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.3s ease;
+  }
+
+  .desktop-nav > a:not(.header-cta):hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+
+  .desktop-nav small {
+    color: #9ca1a5;
+    font-family: "Inter", sans-serif;
+    font-size: 7px;
+    font-weight: 800;
+    transform: translateY(-5px);
+  }
+
+  .header-cta {
+    display: flex;
+    width: 116px;
+    height: 52px;
+    padding: 0 16px;
+    align-items: center;
+    justify-content: space-between;
+    background: #151719;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    text-decoration: none;
+    transition: background 0.25s ease;
+  }
+
+  .header-cta:hover { background: #92745e; }
+  .header-cta b { font-size: 18px; font-weight: 500; }
+
+  .menu-toggle {
+    display: none;
+    border: 0;
+    background: transparent;
+    color: #151719;
+  }
+
+  .mobile-menu { display: none; }
+
+  @media (max-width: 1100px) {
+    .desktop-nav { gap: 19px; }
+    .desktop-nav small { display: none; }
+  }
+
+  @media (max-width: 900px) {
+    .header-inner {
+      height: 64px;
+      padding: 0 16px 0 18px;
+    }
+
+    .brand { gap: 10px; }
+    .brand img { height: 22px; }
+    .brand span {
+      padding-left: 10px;
+      font-size: 10px;
+      letter-spacing: 0.13em;
+    }
+
+    .desktop-nav { display: none; }
+
+    .menu-toggle {
+      display: flex;
+      width: 49px;
+      height: 49px;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      background: #151719;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    .menu-toggle > span:last-child {
+      font-family: "Inter", sans-serif;
+      font-size: 7px;
+      font-weight: 800;
+      letter-spacing: 0.13em;
+    }
+
+    .menu-lines {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .menu-lines i {
+      display: block;
+      width: 22px;
+      height: 1px;
+      background: currentColor;
+      transition: transform 0.25s ease;
+    }
+
+    .menu-toggle[aria-expanded="true"] .menu-lines i:first-child { transform: translateY(3px) rotate(45deg); }
+    .menu-toggle[aria-expanded="true"] .menu-lines i:last-child { transform: translateY(-3px) rotate(-45deg); }
+
+    .mobile-menu {
+      position: fixed;
+      inset: 64px 0 0;
+      display: block;
+      overflow-y: auto;
+      background: #151719;
+      color: #fff;
+    }
+
+    .mobile-menu.hidden { display: none; }
+
+    .mobile-menu-inner {
+      min-height: calc(100svh - 64px);
+      padding: 24px 20px 34px;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.055) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.055) 1px, transparent 1px);
+      background-size: 42px 42px;
+    }
+
+    .mobile-menu-head {
+      display: flex;
+      margin-bottom: 30px;
+      justify-content: space-between;
+      color: #8c9399;
+      font-family: "Inter", sans-serif;
+      font-size: 8px;
+      font-weight: 800;
+      letter-spacing: 0.17em;
+      line-height: 1.55;
+    }
+
+    .mobile-menu-head p { margin: 0; }
+    .mobile-menu-head p:first-child { display: flex; gap: 12px; }
+    .mobile-menu-head p:first-child span { color: #c0aa98; }
+    .mobile-menu-head b { color: #fff; font-size: 11px; line-height: 1.65; }
+
+    .mobile-primary { border-top: 1px solid rgba(255,255,255,0.24); }
+
+    .mobile-primary a {
+      display: grid;
+      grid-template-columns: 29px 1fr 24px;
+      padding: 14px 2px;
+      align-items: center;
+      border-bottom: 1px solid rgba(255,255,255,0.24);
+      text-decoration: none;
+    }
+
+    .mobile-primary small {
+      color: #c0aa98;
+      font-family: "Inter", sans-serif;
+      font-size: 8px;
+      font-weight: 800;
+    }
+
+    .mobile-primary span {
+      font-size: 16px;
+      font-weight: 900;
+      letter-spacing: 0.03em;
+    }
+
+    .mobile-primary b { text-align: right; font-size: 17px; font-weight: 400; }
+
+    .mobile-symptoms {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px 18px;
+      padding: 28px 0;
+    }
+
+    .mobile-symptoms p {
+      grid-column: 1 / -1;
+      margin: 0 0 4px;
+      color: #c0aa98;
+      font-family: "Inter", sans-serif;
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 0.2em;
+    }
+
+    .mobile-symptoms a {
+      color: #b8bdc1;
+      font-size: 12px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .mobile-reserve {
+      display: flex;
+      padding: 17px 18px;
+      align-items: center;
+      justify-content: space-between;
+      background: #92745e;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.13em;
+      text-decoration: none;
+    }
+  }
+</style>

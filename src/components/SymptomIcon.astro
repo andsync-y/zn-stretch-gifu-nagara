@@ -1,0 +1,140 @@
+---
+interface Props {
+  slug: string;
+  label?: string;
+}
+
+const { slug, label } = Astro.props;
+---
+
+<span class="symptom-icon" aria-hidden={label ? undefined : 'true'} role={label ? 'img' : undefined} aria-label={label}>
+  <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle class="guide" cx="60" cy="60" r="48" />
+    <path class="guide-dash" d="M19 47A44 44 0 0 1 47 18M101 73A44 44 0 0 1 74 102" />
+
+    {slug === 'katakori' && (
+      <>
+        <circle class="body" cx="60" cy="38" r="12" />
+        <path class="body" d="M49 52v9c-12 3-21 11-25 25M71 52v9c12 3 21 11 25 25M39 68c7 8 35 8 42 0" />
+        <path class="accent" d="m33 55-7-7m13 3-3-10m45 14 7-7M75 51l3-10" />
+        <circle class="accent-dot" cx="31" cy="67" r="3" />
+        <circle class="accent-dot" cx="89" cy="67" r="3" />
+      </>
+    )}
+
+    {slug === 'youtsu' && (
+      <>
+        <circle class="body" cx="67" cy="30" r="10" />
+        <path class="body" d="M64 41c-13 9-18 22-13 36l-3 18M56 52c10 2 17 8 20 17l9 18M53 76c10 2 18 0 24-6" />
+        <path class="accent" d="M42 64c5-6 12-8 20-5M39 72c7-7 16-9 26-5M39 81c8-7 18-8 28-4" />
+        <circle class="accent-dot" cx="52" cy="70" r="4" />
+      </>
+    )}
+
+    {slug === 'kubi-ganseihiro' && (
+      <>
+        <path class="body" d="M28 48c8-12 23-18 38-13 9 3 17 9 22 17-10 10-25 13-38 9-9-2-16-7-22-13Z" />
+        <circle class="body" cx="59" cy="49" r="7" />
+        <path class="body" d="M53 68v10c0 8-5 13-13 17M67 67v11c0 8 5 13 13 17" />
+        <path class="accent" d="M34 31l-7-8m28 5V17m23 17 8-7" />
+        <path class="accent" d="M76 73c7 1 12 5 15 11" />
+      </>
+    )}
+
+    {slug === 'mukumi' && (
+      <>
+        <path class="body" d="M45 23c4 18 4 34-1 49-3 9-1 18 5 25h22M60 25c-1 17 1 30 6 42 4 10 1 18-5 25" />
+        <path class="accent" d="M84 26s10 12 10 20a10 10 0 0 1-20 0c0-8 10-20 10-20Z" />
+        <path class="accent" d="M78 70v20m-7-7 7 7 7-7" />
+        <path class="accent" d="M34 75c-5 4-8 9-9 15m15-8c-3 4-5 9-5 14" />
+      </>
+    )}
+
+    {slug === 'jiritsu' && (
+      <>
+        <path class="body" d="M71 27a34 34 0 1 0 20 51A28 28 0 0 1 71 27Z" />
+        <path class="accent" d="M25 60h12l5-11 8 24 7-14h11" />
+        <path class="accent" d="M31 31h14L31 45h14" />
+        <circle class="accent-dot" cx="80" cy="45" r="3.5" />
+      </>
+    )}
+
+    {slug === 'shisei' && (
+      <>
+        <path class="accent guide-line" d="M82 23v74" />
+        <circle class="body" cx="48" cy="33" r="10" />
+        <path class="body" d="M51 44c11 10 14 22 8 36l-2 17M58 56c-10 1-16 6-20 14M57 80l15 17" />
+        <path class="accent" d="m76 30 6-7 6 7M76 90l6 7 6-7" />
+        <path class="accent" d="M68 46h14M69 68h13" />
+      </>
+    )}
+
+    {slug === 'sports' && (
+      <>
+        <circle class="body" cx="53" cy="27" r="9" />
+        <path class="body" d="m51 38 8 23m-4-14 17-9 13 6M59 61 42 91m17-30 23 24M42 91H30m52-6 10 5" />
+        <path class="accent" d="M26 68a39 39 0 0 1 14-31M22 79l4-11 10 5" />
+        <path class="accent" d="M72 24h18m-13 8h17" />
+      </>
+    )}
+  </svg>
+</span>
+
+<style>
+  .symptom-icon {
+    --accent: #92745e;
+    display: block;
+    width: 100%;
+    aspect-ratio: 1;
+    color: #17191b;
+  }
+
+  svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  .guide,
+  .guide-dash,
+  .body,
+  .accent,
+  .guide-line {
+    vector-effect: non-scaling-stroke;
+  }
+
+  .guide {
+    stroke: #d9dcdf;
+    stroke-width: 1;
+  }
+
+  .guide-dash {
+    stroke: #aeb4ba;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-dasharray: 2 7;
+  }
+
+  .body {
+    stroke: currentColor;
+    stroke-width: 2.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .accent {
+    stroke: var(--accent);
+    stroke-width: 2.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .accent-dot {
+    fill: var(--accent);
+  }
+
+  .guide-line {
+    stroke-dasharray: 3 6;
+  }
+</style>

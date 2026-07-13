@@ -4,39 +4,40 @@ export default {
   theme: {
     extend: {
       colors: {
-        // TOP v5 デザイントークン（エディトリアル・クラフト）
-        paper: '#F7F5F0', // ベースの生成り
-        paper2: '#EFEDE6', // 交互セクションの少し濃い生成り
-        panel: '#ECEAE4',
-        ink: '#1A1A1A', // 主役の黒
-        sub: '#333333', // 本文
-        muted: '#555555',
-        faint: '#999999',
-        line: '#EAEAEA',
+        // KEY VISUAL基準：モノクロ＋タオル由来のウォームトープ
+        paper: '#F7F7F4',
+        paper2: '#ECEDEA',
+        panel: '#E4E5E2',
+        ink: '#151719',
+        sub: '#333638',
+        muted: '#62676B',
+        faint: '#969CA1',
+        line: '#D4D7D8',
+        accent: '#92745E',
         // 黒セクション内のトーン
-        inkpaper: '#F7F5F0',
-        inkmuted: '#BBB8B2',
-        inkfaint: '#8A8884',
+        inkpaper: '#F7F7F4',
+        inkmuted: '#B9BEC2',
+        inkfaint: '#7D848A',
         amber: {
-          DEFAULT: '#FF9C46',
-          600: '#F0842A',
-          700: '#D96F17',
+          DEFAULT: '#92745E',
+          600: '#7A604D',
+          700: '#634C3C',
         },
       },
       fontFamily: {
         sans: ['"Noto Sans JP"', 'system-ui', 'sans-serif'],
-        display: ['"Playfair Display"', 'serif'], // 英字大見出し・価格
-        script: ['"Cormorant Garamond"', 'serif'], // 英語イタリックの添えラベル
+        display: ['"Archivo Black"', '"Noto Sans JP"', 'sans-serif'],
+        script: ['"Inter"', '"Noto Sans JP"', 'sans-serif'],
         hand: ['"Yomogi"', '"Noto Sans JP"', 'cursive'],
       },
       maxWidth: {
         content: '85rem', // 1360px
       },
       boxShadow: {
-        hard: '10px 10px 0 #1A1A1A',
-        'hard-l': '-10px 10px 0 #1A1A1A',
-        'hard-sm': '8px 8px 0 #1A1A1A',
-        'hard-btn': '6px 6px 0 rgba(26,26,26,0.15)',
+        hard: '10px 10px 0 #92745E',
+        'hard-l': '-10px 10px 0 #92745E',
+        'hard-sm': '7px 7px 0 #92745E',
+        'hard-btn': '5px 5px 0 rgba(146,116,94,0.28)',
         'hard-btn-light': '6px 6px 0 rgba(247,245,240,0.18)',
       },
       keyframes: {

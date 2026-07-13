@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import ReserveCTA from '../components/ReserveCTA.astro';
 import PriceRows from '../components/PriceRows.astro';
+import SymptomIcon from '../components/SymptomIcon.astro';
 import { SITE, BRAND, STAFF, SYMPTOMS, PHOTOS, REVIEWS } from '../consts';
 
 const title = '岐阜市長良の完全個室パーソナルストレッチ｜全力ストレッチ岐阜長良店';
@@ -179,14 +180,14 @@ const marqueeItems = [
   </script>
 
   <!-- MARQUEE -->
-  <section class="overflow-hidden border-y border-ink bg-paper" aria-hidden="true">
+  <section class="home-marquee overflow-hidden border-y border-ink bg-paper" aria-hidden="true">
     <div class="flex w-max animate-marquee">
       {[0, 1].map(() => (
         <div class="flex">
           {marqueeItems.map((m) => (
             <>
-              <img src={m.photo} alt="" width="680" height="440" loading="lazy" decoding="async" class="h-[130px] w-[200px] object-cover sm:h-[220px] sm:w-[340px]" style="object-position:center 68%" />
-              <span class="flex h-[130px] w-[180px] items-center justify-center border-x border-ink text-[15px] font-black tracking-[0.2em] sm:h-[220px] sm:w-[340px] sm:text-[22px]">{m.word}</span>
+              <img src={m.photo} alt="" width="680" height="440" loading="lazy" decoding="async" class="h-[130px] w-[210px] object-cover grayscale sm:h-[200px] sm:w-[360px]" style="object-position:center 68%" />
+              <span class="flex h-[130px] w-[220px] items-center justify-center border-x border-ink px-5 text-center text-[16px] font-black tracking-[0.08em] sm:h-[200px] sm:w-[360px] sm:text-[27px]">{m.word}</span>
             </>
           ))}
         </div>
@@ -195,13 +196,17 @@ const marqueeItems = [
   </section>
 
   <!-- CONCEPT -->
-  <section id="concept" class="relative px-5 py-24 sm:px-10 sm:py-32 xl:px-14">
+  <section id="concept" class="home-concept section-grid relative border-b border-ink/20 px-5 py-24 sm:px-10 sm:py-36 xl:px-14">
     <span class="side-label">Concept — 01</span>
     <div class="mx-auto max-w-[1440px]">
-      <h2 class="display-title rise mb-12 sm:mb-16">CONCEPT</h2>
+      <div class="mb-12 flex items-end justify-between gap-8 sm:mb-20">
+        <h2 class="display-title rise">CONCEPT</h2>
+        <p class="editorial-kicker hidden sm:inline-flex">OUR PHILOSOPHY</p>
+      </div>
       <div class="grid items-center gap-12 lg:grid-cols-[520px_1fr] lg:gap-[88px]">
         <div class="rise relative order-2 lg:order-1">
-          <img src={PHOTOS.concept} alt="マンツーマンで行う体感軸調整ストレッチ" width="1060" height="1700" loading="lazy" decoding="async" class="h-[380px] w-full object-cover lg:h-[850px]" style="object-position:center 62%" />
+          <span class="absolute -left-3 -top-5 z-10 bg-ink px-3 py-1 font-script text-[9px] font-extrabold tracking-[0.18em] text-white">01 / BODY AXIS</span>
+          <img src={PHOTOS.concept} alt="マンツーマンで行う体感軸調整ストレッチ" width="1060" height="1700" loading="lazy" decoding="async" class="h-[420px] w-full object-cover grayscale lg:h-[850px]" style="object-position:center 62%" />
         </div>
         <div class="rise order-1 lg:order-2">
           <p class="mb-7 text-[23px] font-black leading-[1.8] sm:text-[32px] lg:text-[40px] lg:leading-[1.7]">
@@ -214,7 +219,7 @@ const marqueeItems = [
           <div class="rule-top">
             {concepts.map((c) => (
               <div class="rule-row flex items-baseline gap-4 px-1 py-5 sm:gap-6">
-                <span class="shrink-0 font-display text-[36px] italic leading-none text-faint sm:text-[44px]">{c.no}</span>
+                <span class="shrink-0 font-script text-[12px] font-extrabold leading-none tracking-[0.16em] text-[#92745e]">{c.no}</span>
                 <div class="text-[15px] leading-[2] text-muted sm:text-[17px]">
                   <span class="mb-1.5 block text-[21px] font-black text-ink sm:mb-2 sm:text-[28px]">{c.title}</span>
                   {c.body}
@@ -228,11 +233,12 @@ const marqueeItems = [
   </section>
 
   <!-- METHOD -->
-  <section id="method" class="relative px-5 pb-24 sm:px-10 sm:pb-32 xl:px-14">
+  <section id="method" class="home-method relative border-b border-ink/20 bg-paper2 px-5 py-24 sm:px-10 sm:py-36 xl:px-14">
     <span class="side-label" style="top:40px">Method — 02</span>
     <div class="mx-auto max-w-[1440px]">
       <div class="rise">
-        <h2 class="display-title mb-6">METHOD</h2>
+        <p class="editorial-kicker mb-7">HOW WE MOVE</p>
+        <h2 class="display-title mb-8">METHOD</h2>
         <p class="mb-16 max-w-[640px] text-[15px] leading-[2.1] tracking-[0.03em] text-muted sm:mb-[88px] sm:text-[17px]">
           元格闘家のオーナーが考案した独自の「体感軸調整法」。もみほぐしではなく、体の軸をつくる筋肉へのストレッチで深い部分からアプローチします。
         </p>
@@ -242,12 +248,12 @@ const marqueeItems = [
           <div class={`rise grid items-center gap-8 lg:gap-20 ${m.flip ? 'lg:grid-cols-[1fr_460px]' : 'lg:grid-cols-[460px_1fr]'}`}>
             <img
               src={m.photo} alt={m.alt} width="920" height="660" loading="lazy" decoding="async"
-              class={`h-[240px] w-full object-cover sm:h-[330px] ${m.flip ? 'shadow-hard-l lg:order-2' : 'shadow-hard'}`}
+              class={`h-[270px] w-full object-cover grayscale transition duration-700 hover:grayscale-0 sm:h-[360px] ${m.flip ? 'lg:order-2' : ''}`}
               style="object-position:center 68%"
             />
             <div class={m.flip ? 'lg:order-1 lg:flex lg:flex-col lg:items-end lg:text-right' : ''}>
               <h3 class="mb-4 text-[22px] font-black sm:text-[31px]">
-                <span class="mr-4 font-display text-[20px] font-semibold italic text-faint sm:text-[26px]">{m.no}</span>{m.title}
+                <span class="mr-4 font-script text-[11px] font-extrabold tracking-[0.16em] text-[#92745e]">{m.no}</span>{m.title}
               </h3>
               <p class="max-w-[560px] text-[15px] leading-[2.1] text-muted sm:text-[17px]">{m.body}</p>
               <p class={`mt-6 flex items-center gap-3.5 text-[13px] font-medium tracking-[0.22em] sm:mt-7 ${m.flip ? 'lg:flex-row-reverse' : ''}`}>
@@ -261,28 +267,30 @@ const marqueeItems = [
   </section>
 
   <!-- SYMPTOMS（黒） -->
-  <section id="symptoms" class="relative bg-ink px-5 py-24 text-inkpaper sm:px-10 sm:py-32 xl:px-14">
+  <section id="symptoms" class="home-symptoms relative bg-ink px-5 py-24 text-inkpaper sm:px-10 sm:py-36 xl:px-14">
     <span class="side-label" style="color:#777">Symptoms — 03</span>
     <div class="mx-auto max-w-[1440px]">
       <div class="rise">
-        <h2 class="display-title mb-6 !text-inkpaper" style="mix-blend-mode:normal">SYMPTOMS</h2>
+        <p class="editorial-kicker mb-7 !text-[#c0aa98]">FIND YOUR CONDITION</p>
+        <h2 class="display-title mb-8 !text-inkpaper">SYMPTOMS</h2>
         <p class="mb-14 text-[15px] leading-[2.1] tracking-[0.03em] text-inkmuted sm:mb-20 sm:text-[17px]">お悩みから探す。気になるお悩みに合わせて、アプローチの内容をご紹介します。</p>
       </div>
-      <div class="rise grid grid-cols-2 gap-x-6 md:gap-x-[72px]">
+      <div class="rise grid border-t border-inkpaper/35 md:grid-cols-2">
         {SYMPTOMS.map((s, i) => (
-          <a href={`/symptoms/${s.slug}`} class="group flex flex-col gap-1.5 border-b border-inkpaper/25 px-1 py-5 no-underline sm:py-[26px]">
-            <span class="flex items-baseline justify-between">
-              <span class="font-display text-sm italic text-[#777]">{String(i + 1).padStart(2, '0')}</span>
-              <span class="shrink-0 font-bold text-inkpaper transition group-hover:text-amber" aria-hidden="true">→</span>
+          <a href={`/symptoms/${s.slug}`} class="group grid grid-cols-[72px_1fr_28px] items-center gap-4 border-b border-inkpaper/25 px-2 py-5 no-underline transition hover:bg-white/[0.04] sm:grid-cols-[92px_1fr_34px] sm:px-5 sm:py-7 md:odd:border-r">
+            <span class="block h-[62px] w-[62px] brightness-0 invert opacity-80 transition duration-500 group-hover:scale-105 group-hover:opacity-100 sm:h-[78px] sm:w-[78px]"><SymptomIcon slug={s.slug} /></span>
+            <span>
+              <span class="mb-2 block font-script text-[8px] font-extrabold tracking-[0.18em] text-[#c0aa98]">{String(i + 1).padStart(2, '0')} / CONDITION</span>
+              <span class="block text-[15px] font-black leading-[1.6] text-inkpaper sm:text-xl">{s.label}</span>
+              {s.note && <span class="mt-1 hidden text-[11px] text-inkfaint sm:block">{s.note}</span>}
             </span>
-            <span class="text-[15px] font-bold leading-[1.6] text-inkpaper sm:text-xl">{s.label}</span>
-            {s.note && <span class="hidden text-[13px] text-inkfaint md:block">{s.note}</span>}
+            <span class="text-right text-xl font-normal text-inkpaper transition group-hover:text-[#c0aa98]" aria-hidden="true">↗</span>
           </a>
         ))}
       </div>
 
       <!-- ブランド実績（ブランド主語） -->
-      <div class="rise mt-20 border border-inkpaper/30 p-8 text-center sm:mt-28 sm:p-14">
+      <div class="rise section-grid-dark mt-20 border border-inkpaper/30 p-8 text-center sm:mt-28 sm:p-14">
         <p class="en-label-dark mb-6" style="letter-spacing:0.3em;font-size:16px">Nationwide Brand</p>
         <p class="mb-7 flex justify-center">
           <img src="/images/logo.png" alt="全力ストレッチ PHYSICAL CONDITIONING SALON" width="1200" height="307" loading="lazy" decoding="async" class="h-auto w-[240px] invert sm:w-[340px]" />
@@ -299,19 +307,23 @@ const marqueeItems = [
   </section>
 
   <!-- STAFF -->
-  <section id="staff" class="relative px-5 py-24 sm:px-10 sm:py-32 xl:px-14">
+  <section id="staff" class="home-staff section-grid relative border-b border-ink/20 px-5 py-24 sm:px-10 sm:py-36 xl:px-14">
     <span class="side-label">Staff — 04</span>
     <div class="mx-auto max-w-[1440px]">
       <div class="rise">
-        <h2 class="display-title mb-6">STAFF</h2>
+        <p class="editorial-kicker mb-7">PERSONAL TRAINERS</p>
+        <h2 class="display-title mb-8">STAFF</h2>
         <p class="mb-14 text-[15px] leading-[2.1] tracking-[0.03em] text-muted sm:mb-20 sm:text-[17px]">担当は、全員女性の体感軸調整トレーナー。最初から最後まで、マンツーマンであなたの体と向き合います。</p>
       </div>
       <div class="rise grid grid-cols-2 gap-x-5 gap-y-10 sm:gap-x-7 sm:gap-y-14 lg:grid-cols-4">
         {STAFF.map((s, i) => (
           <div class={i % 2 === 1 ? 'lg:mt-11' : ''}>
-            <img src={s.photo} alt={`トレーナー ${s.name}（${s.kana}）`} width="800" height="1069" loading="lazy" decoding="async" class="mb-4 aspect-[3/4] w-full object-cover object-top shadow-hard-sm sm:mb-5" />
-            <p class="text-center text-base font-black tracking-[0.1em] sm:text-lg">{s.name}</p>
-            <p class="mt-1 text-center text-xs font-medium tracking-[0.1em] text-muted sm:text-sm">{s.role}</p>
+            <div class="relative mb-4 overflow-hidden sm:mb-5">
+              <span class="absolute left-3 top-3 z-10 bg-ink px-2 py-1 font-script text-[8px] font-extrabold tracking-[0.16em] text-white">{String(i + 1).padStart(2, '0')}</span>
+              <img src={s.photo} alt={`トレーナー ${s.name}（${s.kana}）`} width="800" height="1069" loading="lazy" decoding="async" class="aspect-[3/4] w-full object-cover object-top grayscale transition duration-700 hover:grayscale-0" />
+            </div>
+            <p class="text-left text-base font-black tracking-[0.08em] sm:text-lg">{s.name}</p>
+            <p class="mt-1 text-left text-[10px] font-bold tracking-[0.14em] text-muted sm:text-xs">{s.role}</p>
           </div>
         ))}
       </div>
@@ -320,18 +332,20 @@ const marqueeItems = [
   </section>
 
   <!-- VOICE（枠組み・実クチコミ投入まで準備中表示） -->
-  <section class="px-5 pb-24 sm:px-10 sm:pb-32 xl:px-14">
+  <section class="home-voice bg-paper2 px-5 py-24 sm:px-10 sm:py-36 xl:px-14">
     <div class="mx-auto max-w-[1440px]">
-      <div class="rise border border-ink p-2">
-        <div class="border border-ink px-6 py-14 sm:px-16 sm:py-[72px]">
-          <h2 class="display-title mb-6 text-center">VOICE</h2>
-          <p class="mb-12 text-center text-sm tracking-[0.08em] text-muted">Google マップのクチコミより</p>
+      <div class="rise border-t-2 border-ink">
+        <div class="px-1 py-14 sm:py-[72px]">
+          <div class="mb-14 flex flex-col justify-between gap-7 sm:flex-row sm:items-end">
+            <h2 class="display-title">VOICE</h2>
+            <p class="editorial-kicker">GOOGLE REVIEWS</p>
+          </div>
           <div class="grid gap-x-14 gap-y-12 md:grid-cols-3">
             {REVIEWS.slice(0, 6).map((r) => (
               <div>
                 <div class="mb-3.5 flex items-baseline justify-between gap-3">
                   <span class="text-[15px] font-black tracking-[0.06em]">{r.name}</span>
-                  <span class="text-sm tracking-[0.12em] text-amber" aria-label={`星${r.stars}つ`}>{'★'.repeat(r.stars)}{'☆'.repeat(5 - r.stars)}</span>
+                  <span class="text-sm tracking-[0.12em] text-[#92745e]" aria-label={`星${r.stars}つ`}>{'★'.repeat(r.stars)}{'☆'.repeat(5 - r.stars)}</span>
                 </div>
                 <p class="border-t border-ink/25 pt-4 text-[15px] leading-[2.1] text-muted sm:text-base">{r.text}</p>
               </div>
@@ -345,9 +359,10 @@ const marqueeItems = [
   </section>
 
   <!-- SNS（Instagram / TikTok 埋め込み・遅延読み込み） -->
-  <section id="sns" class="px-5 pb-24 sm:px-10 sm:pb-32 xl:px-14">
+  <section id="sns" class="home-sns border-b border-ink/20 px-5 py-24 sm:px-10 sm:py-36 xl:px-14">
     <div class="mx-auto max-w-[1440px]">
-      <h2 class="display-title mb-12">SNS</h2>
+      <p class="editorial-kicker mb-7">FOLLOW THE MOVEMENT</p>
+      <h2 class="display-title mb-16">SOCIAL</h2>
       <div class="grid items-start gap-10 md:grid-cols-2 lg:gap-16">
         <!-- Instagram -->
         <div>
@@ -412,7 +427,7 @@ const marqueeItems = [
   </script>
 
   <!-- PRICE + ACCESS -->
-  <section id="price" class="relative px-5 pb-24 sm:px-10 sm:pb-32 xl:px-14">
+  <section id="price" class="home-info section-grid relative bg-paper2 px-5 py-24 sm:px-10 sm:py-36 xl:px-14">
     <div class="mx-auto grid max-w-[1440px] items-start gap-16 lg:grid-cols-2 lg:gap-[104px]">
       <div class="rise">
         <h2 class="display-title mb-10 sm:mb-14">PRICE</h2>
