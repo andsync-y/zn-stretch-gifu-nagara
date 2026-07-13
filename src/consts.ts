@@ -30,6 +30,8 @@ export const SITE = {
     lat: 35.447547,
     lng: 136.784403,
   },
+  // Googleマップ埋め込み（店舗ピン付きの公式embed URL）
+  mapEmbed: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3250.1911674489115!2d136.78376877523996!3d35.45006144263926!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6003ab00212d8347%3A0x74a2b6298b0da40f!2z5YWo5Yqb44K544OI44Os44OD44OB5bKQ6Zic6ZW36Imv5bqX!5e0!3m2!1sja!2sjp!4v1783924814903!5m2!1sja!2sjp',
   // 外部URL（実データ）
   urls: {
     reserve: 'https://beauty.hotpepper.jp/kr/slnH000806541/?vos=cpahpbprosmaf131118006',

@@ -50,9 +50,9 @@ const breadcrumb = {
         </div>
       </div>
       <iframe
-        src={`https://www.google.com/maps?q=${SITE.geo.lat},${SITE.geo.lng}&z=17&output=embed`}
+        src={SITE.mapEmbed}
         title="全力ストレッチ岐阜長良店の周辺地図（岐阜市長良・ヤマダデンキ長良そば）"
-        width="1200" height="700" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen
+        width="1200" height="700" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen
         class="aspect-[4/3] h-auto w-full border border-ink/15 bg-panel"
       ></iframe>
     </div>

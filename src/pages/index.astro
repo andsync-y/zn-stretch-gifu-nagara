@@ -342,9 +342,9 @@ const marqueeItems = [
           <div class="rule-row grid grid-cols-[92px_1fr] gap-4 px-1 py-5 sm:grid-cols-[120px_1fr]"><span class="font-bold">電話</span><a href={`tel:${SITE.telLink}`} class="text-muted underline">{SITE.tel}</a></div>
         </div>
         <iframe
-          src={`https://www.google.com/maps?q=${SITE.geo.lat},${SITE.geo.lng}&z=17&output=embed`}
+          src={SITE.mapEmbed}
           title="全力ストレッチ岐阜長良店の周辺地図"
-          width="1200" height="460" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen
+          width="1200" height="460" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen
           class="mt-7 h-[230px] w-full border-0 bg-panel"
         ></iframe>
         <a href="/access" class="mt-5 inline-block text-[15px] font-bold underline-offset-4 hover:underline">アクセスの詳細 →</a>
