@@ -79,6 +79,10 @@ const marqueeWords = [
           <p><span>集中ケアコース</span><b>60 min.</b></p>
           <p><del>¥13,200</del><strong>¥3,300</strong><small>税込</small></p>
         </div>
+        <div class="hero-offer-price">
+          <p><span>全身ケアコース</span><b>90 min.</b></p>
+          <p><del>¥19,800</del><strong>¥4,900</strong><small>税込</small></p>
+        </div>
         <a href={SITE.urls.reserve} target="_blank" rel="noopener">WEB予約 <span aria-hidden="true">↗</span></a>
         <p class="hero-offer-note">※初回価格はおひとり様1回限り。価格は変更となる場合があります。</p>
       </div>
@@ -95,7 +99,7 @@ const marqueeWords = [
     const ctx = canvas?.getContext('2d');
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-    const OFFER_AT = 0.72; // オファーカードを出すスクロール進捗
+    const OFFER_AT = 0.03; // オファーカードを出すスクロール進捗（少しでもスクロールしたら表示）
     const SCRUB_END = 0.85; // ここまでで最終フレームに到達し、残りは静止
     // PCとSPは別動画（PC=横1920x1080/169枚・SP=縦720x1280/106枚）
     const cfg = window.innerWidth <= 768
@@ -195,13 +199,13 @@ const marqueeWords = [
     }
   </script>
 
-  <!-- MARQUEE（画像・背景なしのキーワードのみ） -->
-  <section class="home-marquee overflow-hidden py-10 sm:py-16" aria-hidden="true">
+  <!-- MARQUEE（キーワードのみ・グリッド背景） -->
+  <section class="home-marquee section-grid overflow-hidden py-8 sm:py-10" aria-hidden="true">
     <div class="flex w-max animate-marquee">
       {[0, 1].map(() => (
         <div class="flex items-baseline">
           {marqueeWords.map((word) => (
-            <span class="whitespace-nowrap px-7 text-[22px] font-black tracking-[0.06em] sm:px-12 sm:text-[38px]">{word}</span>
+            <span class="whitespace-nowrap px-6 text-[13px] font-black tracking-[0.06em] sm:px-9 sm:text-[19px]">{word}</span>
           ))}
         </div>
       ))}
@@ -219,7 +223,7 @@ const marqueeWords = [
       <div class="grid items-center gap-12 lg:grid-cols-[520px_1fr] lg:gap-[88px]">
         <div class="rise relative order-2 lg:order-1">
           <span class="absolute -left-3 -top-5 z-10 bg-ink px-3 py-1 font-script text-[9px] font-extrabold tracking-[0.18em] text-white">01 / BODY AXIS</span>
-          <img src={PHOTOS.concept} alt="マンツーマンで行う体感軸調整ストレッチ" width="1060" height="1700" loading="lazy" decoding="async" class="h-[420px] w-full object-cover grayscale lg:h-[850px]" style="object-position:center 62%" />
+          <img src={PHOTOS.concept} alt="マンツーマンで行う体感軸調整ストレッチ" width="1060" height="1700" loading="lazy" decoding="async" class="h-[420px] w-full object-cover lg:h-[850px]" style="object-position:center 62%" />
         </div>
         <div class="rise order-1 lg:order-2">
           <p class="mb-7 text-[23px] font-black leading-[1.8] sm:text-[32px] lg:text-[40px] lg:leading-[1.7]">
@@ -261,7 +265,7 @@ const marqueeWords = [
           <div class={`rise grid items-center gap-8 lg:gap-20 ${m.flip ? 'lg:grid-cols-[1fr_460px]' : 'lg:grid-cols-[460px_1fr]'}`}>
             <img
               src={m.photo} alt={m.alt} width="920" height="660" loading="lazy" decoding="async"
-              class={`h-[270px] w-full object-cover grayscale transition duration-700 hover:grayscale-0 sm:h-[360px] ${m.flip ? 'lg:order-2' : ''}`}
+              class={`h-[270px] w-full object-cover sm:h-[360px] ${m.flip ? 'lg:order-2' : ''}`}
               style="object-position:center 68%"
             />
             <div class={m.flip ? 'lg:order-1 lg:flex lg:flex-col lg:items-end lg:text-right' : ''}>
@@ -333,7 +337,7 @@ const marqueeWords = [
           <div class={i % 2 === 1 ? 'lg:mt-11' : ''}>
             <div class="relative mb-4 overflow-hidden sm:mb-5">
               <span class="absolute left-3 top-3 z-10 bg-ink px-2 py-1 font-script text-[8px] font-extrabold tracking-[0.16em] text-white">{String(i + 1).padStart(2, '0')}</span>
-              <img src={s.photo} alt={`トレーナー ${s.name}（${s.kana}）`} width="800" height="1069" loading="lazy" decoding="async" class="aspect-[3/4] w-full object-cover object-top grayscale transition duration-700 hover:grayscale-0" />
+              <img src={s.photo} alt={`トレーナー ${s.name}（${s.kana}）`} width="800" height="1069" loading="lazy" decoding="async" class="aspect-[3/4] w-full object-cover object-top" />
             </div>
             <p class="text-left text-base font-black tracking-[0.08em] sm:text-lg">{s.name}</p>
             <p class="mt-1 text-left text-[10px] font-bold tracking-[0.14em] text-muted sm:text-xs">{s.role}</p>
