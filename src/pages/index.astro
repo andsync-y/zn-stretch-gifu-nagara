@@ -2,8 +2,8 @@
 import Base from '../layouts/Base.astro';
 import ReserveCTA from '../components/ReserveCTA.astro';
 import PriceRows from '../components/PriceRows.astro';
-import SymptomIcon from '../components/SymptomIcon.astro';
-import { SITE, BRAND, STAFF, SYMPTOMS, PHOTOS, REVIEWS } from '../consts';
+import InteractiveSymptoms from '../components/InteractiveSymptoms.astro';
+import { SITE, BRAND, STAFF, PHOTOS, REVIEWS } from '../consts';
 
 const title = '岐阜市長良の完全個室パーソナルストレッチ｜全力ストレッチ岐阜長良店';
 const description = '岐阜市長良の完全個室・マンツーマンのパーソナルストレッチ専門店。元格闘家考案・独自の「体感軸調整法」で動ける身体へ。初回60分3,300円、駐車場10台以上、22時まで営業。';
@@ -283,31 +283,21 @@ const marqueeWords = [
     </div>
   </section>
 
-  <!-- SYMPTOMS（黒） -->
-  <section id="symptoms" class="home-symptoms relative bg-ink px-5 py-24 text-inkpaper sm:px-10 sm:py-36 xl:px-14">
-    <span class="side-label" style="color:#777">Symptoms — 03</span>
+  <!-- SYMPTOMS -->
+  <section id="symptoms" class="home-symptoms relative bg-[#151719] px-5 py-16 text-inkpaper sm:px-10 sm:py-20 xl:px-14">
+    <span class="side-label" style="color:#df342f">Symptoms — 03</span>
     <div class="mx-auto max-w-[1440px]">
       <div class="rise">
-        <p class="editorial-kicker mb-7 !text-[#c0aa98]">FIND YOUR CONDITION</p>
-        <h2 class="display-title mb-8 !text-inkpaper">SYMPTOMS</h2>
-        <p class="mb-14 text-[15px] leading-[2.1] tracking-[0.03em] text-inkmuted sm:mb-20 sm:text-[17px]">お悩みから探す。気になるお悩みに合わせて、アプローチの内容をご紹介します。</p>
+        <p class="editorial-kicker mb-4 !text-[#df342f]">FIND YOUR CONDITION</p>
+        <div class="mb-9 grid items-end gap-4 sm:mb-11 lg:grid-cols-[auto_1fr] lg:gap-12">
+          <h2 class="display-title !text-inkpaper">SYMPTOMS</h2>
+          <p class="max-w-[620px] pb-2 text-[14px] leading-[1.9] tracking-[0.03em] text-inkmuted sm:text-[15px]">お悩みから探す。気になる項目にカーソルを合わせると、該当する部位が赤く光ります。</p>
+        </div>
       </div>
-      <div class="rise grid border-t border-inkpaper/35 md:grid-cols-2">
-        {SYMPTOMS.map((s, i) => (
-          <a href={`/symptoms/${s.slug}`} class="group grid grid-cols-[72px_1fr_28px] items-center gap-4 border-b border-inkpaper/25 px-2 py-5 no-underline transition hover:bg-white/[0.04] sm:grid-cols-[92px_1fr_34px] sm:px-5 sm:py-7 md:odd:border-r">
-            <span class="block h-[62px] w-[62px] brightness-0 invert opacity-80 transition duration-500 group-hover:scale-105 group-hover:opacity-100 sm:h-[78px] sm:w-[78px]"><SymptomIcon slug={s.slug} /></span>
-            <span>
-              <span class="mb-2 block font-script text-[8px] font-extrabold tracking-[0.18em] text-[#c0aa98]">{String(i + 1).padStart(2, '0')} / CONDITION</span>
-              <span class="block text-[15px] font-black leading-[1.6] text-inkpaper sm:text-xl">{s.label}</span>
-              {s.note && <span class="mt-1 hidden text-[11px] text-inkfaint sm:block">{s.note}</span>}
-            </span>
-            <span class="text-right text-xl font-normal text-inkpaper transition group-hover:text-[#c0aa98]" aria-hidden="true">↗</span>
-          </a>
-        ))}
-      </div>
+      <InteractiveSymptoms />
 
       <!-- ブランド実績（ブランド主語） -->
-      <div class="rise section-grid-dark mt-20 border border-inkpaper/30 p-8 text-center sm:mt-28 sm:p-14">
+      <div class="rise section-grid-dark mt-20 border border-inkpaper/30 bg-ink p-8 text-center sm:mt-24 sm:p-14">
         <p class="en-label-dark mb-6" style="letter-spacing:0.3em;font-size:16px">Nationwide Brand</p>
         <p class="mb-7 flex justify-center">
           <img src="/images/logo.png" alt="全力ストレッチ PHYSICAL CONDITIONING SALON" width="1200" height="307" loading="lazy" decoding="async" class="h-auto w-[240px] invert sm:w-[340px]" />
