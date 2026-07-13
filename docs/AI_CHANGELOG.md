@@ -130,7 +130,7 @@ Git履歴が「何を変更したか」、このファイルが「なぜ変更�
 ## 2026-07-14 00:20 JST — ChatGPT Codex
 
 - ブランチ：`codex/interactive-symptoms`
-- 関連PR：作成予定
+- 関連PR：[PR #4 SYMPTOMSを人体連動型UIへ刷新](https://github.com/andsync-y/zn-stretch-gifu-nagara/pull/4)
 - 変更内容：
   - 添付の `CODEX_HANDOFF.md` に沿い、トップページのSYMPTOMSを人体連動型UIへ刷新。
   - PCでは左右の症状項目と中央の透過人体を3カラムで配置し、hover・focus・clickに応じて人体の移動、赤い部位発光、SVGコネクターを同期。
