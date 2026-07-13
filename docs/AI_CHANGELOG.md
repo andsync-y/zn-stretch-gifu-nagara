@@ -299,3 +299,156 @@ Git履歴が「何を変更したか」、このファイルが「なぜ変更�
   - navと重複していた「スタッフ紹介」「メニュー・料金」をモバイルメニューの追加リンクから削除（スタッフ／料金はnav側の表記で表示）。
 - 主な変更ファイル：`src/components/Header.astro`
 - 確認結果：`npm run build` 成功。iPhoneエミュレーションでメニューが全画面（top:0・高さ=ビューポート）で開き、リンク9件に重複なし・採用情報ありを確認。
+
+## 2026-07-14 00:20 JST — ChatGPT Codex
+
+- ブランチ：`codex/interactive-symptoms`
+- 関連PR：[PR #4 SYMPTOMSを人体連動型UIへ刷新](https://github.com/andsync-y/zn-stretch-gifu-nagara/pull/4)
+- 変更内容：
+  - 添付の `CODEX_HANDOFF.md` に沿い、トップページのSYMPTOMSを人体連動型UIへ刷新。
+  - PCでは左右の症状項目と中央の透過人体を3カラムで配置し、hover・focus・clickに応じて人体の移動、赤い部位発光、SVGコネクターを同期。
+  - SPでは人体と1カラム一覧へ切り替え、タップした症状の説明と既存詳細ページへの導線を展開。
+  - 単一の透過人体WebPを全状態で共有し、7種類の部位マスクをSVGレイヤーとして実装。
+- 主な変更ファイル：
+  - `src/components/InteractiveSymptoms.astro`
+  - `src/pages/index.astro`
+  - `public/images/symptoms/anatomy-base.webp`
+  - `docs/SYMPTOMS_INTERACTION_IMPLEMENTATION.md`
+  - `docs/AI_CHANGELOG.md`
+- 判断・注意点：
+  - サイト全体の黒・白・グレー＋ウォームトープは維持し、赤 `#e5443f` はアクティブ症状と解剖学的フォーカスのみに限定。
+  - 人体素材は約94KBの透過WebP。下層の遅延読み込みと寸法指定でCLSを抑制。
+  - `prefers-reduced-motion` では移動・回転・線描画を停止。
+- 確認結果：
+  - `npm run build` 成功。Astro静的ページ15件の生成を確認。
+  - `git diff --check` 成功。
+  - 1440／1024／768／390／375pxをChromiumで確認。
+  - mouse pointerenter、keyboard focus、touch click、7詳細URL、SP展開、reduced motionを確認。
+- 未対応・次の作業：Vercelプレビューで実機フォント読み込み後の和文幅と、赤い部位マスクの見え方を最終確認する。
+
+## 2026-07-14 01:05 JST — ChatGPT Codex
+
+- ブランチ：`codex/interactive-symptoms`
+- 関連PR：[PR #4 SYMPTOMSを人体連動型UIへ刷新](https://github.com/andsync-y/zn-stretch-gifu-nagara/pull/4)
+- 変更内容：
+  - ユーザーフィードバックに合わせ、単一人体の回転・拡大とSVG部位マスクを廃止。
+  - 添付された7状態の見本から、姿勢と該当部位ハイライトが異なる中央人体素材を作成。
+  - PCのhover／focus、SPのtapに合わせ、中央画像を620msのクロスフェードで切り替える方式へ変更。
+- 主な変更ファイル：
+  - `src/components/InteractiveSymptoms.astro`
+  - `public/images/symptoms/anatomy-*.webp`（7点）
+  - `docs/SYMPTOMS_INTERACTION_IMPLEMENTATION.md`
+  - `docs/AI_CHANGELOG.md`
+- 判断・注意点：
+  - 赤い円、コネクター、文字などは画像へ焼き込まず、人体と解剖学的ハイライトのみを素材化。
+  - 画像はすべて768 × 1152pxの透過WebPへ統一し、1点約78〜102KB、7点合計約620KBに抑制。
+  - アクティブ項目、詳細リンク、既存URL、PCコネクター、SP展開の仕様は維持。
+- 確認結果：
+  - `npm run build` 成功。Astro静的ページ15件を生成。
+  - `git diff --check` 成功。
+  - 1440／1024／768／390／375pxで、7画像の読み込み、アクティブ同期、レイアウト幅を確認。
+  - PC hover、キーボードfocus、クリック、SP tapで画像が切り替わることを確認。
+  - フェード途中に新旧画像が同時表示され、620ms後に新画像だけが不透明度1になることを確認。
+  - reduced motionではフェードが180msへ短縮され、コネクター線描画が停止することを確認。
+- 未対応・次の作業：Vercelプレビューでクロスフェードと各部位の見え方を確認する。
+
+## 2026-07-14 02:25 JST — ChatGPT Codex
+
+- ブランチ：`codex/interactive-symptoms`
+- 関連PR：[PR #4 SYMPTOMSを人体連動型UIへ刷新](https://github.com/andsync-y/zn-stretch-gifu-nagara/pull/4)
+- 変更内容：
+  - ユーザーフィードバックに合わせ、スケルトン表現を全面的に廃止。
+  - 悩みページの参考イラストに登場するグレーヘアの男性を踏襲し、7症状の人物イラストを作成。
+  - 人物はモノクロの鉛筆画調に統一し、悩み箇所だけを赤く表示。
+  - PCを「左イラスト／右コンパクト一覧」の2カラムへ変更し、症状から伸びる線を削除。
+  - hover／focus／tapで中央ではなく左イラストがクロスフェードする仕様へ変更。
+- 主な変更ファイル：
+  - `src/components/InteractiveSymptoms.astro`
+  - `src/pages/index.astro`
+  - `public/images/symptoms/illustration-*.webp`（7点）
+  - `docs/SYMPTOMS_INTERACTION_IMPLEMENTATION.md`
+  - `docs/AI_CHANGELOG.md`
+- 判断・注意点：
+  - セクションを明るいニュートラルグレーへ変更し、人物イラストと悩みページのトーンを統一。
+  - PCでは見出しから一覧下端まで約773〜816pxとし、900px高の画面でほぼ1画面に収まるよう調整。
+  - 既存の7症状ページURLと右端の詳細リンクを維持。
+- 確認結果：
+  - `npm run build` 成功。Astro静的ページ15件を生成。
+  - `git diff --check` 成功。
+  - 1440／1024／768／390／375pxで、画像読み込み、レイアウト、既存リンクを確認。
+  - PC hover、キーボードfocus、クリック、SP tapで7イラストが切り替わることを確認。
+  - PCの見出しから一覧下端まで約773〜816px。左イラスト／右一覧の2カラムを確認。
+  - コネクター線・SVGが存在しないこと、reduced motionでフェードが160msへ短縮されることを確認。
+- 未対応・次の作業：Vercelプレビューで実機フォント読み込み後の人物サイズと一覧密度を確認する。
+
+## 2026-07-14 03:10 JST — ChatGPT Codex
+
+- ブランチ：`codex/interactive-symptoms`
+- 関連PR：[PR #4 SYMPTOMSを人体連動型UIへ刷新](https://github.com/andsync-y/zn-stretch-gifu-nagara/pull/4)
+- 変更内容：
+  - SYMPTOMSセクションをライトグレーから黒背景へ戻した。
+  - 既存の人物イラスト6点を、同一人物・同一ポーズを維持した黒地の白線画へ変更。
+  - 悩み箇所のみ赤い発光エフェクトを残し、人物・服装の色は排除。
+  - スポーツケアは、同じ男性がゴルフ後にクラブを持ち、腰を押さえる専用イラストへ差し替え。
+  - 左イラスト／右一覧、hover・focus・tapのクロスフェード、コネクター線なしの仕様は維持。
+- 主な変更ファイル：
+  - `src/components/InteractiveSymptoms.astro`
+  - `src/pages/index.astro`
+  - `public/images/symptoms/illustration-*.webp`（7点）
+  - `docs/SYMPTOMS_INTERACTION_IMPLEMENTATION.md`
+  - `docs/AI_CHANGELOG.md`
+- 判断・注意点：
+  - 白線画は背景から自然に分離するよう、輪郭抽出後にWebPへ最適化。
+  - 赤 `#ff382f` は患部エフェクトとアクティブ項目のみに限定。
+  - 7点は960 × 1260px、合計約307KB。
+- 確認結果：
+  - `npm run build` 成功。Astro静的ページ15件を生成。
+  - `git diff --check` 成功。
+  - 1440／1024／768pxで左右2カラム、390／375pxで縦構成を確認。
+  - 7画像の読み込み、hover・focus・click・tapの状態同期、クロスフェードを確認。
+  - PCの主要部は約773〜816pxを維持し、コネクター線は0件。
+
+## 2026-07-14 03:55 JST — ChatGPT Codex
+
+- ブランチ：`codex/interactive-symptoms`
+- 関連PR：[PR #4 SYMPTOMSを人体連動型UIへ刷新](https://github.com/andsync-y/zn-stretch-gifu-nagara/pull/4)
+- 変更内容：
+  - 症状ごとに人物・ポーズ・画像を切り替える方式を廃止。
+  - 添付見本と同じ背面寄り斜めアングルの全身人体を1枚だけ固定表示。
+  - hover・focus・tap時は、人体を変えずに該当部位の赤い発光だけを切り替える仕様へ変更。
+  - 発光は1.9秒周期で拡大・縮小する「ぽわん」としたCSSアニメーション。
+  - 左人体／右一覧、既存詳細リンク、コネクター線なしの構成は維持。
+- 主な変更ファイル：
+  - `src/components/InteractiveSymptoms.astro`
+  - `public/images/symptoms/anatomy-base.webp`
+  - `docs/SYMPTOMS_INTERACTION_IMPLEMENTATION.md`
+  - `docs/AI_CHANGELOG.md`
+- 判断・注意点：
+  - 患部の赤は画像へ焼き込まず、CSSレイヤーとして位置・大きさを症状別に定義。
+  - 7枚の人物イラストを削除し、約96KBの単一WebPへ集約。
+  - `prefers-reduced-motion` では発光のパルスを停止。
+- 確認結果：
+  - `npm run build` 成功。Astro静的ページ15件を生成。
+  - `git diff --check` 成功。
+  - 1440／1024／768pxで左右2カラム、390／375pxで縦構成を確認。
+  - 全幅で人体画像が1枚のみであること、7症状すべてで画像URLが変化しないことを確認。
+  - hover・focus・click・tapと患部レイヤー数の同期、コネクター線0件を確認。
+  - reduced motionでは発光アニメーションが停止することを確認。
+
+## 2026-07-14 04:25 JST — ChatGPT Codex
+
+- ブランチ：`codex/interactive-symptoms`
+- 関連PR：[PR #4 SYMPTOMSを人体連動型UIへ刷新](https://github.com/andsync-y/zn-stretch-gifu-nagara/pull/4)
+- 変更内容：
+  - 全身人体の表示倍率を110%から96%へ変更し、頭頂部と足先に安全余白を確保。
+  - SYMPTOMSセクションと人体表示枠の背景色を `#151719` に統一。
+  - リード文を実装仕様に合わせ、「該当する部位が赤く光ります」へ修正。
+- 主な変更ファイル：
+  - `src/components/InteractiveSymptoms.astro`
+  - `src/pages/index.astro`
+  - `docs/AI_CHANGELOG.md`
+- 確認結果：
+  - `npm run build` と `git diff --check` 成功。
+  - 1440／1024／768／390／375pxで頭頂部・足先が表示枠内に収まることを確認。
+  - 7状態の発光同期、固定画像1枚、reduced motion対応を再確認。
+  - セクションと人体表示枠に `#151719` が指定されていることを確認。
