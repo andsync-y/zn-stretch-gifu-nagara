@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Playfair+Display:ital,wght@0,700;0,800;1,600&family=Cormorant+Garamond:ital,wght@1,500;1,600&family=Yomogi&display=swap" rel="stylesheet">
+<style>body{margin:0;background:#F7F5F0}image-slot{display:block;width:100%;height:100%}</style>
+</helmet>
+<!--
+SEO実装メモ（Astro実装時にheadタグへ反映）
+
+対象キーワード（2026-07調査）:
+ 主要:  姿勢・猫背 ストレッチ 岐阜 ／ 岐阜市 姿勢・猫背 ストレッチ専門店 ／ 岐阜 パーソナルストレッチ
+ 副次:  猫背 ストレッチ 岐阜 ／ 巻き肩 ストレッチ ／ 姿勢 パーソナル 岐阜市 ／ 長良 完全個室
+ ロングテール: デスクワーク 猫背 気になる ／ 写真 姿勢 背中 丸い ／ 巻き肩 胸 ストレッチ
+
+title（32文字前後）:
+ 姿勢・猫背でお悩みの方へ｜岐阜市長良の完全個室パーソナルストレッチ専門店 全力ストレッチ岐阜長良店
+
+meta description（120文字前後）:
+ 岐阜市長良で姿勢・猫背にお悩みなら、完全個室・マンツーマンのストレッチ専門店「全力ストレッチ岐阜長良店」へ。マッサージや整体とは違う、体幹軸から姿勢・猫背にアプローチするザウルス式ストレッチ。初回60分3,300円・駐車場10台以上・22時まで営業。
+
+canonical: https://DOMAIN/symptoms/shisei/
+OGP: og:type=article ／ og:image=施術写真1200x630
+
+JSON-LD 1（FAQPage・application/ld+json のscriptタグで出力）:
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+ {"@type":"Question","name":"予約は必要ですか？","acceptedAnswer":{"@type":"Answer","text":"完全予約制です。WEB（ホットペッパー）・LINE・お電話（058-215-5835）からご予約いただけます。"}},
+ {"@type":"Question","name":"どんな服装で行けばいいですか？","acceptedAnswer":{"@type":"Answer","text":"動きやすい服装がおすすめです。お仕事帰りなどスーツでお越しの場合は、事前にご相談ください。"}},
+ {"@type":"Question","name":"痛くないですか？","acceptedAnswer":{"@type":"Answer","text":"会話をしながら「痛気持ちいい」範囲で行います。強さはその場で調整しますので、遠慮なくお声がけください。"}},
+ {"@type":"Question","name":"男性でも利用できますか？","acceptedAnswer":{"@type":"Answer","text":"はい。デスクワークやゴルフをされる30〜60代の男性のお客様に多くご利用いただいています。"}},
+ {"@type":"Question","name":"マッサージや整体とは何が違うのですか？","acceptedAnswer":{"@type":"Answer","text":"当店は治療院・整体院ではなく、ストレッチ専門店です。もみほぐすのではなく、マンツーマンで筋肉を「伸ばす」ことに特化しています。"}},
+ {"@type":"Question","name":"どれくらいの頻度で通うのがおすすめですか？","acceptedAnswer":{"@type":"Answer","text":"体の状態や目的によりますが、最初は1〜2週間に1回のペースでご利用いただく方が多いです。カウンセリングの際に、無理のない通い方をご提案します。"}},
+ {"@type":"Question","name":"駐車場はありますか？岐阜市外からでも通えますか？","acceptedAnswer":{"@type":"Answer","text":"店舗前に10台以上の駐車場をご用意しています。ヤマダデンキ テックランド岐阜長良店のすぐそばで、岐阜市外からもお車で通いやすい立地です。"}},
+ {"@type":"Question","name":"姿勢は一回で変わりますか？","acceptedAnswer":{"@type":"Answer","text":"感じ方には個人差があります。施術前後の姿勢チェックで変化を確認しながら、続けやすいペースとご自宅でのセルフストレッチをご提案します。"}},
+ {"@type":"Question","name":"筋トレとどちらが良いですか？","acceptedAnswer":{"@type":"Answer","text":"目的によります。当店は縮こまった筋肉を「ゆるめて伸ばす」ことに特化しており、運動との併用もおすすめです。"}}
+]}
+
+JSON-LD 2（LocalBusiness・application/ld+json のscriptタグで出力）:
+{"@context":"https://schema.org","@type":"HealthAndBeautyBusiness",
+ "name":"全力ストレッチ 岐阜長良店",
+ "description":"岐阜市長良の完全個室・マンツーマンのパーソナルストレッチ専門店。",
+ "address":{"@type":"PostalAddress","addressRegion":"岐阜県","addressLocality":"岐阜市","streetAddress":"長良東2-37 RSDビル2F南"},
+ "telephone":"+81-58-215-5835",
+ "openingHoursSpecification":{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],"opens":"10:00","closes":"22:00"},
+ "priceRange":"3300-26400JPY",
+ "url":"https://DOMAIN/"}
+
+実装時の注意:
+ ・H1は1ページ1つ（現状OK）。セクション見出しはh2、部位名などはh3でマークアップ
+ ・「こちらのお悩みも。」の関連カードはaタグ化し、アンカーテキストは「首こり・眼精疲労へのアプローチ」のように記述的にする
+ ・画像のalt属性は「肩甲骨まわりへのアプローチ（パーソナルストレッチ）」のように部位＋施術内容で記述
+ ・パンくずは BreadcrumbList の JSON-LD も追加推奨
+-->
+<div style="font-family:'Noto Sans JP',sans-serif;color:#1A1A1A;background:#F7F5F0;min-width:1200px">
+
+  <!-- header -->
+  <header style="display:flex;align-items:center;justify-content:space-between;height:92px;padding:0 56px">
+    <a href="全力ストレッチ TOP v5.dc.html" style="text-decoration:none;color:#1A1A1A;display:flex;align-items:center;gap:16px">
+      <img src="uploads/Group 89.png" alt="全力ストレッチ PHYSICAL CONDITIONING SALON" style="height:36px;width:auto">
+      <span style="font-size:17px;letter-spacing:0.24em;color:#777;font-weight:500">岐阜長良店</span>
+    </a>
+    <nav style="display:flex;align-items:center;gap:36px;font-size:13px;font-weight:500;color:#1A1A1A;letter-spacing:0.12em">
+      <span>Concept</span><span>Method</span><span>Symptoms</span><span>Staff</span><span>Price</span>
+      <span style="background:#1A1A1A;color:#F7F5F0;font-weight:700;font-size:13px;padding:12px 28px;letter-spacing:0.14em">ご予約</span>
+    </nav>
+  </header>
+
+  <!-- H1 + lead -->
+  <section data-screen-label="姿勢・猫背 H1" style="max-width:1360px;margin:0 auto;padding:120px 40px 130px">
+    <div style="font-size:14px;color:#777;margin-bottom:56px"><a href="全力ストレッチ TOP v5.dc.html" style="color:#777">トップ</a>　／　お悩み別　／　<span style="font-weight:700;color:#1A1A1A">姿勢・猫背</span></div>
+    <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;letter-spacing:0.35em;color:#999;margin-bottom:36px">Symptoms — 06</div>
+    <h1 style="font-weight:900;font-size:56px;line-height:1.45;margin:0 0 40px"><span style="display:inline-block;border:3px solid #1A1A1A;padding:0 18px;margin-right:6px;line-height:1.5">姿勢・猫背</span>でお悩みの方へ</h1>
+    <p style="font-size:17px;line-height:2.1;color:#333333;max-width:900px;margin:0 0 56px">ふと映った自分の姿にドキッとする。写真を見ると、いつも背中が丸い——。岐阜市長良のパーソナルストレッチ専門店「全力ストレッチ岐阜長良店」では、完全個室・マンツーマンのストレッチで、背すじだけでなく胸や骨盤、体幹の軸から姿勢のクセにアプローチします。</p>
+    <div style="border-top:1px solid #1A1A1A;max-width:900px;padding-top:28px">
+      <div style="font-family:'Noto Sans JP',sans-serif;font-weight:900;font-size:17px;margin-bottom:12px">マッサージ・整体との違い</div>
+      <p style="font-size:16px;line-height:2.1;color:#333333;margin:0">当店は治療院・整体院ではなく、岐阜市長良のパーソナルストレッチ専門店です。マッサージのように表面をもみほぐすのではなく、トレーナーと一対一で筋肉を「伸ばす」ことに特化。「もんだ直後は軽いのに、数日で戻ってしまう」という方こそ、縮こまった筋肉そのものを伸ばすストレッチとの違いを体感しやすいと言われています。自分では届かない胸や肩甲骨まわりの深層の筋肉まで、じっくりアプローチします。</p>
+    </div>
+    <img src="https://lh3.googleusercontent.com/d/1xzfVhj8pfjiVIduKgh2Og572FrHA7BHa=w1600" alt="肩まわりの施術シーン" style="width:100%;height:520px;object-fit:cover;object-position:center 50%;margin-top:72px;display:block">
+  </section>
+
+  <!-- なぜ起こる -->
+  <section data-screen-label="姿勢・猫背 なぜ起こる" style="background:#EFEDE6;border-top:1px solid rgba(26,26,26,0.15);padding:140px 40px">
+    <div style="max-width:1360px;margin:0 auto">
+      <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;letter-spacing:0.35em;color:#999;margin-bottom:36px">Why</div>
+      <h2 style="font-family:'Noto Sans JP',sans-serif;font-weight:900;font-size:40px;margin:0 0 48px">猫背・巻き肩は、なぜ起こる？</h2>
+      <!-- 猫背・巻き肩が進むサイクル 図解 -->
+      <div style="border:1px solid #1A1A1A;padding:56px 48px;margin-bottom:72px;background:#F7F5F0">
+        <div style="text-align:center;font-weight:900;font-size:26px;margin-bottom:48px">猫背・巻き肩が進むサイクル</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;justify-items:center">
+          <img src="https://lh3.googleusercontent.com/d/1ca-lWR04luA9uFCSk902EJxQVl25MYvg=w800" alt="首すじ・肩まわりのストレッチ" style="width:100%;height:520px;object-fit:cover;object-position:center 50%;display:block">
+          <div style="position:relative;width:640px;height:560px">
+            <svg viewBox="0 0 640 560" fill="none" style="position:absolute;left:0;top:0;width:640px;height:560px">
+              <defs><marker id="kkArw" markerUnits="userSpaceOnUse" markerWidth="26" markerHeight="26" refX="14" refY="13" orient="auto"><path d="M4 4 L 22 13 L 4 22 Z" fill="#C9C7C0"></path></marker></defs>
+              <path d="M372 77 A 190 190 0 0 1 478 154" stroke="#C9C7C0" stroke-width="9" marker-end="url(#kkArw)"></path>
+              <path d="M510 253 A 190 190 0 0 1 470 377" stroke="#C9C7C0" stroke-width="9" marker-end="url(#kkArw)"></path>
+              <path d="M385 439 A 190 190 0 0 1 255 439" stroke="#C9C7C0" stroke-width="9" marker-end="url(#kkArw)"></path>
+              <path d="M170 377 A 190 190 0 0 1 130 253" stroke="#C9C7C0" stroke-width="9" marker-end="url(#kkArw)"></path>
+              <path d="M163 154 A 190 190 0 0 1 183 128" stroke="#C9C7C0" stroke-width="9"></path>
+              <path d="M219 99 A 190 190 0 0 1 268 77" stroke="#C9C7C0" stroke-width="9" marker-end="url(#kkArw)"></path>
+            </svg>
+            <div style="position:absolute;left:142px;top:88px;border:2px solid #1A1A1A;background:#F7F5F0;font-weight:900;font-size:15px;padding:5px 13px">慢性化</div>
+          <div style="position:absolute;left:235px;top:0;width:170px;text-align:center">
+            <svg viewBox="0 0 120 80" fill="none" stroke="#1A1A1A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width:120px;height:80px;margin:0 auto 14px;display:block">
+            <path d="M36 16 C 26 30, 26 50, 36 64"></path><path d="M84 16 C 94 30, 94 50, 84 64"></path><path d="M46 40 L 56 40 M52 35 L 56 40 L 52 45"></path><path d="M74 40 L 64 40 M68 35 L 64 40 L 68 45"></path>
+          </svg>
+            <div style="display:inline-block;background:#1A1A1A;color:#F7F5F0;font-weight:700;font-size:13px;width:26px;height:26px;line-height:26px;border-radius:50%;margin-bottom:10px">1</div>
+            <div style="font-weight:900;font-size:16px;line-height:1.7">胸の筋肉の<br>縮こまり</div>
+          </div>
+          <div style="position:absolute;left:416px;top:116px;width:170px;text-align:center">
+            <svg viewBox="0 0 120 80" fill="none" stroke="#1A1A1A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width:120px;height:80px;margin:0 auto 14px;display:block">
+            <path d="M26 56 C 26 38, 40 30, 60 30 C 80 30, 94 38, 94 56"></path><path d="M32 32 C 26 38, 26 46, 32 50 M88 32 C 94 38, 94 46, 88 50" stroke-dasharray="4 5"></path><path d="M36 28 L 32 32 L 38 36 M84 28 L 88 32 L 82 36"></path>
+          </svg>
+            <div style="display:inline-block;background:#1A1A1A;color:#F7F5F0;font-weight:700;font-size:13px;width:26px;height:26px;line-height:26px;border-radius:50%;margin-bottom:10px">2</div>
+            <div style="font-weight:900;font-size:16px;line-height:1.7">肩が内側に<br>巻き込まれる</div>
+          </div>
+          <div style="position:absolute;left:347px;top:340px;width:170px;text-align:center">
+            <svg viewBox="0 0 120 80" fill="none" stroke="#1A1A1A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width:120px;height:80px;margin:0 auto 14px;display:block">
+            <circle cx="78" cy="24" r="11"></circle><path d="M68 32 C 56 40, 50 52, 48 66"></path><path d="M44 24 L 60 24" stroke-dasharray="4 5"></path><path d="M56 19 L 60 24 L 56 29"></path>
+          </svg>
+            <div style="display:inline-block;background:#1A1A1A;color:#F7F5F0;font-weight:700;font-size:13px;width:26px;height:26px;line-height:26px;border-radius:50%;margin-bottom:10px">3</div>
+            <div style="font-weight:900;font-size:16px;line-height:1.7">頭が前に出る</div>
+          </div>
+          <div style="position:absolute;left:123px;top:340px;width:170px;text-align:center">
+            <svg viewBox="0 0 120 80" fill="none" stroke="#1A1A1A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width:120px;height:80px;margin:0 auto 14px;display:block">
+            <path d="M30 62 L 90 62"></path><path d="M60 14 L 60 50 M51 42 L 60 51 L 69 42" stroke-width="3.5"></path><path d="M38 62 C 40 56, 44 54, 48 56 M82 62 C 80 56, 76 54, 72 56"></path>
+          </svg>
+            <div style="display:inline-block;background:#1A1A1A;color:#F7F5F0;font-weight:700;font-size:13px;width:26px;height:26px;line-height:26px;border-radius:50%;margin-bottom:10px">4</div>
+            <div style="font-weight:900;font-size:16px;line-height:1.7">背中・首への<br>負担増</div>
+          </div>
+          <div style="position:absolute;left:54px;top:116px;width:170px;text-align:center">
+            <svg viewBox="0 0 120 80" fill="none" stroke="#1A1A1A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width:120px;height:80px;margin:0 auto 14px;display:block">
+            <path d="M38 66 C 34 50, 42 34, 58 30 C 74 26, 86 34, 88 46" stroke-dasharray="5 6"></path><path d="M56 46 L 78 46 L 78 64 L 56 64 Z"></path><path d="M61 46 L 61 39 C 61 33, 73 33, 73 39 L 73 46"></path>
+          </svg>
+            <div style="display:inline-block;background:#1A1A1A;color:#F7F5F0;font-weight:700;font-size:13px;width:26px;height:26px;line-height:26px;border-radius:50%;margin-bottom:10px">5</div>
+            <div style="font-weight:900;font-size:16px;line-height:1.7">姿勢のクセの定着</div>
+          </div>
+        </div>
+        </div>
+        <p style="text-align:center;font-size:15px;color:#555;margin:36px 0 0">クセがさらに縮こまりを生み、①へ戻る悪循環が続きます。</p>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:28px">
+        <div style="text-align:center">
+          <svg viewBox="0 0 96 96" fill="none" stroke="#1A1A1A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width:88px;height:88px;margin:0 auto 22px;display:block">
+            <circle cx="40" cy="26" r="9"></circle>
+            <path d="M40 35 C 33 38, 30 44, 29 52 L 27 66"></path>
+            <path d="M40 40 L 55 50 L 66 44"></path>
+            <path d="M14 78 L 82 78"></path>
+            <path d="M56 60 L 78 60 L 78 78"></path>
+            <path d="M56 60 L 56 78"></path>
+          </svg>
+          <div style="font-weight:900;font-size:17px;line-height:1.8;border-bottom:1px solid #1A1A1A;padding-bottom:24px">長時間のデスクワーク・<br>スマホ操作</div>
+        </div>
+        <div style="text-align:center">
+          <svg viewBox="0 0 96 96" fill="none" stroke="#1A1A1A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width:88px;height:88px;margin:0 auto 22px;display:block">
+            <circle cx="54" cy="22" r="9"></circle>
+            <path d="M52 31 C 44 38, 40 48, 40 58 C 40 68, 42 76, 44 82"></path>
+            <path d="M52 40 C 58 46, 60 54, 58 62"></path>
+            <path d="M30 40 C 34 34, 40 32, 46 34" stroke-dasharray="4 6"></path>
+          </svg>
+          <div style="font-weight:900;font-size:17px;line-height:1.8;border-bottom:1px solid #1A1A1A;padding-bottom:24px">頭が前に出る<br>姿勢のクセ</div>
+        </div>
+        <div style="text-align:center">
+          <svg viewBox="0 0 96 96" fill="none" stroke="#1A1A1A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width:88px;height:88px;margin:0 auto 22px;display:block">
+            <path d="M30 24 C 20 36, 20 56, 30 68"></path><path d="M66 24 C 76 36, 76 56, 66 68"></path><path d="M36 46 L 46 46 M42 41 L 46 46 L 42 51"></path><path d="M60 46 L 50 46 M54 41 L 50 46 L 54 51"></path>
+          </svg>
+          <div style="font-weight:900;font-size:17px;line-height:1.8;border-bottom:1px solid #1A1A1A;padding-bottom:24px">胸の筋肉の<br>縮こまり</div>
+        </div>
+        <div style="text-align:center">
+          <svg viewBox="0 0 96 96" fill="none" stroke="#1A1A1A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width:88px;height:88px;margin:0 auto 22px;display:block">
+            <circle cx="52" cy="22" r="9"></circle><path d="M50 31 C 42 40, 38 52, 40 64 L 42 80"></path><path d="M58 40 C 64 48, 66 58, 62 68" stroke-dasharray="4 6"></path><path d="M18 84 L 78 84"></path>
+          </svg>
+          <div style="font-weight:900;font-size:17px;line-height:1.8;border-bottom:1px solid #1A1A1A;padding-bottom:24px">運動不足で背中の筋肉が<br>働きにくい</div>
+        </div>
+      </div>
+      <p style="font-size:16px;line-height:2.2;color:#333333;margin:64px 0 0;max-width:900px">デスクワークやスマホ操作で前かがみの姿勢が続くと、胸の筋肉が縮こまり、肩が内側に巻き込まれやすくなると言われています。背すじを無理に「伸ばす」のではなく、縮んだ側を「ゆるめる」ことが、ラクに姿勢を保つ近道です。</p>
+    </div>
+  </section>
+
+  <!-- アプローチ -->
+  <section data-screen-label="姿勢・猫背 アプローチ" style="padding:140px 40px">
+    <div style="max-width:1360px;margin:0 auto">
+      <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;letter-spacing:0.35em;color:#999;margin-bottom:36px">Approach</div>
+      <h2 style="font-family:'Noto Sans JP',sans-serif;font-weight:900;font-size:40px;margin:0 0 48px">当店の姿勢・猫背へのアプローチ</h2>
+      <div style="display:grid;grid-template-columns:1fr 380px;gap:88px;align-items:start">
+        <div>
+          <p style="font-size:16px;line-height:2.2;color:#333333;margin:0 0 24px">背中だけをもむのではなく、ZST協会認定「体幹軸調整法」にもとづくザウルス式ストレッチで、猫背・巻き肩と関わりの深い部位をまとめて伸ばしていきます。縮こまった胸を開き、肩甲骨まわりを動かし、姿勢の土台となる骨盤までアプローチ。担当するのは、認定研修を受けた専門トレーナーです。</p>
+          <p style="font-size:16px;line-height:2.2;color:#333333;margin:0 0 48px">完全個室・マンツーマンなので、人目を気にせず、その日の状態に合わせた強さでじっくり伸ばせます。営業は22時まで・駐車場10台以上。仕事帰りのデスクワークの方や、ゴルフなどスポーツ前後のケアにも通いやすい環境です。施術後には、ご自宅でできる姿勢・猫背向けセルフストレッチもご提案します。</p>
+          <img src="https://lh3.googleusercontent.com/d/105114c6Clly8-jSlqiyjTY1qI-RBGmBZ=w1000" alt="肩甲骨まわりへのアプローチ" style="width:100%;height:380px;object-fit:cover;object-position:center 100%;display:block">
+        </div>
+        <div>
+          <div style="font-family:'Noto Sans JP',sans-serif;font-weight:900;font-size:24px;margin-bottom:32px;border-top:1px solid #1A1A1A;padding-top:32px">アプローチする主な部位</div>
+          <div style="display:flex;flex-direction:column;gap:32px">
+            <div style="display:flex;gap:20px;align-items:baseline"><svg style="width:26px;height:23px;flex:none;transform:translateY(4px)" viewBox="0 0 28 24" fill="none"><path d="M4 13 L 11 20 L 25 4" stroke="#1A1A1A" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"></path></svg><span style="font-size:20px;line-height:1.9"><span style="font-weight:900;font-size:22px">胸（大胸筋）</span><br><span style="color:#333333;font-size:17px">縮こまって肩を内に巻き込む筋肉</span></span></div>
+            <div style="display:flex;gap:20px;align-items:baseline"><svg style="width:26px;height:23px;flex:none;transform:translateY(4px)" viewBox="0 0 28 24" fill="none"><path d="M4 13 L 11 20 L 25 4" stroke="#1A1A1A" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"></path></svg><span style="font-size:20px;line-height:1.9"><span style="font-weight:900;font-size:22px">肩甲骨まわり</span><br><span style="color:#333333;font-size:17px">動きが少なくなりがちな背中側</span></span></div>
+            <div style="display:flex;gap:20px;align-items:baseline"><svg style="width:26px;height:23px;flex:none;transform:translateY(4px)" viewBox="0 0 28 24" fill="none"><path d="M4 13 L 11 20 L 25 4" stroke="#1A1A1A" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"></path></svg><span style="font-size:20px;line-height:1.9"><span style="font-weight:900;font-size:22px">骨盤まわり</span><br><span style="color:#333333;font-size:17px">姿勢の土台となる要の部位</span></span></div>
+            <div style="display:flex;gap:20px;align-items:baseline"><svg style="width:26px;height:23px;flex:none;transform:translateY(4px)" viewBox="0 0 28 24" fill="none"><path d="M4 13 L 11 20 L 25 4" stroke="#1A1A1A" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"></path></svg><span style="font-size:20px;line-height:1.9"><span style="font-weight:900;font-size:22px">首すじ〜後頭部</span><br><span style="color:#333333;font-size:17px">頭が前に出る姿勢と関わる部位</span></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 流れ -->
+  <section data-screen-label="姿勢・猫背 施術の流れ" style="background:#EFEDE6;border-top:1px solid rgba(26,26,26,0.15);padding:140px 40px">
+    <div style="max-width:1360px;margin:0 auto">
+      <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;letter-spacing:0.35em;color:#999;margin-bottom:36px">Flow</div>
+      <h2 style="font-family:'Noto Sans JP',sans-serif;font-weight:900;font-size:40px;margin:0 0 72px">施術の流れ</h2>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:48px">
+        <div style="border-top:1px solid #1A1A1A;padding-top:28px">
+          <div style="font-family:'Noto Sans JP',sans-serif;font-weight:900;font-size:13px;letter-spacing:0.25em;color:#999999;margin-bottom:18px">01</div>
+          
+          <div style="font-family:'Noto Sans JP',sans-serif;font-weight:900;font-size:19px;margin-bottom:12px">カウンセリング</div>
+          <p style="font-size:15px;line-height:2;color:#333333;margin:0">気になる部位や生活習慣を、個室でゆっくり伺います。</p>
+        </div>
+        <div style="border-top:1px solid #1A1A1A;padding-top:28px">
+          <div style="font-family:'Noto Sans JP',sans-serif;font-weight:900;font-size:13px;letter-spacing:0.25em;color:#999999;margin-bottom:18px">02</div>
+          
+          <div style="font-family:'Noto Sans JP',sans-serif;font-weight:900;font-size:19px;margin-bottom:12px">体の状態チェック</div>
+          <p style="font-size:15px;line-height:2;color:#333333;margin:0">姿勢や可動域を確認し、その日の内容を組み立てます。</p>
+        </div>
+        <div style="border-top:1px solid #1A1A1A;padding-top:28px">
+          <div style="font-family:'Noto Sans JP',sans-serif;font-weight:900;font-size:13px;letter-spacing:0.25em;color:#999999;margin-bottom:18px">03</div>
+          
+          <div style="font-family:'Noto Sans JP',sans-serif;font-weight:900;font-size:19px;margin-bottom:12px">ザウルス式ストレッチ</div>
+          <p style="font-size:15px;line-height:2;color:#333333;margin:0">痛気持ちいい強さで、深層の筋肉までマンツーマンで伸ばします。</p>
+        </div>
+        <div style="border-top:1px solid #1A1A1A;padding-top:28px">
+          <div style="font-family:'Noto Sans JP',sans-serif;font-weight:900;font-size:13px;letter-spacing:0.25em;color:#999999;margin-bottom:18px">04</div>
+          
+          <div style="font-family:'Noto Sans JP',sans-serif;font-weight:900;font-size:19px;margin-bottom:12px">アフターチェック</div>
+          <p style="font-size:15px;line-height:2;color:#333333;margin:0">施術前との違いを確認し、セルフケアをご提案します。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- voice -->
+  <section data-screen-label="姿勢・猫背 お客様の声" style="padding:140px 40px">
+    <div style="max-width:1360px;margin:0 auto">
+      <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;letter-spacing:0.35em;color:#999;margin-bottom:36px">Voice</div>
+      <h2 style="font-family:'Noto Sans JP',sans-serif;font-weight:900;font-size:40px;margin:0 0 64px">お客様の声</h2>
+      <div style="border:1px dashed #D9D9D5;border-radius:4px;padding:64px 40px;text-align:center">
+        <div style="font-family:'Noto Sans JP',sans-serif;font-weight:900;font-size:18px;color:#333333;margin-bottom:12px">掲載準備中</div>
+        <div style="font-size:15px;line-height:2.1;color:#333333">姿勢・猫背でご来店いただいたお客様の声を、準備が整いしだい掲載します。<br>※実際のお客様の声のみを掲載します。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- price -->
+  <section data-screen-label="姿勢・猫背 料金" style="background:#EFEDE6;border-top:1px solid rgba(26,26,26,0.15);padding:140px 40px">
+    <div style="max-width:1360px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:88px;align-items:center">
+      <div>
+        <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;letter-spacing:0.35em;color:#999;margin-bottom:36px">Price</div>
+        <h2 style="font-family:'Noto Sans JP',sans-serif;font-weight:900;font-size:40px;line-height:1.5;margin:0 0 24px">まずは、初回3,300円から。</h2>
+        <p style="font-size:16px;line-height:2.1;color:#333333;margin:0 0 40px">姿勢へのアプローチは60分コースがおすすめです。全身をじっくり伸ばしたい方は90分コースをどうぞ。</p>
+        <img src="https://lh3.googleusercontent.com/d/1xzfVhj8pfjiVIduKgh2Og572FrHA7BHa=w1000" alt="マンツーマンの施術" style="width:100%;height:300px;object-fit:cover;object-position:center 50%;margin-bottom:40px;display:block">
+        <div style="display:flex;align-items:center;gap:28px">
+          <span style="background:#1A1A1A;color:#FFFFFF;font-family:'Noto Sans JP',sans-serif;font-weight:900;font-size:16px;letter-spacing:0.08em;padding:20px 44px;border-radius:999px">初回価格で予約する</span>
+          <span style="font-size:14px;color:#333333;border-bottom:1px solid #333333;padding-bottom:3px">LINEで相談</span>
+        </div>
+      </div>
+      <div>
+        <div style="display:inline-block;background:#FF9C46;color:#1A1A1A;font-family:'Noto Sans JP',sans-serif;font-weight:900;font-size:13px;letter-spacing:0.14em;padding:8px 18px;border-radius:4px;margin-bottom:24px">初回限定 75%OFF</div>
+        <div style="border-top:1px solid #1A1A1A">
+          <div style="display:flex;align-items:baseline;gap:18px;padding:28px 4px;border-bottom:1px solid #EAEAEA">
+            <span style="font-family:'Noto Sans JP',sans-serif;font-weight:900;font-size:17px;width:52px">60分</span>
+            <span style="font-size:14px;color:#333333;text-decoration:line-through">13,200円</span>
+            <span style="font-family:'Noto Sans JP',sans-serif;font-weight:900;font-size:38px;margin-left:auto">3,300<span style="font-size:15px;font-weight:700">円（税込）</span></span>
+          </div>
+          <div style="display:flex;align-items:baseline;gap:18px;padding:28px 4px;border-bottom:1px solid #EAEAEA">
+            <span style="font-family:'Noto Sans JP',sans-serif;font-weight:900;font-size:17px;width:52px">90分</span>
+            <span style="font-size:14px;color:#333333;text-decoration:line-through">19,800円</span>
+            <span style="font-family:'Noto Sans JP',sans-serif;font-weight:900;font-size:38px;margin-left:auto">4,900<span style="font-size:15px;font-weight:700">円（税込）</span></span>
+          </div>
+        </div>
+        <p style="font-size:13px;line-height:2;color:#333333;margin:20px 0 0">※おひとり様1回限り。2回目以降は通常料金です。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section data-screen-label="姿勢・猫背 FAQ" style="padding:140px 40px">
+    <div style="max-width:1100px;margin:0 auto">
+      <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;letter-spacing:0.35em;color:#999;margin-bottom:36px">FAQ</div>
+      <h2 style="font-family:'Noto Sans JP',sans-serif;font-weight:900;font-size:40px;margin:0 0 64px">よくあるご質問</h2>
+      <div style="border-top:1px solid #1A1A1A">
+        <sc-for list="{{ faqs }}" as="faq" hint-placeholder-count="5">
+          <div style="border-bottom:1px solid #EAEAEA">
+            <div onClick="{{ faq.toggle }}" style="display:flex;justify-content:space-between;align-items:center;gap:24px;padding:28px 8px;cursor:pointer">
+              <div style="display:flex;gap:20px;align-items:baseline"><span style="font-family:'Noto Sans JP',sans-serif;font-weight:900;font-size:15px;flex:none;color:#999999">Q</span><span style="font-family:'Noto Sans JP',sans-serif;font-weight:900;font-size:18px;line-height:1.7">{{ faq.q }}</span></div>
+              <span style="font-family:'Noto Sans JP',sans-serif;font-weight:900;font-size:22px;flex:none;color:#999999">{{ faq.mark }}</span>
+            </div>
+            <sc-if value="{{ faq.open }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;gap:20px;align-items:baseline;padding:0 8px 32px"><span style="font-family:'Noto Sans JP',sans-serif;font-weight:900;font-size:15px;flex:none;color:#999999">A</span><p style="font-size:16px;line-height:2.1;color:#333333;margin:0">{{ faq.a }}</p></div>
+            </sc-if>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <!-- related -->
+  <section data-screen-label="姿勢・猫背 関連リンク" style="background:#EFEDE6;border-top:1px solid rgba(26,26,26,0.15);padding:140px 40px">
+    <div style="max-width:1360px;margin:0 auto">
+      <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;letter-spacing:0.35em;color:#999;margin-bottom:36px">Related</div>
+      <h2 style="font-family:'Noto Sans JP',sans-serif;font-weight:900;font-size:40px;margin:0 0 64px">こちらのお悩みも。</h2>
+      <div style="border-top:1px solid #1A1A1A">
+        <div style="display:grid;grid-template-columns:260px 1fr 32px;gap:32px;align-items:baseline;padding:28px 8px;border-bottom:1px solid #EAEAEA">
+          <span style="font-family:'Noto Sans JP',sans-serif;font-weight:900;font-size:20px">首こり・眼精疲労</span>
+          <span style="font-size:15px;line-height:2;color:#333333">姿勢・猫背と関わりの深い首すじのお悩みへ</span>
+          <span style="font-weight:700;font-size:18px;text-align:right">→</span>
+        </div>
+        <div style="display:grid;grid-template-columns:260px 1fr 32px;gap:32px;align-items:baseline;padding:28px 8px;border-bottom:1px solid #EAEAEA">
+          <span style="font-family:'Noto Sans JP',sans-serif;font-weight:900;font-size:20px">肩こり</span>
+          <span style="font-size:15px;line-height:2;color:#333333">重だるい肩、デスクワークの張りが気になる方へ</span>
+          <span style="font-weight:700;font-size:18px;text-align:right">→</span>
+        </div>
+        <div style="display:grid;grid-template-columns:260px 1fr 32px;gap:32px;align-items:baseline;padding:28px 8px;border-bottom:1px solid #EAEAEA">
+          <span style="font-family:'Noto Sans JP',sans-serif;font-weight:900;font-size:20px">疲れ・睡眠</span>
+          <span style="font-size:15px;line-height:2;color:#333333">休んでもスッキリしない方へ</span>
+          <span style="font-weight:700;font-size:18px;text-align:right">→</span>
+        </div>
+      </div>
+      <div style="margin-top:48px"><a href="全力ストレッチ TOP v5.dc.html" style="color:#1A1A1A;font-size:15px;font-weight:700">← トップページへ戻る</a></div>
+    </div>
+  </section>
+
+  <!-- reserve -->
+  <section data-screen-label="姿勢・猫背 予約CTA" style="background:#1A1A1A;color:#FFFFFF;padding:150px 40px;text-align:center">
+    <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:18px;letter-spacing:0.3em;color:#8A8884;margin-bottom:44px">Reservation</div>
+    <h2 style="font-family:'Noto Sans JP',sans-serif;font-weight:900;font-size:44px;line-height:1.5;margin:0 0 24px;color:#FFFFFF">気になる姿勢のクセ、一度ご相談ください。</h2>
+    <p style="font-size:16px;line-height:2;color:#F2F2F0;margin:0 0 64px">初回限定 60分 3,300円（税込）／完全個室・マンツーマン</p>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:36px">
+      <span style="background:#FF9C46;color:#1A1A1A;font-family:'Noto Sans JP',sans-serif;font-weight:900;font-size:18px;letter-spacing:0.06em;padding:24px 72px;border-radius:999px">WEB予約はこちら（ホットペッパー）</span>
+      <div style="display:flex;align-items:center;gap:48px;font-size:15px;color:#F2F2F0">
+        <span style="border-bottom:1px solid rgba(255,255,255,0.5);padding-bottom:4px">LINEで予約・相談</span>
+        <span>TEL 058-215-5835（10:00–22:00・不定休）</span>
+      </div>
+    </div>
+  </section>
+
+  <footer style="padding:56px;display:flex;justify-content:space-between;align-items:flex-start;gap:40px;border-top:1px solid #EAEAEA">
+    <div>
+      <div style="font-family:'Noto Sans JP',sans-serif;font-weight:900;font-size:18px;margin-bottom:10px">全力ストレッチ 岐阜長良店</div>
+      <div style="font-size:13px;line-height:2;color:#333333">岐阜県岐阜市長良東2-37 RSDビル2F南　／　10:00–22:00（不定休）　／　058-215-5835</div>
+    </div>
+    <div style="font-size:12px;line-height:2;color:#333333;text-align:right">※当店はリラクゼーションを目的としたストレッチ専門店であり、<br>医療行為を行う施設ではありません。<br>© 全力ストレッチ 岐阜長良店</div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;showHandwritten&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;表示オプション&quot;}}">
+class Component extends DCLogic {
+  state = { open: 0 };
+
+  renderVals() {
+    const data = [
+      { q: "予約は必要ですか？", a: "完全予約制です。WEB（ホットペッパー）・LINE・お電話（058-215-5835）からご予約いただけます。" },
+      { q: "どんな服装で行けばいいですか？", a: "動きやすい服装がおすすめです。お仕事帰りなどスーツでお越しの場合は、事前にご相談ください。" },
+      { q: "痛くないですか？", a: "会話をしながら「痛気持ちいい」範囲で行います。強さはその場で調整しますので、遠慮なくお声がけください。" },
+      { q: "男性でも利用できますか？", a: "はい。デスクワークやゴルフをされる30〜60代の男性のお客様に多くご利用いただいています。" },
+      { q: "マッサージや整体とは何が違うのですか？", a: "当店は治療院・整体院ではなく、ストレッチ専門店です。もみほぐすのではなく、マンツーマンで筋肉を「伸ばす」ことに特化しています。" },
+      { q: "どれくらいの頻度で通うのがおすすめですか？", a: "体の状態や目的によりますが、最初は1〜2週間に1回のペースでご利用いただく方が多いです。カウンセリングの際に、無理のない通い方をご提案します。" },
+      { q: "駐車場はありますか？岐阜市外からでも通えますか？", a: "店舗前に10台以上の駐車場をご用意しています。ヤマダデンキ テックランド岐阜長良店のすぐそばで、岐阜市外からもお車で通いやすい立地です。" },
+      { q: "姿勢は一回で変わりますか？", a: "感じ方には個人差があります。施術前後の姿勢チェックで変化を確認しながら、続けやすいペースとご自宅でのセルフストレッチをご提案します。" },
+      { q: "筋トレとどちらが良いですか？", a: "目的によります。当店は縮こまった筋肉を「ゆるめて伸ばす」ことに特化しており、運動との併用もおすすめです。" },
+    ];
+    return {
+      showHandwritten: this.props.showHandwritten ?? true,
+      faqs: data.map((f, i) => ({
+        ...f,
+        open: this.state.open === i,
+        mark: this.state.open === i ? "−" : "＋",
+        toggle: () => this.setState({ open: this.state.open === i ? -1 : i }),
+      })),
+    };
+  }
+}
+</script>
+</body>
+</html>

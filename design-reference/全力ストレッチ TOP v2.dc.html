@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Zen+Kaku+Gothic+New:wght@700;900&family=Yomogi&display=swap" rel="stylesheet">
+<style>body{margin:0;background:#E9E8E4}image-slot{display:block;width:100%;height:100%}</style>
+</helmet>
+<section style="padding:56px;display:flex;gap:64px;align-items:flex-start;font-family:'Noto Sans JP',sans-serif">
+
+<!-- ============ PC 1440 ============ -->
+<div id="top-pc" style="flex:none;display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;align-items:baseline;gap:10px"><span style="font:700 11px ui-monospace,Menlo,monospace;padding:3px 8px;background:#1A1A1A;color:#fff;border-radius:4px">TOP v2 / PC 1440</span><a href="全力ストレッチ 症状_肩こり v2.dc.html" style="font-size:12px;color:#333">→ 症状ページ（肩こり）v2 を見る</a></div>
+<div style="width:1440px;background:#FFFFFF;border:1px solid rgba(0,0,0,0.08);box-shadow:0 2px 10px rgba(0,0,0,0.06);color:#1A1A1A">
+
+  <!-- header -->
+  <header style="display:flex;align-items:center;justify-content:space-between;height:96px;padding:0 56px;border-bottom:1px solid #EAEAEA">
+    <div style="display:flex;flex-direction:column;gap:3px">
+      <div style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:900;font-size:21px;letter-spacing:0.08em;color:#1A1A1A">全力ストレッチ</div>
+      <div style="font-size:10px;letter-spacing:0.3em;color:#999999">PERSONAL STRETCH — GIFU NAGARA</div>
+    </div>
+    <nav style="display:flex;align-items:center;gap:36px;font-size:14px;font-weight:500;color:#333333">
+      <span>コンセプト</span><span>施術内容</span><span>お悩み別</span><span>スタッフ</span><span>料金・アクセス</span>
+    </nav>
+    <div style="display:flex;align-items:center;gap:28px">
+      <div style="text-align:right">
+        <div style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:700;font-size:16px;letter-spacing:0.04em">058-215-5835</div>
+        <div style="font-size:11px;color:#333333;letter-spacing:0.06em">10:00–22:00（不定休）</div>
+      </div>
+      <div style="background:#1A1A1A;color:#FFFFFF;font-weight:700;font-size:14px;padding:14px 30px;border-radius:999px;letter-spacing:0.08em">ご予約</div>
+    </div>
+  </header>
+
+  <!-- hero: text left / full-bleed photo right -->
+  <section data-screen-label="TOP-PC ヒーロー" style="display:grid;grid-template-columns:620px 1fr;min-height:840px">
+    <div style="display:flex;flex-direction:column;justify-content:center;padding:80px 64px 80px 88px">
+      <div style="font-size:12px;letter-spacing:0.35em;color:#999999;font-weight:500;margin-bottom:40px">PERSONAL STRETCH GIFU NAGARA</div>
+      <h1 style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:900;font-size:56px;line-height:1.42;letter-spacing:0.02em;margin:0 0 36px;color:#1A1A1A">がんばる体に、<br><span style="position:relative;display:inline-block">全力<sc-if value="{{ showHandwritten }}" hint-placeholder-val="{{ true }}"><svg style="position:absolute;left:-3px;bottom:-10px;width:calc(100% + 6px);height:13px;overflow:visible" viewBox="0 0 120 12" preserveAspectRatio="none" fill="none"><path d="M4 8 C 30 3, 72 11, 116 5" stroke="#FF9C46" stroke-width="6" stroke-linecap="round"></path></svg></sc-if></span>のストレッチを。</h1>
+      <p style="font-size:17px;line-height:2;color:#333333;margin:0 0 56px">岐阜市長良の完全個室・マンツーマン<br>パーソナルストレッチ専門店。</p>
+      <div style="display:flex;align-items:baseline;gap:14px;margin-bottom:36px">
+        <span style="font-size:13px;letter-spacing:0.14em;color:#333333;font-weight:500">初回限定</span>
+        <span style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:700;font-size:16px">60分</span>
+        <span style="font-size:15px;color:#333333;text-decoration:line-through">13,200円</span>
+        <span style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:900;font-size:34px;letter-spacing:0.02em">3,300<span style="font-size:15px;font-weight:700">円（税込）</span></span>
+      </div>
+      <div style="display:flex;align-items:center;gap:24px">
+        <span style="background:#FF9C46;color:#1A1A1A;font-family:'Zen Kaku Gothic New',sans-serif;font-weight:700;font-size:16px;letter-spacing:0.08em;padding:20px 48px;border-radius:999px">WEB予約はこちら</span>
+        <span style="font-size:13px;color:#333333">TEL 058-215-5835<br>10:00–22:00（不定休）</span>
+      </div>
+    </div>
+    <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="hero" shape="rect" placeholder="施術シーンの写真（自然光・40〜50代男性のお客様）" style="width:100%;height:100%;display:block" hint-size="820px,840px"></x-import>
+  </section>
+
+  <!-- CONCEPT: photo 6 / text 4 asymmetric -->
+  <section data-screen-label="TOP-PC CONCEPT" style="border-top:1px solid #EAEAEA;padding:150px 88px">
+    <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:96px;align-items:center">
+      <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="room" shape="rounded" radius="4" placeholder="個室の写真（明るい室内・縦長）" style="width:100%;height:720px;display:block" hint-size="720px,720px"></x-import>
+      <div>
+        <div style="font-size:12px;letter-spacing:0.35em;color:#999999;font-weight:500;margin-bottom:36px">CONCEPT</div>
+        <h2 style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:900;font-size:40px;line-height:1.5;letter-spacing:0.02em;margin:0 0 36px"><span style="position:relative;display:inline-block;padding:0 4px">完全個室<sc-if value="{{ showHandwritten }}" hint-placeholder-val="{{ true }}"><svg style="position:absolute;left:-16px;top:-12px;width:calc(100% + 32px);height:calc(100% + 24px);overflow:visible" viewBox="0 0 160 60" preserveAspectRatio="none" fill="none"><path d="M84 5 C 130 4, 155 15, 153 30 C 151 47, 112 57, 73 56 C 34 55, 7 45, 8 29 C 9 14, 44 6, 98 6" stroke="#FF9C46" stroke-width="3.5" stroke-linecap="round"></path></svg></sc-if></span>だから、<br>人目を気にせず。</h2>
+        <p style="font-size:16px;line-height:2.1;color:#333333;margin:0 0 64px">治療院や整体院ではなく、マンツーマンのパーソナルストレッチ専門店。扉の閉まる静かな個室で、ふだん自分では伸ばせない深い部分までじっくりストレッチします。</p>
+        <div style="border-top:1px solid #EAEAEA">
+          <div style="display:flex;gap:28px;padding:28px 4px;border-bottom:1px solid #EAEAEA;align-items:baseline">
+            <span style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:900;font-size:14px;letter-spacing:0.1em;flex:none;color:#999999">01</span>
+            <div><div style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:700;font-size:18px;margin-bottom:6px">完全個室・マンツーマン</div><div style="font-size:15px;line-height:1.9;color:#333333">施術中に、ほかのお客様と顔を合わせることはありません。</div></div>
+          </div>
+          <div style="display:flex;gap:28px;padding:28px 4px;border-bottom:1px solid #EAEAEA;align-items:baseline">
+            <span style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:900;font-size:14px;letter-spacing:0.1em;flex:none;color:#999999">02</span>
+            <div><div style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:700;font-size:18px;margin-bottom:6px">一人ひとりに合わせた内容</div><div style="font-size:15px;line-height:1.9;color:#333333">毎回カウンセリングから。体の状態に合わせて組み立てます。</div></div>
+          </div>
+          <div style="display:flex;gap:28px;padding:28px 4px;border-bottom:1px solid #EAEAEA;align-items:baseline">
+            <span style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:900;font-size:14px;letter-spacing:0.1em;flex:none;color:#999999">03</span>
+            <div><div style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:700;font-size:18px;margin-bottom:6px">無理のない強さで</div><div style="font-size:15px;line-height:1.9;color:#333333">会話をしながら、痛気持ちいい範囲で少しずつ深く伸ばします。</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- METHOD: no boxes, number + thin top rule -->
+  <section data-screen-label="TOP-PC METHOD" style="background:#FAFAF8;border-top:1px solid #EAEAEA;padding:150px 88px">
+    <div style="font-size:12px;letter-spacing:0.35em;color:#999999;font-weight:500;margin-bottom:36px">METHOD</div>
+    <h2 style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:900;font-size:42px;line-height:1.4;margin:0 0 28px">「ザウルス式」、3つの柱。</h2>
+    <p style="font-size:16px;line-height:2;color:#333333;max-width:680px;margin:0 0 88px">元格闘家のオーナーが考案した、体幹軸調整ストレッチ。もみほぐしではなく、体の軸をつくる筋肉へのストレッチで、深い部分からアプローチします。</p>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:64px">
+      <div style="border-top:1px solid #1A1A1A;padding-top:36px">
+        <div style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:900;font-size:14px;letter-spacing:0.25em;color:#999999;margin-bottom:24px">01</div>
+        <h3 style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:700;font-size:23px;line-height:1.5;margin:0 0 18px">骨盤へのアプローチ</h3>
+        <p style="font-size:16px;line-height:2;color:#333333;margin:0">体の土台となる骨盤まわりの筋肉をゆるめ、軸を意識しやすい状態へ整えていきます。</p>
+      </div>
+      <div style="border-top:1px solid #1A1A1A;padding-top:36px">
+        <div style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:900;font-size:14px;letter-spacing:0.25em;color:#999999;margin-bottom:24px">02</div>
+        <h3 style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:700;font-size:23px;line-height:1.5;margin:0 0 18px">猫背・巻き肩へのアプローチ</h3>
+        <p style="font-size:16px;line-height:2;color:#333333;margin:0">縮こまりがちな胸や肩まわりの筋肉を伸ばし、胸を開きやすい状態を目指します。</p>
+      </div>
+      <div style="border-top:1px solid #1A1A1A;padding-top:36px">
+        <div style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:900;font-size:14px;letter-spacing:0.25em;color:#999999;margin-bottom:24px">03</div>
+        <h3 style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:700;font-size:23px;line-height:1.5;margin:0 0 18px">筋膜ほぐし＋深層筋ストレッチ</h3>
+        <p style="font-size:16px;line-height:2;color:#333333;margin:0">表層をほぐしてから、自分では届きにくい深層の筋肉までじっくりストレッチします。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SYMPTOMS: quiet ruled list -->
+  <section data-screen-label="TOP-PC SYMPTOMS" style="border-top:1px solid #EAEAEA;padding:150px 88px">
+    <div style="display:grid;grid-template-columns:380px 1fr;gap:96px;align-items:start">
+      <div>
+        <div style="font-size:12px;letter-spacing:0.35em;color:#999999;font-weight:500;margin-bottom:36px">SYMPTOMS</div>
+        <h2 style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:900;font-size:42px;line-height:1.4;margin:0 0 28px">お悩みから探す。</h2>
+        <p style="font-size:16px;line-height:2;color:#333333;margin:0">気になるお悩みに合わせて、<br>アプローチの内容をご紹介します。</p>
+      </div>
+      <div style="border-top:1px solid #1A1A1A">
+        <a href="全力ストレッチ 症状_肩こり v2.dc.html" style="text-decoration:none;color:#1A1A1A;display:grid;grid-template-columns:240px 1fr 32px;gap:32px;align-items:baseline;padding:30px 8px;border-bottom:1px solid #EAEAEA">
+          <span style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:700;font-size:21px">肩こり</span>
+          <span style="font-size:15px;line-height:1.9;color:#333333">重だるい肩、デスクワークの張りが気になる方へ</span>
+          <span style="font-weight:700;font-size:18px;text-align:right">→</span>
+        </a>
+        <div style="display:grid;grid-template-columns:240px 1fr 32px;gap:32px;align-items:baseline;padding:30px 8px;border-bottom:1px solid #EAEAEA">
+          <span style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:700;font-size:21px">腰痛・お尻や脚の張り</span>
+          <span style="font-size:15px;line-height:1.9;color:#333333">座りっぱなし・立ちっぱなしの腰まわりに</span>
+          <span style="font-weight:700;font-size:18px;text-align:right">→</span>
+        </div>
+        <div style="display:grid;grid-template-columns:240px 1fr 32px;gap:32px;align-items:baseline;padding:30px 8px;border-bottom:1px solid #EAEAEA">
+          <span style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:700;font-size:21px">首こり・眼精疲労</span>
+          <span style="font-size:15px;line-height:1.9;color:#333333">スマホやPCで固まった首すじが気になる方へ</span>
+          <span style="font-weight:700;font-size:18px;text-align:right">→</span>
+        </div>
+        <div style="display:grid;grid-template-columns:240px 1fr 32px;gap:32px;align-items:baseline;padding:30px 8px;border-bottom:1px solid #EAEAEA">
+          <span style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:700;font-size:21px">むくみ・冷え</span>
+          <span style="font-size:15px;line-height:1.9;color:#333333">夕方の脚の重さ、だるさが気になる方へ</span>
+          <span style="font-weight:700;font-size:18px;text-align:right">→</span>
+        </div>
+        <div style="display:grid;grid-template-columns:240px 1fr 32px;gap:32px;align-items:baseline;padding:30px 8px;border-bottom:1px solid #EAEAEA">
+          <span style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:700;font-size:21px">疲れ・睡眠</span>
+          <span style="font-size:15px;line-height:1.9;color:#333333">休んでもスッキリしない、疲れが抜けにくい方へ</span>
+          <span style="font-weight:700;font-size:18px;text-align:right">→</span>
+        </div>
+        <div style="display:grid;grid-template-columns:240px 1fr 32px;gap:32px;align-items:baseline;padding:30px 8px;border-bottom:1px solid #EAEAEA">
+          <span style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:700;font-size:21px">姿勢・猫背</span>
+          <span style="font-size:15px;line-height:1.9;color:#333333">鏡に映る姿勢、写真の写りが気になってきた方へ</span>
+          <span style="font-weight:700;font-size:18px;text-align:right">→</span>
+        </div>
+        <div style="display:grid;grid-template-columns:240px 1fr 32px;gap:32px;align-items:baseline;padding:30px 8px;border-bottom:1px solid #EAEAEA">
+          <span style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:700;font-size:21px">スポーツケア</span>
+          <span style="font-size:15px;line-height:1.9;color:#333333">ゴルフ・ランニングなど、運動前後のコンディション作りに</span>
+          <span style="font-weight:700;font-size:18px;text-align:right">→</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BRAND -->
+  <section data-screen-label="TOP-PC BRAND" style="background:#1A1A1A;color:#FFFFFF;padding:160px 88px;text-align:center">
+    <div style="font-size:12px;letter-spacing:0.35em;color:#999999;font-weight:500;margin-bottom:44px">BRAND</div>
+    <h2 style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:900;font-size:42px;line-height:1.6;margin:0 0 32px;color:#FFFFFF">全国約70店舗の<br>パーソナルストレッチブランド。</h2>
+    <p style="font-size:16px;line-height:2.1;color:#F2F2F0;max-width:600px;margin:0 auto 64px">「全力ストレッチ」は全国に約70店舗を展開するストレッチ専門ブランド。テレビや雑誌、YouTubeなど各種メディアでも紹介されています。</p>
+    <div style="display:flex;justify-content:center;flex-wrap:wrap;gap:14px">
+      <span style="border:1px solid rgba(255,255,255,0.35);color:#FFFFFF;font-size:13px;letter-spacing:0.12em;padding:11px 24px;border-radius:999px">全国 約70店舗</span>
+      <span style="border:1px solid rgba(255,255,255,0.35);color:#FFFFFF;font-size:13px;letter-spacing:0.12em;padding:11px 24px;border-radius:999px">テレビ番組で紹介</span>
+      <span style="border:1px solid rgba(255,255,255,0.35);color:#FFFFFF;font-size:13px;letter-spacing:0.12em;padding:11px 24px;border-radius:999px">雑誌掲載</span>
+      <span style="border:1px solid rgba(255,255,255,0.35);color:#FFFFFF;font-size:13px;letter-spacing:0.12em;padding:11px 24px;border-radius:999px">YouTube</span>
+      <span style="border:1px solid rgba(255,255,255,0.35);color:#FFFFFF;font-size:13px;letter-spacing:0.12em;padding:11px 24px;border-radius:999px">元格闘家オーナー考案「ザウルス式」</span>
+    </div>
+  </section>
+
+  <!-- STAFF -->
+  <section data-screen-label="TOP-PC STAFF" style="padding:150px 88px">
+    <div style="font-size:12px;letter-spacing:0.35em;color:#999999;font-weight:500;margin-bottom:36px">STAFF</div>
+    <h2 style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:900;font-size:42px;margin:0 0 80px">体のこと、任せてください。</h2>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:48px">
+      <div style="display:flex;flex-direction:column;gap:22px">
+        <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="staff-1" shape="rounded" radius="4" placeholder="トレーナー写真（正方形）" style="width:100%;height:390px;display:block" hint-size="390px,390px"></x-import>
+        <div>
+          <div style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:700;font-size:20px">佐藤 ◯◯<span style="font-size:13px;font-weight:500;color:#333333;margin-left:12px">店長・トレーナー</span></div>
+          <div style="font-family:'Yomogi',cursive;font-size:18px;color:#333333;margin-top:10px">“まずは体の話、聞かせてください”</div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:22px">
+        <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="staff-2" shape="rounded" radius="4" placeholder="トレーナー写真（正方形）" style="width:100%;height:390px;display:block" hint-size="390px,390px"></x-import>
+        <div>
+          <div style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:700;font-size:20px">田中 ◯◯<span style="font-size:13px;font-weight:500;color:#333333;margin-left:12px">トレーナー</span></div>
+          <div style="font-family:'Yomogi',cursive;font-size:18px;color:#333333;margin-top:10px">“途中で眠ってしまってもOKです”</div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:22px">
+        <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="staff-3" shape="rounded" radius="4" placeholder="トレーナー写真（正方形）" style="width:100%;height:390px;display:block" hint-size="390px,390px"></x-import>
+        <div>
+          <div style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:700;font-size:20px">山口 ◯◯<span style="font-size:13px;font-weight:500;color:#333333;margin-left:12px">トレーナー</span></div>
+          <div style="font-family:'Yomogi',cursive;font-size:18px;color:#333333;margin-top:10px">“ゴルフ前後のケア、得意です”</div>
+        </div>
+      </div>
+    </div>
+    <p style="font-size:13px;color:#999999;margin:40px 0 0">※氏名・プロフィールは準備中のダミー表記です。</p>
+  </section>
+
+  <!-- VOICE -->
+  <section data-screen-label="TOP-PC VOICE" style="background:#FAFAF8;border-top:1px solid #EAEAEA;padding:150px 88px">
+    <div style="font-size:12px;letter-spacing:0.35em;color:#999999;font-weight:500;margin-bottom:36px">VOICE</div>
+    <h2 style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:900;font-size:42px;margin:0 0 80px">お客様の声</h2>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:40px">
+      <div style="border:1px dashed #D9D9D5;border-radius:4px;min-height:240px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:40px;text-align:center">
+        <span style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:700;font-size:17px;color:#333333">掲載準備中</span>
+        <span style="font-size:14px;line-height:2;color:#333333">ご来店いただいたお客様の声を、<br>準備が整いしだい掲載します。</span>
+      </div>
+      <div style="border:1px dashed #D9D9D5;border-radius:4px;min-height:240px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:40px;text-align:center">
+        <span style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:700;font-size:17px;color:#333333">掲載準備中</span>
+        <span style="font-size:14px;line-height:2;color:#333333">ご来店いただいたお客様の声を、<br>準備が整いしだい掲載します。</span>
+      </div>
+      <div style="border:1px dashed #D9D9D5;border-radius:4px;min-height:240px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:40px;text-align:center">
+        <span style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:700;font-size:17px;color:#333333">掲載準備中</span>
+        <span style="font-size:14px;line-height:2;color:#333333">ご来店いただいたお客様の声を、<br>準備が整いしだい掲載します。</span>
+      </div>
+    </div>
+    <p style="font-size:13px;color:#999999;margin:40px 0 0">※実際にご来店いただいたお客様の声のみを掲載します。</p>
+  </section>
+
+  <!-- PRICE + ACCESS -->
+  <section data-screen-label="TOP-PC PRICE/ACCESS" style="padding:150px 88px">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:112px;align-items:start">
+      <div>
+        <div style="font-size:12px;letter-spacing:0.35em;color:#999999;font-weight:500;margin-bottom:36px">PRICE</div>
+        <h2 style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:900;font-size:38px;margin:0 0 48px">料金</h2>
+        <div style="display:inline-block;background:#FF9C46;color:#1A1A1A;font-family:'Zen Kaku Gothic New',sans-serif;font-weight:700;font-size:13px;letter-spacing:0.14em;padding:8px 18px;border-radius:4px;margin-bottom:28px">初回限定 75%OFF</div>
+        <div style="border-top:1px solid #1A1A1A">
+          <div style="display:flex;align-items:baseline;gap:20px;padding:30px 4px;border-bottom:1px solid #EAEAEA">
+            <span style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:700;font-size:18px;width:56px">60分</span>
+            <span style="font-size:15px;color:#333333;text-decoration:line-through">13,200円</span>
+            <span style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:900;font-size:40px;margin-left:auto">3,300<span style="font-size:16px;font-weight:700">円（税込）</span></span>
+          </div>
+          <div style="display:flex;align-items:baseline;gap:20px;padding:30px 4px;border-bottom:1px solid #EAEAEA">
+            <span style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:700;font-size:18px;width:56px">90分</span>
+            <span style="font-size:15px;color:#333333;text-decoration:line-through">19,800円</span>
+            <span style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:900;font-size:40px;margin-left:auto">4,900<span style="font-size:16px;font-weight:700">円（税込）</span></span>
+          </div>
+        </div>
+        <p style="font-size:13px;line-height:2;color:#333333;margin:24px 0 48px">※初回限定価格はおひとり様1回限りです。<br>※2回目以降は通常料金（60分 13,200円／90分 19,800円）となります。</p>
+        <span style="display:inline-block;background:#1A1A1A;color:#FFFFFF;font-family:'Zen Kaku Gothic New',sans-serif;font-weight:700;font-size:16px;letter-spacing:0.08em;padding:20px 48px;border-radius:999px">初回価格で予約する</span>
+      </div>
+      <div>
+        <div style="font-size:12px;letter-spacing:0.35em;color:#999999;font-weight:500;margin-bottom:36px">ACCESS</div>
+        <h2 style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:900;font-size:38px;margin:0 0 48px">店舗情報</h2>
+        <div style="border-top:1px solid #1A1A1A">
+          <div style="display:grid;grid-template-columns:120px 1fr;gap:20px;padding:22px 4px;border-bottom:1px solid #EAEAEA;font-size:15px;line-height:2"><span style="font-weight:700">店名</span><span style="color:#333333">全力ストレッチ 岐阜長良店</span></div>
+          <div style="display:grid;grid-template-columns:120px 1fr;gap:20px;padding:22px 4px;border-bottom:1px solid #EAEAEA;font-size:15px;line-height:2"><span style="font-weight:700">住所</span><span style="color:#333333">岐阜県岐阜市長良東2-37 RSDビル2F南<br>（ヤマダデンキ テックランド岐阜長良店 すぐそば）</span></div>
+          <div style="display:grid;grid-template-columns:120px 1fr;gap:20px;padding:22px 4px;border-bottom:1px solid #EAEAEA;font-size:15px;line-height:2"><span style="font-weight:700">駐車場</span><span style="color:#333333">10台以上あり</span></div>
+          <div style="display:grid;grid-template-columns:120px 1fr;gap:20px;padding:22px 4px;border-bottom:1px solid #EAEAEA;font-size:15px;line-height:2"><span style="font-weight:700">営業時間</span><span style="color:#333333">10:00–22:00（不定休）</span></div>
+          <div style="display:grid;grid-template-columns:120px 1fr;gap:20px;padding:22px 4px;border-bottom:1px solid #EAEAEA;font-size:15px;line-height:2"><span style="font-weight:700">電話</span><span style="color:#333333">058-215-5835</span></div>
+        </div>
+        <div style="margin-top:32px;background:#F2F2F0;height:240px;display:flex;align-items:center;justify-content:center;font-size:12px;letter-spacing:0.35em;color:#999999">GOOGLE MAP</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESERVE -->
+  <section data-screen-label="TOP-PC 予約CTA" style="background:#1A1A1A;color:#FFFFFF;padding:160px 88px;text-align:center">
+    <div style="font-size:12px;letter-spacing:0.35em;color:#999999;font-weight:500;margin-bottom:44px">RESERVE</div>
+    <h2 style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:900;font-size:46px;line-height:1.5;margin:0 0 24px;color:#FFFFFF">まずは、初回3,300円から。</h2>
+    <p style="font-size:16px;line-height:2;color:#F2F2F0;margin:0 0 64px">気になる肩や腰、そのままにせず一度ご相談ください。</p>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:36px">
+      <span style="background:#FF9C46;color:#1A1A1A;font-family:'Zen Kaku Gothic New',sans-serif;font-weight:700;font-size:18px;letter-spacing:0.06em;padding:24px 72px;border-radius:999px">WEB予約はこちら（ホットペッパー）</span>
+      <div style="display:flex;align-items:center;gap:48px;font-size:15px;color:#F2F2F0">
+        <span style="border-bottom:1px solid rgba(255,255,255,0.5);padding-bottom:4px">LINEで予約・相談</span>
+        <span>TEL 058-215-5835（10:00–22:00・不定休）</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- footer -->
+  <footer style="padding:56px 88px;display:flex;justify-content:space-between;align-items:flex-start;gap:40px;border-top:1px solid #EAEAEA">
+    <div>
+      <div style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:900;font-size:18px;margin-bottom:10px">全力ストレッチ 岐阜長良店</div>
+      <div style="font-size:13px;line-height:2;color:#333333">岐阜県岐阜市長良東2-37 RSDビル2F南　／　10:00–22:00（不定休）　／　058-215-5835</div>
+    </div>
+    <div style="font-size:12px;line-height:2;color:#333333;text-align:right">※当店はリラクゼーションを目的としたストレッチ専門店であり、<br>医療行為を行う施設ではありません。<br>© 全力ストレッチ 岐阜長良店</div>
+  </footer>
+</div>
+</div>
+
+<!-- ============ SP 390 ============ -->
+<sc-if value="{{ showMobile }}" hint-placeholder-val="{{ true }}">
+<div id="top-sp" style="flex:none;display:flex;flex-direction:column;gap:12px">
+<span style="font:700 11px ui-monospace,Menlo,monospace;padding:3px 8px;background:#1A1A1A;color:#fff;border-radius:4px;align-self:flex-start">TOP v2 / SP 390</span>
+<div style="width:390px;background:#FFFFFF;border:1px solid rgba(0,0,0,0.08);box-shadow:0 2px 10px rgba(0,0,0,0.06);color:#1A1A1A">
+
+  <header style="display:flex;align-items:center;justify-content:space-between;height:68px;padding:0 20px;border-bottom:1px solid #EAEAEA">
+    <div>
+      <div style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:900;font-size:16px;letter-spacing:0.08em">全力ストレッチ</div>
+      <div style="font-size:9px;letter-spacing:0.26em;color:#999999">GIFU NAGARA</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:14px">
+      <span style="background:#1A1A1A;color:#FFFFFF;font-weight:700;font-size:13px;padding:10px 18px;border-radius:999px">ご予約</span>
+      <span style="display:flex;flex-direction:column;gap:5px"><span style="width:22px;height:1.5px;background:#1A1A1A"></span><span style="width:22px;height:1.5px;background:#1A1A1A"></span></span>
+    </div>
+  </header>
+
+  <section data-screen-label="TOP-SP ヒーロー" style="padding:0 0 72px">
+    <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="hero" shape="rect" placeholder="施術シーンの写真" style="width:100%;height:430px;display:block" hint-size="390px,430px"></x-import>
+    <div style="padding:48px 24px 0">
+      <div style="font-size:10px;letter-spacing:0.32em;color:#999999;font-weight:500;margin-bottom:24px">PERSONAL STRETCH GIFU NAGARA</div>
+      <h1 style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:900;font-size:34px;line-height:1.5;margin:0 0 20px">がんばる体に、<br><span style="position:relative;display:inline-block">全力<sc-if value="{{ showHandwritten }}" hint-placeholder-val="{{ true }}"><svg style="position:absolute;left:-2px;bottom:-7px;width:calc(100% + 4px);height:10px;overflow:visible" viewBox="0 0 120 12" preserveAspectRatio="none" fill="none"><path d="M4 8 C 30 3, 72 11, 116 5" stroke="#FF9C46" stroke-width="6" stroke-linecap="round"></path></svg></sc-if></span>のストレッチを。</h1>
+      <p style="font-size:16px;line-height:2;color:#333333;margin:0 0 36px">岐阜市長良の完全個室・マンツーマン<br>パーソナルストレッチ専門店。</p>
+      <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:28px;flex-wrap:wrap">
+        <span style="font-size:12px;letter-spacing:0.12em;color:#333333;font-weight:500">初回限定</span>
+        <span style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:700;font-size:15px">60分</span>
+        <span style="font-size:14px;color:#333333;text-decoration:line-through">13,200円</span>
+        <span style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:900;font-size:30px">3,300<span style="font-size:14px;font-weight:700">円（税込）</span></span>
+      </div>
+      <span style="display:block;background:#FF9C46;color:#1A1A1A;font-family:'Zen Kaku Gothic New',sans-serif;font-weight:700;font-size:16px;letter-spacing:0.08em;padding:19px 0;border-radius:999px;text-align:center">WEB予約はこちら</span>
+      <p style="font-size:13px;color:#333333;margin:20px 0 0;text-align:center">TEL 058-215-5835（10:00–22:00・不定休）</p>
+    </div>
+  </section>
+
+  <section data-screen-label="TOP-SP CONCEPT" style="border-top:1px solid #EAEAEA;padding:88px 0">
+    <div style="padding:0 24px">
+      <div style="font-size:10px;letter-spacing:0.32em;color:#999999;font-weight:500;margin-bottom:24px">CONCEPT</div>
+      <h2 style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:900;font-size:28px;line-height:1.6;margin:0 0 24px"><span style="position:relative;display:inline-block;padding:0 2px">完全個室<sc-if value="{{ showHandwritten }}" hint-placeholder-val="{{ true }}"><svg style="position:absolute;left:-12px;top:-9px;width:calc(100% + 24px);height:calc(100% + 18px);overflow:visible" viewBox="0 0 160 60" preserveAspectRatio="none" fill="none"><path d="M84 5 C 130 4, 155 15, 153 30 C 151 47, 112 57, 73 56 C 34 55, 7 45, 8 29 C 9 14, 44 6, 98 6" stroke="#FF9C46" stroke-width="3.5" stroke-linecap="round"></path></svg></sc-if></span>だから、<br>人目を気にせず。</h2>
+      <p style="font-size:16px;line-height:2.1;color:#333333;margin:0 0 40px">治療院や整体院ではなく、マンツーマンのパーソナルストレッチ専門店。扉の閉まる静かな個室で、自分では伸ばせない深い部分までじっくりストレッチします。</p>
+    </div>
+    <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="room" shape="rect" placeholder="個室の写真" style="width:100%;height:300px;display:block" hint-size="390px,300px"></x-import>
+    <div style="padding:0 24px;margin-top:40px">
+      <div style="border-top:1px solid #EAEAEA">
+        <div style="display:flex;gap:18px;padding:22px 2px;border-bottom:1px solid #EAEAEA;align-items:baseline">
+          <span style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:900;font-size:13px;flex:none;color:#999999">01</span>
+          <div style="font-size:15px;line-height:2"><span style="font-weight:700">完全個室・マンツーマン。</span><span style="color:#333333">ほかのお客様と顔を合わせません。</span></div>
+        </div>
+        <div style="display:flex;gap:18px;padding:22px 2px;border-bottom:1px solid #EAEAEA;align-items:baseline">
+          <span style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:900;font-size:13px;flex:none;color:#999999">02</span>
+          <div style="font-size:15px;line-height:2"><span style="font-weight:700">毎回カウンセリングから。</span><span style="color:#333333">その日の体に合わせて組み立てます。</span></div>
+        </div>
+        <div style="display:flex;gap:18px;padding:22px 2px;border-bottom:1px solid #EAEAEA;align-items:baseline">
+          <span style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:900;font-size:13px;flex:none;color:#999999">03</span>
+          <div style="font-size:15px;line-height:2"><span style="font-weight:700">無理のない強さで。</span><span style="color:#333333">痛気持ちいい範囲で深く伸ばします。</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section data-screen-label="TOP-SP METHOD" style="background:#FAFAF8;border-top:1px solid #EAEAEA;padding:88px 24px">
+    <div style="font-size:10px;letter-spacing:0.32em;color:#999999;font-weight:500;margin-bottom:24px">METHOD</div>
+    <h2 style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:900;font-size:28px;line-height:1.5;margin:0 0 16px">「ザウルス式」、3つの柱。</h2>
+    <p style="font-size:16px;line-height:2;color:#333333;margin:0 0 56px">元格闘家のオーナーが考案した、体幹軸調整ストレッチ。体の軸から深くアプローチします。</p>
+    <div style="display:flex;flex-direction:column;gap:48px">
+      <div style="border-top:1px solid #1A1A1A;padding-top:24px">
+        <div style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:900;font-size:13px;letter-spacing:0.25em;color:#999999;margin-bottom:14px">01</div>
+        <h3 style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:700;font-size:20px;margin:0 0 10px">骨盤へのアプローチ</h3>
+        <p style="font-size:16px;line-height:2;color:#333333;margin:0">体の土台となる骨盤まわりの筋肉をゆるめ、軸を意識しやすい状態へ。</p>
+      </div>
+      <div style="border-top:1px solid #1A1A1A;padding-top:24px">
+        <div style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:900;font-size:13px;letter-spacing:0.25em;color:#999999;margin-bottom:14px">02</div>
+        <h3 style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:700;font-size:20px;margin:0 0 10px">猫背・巻き肩へのアプローチ</h3>
+        <p style="font-size:16px;line-height:2;color:#333333;margin:0">縮こまりがちな胸や肩まわりを伸ばし、胸を開きやすい状態へ。</p>
+      </div>
+      <div style="border-top:1px solid #1A1A1A;padding-top:24px">
+        <div style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:900;font-size:13px;letter-spacing:0.25em;color:#999999;margin-bottom:14px">03</div>
+        <h3 style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:700;font-size:20px;margin:0 0 10px">筋膜ほぐし＋深層筋ストレッチ</h3>
+        <p style="font-size:16px;line-height:2;color:#333333;margin:0">表層をほぐしてから、深層の筋肉までじっくりストレッチ。</p>
+      </div>
+    </div>
+  </section>
+
+  <section data-screen-label="TOP-SP SYMPTOMS" style="border-top:1px solid #EAEAEA;padding:88px 24px">
+    <div style="font-size:10px;letter-spacing:0.32em;color:#999999;font-weight:500;margin-bottom:24px">SYMPTOMS</div>
+    <h2 style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:900;font-size:28px;margin:0 0 40px">お悩みから探す。</h2>
+    <div style="border-top:1px solid #1A1A1A">
+      <a href="全力ストレッチ 症状_肩こり v2.dc.html" style="text-decoration:none;color:#1A1A1A;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:22px 4px;border-bottom:1px solid #EAEAEA"><span style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:700;font-size:17px">肩こり</span><span style="font-weight:700">→</span></a>
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding:22px 4px;border-bottom:1px solid #EAEAEA"><span style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:700;font-size:17px">腰痛・お尻や脚の張り</span><span style="font-weight:700">→</span></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding:22px 4px;border-bottom:1px solid #EAEAEA"><span style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:700;font-size:17px">首こり・眼精疲労</span><span style="font-weight:700">→</span></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding:22px 4px;border-bottom:1px solid #EAEAEA"><span style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:700;font-size:17px">むくみ・冷え</span><span style="font-weight:700">→</span></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding:22px 4px;border-bottom:1px solid #EAEAEA"><span style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:700;font-size:17px">疲れ・睡眠</span><span style="font-weight:700">→</span></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding:22px 4px;border-bottom:1px solid #EAEAEA"><span style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:700;font-size:17px">姿勢・猫背</span><span style="font-weight:700">→</span></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding:22px 4px;border-bottom:1px solid #EAEAEA"><span style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:700;font-size:17px">スポーツケア（ゴルフ・ランニング）</span><span style="font-weight:700">→</span></div>
+    </div>
+  </section>
+
+  <section data-screen-label="TOP-SP BRAND" style="background:#1A1A1A;color:#FFFFFF;padding:96px 24px;text-align:center">
+    <div style="font-size:10px;letter-spacing:0.32em;color:#999999;font-weight:500;margin-bottom:32px">BRAND</div>
+    <h2 style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:900;font-size:26px;line-height:1.7;margin:0 0 20px;color:#FFFFFF">全国約70店舗の<br>パーソナルストレッチブランド。</h2>
+    <p style="font-size:15px;line-height:2.1;color:#F2F2F0;margin:0 0 44px">テレビや雑誌、YouTubeなど<br>各種メディアでも紹介されています。</p>
+    <div style="display:flex;justify-content:center;flex-wrap:wrap;gap:10px">
+      <span style="border:1px solid rgba(255,255,255,0.35);font-size:12px;letter-spacing:0.1em;padding:9px 18px;border-radius:999px">全国 約70店舗</span>
+      <span style="border:1px solid rgba(255,255,255,0.35);font-size:12px;letter-spacing:0.1em;padding:9px 18px;border-radius:999px">テレビ番組で紹介</span>
+      <span style="border:1px solid rgba(255,255,255,0.35);font-size:12px;letter-spacing:0.1em;padding:9px 18px;border-radius:999px">雑誌掲載</span>
+      <span style="border:1px solid rgba(255,255,255,0.35);font-size:12px;letter-spacing:0.1em;padding:9px 18px;border-radius:999px">YouTube</span>
+    </div>
+  </section>
+
+  <section data-screen-label="TOP-SP STAFF" style="padding:88px 24px">
+    <div style="font-size:10px;letter-spacing:0.32em;color:#999999;font-weight:500;margin-bottom:24px">STAFF</div>
+    <h2 style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:900;font-size:28px;margin:0 0 40px">体のこと、任せてください。</h2>
+    <div style="display:flex;flex-direction:column;gap:28px">
+      <div style="display:flex;gap:20px;align-items:center;border-bottom:1px solid #EAEAEA;padding-bottom:28px">
+        <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="staff-1" shape="rounded" radius="4" placeholder="写真" style="width:96px;height:96px;display:block;flex:none" hint-size="96px,96px"></x-import>
+        <div><div style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:700;font-size:17px">佐藤 ◯◯<span style="font-size:12px;font-weight:500;color:#333333;margin-left:8px">店長</span></div><div style="font-family:'Yomogi',cursive;font-size:16px;color:#333333;margin-top:6px">“まずは体の話、聞かせてください”</div></div>
+      </div>
+      <div style="display:flex;gap:20px;align-items:center;border-bottom:1px solid #EAEAEA;padding-bottom:28px">
+        <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="staff-2" shape="rounded" radius="4" placeholder="写真" style="width:96px;height:96px;display:block;flex:none" hint-size="96px,96px"></x-import>
+        <div><div style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:700;font-size:17px">田中 ◯◯</div><div style="font-family:'Yomogi',cursive;font-size:16px;color:#333333;margin-top:6px">“途中で眠ってしまってもOKです”</div></div>
+      </div>
+      <div style="display:flex;gap:20px;align-items:center;border-bottom:1px solid #EAEAEA;padding-bottom:28px">
+        <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="staff-3" shape="rounded" radius="4" placeholder="写真" style="width:96px;height:96px;display:block;flex:none" hint-size="96px,96px"></x-import>
+        <div><div style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:700;font-size:17px">山口 ◯◯</div><div style="font-family:'Yomogi',cursive;font-size:16px;color:#333333;margin-top:6px">“ゴルフ前後のケア、得意です”</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section data-screen-label="TOP-SP VOICE" style="background:#FAFAF8;border-top:1px solid #EAEAEA;padding:88px 24px">
+    <div style="font-size:10px;letter-spacing:0.32em;color:#999999;font-weight:500;margin-bottom:24px">VOICE</div>
+    <h2 style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:900;font-size:28px;margin:0 0 40px">お客様の声</h2>
+    <div style="border:1px dashed #D9D9D5;border-radius:4px;padding:48px 28px;text-align:center">
+      <div style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:700;font-size:16px;color:#333333;margin-bottom:10px">掲載準備中</div>
+      <div style="font-size:14px;line-height:2;color:#333333">ご来店いただいたお客様の声を、<br>準備が整いしだい掲載します。</div>
+    </div>
+  </section>
+
+  <section data-screen-label="TOP-SP PRICE/ACCESS" style="padding:88px 24px">
+    <div style="font-size:10px;letter-spacing:0.32em;color:#999999;font-weight:500;margin-bottom:24px">PRICE / ACCESS</div>
+    <h2 style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:900;font-size:28px;margin:0 0 40px">料金・店舗情報</h2>
+    <div style="display:inline-block;background:#FF9C46;color:#1A1A1A;font-family:'Zen Kaku Gothic New',sans-serif;font-weight:700;font-size:12px;letter-spacing:0.14em;padding:7px 15px;border-radius:4px;margin-bottom:20px">初回限定 75%OFF</div>
+    <div style="border-top:1px solid #1A1A1A;margin-bottom:16px">
+      <div style="display:flex;align-items:baseline;gap:12px;padding:22px 2px;border-bottom:1px solid #EAEAEA">
+        <span style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:700;font-size:15px">60分</span>
+        <span style="font-size:13px;color:#333333;text-decoration:line-through">13,200円</span>
+        <span style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:900;font-size:30px;margin-left:auto">3,300<span style="font-size:13px;font-weight:700">円（税込）</span></span>
+      </div>
+      <div style="display:flex;align-items:baseline;gap:12px;padding:22px 2px;border-bottom:1px solid #EAEAEA">
+        <span style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:700;font-size:15px">90分</span>
+        <span style="font-size:13px;color:#333333;text-decoration:line-through">19,800円</span>
+        <span style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:900;font-size:30px;margin-left:auto">4,900<span style="font-size:13px;font-weight:700">円（税込）</span></span>
+      </div>
+    </div>
+    <p style="font-size:12px;line-height:2;color:#333333;margin:0 0 48px">※おひとり様1回限り。2回目以降は通常料金です。</p>
+    <div style="border-top:1px solid #EAEAEA;font-size:14px">
+      <div style="display:grid;grid-template-columns:84px 1fr;gap:14px;padding:18px 2px;border-bottom:1px solid #EAEAEA;line-height:2"><span style="font-weight:700">住所</span><span style="color:#333333">岐阜市長良東2-37 RSDビル2F南（ヤマダデンキ岐阜長良店すぐ）</span></div>
+      <div style="display:grid;grid-template-columns:84px 1fr;gap:14px;padding:18px 2px;border-bottom:1px solid #EAEAEA;line-height:2"><span style="font-weight:700">駐車場</span><span style="color:#333333">10台以上あり</span></div>
+      <div style="display:grid;grid-template-columns:84px 1fr;gap:14px;padding:18px 2px;border-bottom:1px solid #EAEAEA;line-height:2"><span style="font-weight:700">営業時間</span><span style="color:#333333">10:00–22:00（不定休）</span></div>
+      <div style="display:grid;grid-template-columns:84px 1fr;gap:14px;padding:18px 2px;border-bottom:1px solid #EAEAEA;line-height:2"><span style="font-weight:700">電話</span><span style="color:#333333">058-215-5835</span></div>
+    </div>
+    <div style="margin-top:24px;background:#F2F2F0;height:170px;display:flex;align-items:center;justify-content:center;font-size:10px;letter-spacing:0.32em;color:#999999">GOOGLE MAP</div>
+  </section>
+
+  <section data-screen-label="TOP-SP 予約CTA" style="background:#1A1A1A;color:#FFFFFF;padding:96px 24px;text-align:center">
+    <div style="font-size:10px;letter-spacing:0.32em;color:#999999;font-weight:500;margin-bottom:32px">RESERVE</div>
+    <h2 style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:900;font-size:29px;line-height:1.6;margin:0 0 16px;color:#FFFFFF">まずは、初回3,300円から。</h2>
+    <p style="font-size:15px;line-height:2;color:#F2F2F0;margin:0 0 44px">気になる肩や腰、そのままにせず<br>一度ご相談ください。</p>
+    <span style="display:block;background:#FF9C46;color:#1A1A1A;font-family:'Zen Kaku Gothic New',sans-serif;font-weight:700;font-size:16px;padding:20px 0;border-radius:999px">WEB予約はこちら</span>
+    <div style="display:flex;flex-direction:column;gap:18px;margin-top:36px;font-size:14px;color:#F2F2F0">
+      <span style="border-bottom:1px solid rgba(255,255,255,0.5);padding-bottom:4px;align-self:center">LINEで予約・相談</span>
+      <span>TEL 058-215-5835（10:00–22:00・不定休）</span>
+    </div>
+  </section>
+
+  <footer style="padding:40px 24px 104px;border-top:1px solid #EAEAEA">
+    <div style="font-family:'Zen Kaku Gothic New',sans-serif;font-weight:900;font-size:16px;margin-bottom:10px">全力ストレッチ 岐阜長良店</div>
+    <div style="font-size:12px;line-height:2;color:#333333">岐阜県岐阜市長良東2-37 RSDビル2F南<br>10:00–22:00（不定休）／058-215-5835<br>※当店はリラクゼーションを目的としたストレッチ専門店であり、医療行為を行う施設ではありません。</div>
+    <div style="font-size:11px;color:#999999;margin-top:14px">© 全力ストレッチ 岐阜長良店</div>
+  </footer>
+
+  <!-- sticky bottom bar (SP) -->
+  <div style="position:sticky;bottom:0;display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px 16px;background:rgba(255,255,255,0.96);border-top:1px solid #EAEAEA">
+    <span style="background:#FF9C46;color:#1A1A1A;font-family:'Zen Kaku Gothic New',sans-serif;font-weight:700;font-size:15px;padding:15px 0;border-radius:999px;text-align:center">WEB予約</span>
+    <span style="background:#1A1A1A;color:#FFFFFF;font-family:'Zen Kaku Gothic New',sans-serif;font-weight:700;font-size:15px;padding:15px 0;border-radius:999px;text-align:center">電話する</span>
+  </div>
+</div>
+<p style="font-size:12px;color:#555;margin:0">※最下部のバーは、スマホでは画面下に追従表示する想定です。</p>
+</div>
+</sc-if>
+
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;showHandwritten&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;表示オプション&quot;},&quot;showMobile&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;表示オプション&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      showHandwritten: this.props.showHandwritten ?? true,
+      showMobile: this.props.showMobile ?? true,
+    };
+  }
+}
+</script>
+</body>
+</html>
