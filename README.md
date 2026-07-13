@@ -51,27 +51,23 @@ docs/                 # 運用ドキュメント（下記）
 - `gbp-checklist.md` … Googleビジネスプロフィール最適化＋口コミ導線＋サイテーション手順
 - `morning-todo.md` … 「朝、オーナーがやること」チェックリスト
 
-## Cloudflare Pages デプロイ手順
+## Vercel デプロイ手順（本番ドメイン：zn-stretch-gifu.com）
 
-### 方法A：GitHub連携（推奨）
-1. このリポジトリをGitHubにプッシュ（本手順は実施済み）。
-2. Cloudflareダッシュボード → **Workers & Pages** → **Create** → **Pages** → **Connect to Git**。
-3. このリポジトリを選択。
-4. ビルド設定：
-   - **Framework preset**：`Astro`
-   - **Build command**：`npm run build`
-   - **Build output directory**：`dist`
-   - **Node version**：環境変数 `NODE_VERSION` を `20` に設定（必要な場合）。
-5. **Save and Deploy**。以降、対象ブランチへのpushで自動デプロイされます。
-6. **カスタムドメイン**：Pagesプロジェクト → **Custom domains** → 取得した独自ドメインを追加しDNSを設定。
-7. 独自ドメイン確定後、`astro.config.mjs` の `SITE_URL` と `public/robots.txt` の `Sitemap:` 行を本番URLへ変更して再デプロイ。
+1. [vercel.com](https://vercel.com) にGitHubアカウントでログイン → **Add New → Project** → このリポジトリをImport。
+2. FrameworkはAstroが自動検出される（Build: `npm run build`／Output: `dist`）。そのまま**Deploy**。
+3. 以降、本番ブランチへのpushで自動デプロイ。他ブランチはプレビューURLが自動発行される。
+4. **カスタムドメイン**：Vercelプロジェクト → **Settings → Domains** → `zn-stretch-gifu.com` と `www.zn-stretch-gifu.com` を追加。
+5. **XserverのDNS設定**（サーバーパネル → DNSレコード設定）に以下を追加・変更：
 
-### 方法B：Wrangler（CLI）
-```bash
-npm install -g wrangler
-npm run build
-wrangler pages deploy dist --project-name=zn-stretch-gifu-nagara
-```
+| 種別 | ホスト | 値 | 備考 |
+|---|---|---|---|
+| A | @（空欄） | `76.76.21.21` | 既定のXserver向けAレコードがあれば置き換える |
+| CNAME | www | `cname.vercel-dns.com` | |
+| MX / TXT(SPF) | — | 変更しない | Xserverメールを使う場合は既存値のまま残す |
+
+6. Vercel側でドメインの検証が通れば公開完了（SSLは自動発行）。
+
+> 旧メモ：当初はCloudflare Pages想定だったが、Vercel＋Supabase＋Resend構成（予約フォーム拡張）を見据えてVercelに変更。
 
 ## プレースホルダ `{{...}}` 一覧
 

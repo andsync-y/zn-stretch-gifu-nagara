@@ -10,13 +10,15 @@
 - [ ] **本部確認（残り）**：正確な店舗数／公式素材（ロゴ・写真）の提供 → 必要になったら再確認（`docs/fc-honbu-kakunin.md` 参照）。
 
 ## ② 独自ドメイン取得（10〜20分）
-- [ ] ドメインを取得（例：`zenryoku-stretch-gifu-nagara.com` など）。
-- [ ] 取得後、`astro.config.mjs` の `SITE_URL` を本番ドメインに変更（`public/robots.txt` の `Sitemap:` 行も同ドメインに）。
+- [x] `zn-stretch-gifu.com` をXserverで取得（ネームサーバーは「エックスサーバー（標準）」）。
+- [x] `astro.config.mjs` の `SITE_URL`・`public/robots.txt` の `Sitemap:` を本番ドメインに変更済み。
+- [ ] typoドメイン `zn-strech-gifu.com`（取得済み）は本番に使わず、後日301リダイレクト用に設定。
 
-## ③ Cloudflare Pages へデプロイ（15〜30分）
-- [ ] Cloudflare Pages でこのGitHubリポジトリを連携（ビルドコマンド `npm run build`／出力ディレクトリ `dist`）。
-- [ ] 取得した独自ドメインをカスタムドメインとして接続（DNS設定）。
-- [ ] 詳細は `README.md` の「Cloudflare Pages デプロイ手順」を参照。
+## ③ Vercel へデプロイ（15〜30分）
+- [ ] Vercel でこのGitHubリポジトリをImport（Astro自動検出・そのままDeploy）。
+- [ ] Vercel → Settings → Domains に `zn-stretch-gifu.com` / `www` を追加。
+- [ ] XserverのDNSレコード設定でWebだけVercelへ（A @ → 76.76.21.21／CNAME www → cname.vercel-dns.com。**MX/SPFは変更しない**）。
+- [ ] 詳細は `README.md` の「Vercel デプロイ手順」を参照。
 
 ## ④ Googleビジネスプロフィール（GBP）最適化（初回60分＋継続）
 - [ ] `docs/gbp-checklist.md` を上から実施。特に**NAPをサイトと完全一致**、**属性（完全個室・女性スタッフ在籍・駐車場・予約可）を設定**、**口コミ導線**を用意。

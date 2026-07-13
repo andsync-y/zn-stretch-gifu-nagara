@@ -3,9 +3,8 @@ import { defineConfig } from 'astro/config';
 import tailwind from '@astrojs/tailwind';
 import sitemap from '@astrojs/sitemap';
 
-// 本番の独自ドメインが決まったら SITE_URL を差し替える（morning-todo参照）。
-// 例: https://zenryoku-stretch-gifu-nagara.com
-const SITE_URL = 'https://example-zn-gifu-nagara.pages.dev';
+// 本番ドメイン（Xserverで取得・Vercelで公開）
+const SITE_URL = 'https://zn-stretch-gifu.com';
 
 // https://astro.build/config
 export default defineConfig({

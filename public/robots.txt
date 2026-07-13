@@ -33,5 +33,5 @@ Allow: /
 User-agent: *
 Allow: /
 
-# サイトマップ（本番ドメイン確定後に astro.config.mjs の site を差し替えると自動で正しいURLになる）
-Sitemap: https://example-zn-gifu-nagara.pages.dev/sitemap-index.xml
+# サイトマップ
+Sitemap: https://zn-stretch-gifu.com/sitemap-index.xml
