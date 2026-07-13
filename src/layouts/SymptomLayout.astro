@@ -6,7 +6,7 @@ import PriceRows from '../components/PriceRows.astro';
 import ReserveCTA from '../components/ReserveCTA.astro';
 import SymptomIcon from '../components/SymptomIcon.astro';
 import SymptomCycleFigure from '../components/SymptomCycleFigure.astro';
-import { SITE, PHOTOS, REVIEWS, LAST_UPDATED } from '../consts';
+import { SITE, PHOTOS, REVIEWS } from '../consts';
 
 export interface QA { q: string; a: string; }
 export interface Part { title: string; desc: string; }
@@ -244,7 +244,6 @@ const breadcrumbSchema = {
         ))}
       </div>
       <p class="mt-12"><a href="/" class="text-[15px] font-bold hover:text-amber-700">← トップページへ戻る</a></p>
-      <p class="mt-8 text-xs text-muted">最終更新：{LAST_UPDATED}</p>
     </div>
   </section>
 

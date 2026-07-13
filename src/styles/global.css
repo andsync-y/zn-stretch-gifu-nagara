@@ -263,7 +263,7 @@
 .hero-copy h1 {
   margin: 0;
   color: #26272a;
-  font-size: clamp(46px, 15vw, 240px);
+  font-size: clamp(46px, 11.5vw, 176px);
   font-weight: 900;
   letter-spacing: -0.03em;
   line-height: 1.08;
@@ -327,8 +327,10 @@
   background: rgba(244, 245, 242, 0.96);
   border: 1px solid rgba(23, 30, 32, 0.8);
   box-shadow: 12px 12px 0 rgba(146, 116, 94, 0.15);
-  opacity: clamp(0, calc((var(--hero-progress) - 0.7) * 5), 1);
-  transform: translate3d(0, calc((1 - var(--hero-progress)) * 15vh), 0);
+  /* 少しでもスクロールしたら即表示（進捗2%〜9%でスライドイン） */
+  --offer-t: clamp(0, calc((var(--hero-progress) - 0.02) * 14), 1);
+  opacity: var(--offer-t);
+  transform: translate3d(0, calc((1 - var(--offer-t)) * 8vh), 0);
   pointer-events: none;
 }
 
@@ -368,7 +370,12 @@
   align-items: flex-end;
   justify-content: space-between;
   gap: 24px;
-  padding: 14px 0 18px;
+  padding: 14px 0 16px;
+}
+
+.hero-offer-price + .hero-offer-price {
+  padding-top: 12px;
+  border-top: 1px solid rgba(23, 30, 32, 0.18);
 }
 
 .hero-offer-price p { margin: 0; line-height: 1.2; }
@@ -460,7 +467,7 @@
     bottom: 5%;
     width: 90%;
     padding: 20px;
-    transform: translate3d(0, calc((1 - var(--hero-progress)) * 12vh), 0);
+    transform: translate3d(0, calc((1 - var(--offer-t)) * 8vh), 0);
   }
   .hero-offer-heading p { font-size: 24px; }
   .hero-offer-price { padding: 12px 0 14px; }

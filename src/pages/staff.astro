@@ -2,7 +2,7 @@
 import Base from '../layouts/Base.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import ReserveCTA from '../components/ReserveCTA.astro';
-import { STAFF, LAST_UPDATED } from '../consts';
+import { STAFF } from '../consts';
 
 const title = 'スタッフ紹介｜岐阜市長良の完全個室パーソナルストレッチ専門店 全力ストレッチ岐阜長良店';
 const description = '全力ストレッチ岐阜長良店のトレーナー紹介。全員女性の体感軸調整トレーナーが、完全個室・マンツーマンで施術します。岐阜市長良。';
@@ -34,18 +34,15 @@ const breadcrumb = {
     <div class="grid grid-cols-2 gap-x-5 gap-y-12 sm:gap-x-7 lg:grid-cols-3 lg:gap-y-16">
       {STAFF.map((s, i) => (
         <figure class={i % 2 === 1 ? 'sm:mt-11' : ''}>
-          <img src={s.photo} alt={`トレーナー ${s.name}（${s.kana}）`} width="800" height="1069" loading="lazy" decoding="async" class="mb-5 aspect-[3/4] w-full object-cover object-top grayscale transition duration-700 hover:grayscale-0" />
+          <img src={s.photo} alt={`トレーナー ${s.name}（${s.kana}）`} width="800" height="1069" loading="lazy" decoding="async" class="mb-5 aspect-[3/4] w-full object-cover object-top" />
           <figcaption class="text-center">
             <p class="text-lg font-black tracking-[0.1em] sm:text-xl">{s.name}<span class="ml-3 text-sm font-medium text-muted">{s.kana}</span></p>
             <p class="mt-1 text-xs tracking-[0.08em] text-muted">{s.role}</p>
-            <p class="mt-4 font-hand text-[15px] leading-[2] text-sub">{s.word}</p>
+            <p class="mt-4 text-[14px] leading-[2] text-sub">{s.word}</p>
           </figcaption>
         </figure>
       ))}
     </div>
-    <p class="mt-14 text-xs leading-[2] text-muted">
-      ※経歴・保有資格は確認でき次第掲載します。<br />最終更新：{LAST_UPDATED}
-    </p>
   </section>
 
   <ReserveCTA title="担当トレーナーが、あなたの一回に全力で向き合います。" />
