@@ -41,8 +41,10 @@ const menuLinks = [
       <span>MENU</span>
     </button>
   </div>
+</header>
 
-  <div id="mobile-menu" class="mobile-menu hidden">
+<!-- ヘッダーの外に置くこと：ヘッダーにfilter/backdrop-filter等が付くとfixedの基準がヘッダーになり、メニューが描画されなくなる -->
+<div id="mobile-menu" class="mobile-menu hidden">
     <div class="mobile-menu-inner">
       <div class="mobile-menu-head">
         <p><span>MENU</span><b>全力ストレッチ<br />岐阜長良店</b></p>
@@ -68,16 +70,54 @@ const menuLinks = [
       <a href={SITE.urls.reserve} target="_blank" rel="noopener" class="mobile-reserve">WEB予約はこちら <span aria-hidden="true">↗</span></a>
     </div>
   </div>
-</header>
 
 <script>
   const btn = document.getElementById('menu-toggle');
   const menu = document.getElementById('mobile-menu');
+  const header = document.querySelector<HTMLElement>('.site-header');
+
+  // ヘッダー直下の背景色をサンプリングし、暗ければ .is-inverted で白系配色に切り替える
+  const parseRgb = (color: string) => {
+    const m = color.match(/rgba?\(([\d.]+)[,\s]+([\d.]+)[,\s]+([\d.]+)(?:[,\s/]+([\d.]+))?\)/);
+    if (!m) return null;
+    const alpha = m[4] === undefined ? 1 : parseFloat(m[4]);
+    return alpha < 0.5 ? null : { r: +m[1], g: +m[2], b: +m[3] };
+  };
+
+  const backdropLuma = () => {
+    if (!header) return 255;
+    const y = Math.max(1, (header.offsetHeight || 64) - 10);
+    const stack = document.elementsFromPoint(window.innerWidth / 2, y);
+    for (const el of stack) {
+      if (header.contains(el)) continue;
+      let node: Element | null = el;
+      while (node && node !== document.documentElement) {
+        const rgb = parseRgb(getComputedStyle(node).backgroundColor);
+        if (rgb) return 0.2126 * rgb.r + 0.7152 * rgb.g + 0.0722 * rgb.b;
+        node = node.parentElement;
+      }
+      break;
+    }
+    return 255;
+  };
+
+  let themeTicking = false;
+  const updateHeaderTheme = () => {
+    themeTicking = false;
+    header?.classList.toggle('is-inverted', backdropLuma() < 128);
+  };
+  const requestThemeUpdate = () => {
+    if (themeTicking) return;
+    themeTicking = true;
+    requestAnimationFrame(updateHeaderTheme);
+  };
+
   const closeMenu = () => {
     menu?.classList.add('hidden');
     btn?.setAttribute('aria-expanded', 'false');
     btn?.setAttribute('aria-label', 'メニューを開く');
     document.body.style.overflow = '';
+    requestThemeUpdate();
   };
 
   btn?.addEventListener('click', () => {
@@ -85,19 +125,30 @@ const menuLinks = [
     btn.setAttribute('aria-expanded', String(open));
     btn.setAttribute('aria-label', open ? 'メニューを閉じる' : 'メニューを開く');
     document.body.style.overflow = open ? 'hidden' : '';
+    requestThemeUpdate();
   });
 
   menu?.querySelectorAll('a').forEach((link) => link.addEventListener('click', closeMenu));
+
+  updateHeaderTheme();
+  addEventListener('scroll', requestThemeUpdate, { passive: true });
+  addEventListener('resize', requestThemeUpdate, { passive: true });
 </script>
 
 <style>
+  /*
+   * 背景なしヘッダー。スクロール時にヘッダー直下の背景色をJSでサンプリングし、
+   * 暗い背景では .is-inverted を付与して白系配色に反転する。
+   * 注意1：filter/backdrop-filterをここに追加しないこと（fixed子要素=モバイルメニューの
+   * 基準がヘッダーになり描画されなくなる。メニューをヘッダー外に置いているのも同じ理由）。
+   * 注意2：mix-blend-mode: differenceはChromiumのsticky合成でヘッダーの描画位置が
+   * ずれるバグがあるため使用しない。
+   */
   .site-header {
     position: sticky;
     z-index: 50;
     top: 0;
-    border-bottom: 1px solid rgba(21, 23, 25, 0.16);
-    background: rgba(247, 247, 244, 0.94);
-    backdrop-filter: blur(16px);
+    background: transparent;
   }
 
   .header-inner {
@@ -120,7 +171,11 @@ const menuLinks = [
   .brand img {
     width: auto;
     height: 28px;
+    transition: filter 0.25s ease;
   }
+
+  /* 暗い背景上では黒ロゴを白に反転 */
+  .site-header.is-inverted .brand img { filter: invert(1); }
 
   .brand span {
     padding-left: 15px;
@@ -130,6 +185,12 @@ const menuLinks = [
     font-weight: 700;
     letter-spacing: 0.22em;
     white-space: nowrap;
+    transition: color 0.25s ease, border-color 0.25s ease;
+  }
+
+  .site-header.is-inverted .brand span {
+    border-left-color: rgba(255, 255, 255, 0.45);
+    color: rgba(255, 255, 255, 0.85);
   }
 
   .desktop-nav {
@@ -145,11 +206,15 @@ const menuLinks = [
     height: 100%;
     align-items: center;
     gap: 7px;
+    color: #151719;
     font-size: 12px;
     font-weight: 800;
     letter-spacing: 0.08em;
     text-decoration: none;
+    transition: color 0.25s ease;
   }
+
+  .site-header.is-inverted .desktop-nav > a:not(.header-cta) { color: #fff; }
 
   .desktop-nav > a:not(.header-cta)::after {
     content: "";
@@ -175,8 +240,12 @@ const menuLinks = [
     font-size: 7px;
     font-weight: 800;
     transform: translateY(-5px);
+    transition: color 0.25s ease;
   }
 
+  .site-header.is-inverted .desktop-nav small { color: rgba(255, 255, 255, 0.6); }
+
+  /* CTAとMENUボタンは背景の反対色のベタにして常に視認できるようにする */
   .header-cta {
     display: flex;
     width: 116px;
@@ -190,10 +259,12 @@ const menuLinks = [
     font-weight: 900;
     letter-spacing: 0.12em;
     text-decoration: none;
-    transition: background 0.25s ease;
+    transition: background 0.25s ease, color 0.25s ease;
   }
 
-  .header-cta:hover { background: #92745e; }
+  .header-cta:hover { background: #92745e; color: #fff; }
+  .site-header.is-inverted .header-cta { background: #fff; color: #151719; }
+  .site-header.is-inverted .header-cta:hover { background: #d8cfc5; color: #151719; }
   .header-cta b { font-size: 18px; font-weight: 500; }
 
   .menu-toggle {
@@ -237,6 +308,12 @@ const menuLinks = [
       background: #151719;
       color: #fff;
       cursor: pointer;
+      transition: background 0.25s ease, color 0.25s ease;
+    }
+
+    .site-header.is-inverted .menu-toggle {
+      background: #fff;
+      color: #151719;
     }
 
     .menu-toggle > span:last-child {
@@ -265,6 +342,7 @@ const menuLinks = [
 
     .mobile-menu {
       position: fixed;
+      z-index: 49; /* ヘッダー(50)のすぐ下：閉じるボタンを操作可能に保つ */
       inset: 64px 0 0;
       display: block;
       overflow-y: auto;
