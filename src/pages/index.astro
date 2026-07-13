@@ -46,42 +46,46 @@ const marqueeItems = [
 ];
 ---
 <Base title={title} description={description} path="/">
-  <!-- HERO（ファーストビュー1画面完結のコンパクト構成） -->
-  <section class="relative overflow-hidden px-5 pb-20 pt-8 sm:px-10 sm:pt-12 xl:px-14">
-    <div class="mx-auto grid max-w-[1440px] items-start gap-8 lg:grid-cols-[1fr_460px] lg:gap-14 xl:grid-cols-[1fr_500px]">
-      <div class="order-2 lg:order-1 lg:pt-4">
-        <h1 class="mb-5 text-[24px] font-black leading-[1.7] tracking-[0.04em] sm:text-[30px] lg:text-[36px]">
-          平日はタフに、週末はアクティブに。<br />本気の大人のための<span class="frame-word">身体改革</span>。
+  <!-- HERO（SP=写真にキャッチをオーバーレイ／PC=大きなキャッチ＋大きな写真） -->
+  <section class="relative overflow-hidden px-5 pb-20 pt-3 sm:px-10 sm:pt-12 xl:px-14">
+    <div class="relative mx-auto grid max-w-[1440px] items-start gap-6 lg:grid-cols-[1fr_540px] lg:gap-16 xl:grid-cols-[1fr_620px]">
+      <div class="order-2 lg:order-1 lg:pt-2">
+        <!-- SPではキャッチを写真の上に重ねる（absoluteの基準は外側のgridコンテナ） -->
+        <h1 class="absolute left-1 top-[24%] z-10 text-[25px] font-black leading-[1.75] tracking-[0.04em] lg:static lg:mb-7 lg:text-[40px] lg:leading-[1.65] lg:tracking-[0.02em] xl:text-[46px]">
+          <span class="inline-block">平日はタフに、</span><br class="lg:hidden" /><span class="inline-block">週末はアクティブに。</span><br /><span class="inline-block">本気の大人のための</span><br class="lg:hidden" /><span class="frame-word bg-paper/70 lg:bg-transparent">身体改革</span>。
           <span class="sr-only">｜全力ストレッチ岐阜長良店（岐阜市長良の完全個室パーソナルストレッチ専門店）</span>
         </h1>
-        <p class="mb-8 text-[14px] leading-[2] tracking-[0.04em] text-muted sm:text-[15px]">
-          岐阜市長良の完全個室・マンツーマン、パーソナルストレッチ専門店。<br class="hidden sm:block" />Private &amp; personal stretch studio for your working body.
+
+        <p class="mb-8 hidden text-[15px] leading-[2.1] tracking-[0.04em] text-muted lg:mb-12 lg:block lg:text-base">
+          岐阜市長良の完全個室・マンツーマン、パーソナルストレッチ専門店。<br />Private &amp; personal stretch studio for your working body.
         </p>
 
-        <p class="mb-3 inline-block border-2 border-ink px-3 py-1 text-[12px] font-black tracking-[0.14em]">初回限定</p>
-        <div class="mb-8 flex max-w-[520px] flex-col gap-1.5">
-          <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-            <span class="w-[8em] shrink-0 whitespace-nowrap text-[13px] font-bold tracking-[0.06em] sm:text-[15px]">お試しコース</span>
-            <span class="text-[13px] font-bold sm:text-[15px]">60分</span>
-            <span class="text-[13px] text-muted line-through sm:text-[15px]">13,200円</span>
-            <span class="ml-auto font-display text-[38px] font-extrabold leading-none sm:text-[44px]">¥3,300</span>
+        <p class="mb-3 inline-block border-2 border-ink px-3 py-1 text-[12px] font-black tracking-[0.14em] lg:mb-5 lg:px-4 lg:py-1.5 lg:text-[13px]">初回限定</p>
+        <div class="mb-8 flex max-w-[520px] flex-col gap-1.5 lg:mb-11 lg:max-w-[600px] lg:gap-3">
+          <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1 lg:gap-x-5">
+            <span class="w-[8em] shrink-0 whitespace-nowrap text-[13px] font-bold tracking-[0.06em] lg:text-[17px]">お試しコース</span>
+            <span class="text-[13px] font-bold lg:text-[17px]">60分</span>
+            <span class="text-[13px] text-muted line-through lg:text-[16px]">13,200円</span>
+            <span class="ml-auto font-display text-[38px] font-extrabold leading-none lg:text-[58px]">¥3,300</span>
           </div>
-          <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-            <span class="w-[8em] shrink-0 whitespace-nowrap text-[13px] font-bold tracking-[0.06em] sm:text-[15px]">全身ケアコース</span>
-            <span class="text-[13px] font-bold sm:text-[15px]">90分</span>
-            <span class="text-[13px] text-muted line-through sm:text-[15px]">19,800円</span>
-            <span class="ml-auto font-display text-[38px] font-extrabold leading-none sm:text-[44px]">¥4,900</span>
+          <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1 lg:gap-x-5">
+            <span class="w-[8em] shrink-0 whitespace-nowrap text-[13px] font-bold tracking-[0.06em] lg:text-[17px]">全身ケアコース</span>
+            <span class="text-[13px] font-bold lg:text-[17px]">90分</span>
+            <span class="text-[13px] text-muted line-through lg:text-[16px]">19,800円</span>
+            <span class="ml-auto font-display text-[38px] font-extrabold leading-none lg:text-[58px]">¥4,900</span>
           </div>
         </div>
 
-        <a href={SITE.urls.reserve} target="_blank" rel="noopener" class="btn-ink block w-full text-center sm:inline-block sm:w-auto sm:px-14 sm:py-5 sm:text-[16px] sm:tracking-[0.18em]">WEB予約はこちら</a>
-        <p class="mt-3 text-[11px] text-muted">※税込。初回価格はおひとり様1回限りです。価格は変更となる場合があります。</p>
+        <a href={SITE.urls.reserve} target="_blank" rel="noopener" class="btn-ink block w-full text-center sm:inline-block sm:w-auto sm:tracking-[0.18em] lg:px-20 lg:py-6 lg:text-[17px]">WEB予約はこちら</a>
+        <p class="mt-3 text-[11px] text-muted lg:mt-4 lg:text-xs">※税込。初回価格はおひとり様1回限りです。価格は変更となる場合があります。</p>
       </div>
 
-      <!-- 写真（右・コンパクト） -->
-      <div class="relative order-1 h-[300px] w-[calc(100%-20px)] justify-self-end sm:h-[380px] lg:order-2 lg:h-[560px] lg:w-full">
+      <!-- 写真（SP=全幅・キャッチの下地／PC=大きく右側） -->
+      <div class="relative order-1 h-[420px] w-full lg:order-2 lg:h-[700px] xl:h-[740px]">
         <img src={PHOTOS.hero} alt="完全個室で行うパーソナルストレッチの施術シーン" width="1280" height="1720" fetchpriority="high" decoding="async" class="h-full w-full object-cover" style="object-position:center 30%" />
-        <CircleBadge class="absolute -bottom-12 -left-5 h-[110px] w-[110px] lg:-left-16 lg:bottom-[-40px] lg:h-[180px] lg:w-[180px]" />
+        <!-- SPのみ：オーバーレイ文字の可読性を上げる淡いグラデーション -->
+        <div class="absolute inset-0 bg-gradient-to-t from-paper/70 via-paper/25 to-transparent lg:hidden" aria-hidden="true"></div>
+        <CircleBadge class="absolute -bottom-12 right-[-6px] h-[120px] w-[120px] lg:right-auto lg:-left-20 lg:bottom-[-44px] lg:h-[210px] lg:w-[210px]" />
       </div>
     </div>
   </section>
