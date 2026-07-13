@@ -251,3 +251,14 @@ Git履歴が「何を変更したか」、このファイルが「なぜ変更�
   - SPはサブコピーを2行折り返し（max-width 60vw）にして暗部との重なりを回避。
 - 主な変更ファイル：`src/pages/index.astro`／`src/styles/global.css`
 - 確認結果：`npm run build` 成功。Chromium検証でPC/SPともに表示・アニメーション・折り返しを確認。
+
+## 2026-07-14 04:55 JST — Claude Code
+
+- ブランチ：`claude/apply-design-patch-xbq1gz`
+- 関連PR：PC版キャッチコピーの大型化とマルキーのキーワード専用化
+- 変更内容：
+  - PC版キャッチコピーを約3倍に大型化（clamp(46px, 15vw, 240px)）。SPは従来サイズを維持。
+  - マルキー（カルーセル）から画像・背景・罫線を撤去し、キーワードのみの構成に変更。
+  - キーワードを8個に拡充：#完全個室／#マンツーマン／#完全女性トレーナー／#全く新しいストレッチサロン／#岐阜初出店／#独自の体感軸調整法／#深層筋にアプローチ／#根本改善
+- 主な変更ファイル：`src/pages/index.astro`／`src/styles/global.css`
+- 確認結果：`npm run build` 成功。Chromium検証でPC/SPとも横スクロールなし・マルキー流れ・コピー表示を確認。
