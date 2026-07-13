@@ -17,23 +17,44 @@ const symptoms = SYMPTOMS.map((item, index) => ({
   href: `/symptoms/${item.slug}`,
   ...meta[item.slug as keyof typeof meta],
 }));
+
+const hotspots = [
+  { key: 'shoulder', x: 34, y: 24, w: 24, h: 13 },
+  { key: 'lower-back', x: 51, y: 51, w: 30, h: 20 },
+  { key: 'lower-back', x: 58, y: 57, w: 24, h: 18, delay: 120 },
+  { key: 'neck-eyes', x: 42, y: 16, w: 23, h: 17 },
+  { key: 'neck-eyes', x: 33, y: 9, w: 13, h: 9, delay: 100 },
+  { key: 'lower-legs', x: 42, y: 76, w: 16, h: 27 },
+  { key: 'lower-legs', x: 57, y: 76, w: 16, h: 27, delay: 100 },
+  { key: 'whole-body', x: 49, y: 42, w: 48, h: 40 },
+  { key: 'upper-back', x: 45, y: 28, w: 37, h: 22 },
+  { key: 'kinetic-chain', x: 35, y: 24, w: 21, h: 13 },
+  { key: 'kinetic-chain', x: 55, y: 54, w: 25, h: 19, delay: 90 },
+  { key: 'kinetic-chain', x: 43, y: 69, w: 17, h: 14, delay: 180 },
+];
 ---
 
 <div class="symptoms-explorer" data-symptoms-explorer data-active="shoulder">
   <div class="symptoms-visual" aria-hidden="true">
-    <div class="symptoms-visual-images">
-      {symptoms.map((item, index) => (
-        <img
-          class:list={['symptoms-illustration', index === 0 && 'is-active']}
-          data-illustration={item.key}
-          src={`/images/symptoms/illustration-${item.key}.webp`}
-          alt=""
-          width="960"
-          height="1260"
-          loading="lazy"
-          decoding="async"
-        />
-      ))}
+    <div class="symptoms-body">
+      <img
+        class="symptoms-anatomy"
+        src="/images/symptoms/anatomy-base.webp"
+        alt=""
+        width="921"
+        height="1708"
+        loading="lazy"
+        decoding="async"
+      />
+      <div class="symptoms-hotspots">
+        {hotspots.map((spot) => (
+          <span
+            class:list={['symptom-hotspot', spot.key === 'shoulder' && 'is-active']}
+            data-hotspot={spot.key}
+            style={`--x:${spot.x}%;--y:${spot.y}%;--w:${spot.w}%;--h:${spot.h}%;--delay:${spot.delay ?? 0}ms`}
+          ></span>
+        ))}
+      </div>
     </div>
   </div>
 
@@ -66,7 +87,7 @@ const symptoms = SYMPTOMS.map((item, index) => ({
   if (explorer) {
     const entries = [...explorer.querySelectorAll<HTMLElement>('[data-symptom-entry]')];
     const buttons = [...explorer.querySelectorAll<HTMLButtonElement>('[data-symptom-trigger]')];
-    const illustrations = [...explorer.querySelectorAll<HTMLImageElement>('[data-illustration]')];
+    const hotspots = [...explorer.querySelectorAll<HTMLElement>('[data-hotspot]')];
     const desktopHover = matchMedia('(min-width: 768px) and (hover: hover)');
 
     const setActive = (key: string) => {
@@ -75,7 +96,7 @@ const symptoms = SYMPTOMS.map((item, index) => ({
 
       explorer.dataset.active = key;
       buttons.forEach((item) => item.setAttribute('aria-pressed', String(item.dataset.symptomTrigger === key)));
-      illustrations.forEach((image) => image.classList.toggle('is-active', image.dataset.illustration === key));
+      hotspots.forEach((hotspot) => hotspot.classList.toggle('is-active', hotspot.dataset.hotspot === key));
     };
 
     entries.forEach((entry) => {
@@ -95,7 +116,7 @@ const symptoms = SYMPTOMS.map((item, index) => ({
 
 <style>
   .symptoms-explorer {
-    --symptom-red: #df342f;
+    --symptom-red: #ef3f37;
     display: grid;
     grid-template-columns: minmax(0, 1.16fr) minmax(390px, .84fr);
     gap: clamp(36px, 5vw, 80px);
@@ -112,26 +133,57 @@ const symptoms = SYMPTOMS.map((item, index) => ({
     background: #111314;
   }
 
-  .symptoms-visual-images {
+  .symptoms-body {
     position: absolute;
-    inset: 0;
+    left: 50%;
+    top: 50%;
+    width: auto;
+    height: 110%;
+    max-width: 100%;
+    aspect-ratio: 921 / 1708;
+    transform: translate(-50%, -50%);
   }
 
-  .symptoms-illustration {
+  .symptoms-anatomy,
+  .symptoms-hotspots {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
-    object-fit: contain;
-    object-position: center;
-    opacity: 0;
-    transition: opacity 580ms cubic-bezier(.22, 1, .36, 1);
-    will-change: opacity;
   }
 
-  .symptoms-illustration.is-active {
-    z-index: 1;
-    opacity: 1;
+  .symptoms-anatomy {
+    object-fit: contain;
+    filter: contrast(1.04) brightness(.96);
+  }
+
+  .symptoms-hotspots {
+    pointer-events: none;
+  }
+
+  .symptom-hotspot {
+    position: absolute;
+    left: var(--x);
+    top: var(--y);
+    width: var(--w);
+    height: var(--h);
+    border-radius: 50%;
+    background: radial-gradient(ellipse, rgba(255, 48, 40, .96) 0%, rgba(238, 47, 40, .58) 34%, rgba(213, 31, 27, .18) 58%, transparent 76%);
+    box-shadow: 0 0 18px rgba(239, 63, 55, .62), 0 0 44px rgba(239, 63, 55, .28);
+    mix-blend-mode: screen;
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(.72);
+    transition: opacity 320ms ease, transform 480ms cubic-bezier(.22, 1, .36, 1);
+  }
+
+  .symptom-hotspot.is-active {
+    opacity: .92;
+    animation: hotspot-pulse 1.9s ease-in-out var(--delay) infinite;
+  }
+
+  @keyframes hotspot-pulse {
+    0%, 100% { opacity: .64; transform: translate(-50%, -50%) scale(.82); }
+    50% { opacity: 1; transform: translate(-50%, -50%) scale(1.13); }
   }
 
   .symptoms-list {
@@ -148,7 +200,7 @@ const symptoms = SYMPTOMS.map((item, index) => ({
   }
 
   .symptom-entry:has(.symptom-trigger[aria-pressed='true']) {
-    background: rgba(223, 52, 47, .075);
+    background: rgba(239, 63, 55, .075);
   }
 
   .symptom-trigger {
@@ -230,10 +282,6 @@ const symptoms = SYMPTOMS.map((item, index) => ({
     .symptom-copy small { font-size: 9px; }
   }
 
-  @media (min-width: 768px) {
-    .symptoms-illustration { transform: scale(1.08); }
-  }
-
   @media (max-width: 767px) {
     .symptoms-explorer {
       grid-template-columns: 1fr;
@@ -241,10 +289,7 @@ const symptoms = SYMPTOMS.map((item, index) => ({
       min-height: 0;
     }
 
-    .symptoms-visual {
-      height: clamp(390px, 112vw, 500px);
-    }
-
+    .symptoms-visual { height: clamp(390px, 112vw, 500px); }
     .symptoms-list { width: 100%; }
     .symptom-entry { min-height: 62px; }
     .symptom-copy strong { font-size: 14px; }
@@ -252,7 +297,7 @@ const symptoms = SYMPTOMS.map((item, index) => ({
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .symptoms-illustration { transition-duration: 160ms; }
+    .symptom-hotspot.is-active { animation: none; opacity: .9; transform: translate(-50%, -50%) scale(1); }
     .symptom-entry,
     .symptom-trigger *,
     .symptom-link { transition-duration: 0s; }

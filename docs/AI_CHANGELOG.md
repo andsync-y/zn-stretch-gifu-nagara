@@ -311,3 +311,29 @@ Git履歴が「何を変更したか」、このファイルが「なぜ変更�
   - 7画像の読み込み、hover・focus・click・tapの状態同期、クロスフェードを確認。
   - PCの主要部は約773〜816pxを維持し、コネクター線は0件。
 
+## 2026-07-14 03:55 JST — ChatGPT Codex
+
+- ブランチ：`codex/interactive-symptoms`
+- 関連PR：[PR #4 SYMPTOMSを人体連動型UIへ刷新](https://github.com/andsync-y/zn-stretch-gifu-nagara/pull/4)
+- 変更内容：
+  - 症状ごとに人物・ポーズ・画像を切り替える方式を廃止。
+  - 添付見本と同じ背面寄り斜めアングルの全身人体を1枚だけ固定表示。
+  - hover・focus・tap時は、人体を変えずに該当部位の赤い発光だけを切り替える仕様へ変更。
+  - 発光は1.9秒周期で拡大・縮小する「ぽわん」としたCSSアニメーション。
+  - 左人体／右一覧、既存詳細リンク、コネクター線なしの構成は維持。
+- 主な変更ファイル：
+  - `src/components/InteractiveSymptoms.astro`
+  - `public/images/symptoms/anatomy-base.webp`
+  - `docs/SYMPTOMS_INTERACTION_IMPLEMENTATION.md`
+  - `docs/AI_CHANGELOG.md`
+- 判断・注意点：
+  - 患部の赤は画像へ焼き込まず、CSSレイヤーとして位置・大きさを症状別に定義。
+  - 7枚の人物イラストを削除し、約96KBの単一WebPへ集約。
+  - `prefers-reduced-motion` では発光のパルスを停止。
+- 確認結果：
+  - `npm run build` 成功。Astro静的ページ15件を生成。
+  - `git diff --check` 成功。
+  - 1440／1024／768pxで左右2カラム、390／375pxで縦構成を確認。
+  - 全幅で人体画像が1枚のみであること、7症状すべてで画像URLが変化しないことを確認。
+  - hover・focus・click・tapと患部レイヤー数の同期、コネクター線0件を確認。
+  - reduced motionでは発光アニメーションが停止することを確認。
