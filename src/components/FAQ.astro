@@ -3,26 +3,134 @@ export interface QA { q: string; a: string; }
 export interface Props { items: QA[]; heading?: string; }
 const { items, heading = 'よくあるご質問' } = Astro.props;
 ---
-<section class="py-24 sm:py-32" aria-labelledby="faq-heading">
-  <div class="mx-auto max-w-[1100px] px-5 sm:px-10">
-    <p class="en-label mb-8">FAQ</p>
-    <h2 id="faq-heading" class="jp-title mb-12 sm:mb-16">{heading}</h2>
-    <div class="rule-top">
-      {items.map((qa) => (
-        <details class="group border-b border-line">
-          <summary class="flex cursor-pointer list-none items-center justify-between gap-6 px-2 py-7">
-            <span class="flex items-baseline gap-5">
-              <span class="shrink-0 text-[15px] font-black text-faint">Q</span>
-              <span class="text-[17px] font-black leading-[1.7] sm:text-lg">{qa.q}</span>
-            </span>
-            <span class="shrink-0 text-[22px] font-black text-faint transition group-open:rotate-45" aria-hidden="true">＋</span>
+<section class="faq-section" aria-labelledby="faq-heading">
+  <div class="faq-inner">
+    <div class="faq-heading">
+      <p><span>07</span> FAQ</p>
+      <h2 id="faq-heading">{heading}</h2>
+    </div>
+    <div class="faq-list">
+      {items.map((item, index) => (
+        <details>
+          <summary>
+            <span class="faq-no">{String(index + 1).padStart(2, '0')}</span>
+            <span class="faq-question">{item.q}</span>
+            <span class="faq-plus" aria-hidden="true">＋</span>
           </summary>
-          <div class="flex items-baseline gap-5 px-2 pb-8">
-            <span class="shrink-0 text-[15px] font-black text-faint">A</span>
-            <p class="text-base leading-[2.1] text-sub">{qa.a}</p>
+          <div class="faq-answer">
+            <span>A</span>
+            <p>{item.a}</p>
           </div>
         </details>
       ))}
     </div>
   </div>
 </section>
+
+<style>
+  .faq-section {
+    padding: clamp(88px, 10vw, 150px) 20px;
+    background: #ececea;
+  }
+
+  .faq-inner {
+    display: grid;
+    grid-template-columns: minmax(220px, 0.6fr) minmax(0, 1.4fr);
+    width: min(100%, 1360px);
+    margin: 0 auto;
+    gap: 60px 90px;
+  }
+
+  .faq-heading > p {
+    display: flex;
+    margin: 0 0 24px;
+    align-items: center;
+    gap: 12px;
+    color: #92745e;
+    font-family: "Inter", sans-serif;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.22em;
+  }
+
+  .faq-heading > p span {
+    display: grid;
+    width: 29px;
+    height: 29px;
+    place-items: center;
+    border: 1px solid currentColor;
+  }
+
+  .faq-heading h2 {
+    margin: 0;
+    font-size: clamp(31px, 3.5vw, 50px);
+    font-weight: 900;
+    letter-spacing: -0.055em;
+    line-height: 1.35;
+  }
+
+  .faq-list { border-top: 2px solid #151719; }
+
+  details { border-bottom: 1px solid rgba(21,23,25,0.34); }
+
+  summary {
+    display: grid;
+    grid-template-columns: 42px 1fr 28px;
+    min-height: 92px;
+    padding: 18px 4px;
+    align-items: center;
+    gap: 16px;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  summary::-webkit-details-marker { display: none; }
+
+  .faq-no {
+    color: #92745e;
+    font-family: "Inter", sans-serif;
+    font-size: 9px;
+    font-weight: 800;
+  }
+
+  .faq-question {
+    font-size: 16px;
+    font-weight: 900;
+    line-height: 1.65;
+  }
+
+  .faq-plus {
+    font-size: 24px;
+    font-weight: 400;
+    transition: transform 0.25s ease;
+  }
+
+  details[open] .faq-plus { transform: rotate(45deg); }
+
+  .faq-answer {
+    display: grid;
+    grid-template-columns: 42px 1fr;
+    padding: 0 4px 27px;
+    gap: 16px;
+  }
+
+  .faq-answer > span {
+    color: #92745e;
+    font-family: "Archivo Black", sans-serif;
+    font-size: 16px;
+  }
+
+  .faq-answer p {
+    margin: 0;
+    color: #5d6367;
+    font-size: 14px;
+    line-height: 2;
+  }
+
+  @media (max-width: 760px) {
+    .faq-inner { grid-template-columns: 1fr; gap: 40px; }
+    summary { grid-template-columns: 27px 1fr 24px; min-height: 82px; gap: 10px; }
+    .faq-answer { grid-template-columns: 27px 1fr; gap: 10px; }
+    .faq-question { font-size: 14px; }
+  }
+</style>

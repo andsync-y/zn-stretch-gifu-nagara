@@ -1,28 +1,152 @@
 ---
-// 罫線スタイルの料金行（症状ページ・料金ページ共用）
+// 料金表示（症状ページ・料金ページ共用）
 import { PRICING } from '../consts';
 export interface Props {
-  /** primaryのみ（60/90分）に絞るか */
   compact?: boolean;
-  /** 大きい注記を出すか */
   showCaption?: boolean;
-  /** 「初回限定 最大75%OFF」バッジを出すか */
   showBadge?: boolean;
 }
 const { compact = false, showCaption = true, showBadge = true } = Astro.props;
-const courses = compact ? PRICING.courses.filter((c) => c.primary) : PRICING.courses;
+const courses = compact ? PRICING.courses.filter((course) => course.primary) : PRICING.courses;
 ---
-<div>
-  {showBadge && <p class="mb-6 inline-block rounded bg-amber px-4 py-2 text-[13px] font-black tracking-[0.14em] text-ink">初回限定 最大75%OFF</p>}
-  <div class="rule-top">
-    {courses.map((c) => (
-      <div class="flex flex-wrap items-baseline gap-x-4 gap-y-1 border-b border-line py-7 px-1">
-        <span class="w-full text-[17px] font-black sm:w-auto sm:min-w-[13rem]">{c.name} {c.label}</span>
-        <span class={`hidden rounded px-3 py-1 text-[11px] font-bold tracking-[0.1em] sm:inline-block ${c.primary ? 'bg-amber text-ink' : 'bg-ink text-paper'}`}>{c.discount}</span>
-        <span class="text-sm text-muted line-through">{c.normal}</span>
-        <span class="ml-auto font-sans text-[34px] font-black leading-none sm:text-[38px]">{c.firstPlain}<span class="text-[15px] font-bold">円（税込）</span></span>
+<div class="price-table">
+  {showBadge && <p class="price-badge">FIRST SESSION <strong>最大75%OFF</strong></p>}
+  <div class="price-list">
+    {courses.map((course, index) => (
+      <div class="price-row">
+        <span class="price-no">{String(index + 1).padStart(2, '0')}</span>
+        <div class="price-name">
+          <strong>{course.name}</strong>
+          <span>{course.label}</span>
+        </div>
+        <div class="price-before">
+          <span>{course.discount}</span>
+          <del>{course.normal}</del>
+        </div>
+        <p class="price-first">
+          <strong>{course.firstPlain}</strong><span>円</span><small>税込</small>
+        </p>
       </div>
     ))}
   </div>
-  {showCaption && <p class="mt-5 text-[13px] leading-[2] text-sub">{PRICING.caption}<br />※{PRICING.note}</p>}
+  {showCaption && <p class="price-caption">{PRICING.caption}<br />※{PRICING.note}</p>}
 </div>
+
+<style>
+  .price-badge {
+    display: inline-flex;
+    margin: 0 0 22px;
+    padding: 7px 10px;
+    align-items: center;
+    gap: 12px;
+    background: #151719;
+    color: #fff;
+    font-family: "Inter", sans-serif;
+    font-size: 8px;
+    font-weight: 800;
+    letter-spacing: 0.15em;
+  }
+
+  .price-badge strong {
+    padding-left: 12px;
+    border-left: 1px solid rgba(255,255,255,0.4);
+    color: #d0bba9;
+    font-size: 11px;
+  }
+
+  .price-list { border-top: 2px solid #151719; }
+
+  .price-row {
+    display: grid;
+    grid-template-columns: 45px minmax(150px, 1fr) 100px minmax(150px, auto);
+    min-height: 112px;
+    padding: 18px 3px;
+    align-items: center;
+    gap: 16px;
+    border-bottom: 1px solid rgba(21,23,25,0.35);
+  }
+
+  .price-no {
+    color: #9a7f6b;
+    font-family: "Inter", sans-serif;
+    font-size: 9px;
+    font-weight: 800;
+  }
+
+  .price-name strong,
+  .price-name span { display: block; }
+
+  .price-name strong {
+    margin-bottom: 4px;
+    font-size: 17px;
+    font-weight: 900;
+  }
+
+  .price-name span {
+    color: #676d71;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .price-before span {
+    display: block;
+    width: max-content;
+    margin-bottom: 7px;
+    padding: 2px 6px;
+    background: #92745e;
+    color: #fff;
+    font-size: 8px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+  }
+
+  .price-before del {
+    color: #858b8f;
+    font-size: 11px;
+  }
+
+  .price-first {
+    margin: 0;
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  .price-first strong {
+    font-family: "Archivo Black", "Noto Sans JP", sans-serif;
+    font-size: clamp(34px, 4vw, 53px);
+    letter-spacing: -0.07em;
+    line-height: 1;
+  }
+
+  .price-first > span {
+    margin-left: 3px;
+    font-size: 12px;
+    font-weight: 900;
+  }
+
+  .price-first small {
+    margin-left: 4px;
+    color: #777d81;
+    font-size: 8px;
+  }
+
+  .price-caption {
+    margin: 16px 0 0;
+    color: #686e72;
+    font-size: 11px;
+    line-height: 1.9;
+  }
+
+  @media (max-width: 640px) {
+    .price-row {
+      grid-template-columns: 28px 1fr auto;
+      min-height: 96px;
+      gap: 9px;
+    }
+
+    .price-before { display: none; }
+    .price-name strong { font-size: 14px; }
+    .price-name span { font-size: 10px; }
+    .price-first strong { font-size: 31px; }
+  }
+</style>

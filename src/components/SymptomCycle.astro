@@ -1,0 +1,323 @@
+---
+interface Props {
+  title: string;
+  steps: string[];
+  note: string;
+}
+
+const { title, steps, note } = Astro.props;
+---
+
+<div class="cycle-diagram">
+  <div class="cycle-heading">
+    <p>CAUSE &amp; EFFECT</p>
+    <h3>{title}</h3>
+  </div>
+
+  <div class="cycle-map">
+    <svg class="cycle-track" viewBox="0 0 760 560" fill="none" aria-hidden="true">
+      <defs>
+        <marker id="cycle-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#92745e" />
+        </marker>
+      </defs>
+      <ellipse cx="380" cy="280" rx="214" ry="193" stroke="#d6d9dd" stroke-width="1" stroke-dasharray="3 8" />
+      <path d="M397 88 A214 193 0 0 1 573 206" marker-end="url(#cycle-arrow)" />
+      <path d="M588 226 A214 193 0 0 1 515 433" marker-end="url(#cycle-arrow)" />
+      <path d="M494 451 A214 193 0 0 1 267 451" marker-end="url(#cycle-arrow)" />
+      <path d="M244 435 A214 193 0 0 1 171 228" marker-end="url(#cycle-arrow)" />
+      <path d="M184 205 A214 193 0 0 1 361 88" marker-end="url(#cycle-arrow)" />
+    </svg>
+
+    <ol>
+      {steps.map((step, index) => (
+        <li>
+          <span>{String(index + 1).padStart(2, '0')}</span>
+          <strong>{step}</strong>
+        </li>
+      ))}
+    </ol>
+
+    <div class="cycle-core" aria-hidden="true">
+      <span>NEGATIVE</span>
+      <strong>悪循環</strong>
+      <span>CYCLE</span>
+    </div>
+  </div>
+
+  <p class="cycle-note"><span>CHRONIC</span>{note}</p>
+</div>
+
+<style>
+  .cycle-diagram {
+    position: relative;
+    margin-bottom: 4rem;
+    overflow: hidden;
+    border: 1px solid #1a1a1a;
+    background:
+      linear-gradient(rgba(24, 27, 30, 0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(24, 27, 30, 0.035) 1px, transparent 1px),
+      #fafaf8;
+    background-size: 40px 40px;
+  }
+
+  .cycle-heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 2rem;
+    padding: 1.5rem 1.75rem 1.25rem;
+    border-bottom: 1px solid rgba(26, 26, 26, 0.22);
+  }
+
+  .cycle-heading p,
+  .cycle-heading h3 {
+    margin: 0;
+  }
+
+  .cycle-heading p {
+    color: #92745e;
+    font-size: 0.65rem;
+    font-weight: 900;
+    letter-spacing: 0.22em;
+  }
+
+  .cycle-heading h3 {
+    font-size: clamp(1.15rem, 2.2vw, 1.65rem);
+    font-weight: 900;
+    letter-spacing: -0.02em;
+  }
+
+  .cycle-map {
+    position: relative;
+    width: min(100%, 760px);
+    height: 560px;
+    margin: 0 auto;
+  }
+
+  .cycle-track {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .cycle-track path {
+    stroke: #92745e;
+    stroke-width: 2;
+    stroke-linecap: round;
+    vector-effect: non-scaling-stroke;
+  }
+
+  ol {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  li {
+    position: absolute;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    align-items: center;
+    width: 190px;
+    min-height: 76px;
+    padding: 12px 14px 12px 10px;
+    border: 1px solid rgba(26, 26, 26, 0.72);
+    background: rgba(255, 255, 255, 0.94);
+    box-shadow: 7px 7px 0 rgba(146, 116, 94, 0.14);
+  }
+
+  li:nth-child(1) { top: 27px; left: calc(50% - 95px); }
+  li:nth-child(2) { top: 165px; right: 9px; }
+  li:nth-child(3) { right: 75px; bottom: 16px; }
+  li:nth-child(4) { bottom: 16px; left: 75px; }
+  li:nth-child(5) { top: 165px; left: 9px; }
+
+  li > span {
+    color: #92745e;
+    font-family: "Archivo Black", "Noto Sans JP", sans-serif;
+    font-size: 1.3rem;
+    font-style: italic;
+    font-weight: 800;
+  }
+
+  li strong {
+    font-size: 0.88rem;
+    font-weight: 900;
+    line-height: 1.55;
+  }
+
+  .cycle-core {
+    position: absolute;
+    z-index: 1;
+    top: 50%;
+    left: 50%;
+    display: flex;
+    width: 156px;
+    height: 156px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(26, 26, 26, 0.38);
+    border-radius: 50%;
+    background: #17191b;
+    color: #fff;
+    transform: translate(-50%, -50%);
+  }
+
+  .cycle-core::before {
+    content: "";
+    position: absolute;
+    inset: 9px;
+    border: 1px dashed rgba(255, 255, 255, 0.35);
+    border-radius: inherit;
+  }
+
+  .cycle-core span {
+    z-index: 1;
+    color: #d0bba9;
+    font-size: 0.52rem;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+  }
+
+  .cycle-core strong {
+    z-index: 1;
+    margin: 5px 0;
+    font-size: 1.4rem;
+    font-weight: 900;
+  }
+
+  .cycle-note {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.9rem;
+    margin: 0;
+    padding: 1.2rem 1.5rem 1.4rem;
+    border-top: 1px solid rgba(26, 26, 26, 0.22);
+    color: #64696d;
+    font-size: 0.85rem;
+    line-height: 1.8;
+    text-align: center;
+  }
+
+  .cycle-note span {
+    flex: none;
+    padding: 3px 8px;
+    background: #92745e;
+    color: #fff;
+    font-size: 0.56rem;
+    font-weight: 900;
+    letter-spacing: 0.16em;
+  }
+
+  @media (max-width: 767px) {
+    .cycle-heading {
+      display: block;
+      padding: 1.25rem 1.1rem 1rem;
+    }
+
+    .cycle-heading p {
+      margin-bottom: 0.55rem;
+    }
+
+    .cycle-map {
+      width: auto;
+      height: auto;
+      margin: 0;
+      padding: 1.5rem 1rem 1.25rem;
+    }
+
+    .cycle-track {
+      display: none;
+    }
+
+    ol {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    ol::before {
+      content: "";
+      position: absolute;
+      top: 20px;
+      bottom: 20px;
+      left: 25px;
+      width: 2px;
+      background: #92745e;
+    }
+
+    li,
+    li:nth-child(n) {
+      position: relative;
+      top: auto;
+      right: auto;
+      bottom: auto;
+      left: auto;
+      grid-template-columns: 38px 1fr;
+      width: 100%;
+      min-height: 64px;
+      padding: 9px 12px 9px 7px;
+      box-shadow: 5px 5px 0 rgba(146, 116, 94, 0.12);
+    }
+
+    li > span {
+      display: grid;
+      width: 36px;
+      height: 36px;
+      place-items: center;
+      border-radius: 50%;
+      background: #92745e;
+      color: #fff;
+      font-size: 0.95rem;
+      font-style: normal;
+    }
+
+    li strong {
+      padding-left: 0.45rem;
+      font-size: 0.84rem;
+    }
+
+    li:not(:last-child)::after {
+      content: "↓";
+      position: absolute;
+      z-index: 3;
+      left: 17px;
+      bottom: -17px;
+      color: #fff;
+      font-size: 0.65rem;
+      font-weight: 900;
+    }
+
+    .cycle-core {
+      position: relative;
+      top: auto;
+      left: auto;
+      width: 116px;
+      height: 116px;
+      margin: 1.6rem auto 0;
+      transform: none;
+    }
+
+    .cycle-core strong {
+      font-size: 1.1rem;
+    }
+
+    .cycle-note {
+      display: block;
+      padding: 1rem 1rem 1.2rem;
+      font-size: 0.78rem;
+    }
+
+    .cycle-note span {
+      display: block;
+      width: max-content;
+      margin: 0 auto 0.6rem;
+    }
+  }
+</style>

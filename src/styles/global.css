@@ -10,6 +10,7 @@
   html {
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
+    background: #151719;
   }
 
   /* フローティングヘッダー分、アンカー着地位置を下げる */
@@ -20,10 +21,11 @@
   body {
     @apply bg-paper text-ink font-sans;
     font-size: 16px;
-    line-height: 2;
-    letter-spacing: 0.02em;
+    line-height: 1.9;
+    letter-spacing: 0.015em;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
+    overflow-x: clip;
   }
 
   a {
@@ -31,71 +33,88 @@
   }
 
   :focus-visible {
-    outline: 3px solid #ff9c46;
+    outline: 3px solid #92745e;
     outline-offset: 2px;
+  }
+
+  ::selection {
+    color: #fff;
+    background: #151719;
   }
 }
 
 @layer components {
   .container-x {
-    @apply mx-auto w-full max-w-content px-5 sm:px-10;
+    @apply mx-auto w-full max-w-content px-5 sm:px-10 xl:px-12;
   }
 
-  /* 英語イタリックの添えラベル（Cormorant Garamond） */
+  /* セクションの小見出し */
   .en-label {
-    @apply font-script italic text-faint;
-    font-size: 15px;
-    letter-spacing: 0.35em;
+    @apply font-script not-italic font-extrabold uppercase text-amber;
+    font-size: 11px;
+    letter-spacing: 0.24em;
   }
   .en-label-dark {
-    @apply font-script italic text-inkfaint;
-    font-size: 15px;
-    letter-spacing: 0.35em;
+    @apply font-script not-italic font-extrabold uppercase text-[#c0aa98];
+    font-size: 11px;
+    letter-spacing: 0.24em;
   }
 
-  /* Playfairの英字大見出し */
+  /* キービジュアルと連動する極太英字見出し */
   .display-title {
     @apply font-display font-extrabold text-ink;
-    font-size: clamp(46px, 6vw, 76px);
-    letter-spacing: 0.06em;
-    line-height: 1.1;
-    mix-blend-mode: multiply;
+    font-size: clamp(54px, 8.3vw, 126px);
+    letter-spacing: -0.065em;
+    line-height: 0.82;
+    text-transform: uppercase;
   }
 
   /* 和文セクション見出し */
   .jp-title {
     @apply font-sans font-black text-ink;
-    font-size: clamp(26px, 3.2vw, 40px);
-    line-height: 1.5;
+    font-size: clamp(28px, 4vw, 54px);
+    letter-spacing: -0.045em;
+    line-height: 1.35;
   }
 
   /* 枠付き強調語（身体改革・肩こり など） */
   .frame-word {
-    @apply inline-block border-2 sm:border-[3px] border-ink leading-[1.5];
-    padding: 0 0.4em;
+    @apply inline-block bg-ink text-white leading-[1.5];
+    padding: 0.04em 0.4em 0.12em;
     margin: 0 0.15em;
+    box-shadow: 0.16em 0.16em 0 #92745e;
   }
 
   /* 黒ベタCTA（角なし・ハードシャドウ） */
   .btn-ink {
-    @apply inline-flex items-center justify-center bg-ink text-paper font-bold shadow-hard-btn transition hover:bg-black;
-    font-size: 16px;
-    letter-spacing: 0.16em;
-    padding: 1.25rem 3rem;
+    @apply inline-flex items-center justify-center bg-ink text-paper font-black shadow-hard-btn transition;
+    font-size: 14px;
+    letter-spacing: 0.14em;
+    padding: 1.25rem 2.5rem;
+  }
+  .btn-ink:hover {
+    background: #92745e;
+    transform: translate(-2px, -2px);
   }
 
   /* アンバーの丸型CTA（症状ページ・予約セクション用） */
   .btn-amber-pill {
-    @apply inline-flex items-center justify-center rounded-full bg-amber text-ink font-black transition hover:bg-amber-600;
-    font-size: 16px;
-    letter-spacing: 0.06em;
-    padding: 1.25rem 3rem;
+    @apply inline-flex items-center justify-center rounded-none bg-amber text-white font-black transition hover:bg-amber-600;
+    font-size: 14px;
+    letter-spacing: 0.12em;
+    padding: 1.25rem 2.75rem;
+    box-shadow: 6px 6px 0 rgba(255,255,255,0.18);
   }
   .btn-ink-pill {
-    @apply inline-flex items-center justify-center rounded-full bg-ink text-white font-black transition hover:bg-black;
-    font-size: 15px;
-    letter-spacing: 0.08em;
-    padding: 1.1rem 2.5rem;
+    @apply inline-flex items-center justify-center rounded-none bg-ink text-white font-black transition;
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    padding: 1.1rem 2.25rem;
+    box-shadow: 6px 6px 0 #92745e;
+  }
+  .btn-ink-pill:hover {
+    background: #92745e;
+    box-shadow: 6px 6px 0 #151719;
   }
 
   /* 罫線リストの行 */
@@ -103,17 +122,69 @@
     @apply border-t border-ink;
   }
   .rule-row {
-    @apply border-b border-ink/20;
+    @apply border-b border-ink/25;
   }
 
   /* 縦書きの英字サイドラベル（PCのみ） */
   .side-label {
     writing-mode: vertical-rl;
-    @apply font-script italic text-faint absolute hidden xl:block;
-    font-size: 14px;
-    letter-spacing: 0.4em;
+    @apply font-script not-italic font-extrabold uppercase text-faint absolute hidden xl:block;
+    font-size: 9px;
+    letter-spacing: 0.28em;
     top: 120px;
     right: 40px;
+  }
+
+  .section-grid {
+    background-image:
+      linear-gradient(rgba(21, 23, 25, 0.055) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(21, 23, 25, 0.055) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+
+  .editorial-kicker {
+    @apply inline-flex items-center gap-3 font-script text-[10px] font-extrabold uppercase text-amber;
+    letter-spacing: 0.22em;
+  }
+
+  .editorial-kicker::before {
+    content: "";
+    width: 36px;
+    height: 2px;
+    background: currentColor;
+  }
+
+  .section-grid-dark {
+    background-image:
+      linear-gradient(rgba(255,255,255,0.055) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.055) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+
+  .subpage-hero {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+  }
+
+  .subpage-hero::before {
+    content: "MOVE";
+    position: absolute;
+    z-index: -1;
+    top: 44px;
+    right: -0.08em;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(21,23,25,0.12);
+    font-family: "Archivo Black", "Noto Sans JP", sans-serif;
+    font-size: clamp(120px, 22vw, 350px);
+    letter-spacing: -0.08em;
+    line-height: 0.8;
+    pointer-events: none;
+  }
+
+  .subpage-hero > * {
+    position: relative;
+    z-index: 1;
   }
 
   .prose-jp p {
@@ -150,7 +221,7 @@
   --hero-progress: 0;
   position: relative;
   height: 420vh;
-  background: #f4f5f2;
+  background: #f7f7f4;
 }
 
 .hero-scrub-stage {
@@ -159,7 +230,7 @@
   height: calc(100vh - 76px);
   min-height: 560px;
   overflow: hidden;
-  background: #f4f5f2;
+  background: #f7f7f4;
 }
 
 .hero-scrub-stage canvas,
@@ -182,7 +253,7 @@
   .hero-scrub-fallback {
     object-fit: contain;
     object-position: center 38%;
-    background: #f4f5f2;
+    background: #f7f7f4;
   }
 }
 
@@ -195,7 +266,7 @@
   padding: clamp(24px, 2.3vw, 38px);
   background: rgba(244, 245, 242, 0.96);
   border: 1px solid rgba(23, 30, 32, 0.8);
-  box-shadow: 12px 12px 0 rgba(29, 59, 66, 0.12);
+  box-shadow: 12px 12px 0 rgba(146, 116, 94, 0.15);
   opacity: clamp(0, calc((var(--hero-progress) - 0.7) * 5), 1);
   transform: translate3d(0, calc((1 - var(--hero-progress)) * 15vh), 0);
   pointer-events: none;
@@ -216,7 +287,7 @@
 
 .hero-offer-heading p {
   margin: 0;
-  font-family: "Playfair Display", serif;
+  font-family: "Archivo Black", "Noto Sans JP", sans-serif;
   font-size: clamp(24px, 2.5vw, 38px);
   font-weight: 800;
   letter-spacing: -0.02em;
@@ -249,7 +320,7 @@
   letter-spacing: 0.06em;
 }
 .hero-offer-price b {
-  font-family: "Playfair Display", serif;
+  font-family: "Archivo Black", "Noto Sans JP", sans-serif;
   font-size: 20px;
 }
 .hero-offer-price del {
@@ -259,7 +330,7 @@
   font-size: 12px;
 }
 .hero-offer-price strong {
-  font-family: "Playfair Display", serif;
+  font-family: "Archivo Black", "Noto Sans JP", sans-serif;
   font-size: clamp(38px, 4vw, 62px);
   letter-spacing: -0.05em;
 }
@@ -278,6 +349,8 @@
   pointer-events: auto;
 }
 
+.hero-offer > a { transition: background 0.25s ease; }
+.hero-offer > a:hover { background: #92745e; }
 .hero-offer > a span { font-size: 19px; font-weight: 400; }
 .hero-offer-note {
   margin: 9px 0 0;
@@ -295,7 +368,7 @@
   align-items: center;
   gap: 14px;
   writing-mode: vertical-rl;
-  color: #496067;
+  color: #51575b;
   font-size: 9px;
   font-weight: 700;
   letter-spacing: 0.22em;

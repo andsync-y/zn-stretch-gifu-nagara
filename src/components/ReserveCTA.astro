@@ -3,7 +3,6 @@ import { SITE } from '../consts';
 export interface Props {
   title?: string;
   sub?: string;
-  /** trueならトップ用の大きいレイアウト（ロゴ入り） */
   large?: boolean;
 }
 const {
@@ -12,22 +11,213 @@ const {
   large = false,
 } = Astro.props;
 ---
-<section class="bg-ink text-inkpaper" id="reserve">
-  <div class="container-x py-24 text-center sm:py-32">
-    <p class="en-label-dark mb-8 sm:mb-11" style="font-size:18px;letter-spacing:0.3em">Reservation</p>
-    {large && (
-      <p class="mb-10 flex justify-center">
-        <img src="/images/logo.png" alt="全力ストレッチ" width="1200" height="307" class="h-auto w-[320px] invert sm:w-[520px]" loading="lazy" decoding="async" />
-      </p>
-    )}
-    <h2 class="mx-auto mb-5 max-w-3xl text-[26px] font-black leading-[1.5] text-white sm:text-4xl">{title}</h2>
-    <p class="mx-auto mb-12 max-w-xl text-[15px] leading-[2] text-inkmuted sm:mb-16 sm:text-base">{sub}</p>
-    <div class="flex flex-col items-center gap-9">
-      <a href={SITE.urls.reserve} target="_blank" rel="noopener" class="btn-amber-pill w-full max-w-md sm:w-auto sm:px-16 sm:py-6 sm:text-lg">WEB予約はこちら</a>
-      <div class="flex flex-col items-center gap-4 text-[15px] text-inkpaper/90 sm:flex-row sm:gap-12">
-        <a href={SITE.urls.line} target="_blank" rel="noopener" class="border-b border-white/50 pb-1">LINEで予約・相談</a>
-        <a href={`tel:${SITE.telLink}`}>TEL {SITE.tel}（{SITE.hours}・{SITE.closed}）</a>
+<section class:list={['reserve-panel', { 'is-large': large }]} id="reserve">
+  <div class="reserve-grid">
+    <div class="reserve-copy">
+      <p><span>08</span> RESERVATION</p>
+      <h2>{title}</h2>
+      <span class="reserve-sub">{sub}</span>
+    </div>
+
+    <div class="reserve-offer">
+      <div class="discount" aria-label="初回限定75パーセントオフ">
+        <small>FIRST SESSION</small>
+        <strong>75<span>%</span></strong>
+        <b>OFF</b>
       </div>
+      <div class="trial">
+        <p>集中ケアコース <b>60 MIN.</b></p>
+        <p><del>¥13,200</del><strong>¥3,300</strong><small>税込</small></p>
+      </div>
+      <a href={SITE.urls.reserve} target="_blank" rel="noopener">
+        <span>WEB予約はこちら</span><b aria-hidden="true">↗</b>
+      </a>
+    </div>
+
+    <div class="reserve-contact">
+      <span>完全個室</span><span>女性トレーナー</span><span>10:00–22:00</span>
+      <a href={SITE.urls.line} target="_blank" rel="noopener">LINEで相談 ↗</a>
+      <a href={`tel:${SITE.telLink}`}>TEL {SITE.tel}</a>
     </div>
   </div>
 </section>
+
+<style>
+  .reserve-panel {
+    overflow: hidden;
+    background: #151719;
+    color: #f7f7f4;
+  }
+
+  .reserve-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.95fr) minmax(500px, 1.05fr);
+    width: min(100%, 1600px);
+    margin: 0 auto;
+    padding: clamp(72px, 8vw, 128px) clamp(24px, 5vw, 72px);
+    gap: 54px 70px;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+    background-size: 52px 52px;
+  }
+
+  .reserve-copy > p {
+    display: flex;
+    margin: 0 0 26px;
+    align-items: center;
+    gap: 12px;
+    color: #c0aa98;
+    font-family: "Inter", sans-serif;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.23em;
+  }
+
+  .reserve-copy > p span {
+    display: grid;
+    width: 30px;
+    height: 30px;
+    place-items: center;
+    border: 1px solid currentColor;
+  }
+
+  .reserve-copy h2 {
+    max-width: 660px;
+    margin: 0 0 25px;
+    font-size: clamp(34px, 4.5vw, 66px);
+    font-weight: 900;
+    letter-spacing: -0.065em;
+    line-height: 1.23;
+  }
+
+  .reserve-sub {
+    color: #aeb4b8;
+    font-size: 13px;
+    line-height: 1.9;
+  }
+
+  .reserve-offer {
+    display: grid;
+    grid-template-columns: 145px 1fr;
+    border: 1px solid rgba(255,255,255,0.5);
+    background: rgba(255,255,255,0.05);
+  }
+
+  .discount {
+    display: flex;
+    padding: 22px 18px;
+    flex-direction: column;
+    justify-content: center;
+    background: #92745e;
+  }
+
+  .discount small {
+    font-family: "Inter", sans-serif;
+    font-size: 7px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+  }
+
+  .discount strong {
+    font-family: "Archivo Black", sans-serif;
+    font-size: 56px;
+    letter-spacing: -0.09em;
+    line-height: 0.95;
+  }
+
+  .discount strong span { font-size: 22px; }
+  .discount b { font-family: "Inter", sans-serif; font-size: 20px; letter-spacing: 0.1em; }
+
+  .trial {
+    display: flex;
+    padding: 20px 24px;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 18px;
+  }
+
+  .trial p { margin: 0; line-height: 1; }
+  .trial p:first-child { font-size: 11px; font-weight: 800; }
+  .trial p:first-child b { display: block; margin-top: 9px; font-family: "Archivo Black", sans-serif; font-size: 20px; }
+  .trial del { display: block; margin-bottom: 4px; color: #91989d; font-size: 10px; }
+  .trial strong { font-family: "Archivo Black", sans-serif; font-size: clamp(36px, 4vw, 54px); letter-spacing: -0.06em; }
+  .trial small { margin-left: 5px; color: #b5babd; font-size: 8px; }
+
+  .reserve-offer > a {
+    grid-column: 1 / -1;
+    display: flex;
+    padding: 18px 21px;
+    align-items: center;
+    justify-content: space-between;
+    background: #f7f7f4;
+    color: #151719;
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 0.14em;
+    text-decoration: none;
+    transition: background 0.25s ease;
+  }
+
+  .reserve-offer > a:hover { background: #92745e; color: #fff; }
+  .reserve-offer > a b { font-size: 22px; font-weight: 400; }
+
+  .reserve-contact {
+    grid-column: 1 / -1;
+    display: flex;
+    padding-top: 20px;
+    align-items: center;
+    gap: 25px;
+    border-top: 1px solid rgba(255,255,255,0.22);
+    color: #979da2;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+  }
+
+  .reserve-contact a {
+    margin-left: auto;
+    color: #d7dadd;
+    text-decoration: none;
+  }
+
+  .reserve-contact a + a { margin-left: 0; }
+
+  @media (max-width: 850px) {
+    .reserve-grid {
+      grid-template-columns: 1fr;
+      padding: 72px 20px;
+      gap: 38px;
+    }
+
+    .reserve-offer {
+      grid-template-columns: 112px 1fr;
+    }
+
+    .discount { padding: 18px 13px; }
+    .discount strong { font-size: 43px; }
+    .discount b { font-size: 15px; }
+
+    .trial {
+      display: block;
+      padding: 15px 14px;
+    }
+
+    .trial p + p { margin-top: 10px; }
+    .trial strong { font-size: 35px; }
+
+    .reserve-contact {
+      display: grid;
+      grid-template-columns: repeat(3, auto);
+      gap: 8px 12px;
+    }
+
+    .reserve-contact a {
+      grid-column: span 3;
+      width: max-content;
+      margin: 8px 0 0;
+    }
+
+    .reserve-contact a + a { margin-top: 0; }
+  }
+</style>

@@ -1,33 +1,236 @@
 ---
 import { SITE, SYMPTOMS } from '../consts';
----
-<footer class="border-t border-ink/10 bg-paper">
-  <!-- 内部リンク（SEO・回遊用の控えめな行） -->
-  <nav class="container-x flex flex-wrap gap-x-6 gap-y-2 pt-10 text-[13px] text-sub" aria-label="フッターナビゲーション">
-    {SYMPTOMS.map((s) => <a href={`/symptoms/${s.slug}`} class="hover:text-amber-700">{s.label}</a>)}
-    <a href="/menu" class="hover:text-amber-700">メニュー・料金</a>
-    <a href="/staff" class="hover:text-amber-700">スタッフ</a>
-    <a href="/voice" class="hover:text-amber-700">お客様の声</a>
-    <a href="/access" class="hover:text-amber-700">アクセス</a>
-    <a href="/reserve" class="hover:text-amber-700">ご予約</a>
-    <a href="/recruit" class="hover:text-amber-700">採用情報</a>
-    <a href={SITE.urls.instagram} target="_blank" rel="noopener" class="hover:text-amber-700">Instagram</a>
-  </nav>
 
-  <div class="container-x flex flex-col justify-between gap-8 py-10 sm:py-12 md:flex-row md:items-start">
+const infoLinks = [
+  { label: 'メニュー・料金', href: '/menu' },
+  { label: 'スタッフ', href: '/staff' },
+  { label: 'お客様の声', href: '/voice' },
+  { label: 'アクセス', href: '/access' },
+  { label: 'ご予約について', href: '/reserve' },
+  { label: '採用情報', href: '/recruit' },
+];
+---
+<footer class="site-footer">
+  <div class="footer-action">
     <div>
-      <div class="mb-2 flex items-baseline gap-3">
-        <img src="/images/logo.png" alt="" width="1200" height="307" class="h-6 w-auto" loading="lazy" decoding="async" />
-        <span class="text-[13px] font-bold">全力ストレッチ 岐阜長良店</span>
-      </div>
-      <p class="text-[13px] leading-[2.1] text-muted">
-        {SITE.addressFull}　／　{SITE.hours}（{SITE.closed}）　／　<a href={`tel:${SITE.telLink}`} class="underline">{SITE.tel}</a><br />
-        駐車場：{SITE.parking}　／　運営：{SITE.operator}
-      </p>
+      <p>READY TO MOVE?</p>
+      <h2>動ける毎日を、<br />ここから。</h2>
     </div>
-    <p class="text-[12px] leading-[2.1] text-muted md:text-right">
-      ※当店はリラクゼーションを目的としたストレッチ専門店であり、<br class="hidden md:block" />医療行為を行う施設ではありません。<br />
-      © 全力ストレッチ 岐阜長良店
-    </p>
+    <a href={SITE.urls.reserve} target="_blank" rel="noopener">
+      <span>初回体験を予約</span>
+      <b aria-hidden="true">↗</b>
+    </a>
+  </div>
+
+  <div class="footer-word" aria-hidden="true">
+    <span>ZENRYOKU</span>
+    <span>STRETCH</span>
+  </div>
+
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <img src="/images/logo.png" alt="全力ストレッチ" width="1200" height="307" loading="lazy" decoding="async" />
+      <p>岐阜長良店</p>
+      <address>
+        {SITE.addressFull}<br />
+        {SITE.hours}（{SITE.closed}）<br />
+        <a href={`tel:${SITE.telLink}`}>{SITE.tel}</a>
+      </address>
+    </div>
+
+    <nav aria-label="フッターナビゲーション">
+      <p>INFORMATION</p>
+      {infoLinks.map((item) => <a href={item.href}>{item.label}<span aria-hidden="true">↗</span></a>)}
+    </nav>
+
+    <nav aria-label="お悩み別フッターナビゲーション">
+      <p>SYMPTOMS</p>
+      {SYMPTOMS.map((item) => <a href={`/symptoms/${item.slug}`}>{item.label}<span aria-hidden="true">↗</span></a>)}
+    </nav>
+
+    <div class="footer-social">
+      <p>FOLLOW</p>
+      <a href={SITE.urls.instagram} target="_blank" rel="noopener">INSTAGRAM <span aria-hidden="true">↗</span></a>
+      <p class="notice">当店はリラクゼーションを目的としたストレッチ専門店であり、医療行為を行う施設ではありません。</p>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <span>© ZENRYOKU STRETCH GIFU NAGARA</span>
+    <span>PHYSICAL CONDITIONING SALON</span>
   </div>
 </footer>
+
+<style>
+  .site-footer {
+    overflow: hidden;
+    background: #151719;
+    color: #f7f7f4;
+  }
+
+  .footer-action {
+    display: grid;
+    grid-template-columns: 1fr minmax(280px, 440px);
+    width: min(100%, 1600px);
+    margin: 0 auto;
+    padding: clamp(70px, 8vw, 130px) clamp(24px, 5vw, 72px);
+    align-items: end;
+    gap: 50px;
+    border-bottom: 1px solid rgba(255,255,255,0.22);
+  }
+
+  .footer-action p {
+    margin: 0 0 18px;
+    color: #c0aa98;
+    font-family: "Inter", sans-serif;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.25em;
+  }
+
+  .footer-action h2 {
+    margin: 0;
+    font-size: clamp(38px, 5.4vw, 82px);
+    font-weight: 900;
+    letter-spacing: -0.065em;
+    line-height: 1.16;
+  }
+
+  .footer-action > a {
+    display: flex;
+    min-height: 108px;
+    padding: 25px 30px;
+    align-items: center;
+    justify-content: space-between;
+    background: #92745e;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 900;
+    letter-spacing: 0.13em;
+    text-decoration: none;
+    transition: background 0.25s ease;
+  }
+
+  .footer-action > a:hover { background: #fff; color: #151719; }
+  .footer-action > a b { font-size: 34px; font-weight: 400; }
+
+  .footer-word {
+    display: flex;
+    width: min(100%, 1600px);
+    margin: 0 auto;
+    padding: 26px clamp(20px, 4vw, 62px) 34px;
+    flex-direction: column;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(255,255,255,0.45);
+    font-family: "Archivo Black", "Noto Sans JP", sans-serif;
+    font-size: clamp(62px, 13.2vw, 214px);
+    letter-spacing: -0.075em;
+    line-height: 0.77;
+    white-space: nowrap;
+  }
+
+  .footer-word span:last-child {
+    color: #f7f7f4;
+    -webkit-text-stroke: 0;
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 0.9fr;
+    width: min(100%, 1600px);
+    margin: 0 auto;
+    padding: 70px clamp(24px, 5vw, 72px);
+    gap: 55px;
+    border-top: 1px solid rgba(255,255,255,0.22);
+  }
+
+  .footer-brand img {
+    width: 190px;
+    height: auto;
+    margin-bottom: 15px;
+    filter: invert(1);
+  }
+
+  .footer-brand > p {
+    margin: 0 0 27px;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.22em;
+  }
+
+  address {
+    color: #aeb4b8;
+    font-size: 12px;
+    font-style: normal;
+    line-height: 2;
+  }
+
+  nav > p,
+  .footer-social > p:first-child {
+    margin: 0 0 20px;
+    color: #c0aa98;
+    font-family: "Inter", sans-serif;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+  }
+
+  nav a,
+  .footer-social > a {
+    display: flex;
+    padding: 8px 0;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255,255,255,0.14);
+    color: #d3d6d8;
+    font-size: 11px;
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  nav a:hover,
+  .footer-social > a:hover { color: #c0aa98; }
+
+  .notice {
+    margin: 34px 0 0;
+    color: #7f868b;
+    font-size: 9px;
+    line-height: 1.9;
+  }
+
+  .footer-bottom {
+    display: flex;
+    padding: 18px clamp(24px, 5vw, 72px);
+    justify-content: space-between;
+    border-top: 1px solid rgba(255,255,255,0.18);
+    color: #747b80;
+    font-family: "Inter", sans-serif;
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+  }
+
+  @media (max-width: 900px) {
+    .footer-action {
+      grid-template-columns: 1fr;
+      padding: 70px 20px;
+    }
+
+    .footer-action > a { min-height: 82px; }
+    .footer-word { padding: 24px 15px 30px; font-size: 20vw; }
+
+    .footer-grid {
+      grid-template-columns: repeat(2, 1fr);
+      padding: 55px 20px;
+      gap: 48px 28px;
+    }
+
+    .footer-brand,
+    .footer-social { grid-column: 1 / -1; }
+
+    .footer-bottom {
+      padding: 17px 20px;
+      flex-direction: column;
+      gap: 4px;
+    }
+  }
+</style>
