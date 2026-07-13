@@ -104,6 +104,7 @@ export const STAFF = [
 // 店舗写真（本部支給素材より。顔が写らないようトリミング済み・元データは photos-src/）
 export const PHOTOS = {
   hero: '/images/photos/hero.webp', // pic-15 縦位置
+  hero2: '/images/photos/hero2.webp', // pic-37 縦位置クロップ（TOPのMV1枚目）
   marquee1: '/images/photos/marquee-1.webp', // pic-66
   marquee2: '/images/photos/marquee-2.webp', // pic-9
   marquee3: '/images/photos/marquee-3.webp', // pic-58 横位置・上部カット

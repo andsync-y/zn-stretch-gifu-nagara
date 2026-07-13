@@ -82,8 +82,8 @@ const marqueeItems = [
 
       <!-- 写真（SP=全幅・キャッチの下地／PC=大きく右側）5枚クロスフェード -->
       <div class="relative order-1 h-[420px] w-full lg:order-2 lg:h-[700px] xl:h-[740px]">
-        <img src={PHOTOS.hero} alt="完全個室で行うパーソナルストレッチの施術シーン" width="1280" height="1720" fetchpriority="high" decoding="async" class="h-full w-full object-cover" style="object-position:center 30%" />
-        {[PHOTOS.hero, PHOTOS.concept, PHOTOS.method2, PHOTOS.method1, PHOTOS.method3].map((src, i) => (
+        <img src={PHOTOS.hero2} alt="完全個室で行うパーソナルストレッチの施術シーン" width="1085" height="1458" fetchpriority="high" decoding="async" class="h-full w-full object-cover" style="object-position:center 30%" />
+        {[PHOTOS.hero2, PHOTOS.concept, PHOTOS.method2, PHOTOS.method1, PHOTOS.method3].map((src, i) => (
           <img
             src={src} alt="" width="1280" height="1720" loading={i === 0 ? undefined : 'lazy'} decoding="async" aria-hidden="true"
             class="hero-slide absolute inset-0 h-full w-full object-cover"
