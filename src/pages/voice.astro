@@ -2,10 +2,10 @@
 import Base from '../layouts/Base.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import ReserveCTA from '../components/ReserveCTA.astro';
-import { LAST_UPDATED } from '../consts';
+import { LAST_UPDATED, REVIEWS } from '../consts';
 
 const title = 'お客様の声｜岐阜市長良の完全個室パーソナルストレッチ専門店 全力ストレッチ岐阜長良店';
-const description = '全力ストレッチ岐阜長良店に寄せられたお客様の声（準備中）。ご来店いただいた方の感想を、許可のうえ順次掲載します。実際のお客様の声のみを掲載します。';
+const description = '全力ストレッチ岐阜長良店に寄せられたお客様の声。Googleマップに投稿された実際のクチコミを原文のまま掲載しています。完全個室・マンツーマンのパーソナルストレッチ専門店。';
 
 const breadcrumb = {
   '@context': 'https://schema.org', '@type': 'BreadcrumbList',
@@ -18,11 +18,13 @@ const breadcrumb = {
 <Base title={title} description={description} path="/voice" jsonld={[breadcrumb]}>
   {/*
     ============================================================
-    Review / AggregateRating の JSON-LD ひな型（★実レビュー投入時に有効化）
+    Review / AggregateRating の JSON-LD ひな型
     ------------------------------------------------------------
-    実際にいただいた口コミが集まってから、下記のコメントを外し、
-    reviewBody・author・ratingValue を「実データ」で埋めること。
-    空データや創作データのまま出力しないこと（Google厳罰・捏造禁止）。
+    ★重要：Googleマップから転載したクチコミは構造化データにしてはいけない
+    （Googleのガイドライン上、Review schemaにできるのは「自サイトで直接
+    収集したレビュー」のみ。本文表示はOK、schema化はNG）。
+    将来、サイト上のフォーム等で直接いただいたレビューを掲載する場合のみ、
+    下記を実データで埋めて有効化すること。空データ・創作データは禁止。
 
     <script type="application/ld+json">
     {
@@ -51,18 +53,24 @@ const breadcrumb = {
     <h1 class="display-title mb-6">VOICE</h1>
     <p class="mb-4 text-[26px] font-black sm:text-[36px]">お客様の声</p>
     <p class="mb-16 max-w-[820px] text-[15px] leading-[2.1] text-sub sm:mb-20 sm:text-[17px]">
-      2026年6月20日にオープンした店舗です。ご来店いただいた方の声を、ご本人の許可のうえ順次掲載していきます。当店では、事実にもとづかない感想の掲載は一切行いません。
+      ご来店いただいた方の声を掲載しています。当店では、事実にもとづかない感想の掲載は一切行いません。
     </p>
 
     <div class="border border-ink p-2">
       <div class="border border-ink px-6 py-14 sm:px-16 sm:py-[72px]">
-        <p class="mb-10 text-center text-sm tracking-[0.08em] text-muted">Google マップのクチコミより</p>
-        <div class="rounded border border-dashed border-[#D9D9D5] px-8 py-14 text-center">
-          <p class="mb-3 text-lg font-black text-sub">掲載準備中</p>
-          <p class="text-[15px] leading-[2.1] text-sub">
-            クチコミが集まりしだい、このページに掲載します。<br />※実際のお客様の声のみを掲載します（{`{{お客様の声_◯◯_n}}`} プレースホルダ運用中）。
-          </p>
+        <p class="mb-12 text-center text-sm tracking-[0.08em] text-muted">Google マップのクチコミより</p>
+        <div class="grid gap-x-14 gap-y-12 md:grid-cols-2 lg:grid-cols-3">
+          {REVIEWS.map((r) => (
+            <div>
+              <div class="mb-3.5 flex items-baseline justify-between gap-3">
+                <span class="text-[15px] font-black tracking-[0.06em]">{r.name}</span>
+                <span class="text-sm tracking-[0.12em] text-amber" aria-label={`星${r.stars}つ`}>{'★'.repeat(r.stars)}{'☆'.repeat(5 - r.stars)}</span>
+              </div>
+              <p class="border-t border-ink/25 pt-4 text-[15px] leading-[2.1] text-muted sm:text-base">{r.text}</p>
+            </div>
+          ))}
         </div>
+        <p class="mt-12 text-center text-[12px] text-muted">※Googleマップに投稿された実際のクチコミを、原文のまま掲載しています。効果には個人差があります。</p>
       </div>
     </div>
 

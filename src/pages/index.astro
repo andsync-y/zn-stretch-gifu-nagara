@@ -3,7 +3,7 @@ import Base from '../layouts/Base.astro';
 import ReserveCTA from '../components/ReserveCTA.astro';
 import PriceRows from '../components/PriceRows.astro';
 import CircleBadge from '../components/CircleBadge.astro';
-import { SITE, BRAND, STAFF, SYMPTOMS, PHOTOS } from '../consts';
+import { SITE, BRAND, STAFF, SYMPTOMS, PHOTOS, REVIEWS } from '../consts';
 
 const title = '岐阜市長良の完全個室パーソナルストレッチ｜全力ストレッチ岐阜長良店';
 const description = '岐阜市長良の完全個室・マンツーマンのパーソナルストレッチ専門店。元格闘家考案「ザウルス式」体幹軸調整ストレッチで動ける身体へ。初回60分3,300円、駐車場10台以上、22時まで営業。';
@@ -234,23 +234,19 @@ const marqueeItems = [
         <div class="border border-ink px-6 py-14 sm:px-16 sm:py-[72px]">
           <h2 class="display-title mb-6 text-center">VOICE</h2>
           <p class="mb-12 text-center text-sm tracking-[0.08em] text-muted">Google マップのクチコミより</p>
-          {/*
-            実際のクチコミが集まったら、下の「掲載準備中」ボックスを削除し、
-            このグリッドを有効化して本文を貼り付ける（捏造・星の創作は禁止）:
-            <div class="grid gap-12 md:grid-cols-3">
+          <div class="grid gap-x-14 gap-y-12 md:grid-cols-3">
+            {REVIEWS.slice(0, 6).map((r) => (
               <div>
                 <div class="mb-3.5 flex items-baseline justify-between gap-3">
-                  <span class="text-[15px] font-black tracking-[0.06em]">◯ さん</span>
-                  <span class="text-sm tracking-[0.12em] text-amber">★★★★★</span>
+                  <span class="text-[15px] font-black tracking-[0.06em]">{r.name}</span>
+                  <span class="text-sm tracking-[0.12em] text-amber" aria-label={`星${r.stars}つ`}>{'★'.repeat(r.stars)}{'☆'.repeat(5 - r.stars)}</span>
                 </div>
-                <p class="border-t border-ink/25 pt-4 text-base leading-[2.1] text-muted">（クチコミ本文）</p>
+                <p class="border-t border-ink/25 pt-4 text-[15px] leading-[2.1] text-muted sm:text-base">{r.text}</p>
               </div>
-            </div>
-          */}
-          <div class="rounded border border-dashed border-[#D9D9D5] px-8 py-14 text-center">
-            <p class="mb-3 text-lg font-black text-sub">掲載準備中</p>
-            <p class="text-[15px] leading-[2.1] text-sub">ご来店いただいたお客様の声を、準備が整いしだい掲載します。<br />※実際のお客様の声のみを掲載します。</p>
+            ))}
           </div>
+          <p class="mt-12 text-center text-[12px] text-muted">※Googleマップに投稿された実際のクチコミを、原文のまま掲載しています。効果には個人差があります。</p>
+          <p class="mt-4 text-center"><a href="/voice" class="text-[15px] font-bold underline-offset-4 hover:underline">お客様の声をもっと見る →</a></p>
         </div>
       </div>
     </div>
