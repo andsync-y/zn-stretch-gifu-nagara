@@ -216,19 +216,6 @@ const marqueeWords = [
     }
   </script>
 
-  <!-- MARQUEE（キーワードのみ・グリッド背景） -->
-  <section class="home-marquee section-grid overflow-hidden py-8 sm:py-10" aria-hidden="true">
-    <div class="flex w-max animate-marquee">
-      {[0, 1].map(() => (
-        <div class="flex items-baseline">
-          {marqueeWords.map((word) => (
-            <span class="whitespace-nowrap px-6 text-[13px] font-black tracking-[0.06em] sm:px-9 sm:text-[19px]">{word}</span>
-          ))}
-        </div>
-      ))}
-    </div>
-  </section>
-
   <!-- CONCEPT -->
   <section id="concept" class="home-concept section-grid relative border-b border-ink/20 px-5 py-24 sm:px-10 sm:py-36 xl:px-14">
     <span class="side-label">Concept — 01</span>
@@ -240,7 +227,9 @@ const marqueeWords = [
       <div class="grid items-center gap-12 lg:grid-cols-[520px_1fr] lg:gap-[88px]">
         <div class="rise relative order-2 lg:order-1">
           <span class="absolute -left-3 -top-5 z-10 bg-ink px-3 py-1 font-script text-[9px] font-extrabold tracking-[0.18em] text-white">01 / BODY AXIS</span>
-          <img src={PHOTOS.concept} alt="マンツーマンで行う体感軸調整ストレッチ" width="1060" height="1700" loading="lazy" decoding="async" class="h-[420px] w-full object-cover lg:h-[850px]" style="object-position:center 62%" />
+          <div class="parallax-media h-[420px] w-full overflow-hidden lg:h-[850px]">
+            <img src={PHOTOS.concept} alt="マンツーマンで行う体感軸調整ストレッチ" width="1060" height="1700" loading="lazy" decoding="async" class="h-full w-full object-cover" style="object-position:center 62%" />
+          </div>
         </div>
         <div class="rise order-1 lg:order-2">
           <p class="mb-7 text-[23px] font-black leading-[1.8] sm:text-[32px] lg:text-[40px] lg:leading-[1.7]">
@@ -263,6 +252,19 @@ const marqueeWords = [
           </div>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- MARQUEE（キーワードのみ・グリッド背景） -->
+  <section class="home-marquee section-grid overflow-hidden py-8 sm:py-10" aria-hidden="true">
+    <div class="flex w-max animate-marquee">
+      {[0, 1].map(() => (
+        <div class="flex items-baseline">
+          {marqueeWords.map((word) => (
+            <span class="whitespace-nowrap px-6 text-[13px] font-black tracking-[0.06em] sm:px-9 sm:text-[19px]">{word}</span>
+          ))}
+        </div>
+      ))}
     </div>
   </section>
 

@@ -193,6 +193,25 @@
         transform: none;
       }
     }
+
+    /* スクロール連動パララックス：マスク内で画像が上下にドリフトし奥行きを出す。
+       マスク(.parallax-media)は overflow:hidden でスクロールコンテナになるため、
+       view() を画像に直接付けるとタイムラインがマスク基準になり進行しない。
+       マスク自身に名前付き view-timeline を張り、ビューポート基準で画像を駆動する。 */
+    .parallax-media {
+      view-timeline-name: --parallax-media;
+      view-timeline-axis: block;
+    }
+    .parallax-media > img {
+      animation: parallaxDrift linear both;
+      animation-timeline: --parallax-media;
+      animation-range: cover 0% cover 100%;
+      will-change: transform;
+    }
+    @keyframes parallaxDrift {
+      from { transform: translateY(-6.5%) scale(1.16); }
+      to   { transform: translateY(6.5%) scale(1.16); }
+    }
   }
 }
 
@@ -200,7 +219,7 @@
 .hero-scrub {
   --hero-progress: 0;
   position: relative;
-  height: 420vh;
+  height: 300vh;
   background: #f7f7f4;
 }
 
@@ -437,7 +456,7 @@
 }
 
 @media (max-width: 1023px) {
-  .hero-scrub { height: 360svh; }
+  .hero-scrub { height: 260svh; }
   .hero-scrub-stage { top: 64px; height: calc(100svh - 64px); min-height: 480px; }
   .hero-copy { top: 13%; left: 5%; }
   .hero-copy h1 { font-size: clamp(42px, 11.5vw, 64px); }

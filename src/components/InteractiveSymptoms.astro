@@ -19,18 +19,18 @@ const symptoms = SYMPTOMS.map((item, index) => ({
 }));
 
 const hotspots = [
-  { key: 'shoulder', x: 34, y: 24, w: 24, h: 13 },
-  { key: 'lower-back', x: 51, y: 51, w: 30, h: 20 },
-  { key: 'lower-back', x: 58, y: 57, w: 24, h: 18, delay: 120 },
-  { key: 'neck-eyes', x: 42, y: 16, w: 23, h: 17 },
-  { key: 'neck-eyes', x: 33, y: 9, w: 13, h: 9, delay: 100 },
-  { key: 'lower-legs', x: 42, y: 76, w: 16, h: 27 },
-  { key: 'lower-legs', x: 57, y: 76, w: 16, h: 27, delay: 100 },
-  { key: 'whole-body', x: 49, y: 42, w: 48, h: 40 },
-  { key: 'upper-back', x: 45, y: 28, w: 37, h: 22 },
-  { key: 'kinetic-chain', x: 35, y: 24, w: 21, h: 13 },
-  { key: 'kinetic-chain', x: 55, y: 54, w: 25, h: 19, delay: 90 },
-  { key: 'kinetic-chain', x: 43, y: 69, w: 17, h: 14, delay: 180 },
+  { key: 'shoulder', x: 50, y: 20, w: 30, h: 14 },
+  { key: 'lower-back', x: 52, y: 39, w: 26, h: 15 },
+  { key: 'lower-back', x: 52, y: 47, w: 30, h: 15, delay: 120 },
+  { key: 'neck-eyes', x: 49, y: 16, w: 20, h: 14 },
+  { key: 'neck-eyes', x: 45, y: 8, w: 13, h: 9, delay: 100 },
+  { key: 'lower-legs', x: 45, y: 80, w: 15, h: 24 },
+  { key: 'lower-legs', x: 56, y: 79, w: 15, h: 24, delay: 100 },
+  { key: 'whole-body', x: 50, y: 38, w: 46, h: 46 },
+  { key: 'upper-back', x: 51, y: 27, w: 32, h: 20 },
+  { key: 'kinetic-chain', x: 49, y: 20, w: 22, h: 13 },
+  { key: 'kinetic-chain', x: 53, y: 46, w: 24, h: 16, delay: 90 },
+  { key: 'kinetic-chain', x: 45, y: 67, w: 16, h: 14, delay: 180 },
 ];
 ---
 
@@ -128,8 +128,6 @@ const hotspots = [
     position: relative;
     min-width: 0;
     overflow: hidden;
-    border-top: 1px solid rgba(255, 255, 255, .22);
-    border-bottom: 1px solid rgba(255, 255, 255, .22);
     background: #151719;
   }
 
@@ -178,12 +176,7 @@ const hotspots = [
 
   .symptom-hotspot.is-active {
     opacity: .92;
-    animation: hotspot-pulse 1.9s ease-in-out var(--delay) infinite;
-  }
-
-  @keyframes hotspot-pulse {
-    0%, 100% { opacity: .64; transform: translate(-50%, -50%) scale(.82); }
-    50% { opacity: 1; transform: translate(-50%, -50%) scale(1.13); }
+    transform: translate(-50%, -50%) scale(1);
   }
 
   .symptoms-list {
@@ -285,13 +278,20 @@ const hotspots = [
   @media (max-width: 767px) {
     /* SPも2カラム：左にスケルトン、右に項目リスト */
     .symptoms-explorer {
-      grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
-      gap: 14px;
+      grid-template-columns: minmax(0, 0.96fr) minmax(0, 1.04fr);
+      gap: 12px;
       min-height: 0;
       align-items: stretch;
     }
 
     .symptoms-visual { height: auto; min-height: 430px; }
+    /* SPは列幅が狭くmax-widthで横が詰まると縦横比が崩れ赤エフェクトがズレるため、幅基準で配置してホットスポットを画像に一致させる */
+    .symptoms-body {
+      width: 100%;
+      height: auto;
+      max-width: none;
+      max-height: 100%;
+    }
     .symptoms-list { width: 100%; }
     .symptom-entry { min-height: 58px; grid-template-columns: minmax(0, 1fr) 30px; }
     .symptom-trigger { grid-template-columns: 22px minmax(0, 1fr); gap: 6px; padding: 8px 4px; }
