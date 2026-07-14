@@ -238,11 +238,11 @@
   pointer-events: none;
 }
 
-/* テキストオーバーレイのクリップ枠。MV(canvas)は全面（stage top:0）だが、コピー・コンセプト・オファーは
-   ヘッダー(76px)の下でクリップして、ロール時にヘッダーへ被らないようにする */
+/* テキストオーバーレイ枠。MV(canvas)全面の上に重ねる。top:0にして、コンセプトがロール時に
+   透過ヘッダー（ロゴ）の背面を「情報が通っていく」ように流れる。ロゴの可読性は上端フェードで確保 */
 .hero-overlays {
   position: absolute;
-  top: 76px;
+  top: 0;
   left: 0;
   right: 0;
   bottom: 0;
@@ -319,7 +319,7 @@
   font-weight: 900;
   letter-spacing: -0.02em;
   line-height: 1.22;
-  text-shadow: 0 2px 26px rgba(247, 247, 244, 0.85);
+  text-shadow: 0 1px 5px rgba(247, 247, 244, 0.45);
 }
 
 .hero-concept-sub {
@@ -329,7 +329,7 @@
   font-weight: 600;
   line-height: 1.9;
   color: #33373b;
-  text-shadow: 0 1px 16px rgba(247, 247, 244, 0.9);
+  text-shadow: 0 1px 4px rgba(247, 247, 244, 0.55);
 }
 
 .hero-concept-points {
@@ -345,7 +345,7 @@
   gap: 16px;
   padding: 12px 2px;
   border-bottom: 1px solid rgba(28, 30, 33, 0.2);
-  text-shadow: 0 1px 14px rgba(247, 247, 244, 0.9);
+  text-shadow: 0 1px 4px rgba(247, 247, 244, 0.5);
 }
 
 .hero-concept-points b {
