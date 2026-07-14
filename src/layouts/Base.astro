@@ -94,6 +94,37 @@ const schemas = [localBusiness, ...jsonld];
     {schemas.map((s) => (
       <script type="application/ld+json" set:html={JSON.stringify(s)} />
     ))}
+
+    <!-- Google Analytics 4 -->
+    <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-L88N21PDK8"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag('js', new Date());
+      gtag('config', 'G-L88N21PDK8');
+
+      // キーイベント計測：WEB予約（ホットペッパー）・LINE・電話のクリック
+      document.addEventListener(
+        'click',
+        function (e) {
+          var a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
+          if (!a) return;
+          var href = a.getAttribute('href') || '';
+          var name = '';
+          if (href.indexOf('beauty.hotpepper.jp') !== -1) name = 'click_reserve';
+          else if (href.indexOf('lin.ee') !== -1) name = 'click_line';
+          else if (href.indexOf('tel:') === 0) name = 'click_tel';
+          if (name) {
+            gtag('event', name, {
+              link_url: href,
+              link_text: (a.textContent || '').trim().slice(0, 40),
+              page_path: location.pathname,
+            });
+          }
+        },
+        { capture: true, passive: true }
+      );
+    </script>
   </head>
   <body>
     <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:m-2 focus:bg-ink focus:px-4 focus:py-2 focus:text-base">本文へスキップ</a>
