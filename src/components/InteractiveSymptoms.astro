@@ -60,23 +60,21 @@ const hotspots = [
 
   <div class="symptoms-list" aria-label="お悩みを選ぶ">
     {symptoms.map((item) => (
-      <div class="symptom-entry" data-symptom-entry={item.key}>
-        <button
-          type="button"
-          class="symptom-trigger"
-          data-symptom-trigger={item.key}
-          aria-pressed={item.id === '01' ? 'true' : 'false'}
-        >
+      <a
+        class:list={['symptom-entry', item.id === '01' && 'is-active']}
+        href={item.href}
+        data-symptom-entry={item.key}
+        aria-label={`${item.label}（${item.note}）を詳しく見る`}
+      >
+        <span class="symptom-trigger">
           <span class="symptom-no">{item.id}</span>
           <span class="symptom-copy">
             <strong>{item.label}</strong>
             <small>{item.note}</small>
           </span>
-        </button>
-        <a class="symptom-link" href={item.href} aria-label={`${item.label}を詳しく見る`}>
-          <span aria-hidden="true">↗</span>
-        </a>
-      </div>
+        </span>
+        <span class="symptom-link" aria-hidden="true">↗</span>
+      </a>
     ))}
   </div>
 </div>
@@ -86,28 +84,22 @@ const hotspots = [
 
   if (explorer) {
     const entries = [...explorer.querySelectorAll<HTMLElement>('[data-symptom-entry]')];
-    const buttons = [...explorer.querySelectorAll<HTMLButtonElement>('[data-symptom-trigger]')];
     const hotspots = [...explorer.querySelectorAll<HTMLElement>('[data-hotspot]')];
     const desktopHover = matchMedia('(min-width: 768px) and (hover: hover)');
 
     const setActive = (key: string) => {
-      const button = explorer.querySelector<HTMLButtonElement>(`[data-symptom-trigger="${key}"]`);
-      if (!button) return;
-
       explorer.dataset.active = key;
-      buttons.forEach((item) => item.setAttribute('aria-pressed', String(item.dataset.symptomTrigger === key)));
+      entries.forEach((entry) => entry.classList.toggle('is-active', entry.dataset.symptomEntry === key));
       hotspots.forEach((hotspot) => hotspot.classList.toggle('is-active', hotspot.dataset.hotspot === key));
     };
 
     entries.forEach((entry) => {
       const key = entry.dataset.symptomEntry ?? 'shoulder';
-      const button = entry.querySelector<HTMLButtonElement>('[data-symptom-trigger]');
-
+      // 各行はリンク（クリック・タップで詳細ページへ遷移）。PCはホバー／キーボードフォーカスで該当部位をハイライト
       entry.addEventListener('pointerenter', () => {
         if (desktopHover.matches) setActive(key);
       });
       entry.addEventListener('focusin', () => setActive(key));
-      button?.addEventListener('click', () => setActive(key));
     });
 
     setActive('shoulder');
@@ -189,10 +181,13 @@ const hotspots = [
     grid-template-columns: minmax(0, 1fr) 48px;
     min-height: 68px;
     border-bottom: 1px solid rgba(255, 255, 255, .2);
+    color: #f4f0e9;
+    text-decoration: none;
+    cursor: pointer;
     transition: background-color 220ms ease;
   }
 
-  .symptom-entry:has(.symptom-trigger[aria-pressed='true']) {
+  .symptom-entry.is-active {
     background: rgba(239, 63, 55, .075);
   }
 
@@ -201,17 +196,10 @@ const hotspots = [
     grid-template-columns: 38px minmax(0, 1fr);
     align-items: center;
     gap: 10px;
-    width: 100%;
     padding: 10px 6px 10px 2px;
-    border: 0;
-    background: transparent;
-    color: #f4f0e9;
-    text-align: left;
-    cursor: pointer;
   }
 
-  .symptom-trigger:focus-visible,
-  .symptom-link:focus-visible {
+  .symptom-entry:focus-visible {
     outline: 2px solid var(--symptom-red);
     outline-offset: -2px;
   }
@@ -253,14 +241,19 @@ const hotspots = [
     transition: color 220ms ease, transform 220ms ease;
   }
 
-  .symptom-trigger[aria-pressed='true'] .symptom-no,
-  .symptom-trigger[aria-pressed='true'] .symptom-copy strong,
-  .symptom-entry:has(.symptom-trigger[aria-pressed='true']) .symptom-link {
+  .symptom-entry.is-active .symptom-no,
+  .symptom-entry.is-active .symptom-copy strong,
+  .symptom-entry.is-active .symptom-link {
     color: var(--symptom-red);
   }
 
-  .symptom-entry:has(.symptom-trigger[aria-pressed='true']) .symptom-link {
+  .symptom-entry.is-active .symptom-link {
     transform: translate(2px, -2px);
+  }
+
+  /* PCではホバー中の行も控えめにハイライト（リンクであることを示す） */
+  @media (min-width: 768px) and (hover: hover) {
+    .symptom-entry:hover { background: rgba(239, 63, 55, .1); }
   }
 
   @media (max-width: 1023px) and (min-width: 768px) {

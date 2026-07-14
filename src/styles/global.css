@@ -266,7 +266,7 @@
   right: -6%;
   z-index: -1;
   background: linear-gradient(100deg, rgba(247, 247, 244, 0.86) 40%, rgba(247, 247, 244, 0.46) 66%, rgba(247, 247, 244, 0) 86%);
-  opacity: clamp(0, calc((var(--hero-progress) - 0.16) * 6), 1);
+  /* スクリム独自の透明度アニメは廃止（親.hero-conceptのopacityと一緒にフェード）。毎フレームの背景再描画を減らして軽くする */
   pointer-events: none;
 }
 
