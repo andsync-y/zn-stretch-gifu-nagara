@@ -120,7 +120,7 @@ const hotspots = [
     display: grid;
     grid-template-columns: minmax(0, 1.16fr) minmax(390px, .84fr);
     gap: clamp(36px, 5vw, 80px);
-    min-height: clamp(500px, 61vh, 620px);
+    min-height: clamp(560px, 72vh, 760px);
     align-items: stretch;
   }
 
@@ -136,7 +136,7 @@ const hotspots = [
     left: 50%;
     top: 50%;
     width: auto;
-    height: 96%;
+    height: 100%;
     max-width: 100%;
     aspect-ratio: 921 / 1708;
     transform: translate(-50%, -50%);
@@ -265,9 +265,9 @@ const hotspots = [
 
   @media (max-width: 1023px) and (min-width: 768px) {
     .symptoms-explorer {
-      grid-template-columns: minmax(0, 1fr) minmax(330px, .8fr);
+      grid-template-columns: minmax(0, 1.06fr) minmax(320px, .74fr);
       gap: 28px;
-      min-height: 500px;
+      min-height: 620px;
     }
 
     .symptom-entry { min-height: 64px; }
@@ -276,24 +276,30 @@ const hotspots = [
   }
 
   @media (max-width: 767px) {
-    /* SPも2カラム：左にスケルトン、右に項目リスト */
+    /* SPも2カラム：左にスケルトン、右に項目リスト。骨格を大きく見せる */
     .symptoms-explorer {
-      grid-template-columns: minmax(0, 0.96fr) minmax(0, 1.04fr);
-      gap: 12px;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+      gap: 10px;
       min-height: 0;
-      align-items: stretch;
+      align-items: center;
     }
 
-    .symptoms-visual { height: auto; min-height: 430px; }
-    /* SPは列幅が狭くmax-widthで横が詰まると縦横比が崩れ赤エフェクトがズレるため、幅基準で配置してホットスポットを画像に一致させる */
+    /* 暗パネルを骨格の縦横比に合わせて、上下のレターボックス（余白）をなくす＝骨格が枠いっぱいに */
+    .symptoms-visual { height: auto; min-height: 0; aspect-ratio: 921 / 1708; }
+    /* パネル＝骨格比のため、幅・高さ100%で満たす。ホットスポット（%指定）も画像に正確に一致する */
     .symptoms-body {
+      position: absolute;
+      inset: 0;
+      left: 0;
+      top: 0;
       width: 100%;
-      height: auto;
+      height: 100%;
       max-width: none;
-      max-height: 100%;
+      max-height: none;
+      transform: none;
     }
     .symptoms-list { width: 100%; }
-    .symptom-entry { min-height: 58px; grid-template-columns: minmax(0, 1fr) 30px; }
+    .symptom-entry { min-height: 60px; grid-template-columns: minmax(0, 1fr) 30px; }
     .symptom-trigger { grid-template-columns: 22px minmax(0, 1fr); gap: 6px; padding: 8px 4px; }
     .symptom-no { font-size: 8px; }
     .symptom-copy strong { font-size: 12px; }
