@@ -56,6 +56,21 @@ const faqSchema = {
   mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
 };
 
+
+const ageSegments = [
+  { label: '20代以下', value: 5, color: '#f7f7f4' },
+  { label: '30代', value: 25, color: '#b88a2f' },
+  { label: '40代', value: 30, color: '#86827a' },
+  { label: '50代', value: 25, color: '#5f6261' },
+  { label: '60代以上', value: 15, color: '#303436' },
+];
+
+const jobStats = [
+  { label: 'デスクワーク', value: 45, color: 'bg-[#b88a2f]' },
+  { label: '立ち仕事・現場作業', value: 25, color: 'bg-[#5f6261]' },
+  { label: '接客・サービス業', value: 15, color: 'bg-[#73716c]' },
+  { label: 'その他', value: 15, color: 'bg-[#73716c]' },
+];
 const marqueeWords = [
   '#個室',
   '#マンツーマン',
@@ -254,6 +269,104 @@ const marqueeWords = [
           ))}
         </div>
       ))}
+    </div>
+  </section>
+
+
+  <!-- DATA -->
+  <section id="data" class="home-data relative overflow-hidden border-b border-ink bg-[#f2f1ec] px-5 py-20 sm:px-10 sm:py-28 xl:px-14">
+    <div class="absolute inset-0 opacity-[0.55] section-grid" aria-hidden="true"></div>
+    <div class="pointer-events-none absolute -right-28 top-12 h-[360px] w-[360px] rounded-full border border-ink/20 sm:h-[520px] sm:w-[520px]" aria-hidden="true"></div>
+    <div class="pointer-events-none absolute -left-32 bottom-10 h-[260px] w-[260px] rounded-full border border-ink/10 sm:h-[380px] sm:w-[380px]" aria-hidden="true"></div>
+    <div class="relative mx-auto max-w-[1440px]">
+      <div class="rise mb-12 grid gap-6 border-y-2 border-ink py-8 lg:grid-cols-[1fr_auto] lg:items-end sm:mb-16 sm:py-10">
+        <div>
+          <p class="editorial-kicker mb-5">FACTS &amp; FIGURES</p>
+          <h2 class="jp-title">データで見る<br class="sm:hidden" />全力ストレッチ</h2>
+        </div>
+        <p class="max-w-[520px] text-[13px] leading-[2] text-muted sm:text-[15px]">
+          全国展開ブランドとしての規模感と、お客様層の傾向をインフォグラフィックで可視化。ビジネスパーソンが通いやすい、個室パーソナルストレッチです。
+        </p>
+      </div>
+
+      <div class="grid gap-5 lg:grid-cols-[0.95fr_1.15fr_0.9fr] lg:gap-6">
+        <div class="rise border-2 border-ink bg-paper p-6 sm:p-8 lg:min-h-[420px]">
+          <p class="mb-5 flex items-center justify-between border-b border-ink pb-3 text-[12px] font-black tracking-[0.18em]"><span>STORE NETWORK</span><span>01</span></p>
+          <div class="grid min-h-[270px] place-items-center text-center">
+            <div>
+              <p class="text-[15px] font-black tracking-[0.2em]">全国</p>
+              <p class="font-display text-[112px] font-black leading-none tracking-[-0.08em] text-ink sm:text-[148px]">70</p>
+              <p class="-mt-2 text-[28px] font-black tracking-[0.1em]">店舗展開</p>
+              <div class="mx-auto mt-6 h-28 w-20 bg-[url('/images/map-japan.svg')] bg-contain bg-center bg-no-repeat opacity-15" aria-hidden="true"></div>
+              <p class="mt-5 text-[11px] text-muted">※2024年時点</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="rise border-2 border-ink bg-[#151719] p-6 text-inkpaper sm:p-8 lg:min-h-[420px]">
+          <p class="mb-5 flex items-center justify-between border-b border-inkpaper/70 pb-3 text-[12px] font-black tracking-[0.18em]"><span>CUSTOMER PROFILE</span><span>02</span></p>
+          <div class="grid items-center gap-8 md:grid-cols-[1fr_1.1fr]">
+            <div>
+              <h3 class="mb-6 text-center text-[18px] font-black tracking-[0.08em]">お客様の年齢層</h3>
+              <div class="mx-auto grid h-[230px] w-[230px] place-items-center rounded-full border border-inkpaper/40 p-3 sm:h-[270px] sm:w-[270px]">
+                <div class="grid h-full w-full place-items-center rounded-full" style="background: conic-gradient(#f7f7f4 0 5%, #b88a2f 5% 30%, #86827a 30% 60%, #5f6261 60% 85%, #303436 85% 100%);">
+                  <div class="grid h-[38%] w-[38%] place-items-center rounded-full bg-[#151719] text-center text-[10px] font-black leading-[1.5] tracking-[0.1em] text-inkpaper ring-1 ring-inkpaper/50">AGE<br />BALANCE</div>
+                </div>
+              </div>
+            </div>
+            <div class="space-y-3">
+              {ageSegments.map((item) => (
+                <div class="grid grid-cols-[88px_1fr_42px] items-center gap-3 text-[13px] font-bold sm:grid-cols-[96px_1fr_48px]">
+                  <span>{item.label}</span>
+                  <span class="h-2 bg-inkpaper/15"><span class="block h-full" style={`width:${item.value * 2}%; background:${item.color}`}></span></span>
+                  <span class="text-right">{item.value}%</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div class="rise border-2 border-ink bg-paper p-6 sm:p-8 lg:min-h-[420px]">
+          <p class="mb-5 flex items-center justify-between border-b border-ink pb-3 text-[12px] font-black tracking-[0.18em]"><span>GENDER RATIO</span><span>03</span></p>
+          <h3 class="mb-7 text-center text-[18px] font-black tracking-[0.08em]">男女比</h3>
+          <div class="mx-auto grid h-[235px] w-[235px] place-items-center rounded-full" style="background: conic-gradient(#151719 0 80%, #d7d5cf 80% 100%);">
+            <div class="grid h-[62%] w-[62%] place-items-center rounded-full bg-paper text-center shadow-[inset_0_0_0_1px_rgba(21,23,25,.25)]">
+              <p class="text-[16px] font-black">男性</p>
+              <p class="font-display text-[58px] font-black leading-none tracking-[-0.06em]">80<span class="text-[24px]">%</span></p>
+            </div>
+          </div>
+          <p class="mt-5 text-center text-[13px] font-bold text-muted">女性 20%</p>
+        </div>
+      </div>
+
+      <div class="mt-5 grid gap-5 lg:grid-cols-[1.4fr_0.8fr] lg:gap-6">
+        <div class="rise border-2 border-ink bg-paper p-6 sm:p-8">
+          <p class="mb-6 flex items-center justify-between border-b border-ink pb-3 text-[12px] font-black tracking-[0.18em]"><span>OCCUPATION</span><span>04</span></p>
+          <h3 class="mb-7 text-[18px] font-black tracking-[0.08em]">お客様の職業</h3>
+          <div class="space-y-5">
+            {jobStats.map((job) => (
+              <div class="grid grid-cols-[128px_1fr_48px] items-center gap-4 text-[13px] font-black sm:grid-cols-[180px_1fr_56px] sm:text-[15px]">
+                <span>{job.label}</span>
+                <span class="h-7 bg-ink/10"><span class={`block h-full ${job.color}`} style={`width:${job.value * 2}%`}></span></span>
+                <span class="text-right">{job.value}%</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div class="rise border-2 border-ink bg-[#151719] p-6 text-center text-inkpaper sm:p-8">
+          <p class="mb-6 flex items-center justify-between border-b border-inkpaper/70 pb-3 text-[12px] font-black tracking-[0.18em]"><span>REPEAT</span><span>05</span></p>
+          <div class="mx-auto grid h-[230px] w-[230px] place-items-center rounded-full border-[14px] border-dotted border-[#b88a2f]">
+            <div>
+              <p class="text-[16px] font-black tracking-[0.14em]">リピート率</p>
+              <p class="font-display text-[74px] font-black leading-none tracking-[-0.07em]">93<span class="text-[28px]">%</span></p>
+            </div>
+          </div>
+          <p class="mt-5 text-[12px] leading-[1.9] text-inkmuted">リピート・継続利用の多さを示すデータ枠</p>
+        </div>
+      </div>
+
+      <p class="relative mt-6 text-right text-[11px] text-muted">※データは2024年時点の自社調べです。店舗数は全力ストレッチブランド全体の実績です。</p>
     </div>
   </section>
 
@@ -476,3 +589,4 @@ const marqueeWords = [
 
   <ReserveCTA large={true} sub="気になる肩や腰、そのままにせず一度ご相談ください。" />
 </Base>
+
