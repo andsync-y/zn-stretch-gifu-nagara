@@ -1,0 +1,523 @@
+---
+const ageSegments = [
+  { label: '20代以下', value: 5, color: '#e3e1da' },
+  { label: '30代', value: 25, color: '#a98a61' },
+  { label: '40代', value: 30, color: '#aaa79f' },
+  { label: '50代', value: 25, color: '#696b69' },
+  { label: '60代以上', value: 15, color: '#252729' },
+];
+
+const jobStats = [
+  { label: 'デスクワーク', value: 45 },
+  { label: '立ち仕事・現場作業', value: 25 },
+  { label: '接客・サービス業', value: 15 },
+  { label: 'その他', value: 15 },
+];
+---
+
+<section id="data" class="data-section">
+  <div class="data-grid-pattern" aria-hidden="true"></div>
+  <div class="data-inner">
+    <header class="data-header rise">
+      <div class="data-heading-label">
+        <span>FACTS &amp; FIGURES</span>
+        <span>DATA — 01</span>
+      </div>
+      <h2>データで見る<br />全力ストレッチ</h2>
+      <p>全国展開ブランドとしての規模と、<br class="data-pc-break" />お客様の傾向を数字でひも解きます。</p>
+    </header>
+
+    <div class="data-board rise">
+      <article class="data-panel data-network">
+        <div class="data-panel-head"><span>STORE NETWORK</span><span>01</span></div>
+        <div class="network-content">
+          <div class="network-number">
+            <span>全国</span>
+            <strong>70</strong>
+            <b>店舗展開</b>
+          </div>
+          <img src="/images/map-japan.svg" width="90" height="126" loading="lazy" decoding="async" alt="日本地図" />
+        </div>
+        <small>AS OF 2024</small>
+      </article>
+
+      <article class="data-panel data-age">
+        <div class="data-panel-head"><span>CUSTOMER PROFILE</span><span>02</span></div>
+        <div class="age-content">
+          <div class="chart-block">
+            <h3>お客様の年齢層</h3>
+            <div class="age-chart" role="img" aria-label="20代以下5%、30代25%、40代30%、50代25%、60代以上15%">
+              <div><span>AGE</span><b>BALANCE</b></div>
+            </div>
+          </div>
+          <dl class="age-legend">
+            {ageSegments.map((item) => (
+              <div>
+                <dt><i style={`--segment-color:${item.color}`}></i>{item.label}</dt>
+                <dd>{String(item.value).padStart(2, '0')}<small>%</small></dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </article>
+
+      <article class="data-panel data-gender">
+        <div class="data-panel-head"><span>GENDER RATIO</span><span>03</span></div>
+        <div class="gender-content">
+          <h3>男女比</h3>
+          <div class="gender-chart" role="img" aria-label="男性80%、女性20%">
+            <div><span>男性</span><strong>80<small>%</small></strong></div>
+          </div>
+          <p><span>MALE 80</span><span>FEMALE 20</span></p>
+        </div>
+      </article>
+
+      <article class="data-panel data-jobs">
+        <div class="data-panel-head"><span>OCCUPATION</span><span>04</span></div>
+        <div class="jobs-content">
+          <h3>お客様の職業</h3>
+          <div class="job-list">
+            {jobStats.map((job, index) => (
+              <div class="job-row">
+                <span>{job.label}</span>
+                <i><b style={`--job-width:${job.value * 2}%; --job-tone:${index === 0 ? '#a98a61' : index === 1 ? '#696b69' : '#aaa79f'}`}></b></i>
+                <strong>{job.value}<small>%</small></strong>
+              </div>
+            ))}
+          </div>
+        </div>
+      </article>
+
+      <article class="data-panel data-repeat">
+        <div class="data-panel-head"><span>REPEAT</span><span>05</span></div>
+        <div class="repeat-content">
+          <div class="repeat-chart" role="img" aria-label="リピート率93%">
+            <div>
+              <span>リピート率</span>
+              <strong>93<small>%</small></strong>
+            </div>
+          </div>
+          <p>継続して通う方の割合</p>
+        </div>
+      </article>
+    </div>
+
+    <p class="data-note">※データは2024年時点の自社調べです。店舗数は全力ストレッチブランド全体の実績です。</p>
+  </div>
+</section>
+
+<style>
+  .data-section {
+    --data-ink: #17191a;
+    --data-paper: #efeee9;
+    --data-line: rgba(23, 25, 26, 0.72);
+    --data-muted: #6d6c68;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--data-ink);
+    background: var(--data-paper);
+    color: var(--data-ink);
+    padding: clamp(42px, 5vw, 72px) clamp(20px, 4vw, 56px) clamp(34px, 4vw, 54px);
+  }
+
+  .data-grid-pattern {
+    position: absolute;
+    inset: 0;
+    opacity: 0.24;
+    background-image:
+      linear-gradient(rgba(23, 25, 26, 0.1) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(23, 25, 26, 0.1) 1px, transparent 1px);
+    background-size: 40px 40px;
+    mask-image: linear-gradient(to bottom, transparent, #000 18%, #000 82%, transparent);
+    pointer-events: none;
+  }
+
+  .data-inner {
+    position: relative;
+    max-width: 1440px;
+    margin: 0 auto;
+  }
+
+  .data-header {
+    display: grid;
+    grid-template-columns: minmax(190px, 0.66fr) minmax(420px, 1.45fr) minmax(280px, 0.9fr);
+    align-items: end;
+    gap: 28px;
+    min-height: 104px;
+    padding: 0 2px 24px;
+    border-top: 2px solid var(--data-ink);
+    border-bottom: 1px solid var(--data-ink);
+  }
+
+  .data-heading-label {
+    display: flex;
+    justify-content: space-between;
+    align-self: stretch;
+    padding-top: 16px;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+  }
+
+  .data-header h2 {
+    font-size: clamp(30px, 3vw, 48px);
+    font-weight: 900;
+    line-height: 1.08;
+    letter-spacing: -0.045em;
+  }
+
+  .data-header p {
+    padding-bottom: 2px;
+    color: var(--data-muted);
+    font-size: 12px;
+    line-height: 1.9;
+    letter-spacing: 0.04em;
+  }
+
+  .data-board {
+    display: grid;
+    grid-template-columns: 0.86fr 1.42fr 0.96fr;
+    grid-template-rows: minmax(270px, 1.06fr) minmax(200px, 0.78fr);
+    border-left: 1px solid var(--data-line);
+  }
+
+  .data-panel {
+    position: relative;
+    min-width: 0;
+    padding: 18px 24px;
+    border-right: 1px solid var(--data-line);
+    border-bottom: 1px solid var(--data-line);
+    background: rgba(239, 238, 233, 0.82);
+  }
+
+  .data-panel-head {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 9px;
+    border-bottom: 1px solid rgba(23, 25, 26, 0.42);
+    font-size: 8px;
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: 0.2em;
+  }
+
+  .data-panel h3 {
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+  }
+
+  .data-network { grid-column: 1; grid-row: 1; }
+  .data-age { grid-column: 2; grid-row: 1; }
+  .data-gender { grid-column: 3; grid-row: 1; }
+  .data-jobs { grid-column: 1 / span 2; grid-row: 2; }
+  .data-repeat { grid-column: 3; grid-row: 2; }
+
+  .network-content {
+    display: grid;
+    grid-template-columns: 1fr 70px;
+    align-items: center;
+    gap: 12px;
+    height: calc(100% - 38px);
+    padding: 8px 5px 0;
+  }
+
+  .network-number span,
+  .network-number b {
+    display: block;
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 0.16em;
+  }
+
+  .network-number strong {
+    display: block;
+    margin: -3px 0 -5px;
+    font-family: var(--font-display, sans-serif);
+    font-size: clamp(72px, 7.2vw, 112px);
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -0.09em;
+  }
+
+  .network-content img {
+    width: 64px;
+    height: auto;
+    opacity: 0.22;
+    filter: grayscale(1) contrast(1.6);
+  }
+
+  .data-network > small {
+    position: absolute;
+    right: 24px;
+    bottom: 15px;
+    color: var(--data-muted);
+    font-size: 7px;
+    letter-spacing: 0.16em;
+  }
+
+  .age-content {
+    display: grid;
+    grid-template-columns: minmax(164px, 0.9fr) minmax(160px, 1fr);
+    align-items: center;
+    gap: clamp(18px, 2vw, 34px);
+    height: calc(100% - 18px);
+    padding-top: 14px;
+  }
+
+  .chart-block h3 { margin-bottom: 12px; text-align: center; }
+
+  .age-chart {
+    display: grid;
+    width: clamp(148px, 13vw, 190px);
+    aspect-ratio: 1;
+    place-items: center;
+    margin: 0 auto;
+    border-radius: 50%;
+    background: conic-gradient(#e3e1da 0 5%, #a98a61 5% 30%, #aaa79f 30% 60%, #696b69 60% 85%, #252729 85% 100%);
+    box-shadow: 0 0 0 1px var(--data-ink), 0 0 0 7px var(--data-paper), 0 0 0 8px rgba(23, 25, 26, 0.25);
+  }
+
+  .age-chart > div,
+  .gender-chart > div,
+  .repeat-chart > div {
+    display: grid;
+    width: 42%;
+    aspect-ratio: 1;
+    place-items: center;
+    align-content: center;
+    border-radius: 50%;
+    background: var(--data-paper);
+    text-align: center;
+  }
+
+  .age-chart span,
+  .age-chart b {
+    display: block;
+    font-size: 7px;
+    font-weight: 900;
+    line-height: 1.35;
+    letter-spacing: 0.1em;
+  }
+
+  .age-legend { display: grid; gap: 7px; }
+  .age-legend > div {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 14px;
+    padding-bottom: 6px;
+    border-bottom: 1px dotted rgba(23, 25, 26, 0.3);
+  }
+  .age-legend dt {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 10px;
+    font-weight: 700;
+  }
+  .age-legend dt i {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--segment-color);
+    box-shadow: 0 0 0 1px rgba(23, 25, 26, 0.24);
+  }
+  .age-legend dd {
+    font-family: var(--font-display, sans-serif);
+    font-size: 18px;
+    font-weight: 900;
+  }
+  .age-legend dd small { margin-left: 2px; font-size: 8px; }
+
+  .gender-content {
+    display: grid;
+    place-items: center;
+    align-content: center;
+    height: calc(100% - 18px);
+    padding-top: 10px;
+  }
+  .gender-content h3 { margin-bottom: 10px; }
+  .gender-chart {
+    display: grid;
+    width: clamp(142px, 12vw, 180px);
+    aspect-ratio: 1;
+    place-items: center;
+    border-radius: 50%;
+    background: conic-gradient(var(--data-ink) 0 80%, #d3d1ca 80% 100%);
+  }
+  .gender-chart > div { width: 60%; }
+  .gender-chart span { font-size: 10px; font-weight: 900; }
+  .gender-chart strong {
+    font-family: var(--font-display, sans-serif);
+    font-size: 38px;
+    font-weight: 900;
+    line-height: 0.95;
+    letter-spacing: -0.07em;
+  }
+  .gender-chart strong small { font-size: 13px; }
+  .gender-content > p {
+    display: flex;
+    justify-content: space-between;
+    width: min(100%, 190px);
+    margin-top: 11px;
+    font-size: 7px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+  }
+
+  .jobs-content {
+    display: grid;
+    grid-template-columns: 142px 1fr;
+    align-items: center;
+    gap: 28px;
+    height: calc(100% - 18px);
+    padding-top: 12px;
+  }
+  .job-list { display: grid; gap: 9px; }
+  .job-row {
+    display: grid;
+    grid-template-columns: minmax(128px, 0.8fr) minmax(180px, 1.7fr) 44px;
+    align-items: center;
+    gap: 14px;
+    font-size: 10px;
+    font-weight: 800;
+  }
+  .job-row > i {
+    display: block;
+    height: 10px;
+    background: rgba(23, 25, 26, 0.09);
+  }
+  .job-row > i b {
+    display: block;
+    width: var(--job-width);
+    height: 100%;
+    background: var(--job-tone);
+  }
+  .job-row > strong {
+    font-family: var(--font-display, sans-serif);
+    font-size: 18px;
+    text-align: right;
+  }
+  .job-row > strong small { margin-left: 2px; font-size: 8px; }
+
+  .repeat-content {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: 18px;
+    height: calc(100% - 18px);
+    padding-top: 10px;
+  }
+  .repeat-chart {
+    position: relative;
+    display: grid;
+    width: clamp(132px, 11vw, 166px);
+    aspect-ratio: 1;
+    place-items: center;
+    border-radius: 50%;
+    background: conic-gradient(#a98a61 0 93%, rgba(23, 25, 26, 0.12) 93% 100%);
+    transform: rotate(-90deg);
+  }
+  .repeat-chart::after {
+    position: absolute;
+    width: calc(clamp(132px, 11vw, 166px) + 12px);
+    aspect-ratio: 1;
+    border: 1px solid rgba(23, 25, 26, 0.26);
+    border-radius: 50%;
+    content: '';
+  }
+  .repeat-chart > div { width: 78%; transform: rotate(90deg); }
+  .repeat-chart span { font-size: 9px; font-weight: 900; letter-spacing: 0.08em; }
+  .repeat-chart strong {
+    font-family: var(--font-display, sans-serif);
+    font-size: 42px;
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -0.07em;
+  }
+  .repeat-chart strong small { font-size: 14px; }
+  .repeat-content > p {
+    max-width: 86px;
+    color: var(--data-muted);
+    font-size: 9px;
+    line-height: 1.8;
+    letter-spacing: 0.08em;
+  }
+
+  .data-note {
+    margin-top: 11px;
+    color: var(--data-muted);
+    font-size: 8px;
+    line-height: 1.6;
+    text-align: right;
+    letter-spacing: 0.04em;
+  }
+
+  @media (max-width: 1023px) {
+    .data-header {
+      grid-template-columns: 150px 1fr;
+      gap: 18px;
+    }
+    .data-header p { grid-column: 2; }
+    .data-board {
+      grid-template-columns: 0.8fr 1.25fr 0.9fr;
+      grid-template-rows: minmax(260px, 1fr) minmax(195px, 0.76fr);
+    }
+    .data-panel { padding: 16px 18px; }
+    .network-content { grid-template-columns: 1fr 48px; }
+    .network-content img { width: 44px; }
+    .age-content { gap: 16px; }
+    .jobs-content { grid-template-columns: 112px 1fr; gap: 16px; }
+    .job-row { grid-template-columns: 118px 1fr 38px; gap: 10px; }
+    .repeat-content { gap: 8px; }
+  }
+
+  @media (max-width: 767px) {
+    .data-section { padding: 38px 18px 34px; }
+    .data-grid-pattern { background-size: 28px 28px; }
+    .data-header {
+      grid-template-columns: 1fr;
+      min-height: 0;
+      padding: 0 0 20px;
+    }
+    .data-heading-label { min-height: 36px; padding-top: 10px; }
+    .data-header h2 { font-size: clamp(29px, 9.2vw, 38px); }
+    .data-header p { grid-column: auto; font-size: 11px; }
+    .data-pc-break { display: none; }
+    .data-board {
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto;
+    }
+    .data-panel { padding: 15px; }
+    .data-network { grid-column: 1; grid-row: 1; min-height: 240px; }
+    .data-gender { grid-column: 2; grid-row: 1; min-height: 240px; }
+    .data-age { grid-column: 1 / -1; grid-row: 2; min-height: 276px; }
+    .data-jobs { grid-column: 1 / -1; grid-row: 3; min-height: 244px; }
+    .data-repeat { grid-column: 1 / -1; grid-row: 4; min-height: 200px; }
+    .data-panel-head { font-size: 7px; letter-spacing: 0.12em; }
+    .network-content { grid-template-columns: 1fr; place-items: center; text-align: center; }
+    .network-content img { display: none; }
+    .network-number strong { font-size: clamp(68px, 21vw, 88px); }
+    .network-number span, .network-number b { font-size: 10px; }
+    .data-network > small { right: 15px; bottom: 12px; }
+    .age-content { grid-template-columns: 1fr 1fr; gap: 22px; }
+    .age-chart { width: clamp(138px, 39vw, 168px); }
+    .age-legend dt { font-size: 9px; }
+    .age-legend dd { font-size: 16px; }
+    .gender-chart { width: clamp(124px, 35vw, 150px); }
+    .gender-content > p { font-size: 6px; }
+    .jobs-content { grid-template-columns: 1fr; gap: 10px; }
+    .job-row { grid-template-columns: 112px 1fr 36px; gap: 8px; font-size: 9px; }
+    .job-row > strong { font-size: 16px; }
+    .repeat-content { justify-content: center; gap: 28px; }
+    .repeat-chart { width: 136px; }
+    .repeat-chart::after { width: 148px; }
+    .repeat-content > p { max-width: 100px; }
+    .data-note { margin-top: 10px; font-size: 7px; text-align: left; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .data-panel { scroll-behavior: auto; }
+  }
+</style>
