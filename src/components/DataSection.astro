@@ -1,104 +1,90 @@
 ---
 const ageSegments = [
-  { label: '20代以下', value: 5, color: '#e3e1da' },
-  { label: '30代', value: 25, color: '#a98a61' },
-  { label: '40代', value: 30, color: '#aaa79f' },
-  { label: '50代', value: 25, color: '#696b69' },
-  { label: '60代以上', value: 15, color: '#252729' },
+  { key: 'under20', label: '20代以下', value: 5, color: '#e7e5df' },
+  { key: 'thirties', label: '30代', value: 25, color: '#c7b8a3' },
+  { key: 'forties', label: '40代', value: 30, color: '#b5b0a7' },
+  { key: 'fifties', label: '50代', value: 25, color: '#777a79' },
+  { key: 'over60', label: '60代以上', value: 15, color: '#444748' },
 ];
 
 const jobStats = [
-  { label: 'デスクワーク', value: 45 },
-  { label: '立ち仕事・現場作業', value: 25 },
-  { label: '接客・サービス業', value: 15 },
-  { label: 'その他', value: 15 },
+  { label: 'デスクワーク', value: 45, color: '#c7b8a3' },
+  { label: '立ち仕事・現場作業', value: 25, color: '#777a79' },
+  { label: '接客・サービス業', value: 15, color: '#a7aaa9' },
+  { label: 'その他', value: 15, color: '#d9d9d5' },
 ];
 ---
 
-<section id="data" class="data-section">
-  <div class="data-grid-pattern" aria-hidden="true"></div>
+<section id="data" class="data-section" aria-labelledby="data-title">
   <div class="data-inner">
     <header class="data-header rise">
-      <div class="data-heading-label">
-        <span>FACTS &amp; FIGURES</span>
-        <span>DATA — 01</span>
-      </div>
-      <h2>データで見る<br />全力ストレッチ</h2>
-      <p>全国展開ブランドとしての規模と、<br class="data-pc-break" />お客様の傾向を数字でひも解きます。</p>
+      <p>FACTS &amp; FIGURES</p>
+      <h2 id="data-title">データで見る <span>全力ストレッチ</span></h2>
+      <p>BRAND DATA — 2024</p>
     </header>
 
-    <div class="data-board rise">
-      <article class="data-panel data-network">
-        <div class="data-panel-head"><span>STORE NETWORK</span><span>01</span></div>
-        <div class="network-content">
-          <div class="network-number">
-            <span>全国</span>
-            <strong>70</strong>
-            <b>店舗展開</b>
-          </div>
-          <img src="/images/map-japan.svg" width="90" height="126" loading="lazy" decoding="async" alt="日本地図" />
+    <div class="data-composition rise">
+      <article class="data-network" aria-label="全国70店舗展開">
+        <img src="/images/map-japan.svg" width="180" height="300" loading="lazy" decoding="async" alt="" aria-hidden="true" />
+        <svg class="data-dot-ring" viewBox="0 0 100 100" aria-hidden="true">
+          <circle cx="50" cy="50" r="44" pathLength="100"></circle>
+        </svg>
+        <div>
+          <span>全国</span>
+          <strong>70</strong>
+          <b>店舗展開</b>
         </div>
-        <small>AS OF 2024</small>
       </article>
 
-      <article class="data-panel data-age">
-        <div class="data-panel-head"><span>CUSTOMER PROFILE</span><span>02</span></div>
-        <div class="age-content">
-          <div class="chart-block">
-            <h3>お客様の年齢層</h3>
-            <div class="age-chart" role="img" aria-label="20代以下5%、30代25%、40代30%、50代25%、60代以上15%">
-              <div><span>AGE</span><b>BALANCE</b></div>
+      <article class="data-age">
+        <div class="age-visual" role="img" aria-label="お客様の年齢層。20代以下5%、30代25%、40代30%、50代25%、60代以上15%">
+          <div class="age-chart" aria-hidden="true">
+            <div class="age-chart-center">
+              <span>お客様の</span>
+              <strong>年齢層</strong>
+              <i></i>
+              <small>AGE BALANCE</small>
             </div>
           </div>
-          <dl class="age-legend">
-            {ageSegments.map((item) => (
-              <div>
-                <dt><i style={`--segment-color:${item.color}`}></i>{item.label}</dt>
-                <dd>{String(item.value).padStart(2, '0')}<small>%</small></dd>
-              </div>
-            ))}
-          </dl>
+
+          {ageSegments.map((item) => (
+            <p class={`age-label age-${item.key}`}>
+              <span>{item.label}</span>
+              <strong>{item.value}<small>%</small></strong>
+            </p>
+          ))}
         </div>
       </article>
 
-      <article class="data-panel data-gender">
-        <div class="data-panel-head"><span>GENDER RATIO</span><span>03</span></div>
-        <div class="gender-content">
-          <h3>男女比</h3>
-          <div class="gender-chart" role="img" aria-label="男性80%、女性20%">
-            <div><span>男性</span><strong>80<small>%</small></strong></div>
-          </div>
-          <p><span>MALE 80</span><span>FEMALE 20</span></p>
-        </div>
-      </article>
-
-      <article class="data-panel data-jobs">
-        <div class="data-panel-head"><span>OCCUPATION</span><span>04</span></div>
-        <div class="jobs-content">
-          <h3>お客様の職業</h3>
-          <div class="job-list">
-            {jobStats.map((job, index) => (
-              <div class="job-row">
-                <span>{job.label}</span>
-                <i><b style={`--job-width:${job.value * 2}%; --job-tone:${index === 0 ? '#a98a61' : index === 1 ? '#696b69' : '#aaa79f'}`}></b></i>
-                <strong>{job.value}<small>%</small></strong>
-              </div>
-            ))}
+      <article class="data-gender">
+        <h3>男女比</h3>
+        <div class="gender-chart" role="img" aria-label="男性80%、女性20%">
+          <div>
+            <span>男性</span>
+            <strong>80<small>%</small></strong>
           </div>
         </div>
+        <p>女性 20%</p>
       </article>
 
-      <article class="data-panel data-repeat">
-        <div class="data-panel-head"><span>REPEAT</span><span>05</span></div>
-        <div class="repeat-content">
-          <div class="repeat-chart" role="img" aria-label="リピート率93%">
+      <article class="data-jobs">
+        <h3>お客様の職業</h3>
+        <dl>
+          {jobStats.map((job) => (
             <div>
-              <span>リピート率</span>
-              <strong>93<small>%</small></strong>
+              <dt><i style={`--job-color:${job.color}`}></i>{job.label}</dt>
+              <dd>{job.value}<small>%</small></dd>
             </div>
-          </div>
-          <p>継続して通う方の割合</p>
-        </div>
+          ))}
+        </dl>
+      </article>
+
+      <article class="data-repeat" aria-label="リピート率93%">
+        <h3>リピート率</h3>
+        <svg class="data-dot-ring" viewBox="0 0 100 100" aria-hidden="true">
+          <circle cx="50" cy="50" r="44" pathLength="100"></circle>
+        </svg>
+        <strong>93<small>%</small></strong>
       </article>
     </div>
 
@@ -108,416 +94,545 @@ const jobStats = [
 
 <style>
   .data-section {
-    --data-ink: #17191a;
-    --data-paper: #efeee9;
-    --data-line: rgba(23, 25, 26, 0.72);
-    --data-muted: #6d6c68;
+    --data-ink: #151719;
+    --data-paper: #f7f7f4;
+    --data-accent: #c7b8a3;
+    --data-muted: #6c706f;
     position: relative;
     overflow: hidden;
-    border-bottom: 1px solid var(--data-ink);
+    border-bottom: 1px solid rgba(21, 23, 25, 0.24);
     background: var(--data-paper);
     color: var(--data-ink);
-    padding: clamp(42px, 5vw, 72px) clamp(20px, 4vw, 56px) clamp(34px, 4vw, 54px);
-  }
-
-  .data-grid-pattern {
-    position: absolute;
-    inset: 0;
-    opacity: 0.24;
-    background-image:
-      linear-gradient(rgba(23, 25, 26, 0.1) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(23, 25, 26, 0.1) 1px, transparent 1px);
-    background-size: 40px 40px;
-    mask-image: linear-gradient(to bottom, transparent, #000 18%, #000 82%, transparent);
-    pointer-events: none;
+    padding: clamp(42px, 5vw, 72px) clamp(20px, 4vw, 64px) clamp(32px, 3.5vw, 52px);
+    font-family: "Noto Sans JP", sans-serif;
   }
 
   .data-inner {
-    position: relative;
-    max-width: 1440px;
+    width: min(100%, 1540px);
     margin: 0 auto;
   }
 
   .data-header {
-    display: grid;
-    grid-template-columns: minmax(190px, 0.66fr) minmax(420px, 1.45fr) minmax(280px, 0.9fr);
-    align-items: end;
-    gap: 28px;
-    min-height: 104px;
-    padding: 0 2px 24px;
-    border-top: 2px solid var(--data-ink);
-    border-bottom: 1px solid var(--data-ink);
+    display: block;
+    margin-bottom: clamp(22px, 2.4vw, 36px);
   }
 
-  .data-heading-label {
-    display: flex;
-    justify-content: space-between;
-    align-self: stretch;
-    padding-top: 16px;
-    font-size: 9px;
-    font-weight: 800;
-    letter-spacing: 0.2em;
+  .data-header > p {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
   }
 
   .data-header h2 {
-    font-size: clamp(30px, 3vw, 48px);
-    font-weight: 900;
-    line-height: 1.08;
-    letter-spacing: -0.045em;
-  }
-
-  .data-header p {
-    padding-bottom: 2px;
-    color: var(--data-muted);
-    font-size: 12px;
-    line-height: 1.9;
-    letter-spacing: 0.04em;
-  }
-
-  .data-board {
-    display: grid;
-    grid-template-columns: 0.86fr 1.42fr 0.96fr;
-    grid-template-rows: minmax(270px, 1.06fr) minmax(200px, 0.78fr);
-    border-left: 1px solid var(--data-line);
-  }
-
-  .data-panel {
-    position: relative;
-    min-width: 0;
-    padding: 18px 24px;
-    border-right: 1px solid var(--data-line);
-    border-bottom: 1px solid var(--data-line);
-    background: rgba(239, 238, 233, 0.82);
-  }
-
-  .data-panel-head {
-    display: flex;
-    justify-content: space-between;
-    padding-bottom: 9px;
-    border-bottom: 1px solid rgba(23, 25, 26, 0.42);
-    font-size: 8px;
+    margin: 0;
+    font-family: "Archivo Black", "Noto Sans JP", sans-serif;
+    font-size: clamp(28px, 3.2vw, 52px);
     font-weight: 900;
     line-height: 1;
-    letter-spacing: 0.2em;
+    letter-spacing: -0.055em;
+    text-align: center;
+    white-space: nowrap;
   }
 
-  .data-panel h3 {
-    font-size: 13px;
-    font-weight: 900;
-    letter-spacing: 0.08em;
-  }
+  .data-header h2 span { margin-left: 0.34em; }
 
-  .data-network { grid-column: 1; grid-row: 1; }
-  .data-age { grid-column: 2; grid-row: 1; }
-  .data-gender { grid-column: 3; grid-row: 1; }
-  .data-jobs { grid-column: 1 / span 2; grid-row: 2; }
-  .data-repeat { grid-column: 3; grid-row: 2; }
-
-  .network-content {
+  .data-composition {
     display: grid;
-    grid-template-columns: 1fr 70px;
+    grid-template-columns: minmax(220px, 0.9fr) minmax(520px, 1.65fr) minmax(220px, 0.9fr);
+    grid-template-rows: minmax(235px, 1fr) minmax(205px, 0.86fr);
+    grid-template-areas:
+      "network age gender"
+      "jobs age repeat";
     align-items: center;
-    gap: 12px;
-    height: calc(100% - 38px);
-    padding: 8px 5px 0;
+    gap: 4px clamp(14px, 1.5vw, 26px);
+    height: clamp(500px, 62svh, 610px);
   }
 
-  .network-number span,
-  .network-number b {
+  .data-network,
+  .data-gender,
+  .data-jobs,
+  .data-repeat,
+  .data-age {
+    position: relative;
+    min-width: 0;
+  }
+
+  .data-network { grid-area: network; }
+  .data-age { grid-area: age; align-self: stretch; }
+  .data-gender { grid-area: gender; }
+  .data-jobs { grid-area: jobs; align-self: start; }
+  .data-repeat { grid-area: repeat; }
+
+  .data-network {
+    display: grid;
+    width: clamp(225px, 22vw, 330px);
+    aspect-ratio: 1;
+    place-items: center;
+    justify-self: start;
+    isolation: isolate;
+  }
+
+  .data-network > img {
+    position: absolute;
+    z-index: -1;
+    width: 46%;
+    height: 78%;
+    object-fit: contain;
+    opacity: 0.075;
+    filter: grayscale(1) contrast(1.1);
+    transform: translate(5%, -2%);
+  }
+
+  .data-dot-ring {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  .data-dot-ring circle {
+    fill: none;
+    stroke: var(--data-accent);
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-dasharray: 0.1 4.45;
+  }
+
+  .data-network > div {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    text-align: center;
+  }
+
+  .data-network span,
+  .data-network b {
     display: block;
-    font-size: 12px;
+    font-size: clamp(15px, 1.35vw, 21px);
     font-weight: 900;
-    letter-spacing: 0.16em;
+    letter-spacing: 0.12em;
   }
 
-  .network-number strong {
+  .data-network strong {
     display: block;
-    margin: -3px 0 -5px;
-    font-family: var(--font-display, sans-serif);
-    font-size: clamp(72px, 7.2vw, 112px);
+    margin: -0.04em 0 -0.07em;
+    font-family: "Archivo Black", "Noto Sans JP", sans-serif;
+    font-size: clamp(88px, 10vw, 154px);
     font-weight: 900;
     line-height: 1;
     letter-spacing: -0.09em;
   }
 
-  .network-content img {
-    width: 64px;
-    height: auto;
-    opacity: 0.22;
-    filter: grayscale(1) contrast(1.6);
+  .age-visual {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
   }
-
-  .data-network > small {
-    position: absolute;
-    right: 24px;
-    bottom: 15px;
-    color: var(--data-muted);
-    font-size: 7px;
-    letter-spacing: 0.16em;
-  }
-
-  .age-content {
-    display: grid;
-    grid-template-columns: minmax(164px, 0.9fr) minmax(160px, 1fr);
-    align-items: center;
-    gap: clamp(18px, 2vw, 34px);
-    height: calc(100% - 18px);
-    padding-top: 14px;
-  }
-
-  .chart-block h3 { margin-bottom: 12px; text-align: center; }
 
   .age-chart {
+    position: absolute;
+    top: 50%;
+    left: 50%;
     display: grid;
-    width: clamp(148px, 13vw, 190px);
+    width: clamp(300px, 28vw, 430px);
     aspect-ratio: 1;
     place-items: center;
-    margin: 0 auto;
     border-radius: 50%;
-    background: conic-gradient(#e3e1da 0 5%, #a98a61 5% 30%, #aaa79f 30% 60%, #696b69 60% 85%, #252729 85% 100%);
-    box-shadow: 0 0 0 1px var(--data-ink), 0 0 0 7px var(--data-paper), 0 0 0 8px rgba(23, 25, 26, 0.25);
+    background: conic-gradient(#e7e5df 0 5%, #c7b8a3 5% 30%, #b5b0a7 30% 60%, #777a79 60% 85%, #444748 85% 100%);
+    box-shadow: 0 0 0 9px var(--data-paper), 0 0 0 10px rgba(21, 23, 25, 0.18);
+    transform: translate(-50%, -50%);
   }
 
-  .age-chart > div,
-  .gender-chart > div,
-  .repeat-chart > div {
+  .age-chart::before {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: conic-gradient(
+      var(--data-paper) 0 0.35%,
+      transparent 0.35% 4.65%,
+      var(--data-paper) 4.65% 5.35%,
+      transparent 5.35% 29.65%,
+      var(--data-paper) 29.65% 30.35%,
+      transparent 30.35% 59.65%,
+      var(--data-paper) 59.65% 60.35%,
+      transparent 60.35% 84.65%,
+      var(--data-paper) 84.65% 85.35%,
+      transparent 85.35% 99.65%,
+      var(--data-paper) 99.65% 100%
+    );
+    content: '';
+    pointer-events: none;
+  }
+
+  .age-chart-center {
+    position: relative;
+    z-index: 1;
     display: grid;
-    width: 42%;
+    width: 51%;
+    aspect-ratio: 1;
+    place-items: center;
+    align-content: center;
+    border: 4px solid var(--data-paper);
+    border-radius: 50%;
+    background: var(--data-ink);
+    color: #fff;
+    text-align: center;
+  }
+
+  .age-chart-center span,
+  .age-chart-center strong {
+    display: block;
+    font-size: clamp(18px, 1.6vw, 25px);
+    font-weight: 900;
+    line-height: 1.4;
+    letter-spacing: 0.04em;
+  }
+
+  .age-chart-center i {
+    width: 38px;
+    height: 1px;
+    margin: 13px 0 9px;
+    background: rgba(255, 255, 255, 0.72);
+  }
+
+  .age-chart-center small {
+    font-family: "Inter", sans-serif;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+  }
+
+  .age-label {
+    position: absolute;
+    z-index: 2;
+    margin: 0;
+    font-weight: 900;
+    white-space: nowrap;
+  }
+
+  .age-label span {
+    display: block;
+    margin-bottom: 1px;
+    font-size: clamp(12px, 1.05vw, 16px);
+  }
+
+  .age-label strong {
+    font-family: "Archivo Black", "Noto Sans JP", sans-serif;
+    font-size: clamp(34px, 3.4vw, 54px);
+    line-height: 1;
+    letter-spacing: -0.055em;
+  }
+
+  .age-label strong small {
+    margin-left: 2px;
+    font-family: inherit;
+    font-size: 0.5em;
+  }
+
+  .age-label::before {
+    position: absolute;
+    width: 6px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: var(--data-ink);
+    content: '';
+  }
+
+  .age-label::after {
+    position: absolute;
+    width: var(--leader-width, 86px);
+    height: 1px;
+    background: var(--data-ink);
+    content: '';
+    transform-origin: 0 50%;
+  }
+
+  .age-under20 { top: 3%; left: 8%; }
+  .age-under20::after { top: 73px; left: 72px; --leader-width: 94px; transform: rotate(42deg); }
+  .age-under20::before { top: 132px; left: 139px; }
+
+  .age-thirties { top: 8%; right: 4%; }
+  .age-thirties::after { top: 64px; right: 74px; --leader-width: 84px; transform: rotate(138deg); }
+  .age-thirties::before { top: 118px; right: 136px; }
+
+  .age-over60 { top: 43%; left: 0; text-align: right; }
+  .age-over60::after { top: 57px; left: calc(100% + 8px); --leader-width: 80px; }
+  .age-over60::before { top: 54px; left: calc(100% + 85px); }
+
+  .age-fifties { bottom: 0; left: 12%; }
+  .age-fifties::after { top: 0; left: 82px; --leader-width: 75px; transform: rotate(-52deg); }
+  .age-fifties::before { top: -60px; left: 128px; }
+
+  .age-forties { right: 9%; bottom: 0; }
+  .age-forties::after { top: 0; right: 80px; --leader-width: 78px; transform: rotate(232deg); }
+  .age-forties::before { top: -63px; right: 129px; }
+
+  .data-gender {
+    display: grid;
+    width: clamp(155px, 15vw, 225px);
+    justify-self: center;
+    place-items: center;
+  }
+
+  .data-gender h3,
+  .data-jobs h3,
+  .data-repeat h3 {
+    margin: 0;
+    font-size: clamp(15px, 1.25vw, 20px);
+    font-weight: 900;
+    letter-spacing: 0.04em;
+  }
+
+  .gender-chart {
+    display: grid;
+    width: 78%;
+    aspect-ratio: 1;
+    place-items: center;
+    margin-top: 9px;
+    border-radius: 50%;
+    background: conic-gradient(var(--data-ink) 0 80%, #d7cfc4 80% 100%);
+  }
+
+  .gender-chart > div {
+    display: grid;
+    width: 58%;
     aspect-ratio: 1;
     place-items: center;
     align-content: center;
     border-radius: 50%;
     background: var(--data-paper);
-    text-align: center;
   }
 
-  .age-chart span,
-  .age-chart b {
-    display: block;
-    font-size: 7px;
-    font-weight: 900;
-    line-height: 1.35;
-    letter-spacing: 0.1em;
-  }
-
-  .age-legend { display: grid; gap: 7px; }
-  .age-legend > div {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 14px;
-    padding-bottom: 6px;
-    border-bottom: 1px dotted rgba(23, 25, 26, 0.3);
-  }
-  .age-legend dt {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 10px;
-    font-weight: 700;
-  }
-  .age-legend dt i {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: var(--segment-color);
-    box-shadow: 0 0 0 1px rgba(23, 25, 26, 0.24);
-  }
-  .age-legend dd {
-    font-family: var(--font-display, sans-serif);
-    font-size: 18px;
+  .gender-chart span {
+    font-size: clamp(10px, 0.9vw, 14px);
     font-weight: 900;
   }
-  .age-legend dd small { margin-left: 2px; font-size: 8px; }
 
-  .gender-content {
-    display: grid;
-    place-items: center;
-    align-content: center;
-    height: calc(100% - 18px);
-    padding-top: 10px;
-  }
-  .gender-content h3 { margin-bottom: 10px; }
-  .gender-chart {
-    display: grid;
-    width: clamp(142px, 12vw, 180px);
-    aspect-ratio: 1;
-    place-items: center;
-    border-radius: 50%;
-    background: conic-gradient(var(--data-ink) 0 80%, #d3d1ca 80% 100%);
-  }
-  .gender-chart > div { width: 60%; }
-  .gender-chart span { font-size: 10px; font-weight: 900; }
   .gender-chart strong {
-    font-family: var(--font-display, sans-serif);
-    font-size: 38px;
-    font-weight: 900;
+    font-family: "Archivo Black", "Noto Sans JP", sans-serif;
+    font-size: clamp(31px, 3vw, 46px);
     line-height: 0.95;
     letter-spacing: -0.07em;
   }
-  .gender-chart strong small { font-size: 13px; }
-  .gender-content > p {
+
+  .gender-chart strong small { font-size: 0.42em; }
+
+  .data-gender > p {
+    margin: 7px 0 0;
+    font-size: clamp(9px, 0.82vw, 12px);
+    font-weight: 800;
+  }
+
+  .data-jobs {
+    width: clamp(230px, 20vw, 305px);
+    justify-self: center;
+  }
+
+  .data-jobs h3 { margin-bottom: 18px; }
+  .data-jobs dl { display: grid; gap: 12px; margin: 0; }
+  .data-jobs dl > div {
     display: flex;
+    align-items: center;
     justify-content: space-between;
-    width: min(100%, 190px);
-    margin-top: 11px;
-    font-size: 7px;
-    font-weight: 800;
-    letter-spacing: 0.12em;
-  }
-
-  .jobs-content {
-    display: grid;
-    grid-template-columns: 142px 1fr;
-    align-items: center;
-    gap: 28px;
-    height: calc(100% - 18px);
-    padding-top: 12px;
-  }
-  .job-list { display: grid; gap: 9px; }
-  .job-row {
-    display: grid;
-    grid-template-columns: minmax(128px, 0.8fr) minmax(180px, 1.7fr) 44px;
-    align-items: center;
     gap: 14px;
-    font-size: 10px;
-    font-weight: 800;
   }
-  .job-row > i {
-    display: block;
-    height: 10px;
-    background: rgba(23, 25, 26, 0.09);
-  }
-  .job-row > i b {
-    display: block;
-    width: var(--job-width);
-    height: 100%;
-    background: var(--job-tone);
-  }
-  .job-row > strong {
-    font-family: var(--font-display, sans-serif);
-    font-size: 18px;
-    text-align: right;
-  }
-  .job-row > strong small { margin-left: 2px; font-size: 8px; }
 
-  .repeat-content {
-    display: grid;
-    grid-template-columns: auto 1fr;
+  .data-jobs dt {
+    display: flex;
     align-items: center;
-    gap: 18px;
-    height: calc(100% - 18px);
-    padding-top: 10px;
+    min-width: 0;
+    gap: 9px;
+    font-size: clamp(10px, 0.86vw, 13px);
+    font-weight: 800;
+    white-space: nowrap;
   }
-  .repeat-chart {
-    position: relative;
+
+  .data-jobs dt i {
+    flex: 0 0 auto;
+    width: 11px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: var(--job-color);
+  }
+
+  .data-jobs dd {
+    margin: 0;
+    font-family: "Archivo Black", "Noto Sans JP", sans-serif;
+    font-size: clamp(16px, 1.5vw, 23px);
+    line-height: 1;
+  }
+
+  .data-jobs dd small { font-size: 0.52em; }
+
+  .data-repeat {
     display: grid;
-    width: clamp(132px, 11vw, 166px);
+    width: clamp(190px, 18vw, 270px);
     aspect-ratio: 1;
     place-items: center;
-    border-radius: 50%;
-    background: conic-gradient(#a98a61 0 93%, rgba(23, 25, 26, 0.12) 93% 100%);
-    transform: rotate(-90deg);
+    justify-self: center;
   }
-  .repeat-chart::after {
+
+  .data-repeat h3 {
     position: absolute;
-    width: calc(clamp(132px, 11vw, 166px) + 12px);
-    aspect-ratio: 1;
-    border: 1px solid rgba(23, 25, 26, 0.26);
-    border-radius: 50%;
-    content: '';
+    top: 16%;
+    z-index: 1;
   }
-  .repeat-chart > div { width: 78%; transform: rotate(90deg); }
-  .repeat-chart span { font-size: 9px; font-weight: 900; letter-spacing: 0.08em; }
-  .repeat-chart strong {
-    font-family: var(--font-display, sans-serif);
-    font-size: 42px;
-    font-weight: 900;
+
+  .data-repeat .data-dot-ring { inset: 9%; width: 82%; height: 82%; }
+
+  .data-repeat strong {
+    position: relative;
+    z-index: 1;
+    font-family: "Archivo Black", "Noto Sans JP", sans-serif;
+    font-size: clamp(64px, 7vw, 106px);
     line-height: 1;
-    letter-spacing: -0.07em;
+    letter-spacing: -0.08em;
   }
-  .repeat-chart strong small { font-size: 14px; }
-  .repeat-content > p {
-    max-width: 86px;
-    color: var(--data-muted);
-    font-size: 9px;
-    line-height: 1.8;
-    letter-spacing: 0.08em;
+
+  .data-repeat strong small {
+    margin-left: 3px;
+    font-size: 0.38em;
   }
 
   .data-note {
-    margin-top: 11px;
+    margin: clamp(12px, 1.6vw, 22px) 0 0;
     color: var(--data-muted);
     font-size: 8px;
-    line-height: 1.6;
+    line-height: 1.7;
     text-align: right;
     letter-spacing: 0.04em;
   }
 
-  @media (max-width: 1023px) {
-    .data-header {
-      grid-template-columns: 150px 1fr;
-      gap: 18px;
+  @media (max-width: 1180px) {
+    .data-composition {
+      grid-template-columns: minmax(190px, 0.8fr) minmax(460px, 1.6fr) minmax(190px, 0.8fr);
+      height: clamp(500px, 62svh, 560px);
     }
-    .data-header p { grid-column: 2; }
-    .data-board {
-      grid-template-columns: 0.8fr 1.25fr 0.9fr;
-      grid-template-rows: minmax(260px, 1fr) minmax(195px, 0.76fr);
-    }
-    .data-panel { padding: 16px 18px; }
-    .network-content { grid-template-columns: 1fr 48px; }
-    .network-content img { width: 44px; }
-    .age-content { gap: 16px; }
-    .jobs-content { grid-template-columns: 112px 1fr; gap: 16px; }
-    .job-row { grid-template-columns: 118px 1fr 38px; gap: 10px; }
-    .repeat-content { gap: 8px; }
+    .data-network { width: clamp(210px, 21vw, 270px); }
+    .data-network strong { font-size: clamp(84px, 10vw, 120px); }
+    .age-visual { min-height: 0; }
+    .age-chart { width: clamp(280px, 29vw, 360px); }
+    .age-under20 { left: 3%; }
+    .age-thirties { right: 1%; }
+    .age-over60 { left: -1%; }
+    .age-fifties { left: 8%; }
+    .age-forties { right: 5%; }
   }
 
-  @media (max-width: 767px) {
-    .data-section { padding: 38px 18px 34px; }
-    .data-grid-pattern { background-size: 28px 28px; }
-    .data-header {
-      grid-template-columns: 1fr;
-      min-height: 0;
-      padding: 0 0 20px;
-    }
-    .data-heading-label { min-height: 36px; padding-top: 10px; }
-    .data-header h2 { font-size: clamp(29px, 9.2vw, 38px); }
-    .data-header p { grid-column: auto; font-size: 11px; }
-    .data-pc-break { display: none; }
-    .data-board {
+  @media (max-width: 900px) {
+    .data-section { padding-inline: 26px; }
+    .data-header { margin-bottom: 26px; }
+    .data-composition {
       grid-template-columns: 1fr 1fr;
-      grid-template-rows: auto;
+      grid-template-rows: auto auto auto;
+      grid-template-areas:
+        "age age"
+        "network gender"
+        "jobs repeat";
+      gap: 26px 34px;
+      height: auto;
     }
-    .data-panel { padding: 15px; }
-    .data-network { grid-column: 1; grid-row: 1; min-height: 240px; }
-    .data-gender { grid-column: 2; grid-row: 1; min-height: 240px; }
-    .data-age { grid-column: 1 / -1; grid-row: 2; min-height: 276px; }
-    .data-jobs { grid-column: 1 / -1; grid-row: 3; min-height: 244px; }
-    .data-repeat { grid-column: 1 / -1; grid-row: 4; min-height: 200px; }
-    .data-panel-head { font-size: 7px; letter-spacing: 0.12em; }
-    .network-content { grid-template-columns: 1fr; place-items: center; text-align: center; }
-    .network-content img { display: none; }
-    .network-number strong { font-size: clamp(68px, 21vw, 88px); }
-    .network-number span, .network-number b { font-size: 10px; }
-    .data-network > small { right: 15px; bottom: 12px; }
-    .age-content { grid-template-columns: 1fr 1fr; gap: 22px; }
-    .age-chart { width: clamp(138px, 39vw, 168px); }
-    .age-legend dt { font-size: 9px; }
-    .age-legend dd { font-size: 16px; }
-    .gender-chart { width: clamp(124px, 35vw, 150px); }
-    .gender-content > p { font-size: 6px; }
-    .jobs-content { grid-template-columns: 1fr; gap: 10px; }
-    .job-row { grid-template-columns: 112px 1fr 36px; gap: 8px; font-size: 9px; }
-    .job-row > strong { font-size: 16px; }
-    .repeat-content { justify-content: center; gap: 28px; }
-    .repeat-chart { width: 136px; }
-    .repeat-chart::after { width: 148px; }
-    .repeat-content > p { max-width: 100px; }
-    .data-note { margin-top: 10px; font-size: 7px; text-align: left; }
+    .data-age { min-height: 520px; }
+    .age-visual { min-height: 520px; }
+    .age-chart { width: min(54vw, 390px); }
+    .data-network { justify-self: center; width: min(34vw, 285px); }
+    .data-gender { width: min(27vw, 225px); }
+    .data-jobs { align-self: center; width: min(36vw, 305px); }
+    .data-repeat { width: min(30vw, 250px); }
+  }
+
+  @media (max-width: 600px) {
+    .data-section { padding: 36px 16px 30px; }
+    .data-header { margin-bottom: 16px; }
+    .data-header h2 {
+      font-size: clamp(26px, 7.1vw, 32px);
+      line-height: 1.18;
+      text-align: center;
+      white-space: normal;
+    }
+    .data-header h2 span { display: block; margin: 3px 0 0; }
+    .data-composition {
+      grid-template-columns: 1fr 1fr;
+      grid-template-areas:
+        "age age"
+        "network gender"
+        "jobs repeat";
+      gap: 18px 12px;
+    }
+    .data-age { min-height: 0; }
+    .age-visual {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 9px 3px;
+      height: auto;
+      min-height: 0;
+      padding: 3px 0 4px;
+    }
+    .age-chart {
+      position: relative;
+      top: auto;
+      left: auto;
+      grid-column: 1 / -1;
+      width: min(59vw, 242px);
+      margin: 0 auto 5px;
+      box-shadow: 0 0 0 6px var(--data-paper), 0 0 0 7px rgba(21, 23, 25, 0.18);
+      transform: none;
+    }
+    .age-chart-center { border-width: 3px; }
+    .age-chart-center span,
+    .age-chart-center strong { font-size: clamp(13px, 3.8vw, 17px); }
+    .age-chart-center i { width: 24px; margin: 8px 0 6px; }
+    .age-chart-center small { font-size: 6px; }
+    .age-label {
+      position: static;
+      min-width: 0;
+      text-align: center;
+      white-space: normal;
+    }
+    .age-label::before,
+    .age-label::after { display: none; }
+    .age-label span {
+      min-height: 2.6em;
+      margin: 0;
+      font-size: clamp(7px, 2.15vw, 9px);
+      line-height: 1.3;
+    }
+    .age-label strong { font-size: clamp(20px, 6.4vw, 27px); }
+    .data-network { width: min(43vw, 170px); }
+    .data-network strong { font-size: clamp(65px, 20vw, 84px); }
+    .data-network span,
+    .data-network b { font-size: 10px; }
+    .data-network > img { width: 43%; height: 76%; }
+    .data-gender { width: min(38vw, 150px); }
+    .data-gender h3,
+    .data-jobs h3,
+    .data-repeat h3 { font-size: 12px; }
+    .gender-chart { width: 78%; margin-top: 6px; }
+    .gender-chart span { font-size: 8px; }
+    .gender-chart strong { font-size: 28px; }
+    .data-gender > p { margin-top: 5px; font-size: 8px; }
+    .data-jobs { width: 100%; padding-left: 4px; }
+    .data-jobs h3 { margin-bottom: 12px; }
+    .data-jobs dl { gap: 9px; }
+    .data-jobs dl > div { gap: 5px; }
+    .data-jobs dt { gap: 6px; font-size: clamp(7px, 2.2vw, 9px); letter-spacing: -0.03em; }
+    .data-jobs dt i { width: 8px; }
+    .data-jobs dd { font-size: 14px; }
+    .data-repeat { width: min(42vw, 164px); }
+    .data-repeat h3 { top: 15%; }
+    .data-repeat strong { font-size: clamp(53px, 16vw, 68px); }
+    .data-note { margin-top: 18px; font-size: 7px; text-align: left; }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .data-panel { scroll-behavior: auto; }
+    .data-section *,
+    .data-section *::before,
+    .data-section *::after { animation: none !important; transition: none !important; }
   }
 </style>
