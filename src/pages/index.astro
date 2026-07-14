@@ -37,7 +37,7 @@ const concepts = [
 const methods = [
   { no: '01', en: 'Body Axis', title: 'ZST協会認定「体感軸調整法」', body: '元格闘家考案の独自の可動域調整法で、骨盤や肩甲骨など深層筋へアプローチ。認定プロが身体を整え、慢性的な不調の根本ケアをサポートします。', photo: PHOTOS.method1, alt: '体感軸調整法によるパーソナルストレッチ' },
   { no: '02', en: 'Release', title: '揉みほぐし×ストレッチ', body: '全身もみほぐしとストレッチ整体を融合。手技では届かないインナーマッスルを伸ばし、癒着を剥がします。女性による極上の癒やしと技術を同時に提供します。', photo: PHOTOS.method2, alt: 'もみほぐしとストレッチを融合した施術', flip: true },
-  { no: '03', en: 'Effect', title: '圧倒的な「即効性」と「具体的効果」', body: 'デスクワークの蓄積疲労をリセット。独自の可動域調整で肩こり解消や仕事の集中力向上、ゴルフ飛距離UPまでも叶えます。施術直後から実感できる変化が、ビジネスと趣味の両方でパフォーマンスを劇的に進化させます。', photo: PHOTOS.method3, alt: '施術直後から実感できる変化' },
+  { no: '03', en: 'Effect', title: '圧倒的な「即効性」と<br class="md:hidden" />「具体的効果」', body: 'デスクワークの蓄積疲労をリセット。独自の可動域調整で肩こり解消や仕事の集中力向上、ゴルフ飛距離UPまでも叶えます。施術直後から実感できる変化が、ビジネスと趣味の両方でパフォーマンスを劇的に進化させます。', photo: PHOTOS.method3, alt: '施術直後から実感できる変化' },
 ];
 
 // TOPのよくある質問（FAQPage構造化データと一致させる）
@@ -276,7 +276,7 @@ const marqueeWords = [
             />
             <div class={m.flip ? 'lg:order-1 lg:flex lg:flex-col lg:items-end lg:text-right' : ''}>
               <h3 class="mb-4 text-[22px] font-black sm:text-[31px]">
-                <span class="mr-4 font-script text-[11px] font-extrabold tracking-[0.16em] text-[#92745e]">{m.no}</span>{m.title}
+                <span class="mr-4 font-script text-[11px] font-extrabold tracking-[0.16em] text-[#92745e]">{m.no}</span><span set:html={m.title} />
               </h3>
               <p class="max-w-[560px] text-[15px] leading-[2.1] text-muted sm:text-[17px]">{m.body}</p>
               <p class={`mt-6 flex items-center gap-3.5 text-[13px] font-medium tracking-[0.22em] sm:mt-7 ${m.flip ? 'lg:flex-row-reverse' : ''}`}>
