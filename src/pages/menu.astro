@@ -149,11 +149,11 @@ const offerCatalog = {
       <div><!-- タブ追従はこの男性料金ブロック内のみ -->
       <div role="tablist" aria-label="男性回数券の種類" class="sticky top-16 z-30 -mb-px flex w-full border border-ink sm:top-[76px]">
         <button id="tab-regular" type="button" role="tab" aria-selected="false" aria-controls="panel-regular"
-          class="flex-1 whitespace-nowrap bg-paper px-2 py-3.5 text-[12px] font-black tracking-[0.04em] text-ink sm:px-3 sm:text-[15px] sm:tracking-[0.06em]">
+          class="flex-1 whitespace-nowrap bg-ink px-2 py-3.5 text-[12px] font-black tracking-[0.04em] text-paper sm:px-3 sm:text-[15px] sm:tracking-[0.06em]">
           通常回数券
         </button>
         <button id="tab-first" type="button" role="tab" aria-selected="true" aria-controls="panel-first"
-          class="flex-1 whitespace-nowrap bg-ink px-2 py-3.5 text-[12px] font-black tracking-[0.04em] text-paper sm:px-3 sm:text-[15px] sm:tracking-[0.06em]">
+          class="flex-1 whitespace-nowrap bg-paper px-2 py-3.5 text-[12px] font-black tracking-[0.04em] text-ink sm:px-3 sm:text-[15px] sm:tracking-[0.06em]">
           初回特別回数券 <span class="ml-0.5 bg-amber px-1 py-0.5 text-[9px] font-bold text-white sm:ml-1 sm:px-1.5 sm:text-[10px]">最大20%OFF</span>
         </button>
       </div>
@@ -162,7 +162,7 @@ const offerCatalog = {
       <div id="panel-first" role="tabpanel" aria-labelledby="tab-first">
         <div class="border border-ink bg-paper p-4 sm:p-10">
           <p class="mb-2 inline-block bg-amber px-3 py-1 text-[11px] font-black tracking-[0.08em] text-white sm:text-[12px] sm:tracking-[0.1em]">ご新規様キャンペーン 最大20%OFF</p>
-          <h4 class="mb-1 text-[17px] font-black sm:text-[26px]">初回特別価格の回数券（男性コース）</h4>
+          <h4 class="mb-1 text-[17px] font-black sm:text-[26px]">男性　初回特別価格の回数券</h4>
           <p class="mb-5 text-[12px] text-muted sm:mb-10 sm:text-[13px]">初回ご来店のお客様限定です。</p>
           <div class="grid gap-6 lg:grid-cols-2 lg:gap-16">
             {FIRST_TICKETS.map((row) => (
@@ -188,7 +188,7 @@ const offerCatalog = {
       <!-- パネル2：通常回数券（男性） -->
       <div id="panel-regular" role="tabpanel" aria-labelledby="tab-regular" hidden>
         <div class="border border-ink bg-paper p-4 sm:p-10">
-          <h4 class="mb-1 text-[17px] font-black sm:text-[26px]">通常回数券（男性コース）</h4>
+          <h4 class="mb-1 text-[17px] font-black sm:text-[26px]">男性　通常回数券</h4>
           <p class="mb-5 text-[12px] text-muted sm:mb-10 sm:text-[13px]">2回目以降のご購入。初回は「初回特別回数券」がお得です。</p>
           <div class="grid gap-6 lg:grid-cols-2 lg:gap-16">
             {MEN_TICKETS.rows.map((row) => (
@@ -216,7 +216,7 @@ const offerCatalog = {
       <!-- 女性料金（通常回数券のみ・常時表示） -->
       <h3 class="mb-6 mt-16 border-l-4 border-ink pl-4 text-[20px] font-black sm:mt-20 sm:text-[24px]">女性料金</h3>
       <div class="border border-ink bg-paper p-4 sm:p-10">
-        <h4 class="mb-1 text-[17px] font-black sm:text-[26px]">通常回数券（女性コース）</h4>
+        <h4 class="mb-1 text-[17px] font-black sm:text-[26px]">女性　通常回数券</h4>
         <p class="mb-5 text-[12px] text-muted sm:mb-10 sm:text-[13px]">女性コースの回数券は通常価格のみのご用意です。</p>
         <div class="grid gap-6 lg:grid-cols-2 lg:gap-16">
           {LADIES_TICKETS.rows.map((row) => (
@@ -248,10 +248,11 @@ const offerCatalog = {
             for (const t of tabs) {
               const active = t.tab === tab;
               t.tab?.setAttribute('aria-selected', String(active));
-              t.tab?.classList.toggle('bg-ink', active);
-              t.tab?.classList.toggle('text-paper', active);
-              t.tab?.classList.toggle('bg-paper', !active);
-              t.tab?.classList.toggle('text-ink', !active);
+              // アクティブ＝白（bg-paper/text-ink）、非アクティブ＝黒（bg-ink/text-paper）
+              t.tab?.classList.toggle('bg-paper', active);
+              t.tab?.classList.toggle('text-ink', active);
+              t.tab?.classList.toggle('bg-ink', !active);
+              t.tab?.classList.toggle('text-paper', !active);
               if (t.panel) t.panel.hidden = !active;
             }
           });

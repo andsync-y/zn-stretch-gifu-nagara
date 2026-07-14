@@ -516,3 +516,51 @@ Git履歴が「何を変更したか」、このファイルが「なぜ変更�
 - 判断・注意点：ユーザーは当初ドメイン所有者（TXTレコード）方式を提示されたが、DNS設定はコードリポジトリ側から代行できないため、URLプレフィックス＋HTMLタグ方式に切り替えて対応。
 - 確認結果：`npm run build` 成功。distの出力HTMLに確認用metaタグが含まれることを確認。
 - 未対応・次の作業：Search Console側で「確認」ボタンを押して認証完了させる、GA4とSearch Consoleのリンク連携、サイトマップ（sitemap-index.xml）のSearch Console登録。
+
+## 2026-07-14 — Claude Code
+
+- 担当：Claude Code
+- ブランチ：`claude/apply-design-patch-xbq1gz`
+- 関連PR：TOPのMV短縮＋CONCEPTパララックス化、SYMPTOMSの調整
+- 変更内容：
+  - 【MV短縮】ヒーローのスクロール領域を PC 420vh→300vh、SP 360svh→260svh に短縮し、MVの表示（スクロール）時間を削減。
+  - 【CONCEPTパララックス】CONCEPTの写真をマスク（overflow:hidden）で囲み、名前付き view-timeline（`--parallax-media`）で画像を上下ドリフト（translateY ±6.5%＋scale1.16）させ奥行きを演出。`animation-timeline: view()` を画像に直接付けるとマスクがスクロールコンテナ化してタイムラインが進行しない不具合があったため、マスク自身に名前付きタイムラインを張りビューポート基準で駆動。非対応ブラウザ・prefers-reduced-motion時は静止（従来表示）。
+  - 【並び替え】ハッシュタグのマルキー（カルーセル）を「ヒーロー直後」から「CONCEPTの直後」へ移動。順序は HERO→CONCEPT→MARQUEE→METHOD。
+  - 【SYMPTOMS】スケルトン画像コンテナ（.symptoms-visual）の上下ボーダー線を削除（PC/SP共通）。赤エフェクトの拍動アニメーション（hotspot-pulse＝外側の円が膨張する動き）を削除し、常時点灯の静的グローに変更。
+  - 【SYMPTOMS位置補正】赤エフェクトのホットスポット座標（全12点）を解剖図に合わせて再調整（従来は左に約6〜8%ずれ、腰は腿まで下がっていた）。首・肩・上背・腰/尻・ふくらはぎ・全身・スポーツ連鎖の各位置を実レンダリングで確認しながら補正。
+  - 【SYMPTOMS SP】SPで列幅がmax-widthに当たり縦横比が崩れ、ホットスポットが画像とずれて頭上に浮く不具合を修正（.symptoms-body をSPのみ幅基準で配置し画像と一致させた）。あわせてSPのスケルトンを拡大（列比 0.82:1.18→0.96:1.04、body幅100%）。
+- 主な変更ファイル：`src/styles/global.css`（ヒーロー高さ・パララックス）／`src/pages/index.astro`（CONCEPT画像のマスク・マルキー移動）／`src/components/InteractiveSymptoms.astro`（線削除・拍動削除・座標補正・SP配置）
+- 判断・注意点：パララックスは既存の `.rise` と同じ `@supports (animation-timeline: view())` 方式で統一。効果は控えめ（全可視区間で約110px）。ホットスポット座標は %指定で、SP修正によりボックスの縦横比が常に画像と一致するため、全画面幅で同じ座標が正しく重なる。
+- 確認結果：`npm run build` 成功（19ページ）。Chromiumで検証——ヒーロー高さ=2700px(300vh)、CONCEPTパララックスの進行をWeb Animations APIで確認（修正前は進捗0.5固定→修正後は進捗が変化しanimProgressが0→0.596へ進行）、セクション順が concept→marquee→method、CONCEPTの「01/BODY AXIS」バッジがマスクにクリップされない、SYMPTOMS7状態の赤エフェクト位置をPC/タブレット/SPで確認、SPのスケルトン拡大と線の消滅を確認。
+- 未対応・次の作業：なし（デザイン微調整のため、実機での見え方に応じてドリフト量やホットスポット座標は追調整可）。
+
+## 2026-07-14 — Claude Code
+
+- 担当：Claude Code
+- ブランチ：`claude/apply-design-patch-xbq1gz`
+- 関連PR：料金ページのタブ配色反転・見出し文言・初回OFFバッジ拡大＋SP固定CTAバー
+- 変更内容：
+  - 【回数券タブ】男性料金のセグメントタブを「アクティブ＝白（bg-paper/text-ink）／非アクティブ＝黒（bg-ink/text-paper）」に反転（従来は逆）。初期HTMLとJS切替の両方を修正。アクティブタブが下の白パネルと連結して見える自然な形に。
+  - 【見出し文言】回数券見出しを「○○回数券（性別コース）」→「性別　○○回数券」に変更（男性　初回特別価格の回数券／男性　通常回数券／女性　通常回数券）。
+  - 【初回OFFバッジ拡大】初回料金表（PriceRows）の「初回限定○○%OFF」バッジを8px→12pxに拡大し、バッジ列を100px→132pxに広げて3コースで右揃え・同幅で整列。タブレット幅（641〜1100px）は10pxに調整。1024pxで横はみ出しが出ないことを確認。
+  - 【SP固定CTAバー】スマホ表示時、画面下部に固定の「電話する（tel:）」「WEB予約（ホットペッパー）」2ボタンのバーを全ページ共通で追加（Base.astro）。PCでは非表示。iPhoneのホームインジケータ用に safe-area-inset を考慮し、フッター末尾が隠れないようbodyに下余白を確保。GA4のclick_tel/click_reserveは既存のイベント委譲で自動計測される。
+- 主な変更ファイル：`src/pages/menu.astro`（タブ配色・見出し）／`src/components/PriceRows.astro`（バッジ拡大・列幅）／`src/layouts/Base.astro`（SP固定CTAバー）／`src/styles/global.css`（CTAバーのスタイル・body下余白）
+- 判断・注意点：PriceRowsは料金ページとTOP・症状ページで共用のため、バッジ拡大は全ページに反映される（TOPは FIRST SESSION バッジ非表示のまま各行OFFバッジのみ拡大）。SP固定CTAバーはz-index 45でヘッダーのモバイルメニュー（z-49）より下＝メニュー展開時は隠れる。
+- 確認結果：`npm run build` 成功。Chromiumで確認——タブが白黒反転（既定＝初回特別が白、通常が黒／クリックで入替）、見出し3件の文言、初回OFFバッジの拡大と整列、1024px横はみ出しなし、SP固定CTAバーの表示（tel:/ホットペッパーのリンク先）・PC非表示・フッター重なり回避を確認。
+- 未対応・次の作業：TOPコンセプトの構成変更（MV左側にパララックスで情報を流す案）はユーザーに仕様確認中。確定後に実装し本番反映予定。
+
+## 2026-07-14 — Claude Code
+
+- 担当：Claude Code
+- ブランチ：`claude/apply-design-patch-xbq1gz`
+- 関連PR：TOPコンセプトをMV左側へのパララックス流し込みに変更（前回未対応事項の実装）＋reduced-motion時のCONCEPT本文欠落を修正
+- 変更内容：
+  - 【CONCEPT統合】独立した`CONCEPT`セクション（写真＋見出し＋3点リスト）を廃止し、ヒーローのスクラブ動画（`.hero-scrub`）左側に、スクロール進捗（`--hero-progress`）に応じてパララックスで流れ込む形に統合（`.hero-concept`）。動画スクラブは進捗0.58で最終フレームに到達し、残りの区間でコンセプトが読み込む構成。ヒーロー全体の高さをPC 300vh→440vh、SP 260svh→380svhに拡張して流し込み区間を確保。
+  - 【オファーカード左右反転】コンセプトが左側に表示されるため、`.hero-offer`（FIRST SESSION）を左→右配置に変更。
+  - 【キャッチコピー】コンセプト流入前にフェードアウトするよう`.hero-copy`の消失タイミングを早め（opacity係数2.4→5.5、移動量-6vh→-7vh）、両者が重ならないようにした。
+  - 【マルキー並び順】ハッシュタグのマルキーはCONCEPTセクション削除に伴い、そのままヒーロー直後に表示される構成に変更（順序：HERO(+CONCEPT)→MARQUEE→METHOD）。
+  - 【不具合修正：reduced-motion時のCONCEPT欠落】`prefers-reduced-motion: reduce`時、JSは`--hero-progress`を`1`固定にして静止表示するが、CSS側で`.hero-concept { display: none; }`と明示的に上書きしていたため、CONCEPT本文（見出し・サブコピー・差別化3点：ZST協会認定/全席個室・マンツーマン/トレーナーは全員女性）がページ上のどこにも表示されない状態になっていた（旧来は独立セクションとして常時表示されていたコンテンツが、モーション低減設定のユーザーからは完全に消える回帰）。`.hero-copy`側の強制`opacity:1`上書きと`.hero-concept`の`display:none`上書きを削除し、`--hero-progress:1`時の自然な計算値（キャッチコピーは非表示、コンセプトは静止した完成形で表示）をそのまま使う形に修正。両要素とも実体はcalc()/clamp()による静的な位置指定でありCSSアニメーション（@keyframes）を使っていないため、reduced-motionでも実際の動きは発生しない。
+- 主な変更ファイル：`src/pages/index.astro`（CONCEPTセクション削除・`.hero-concept`追加・マルキー移動）／`src/styles/global.css`（ヒーロー高さ・`.hero-concept`関連スタイル・オファーカード左右反転・reduced-motionブロックの修正）
+- 判断・注意点：reduced-motionの静止表示は「スクロール終端の状態」を採用（キャッチコピー非表示・コンセプト表示・オファー表示）。これは通常のスクロールアニメーションが収束する状態と一致しており、動きなしで一貫した最終レイアウトになる。
+- 確認結果：`npm run build` 成功（19ページ）。Chromiumで確認——PC/SPともスクロール進捗0〜0.95でコンセプトがMV左側に段階的にフェードイン、キャッチコピーとの重なりなし、オファーカードが右側に配置。`prefers-reduced-motion: reduce`をPlaywrightでエミュレートし、PC(1440px)/SP(390px)双方でCONCEPT本文（見出し・3点・サブコピー）とオファーカードが重ならず静止表示されることを確認（修正前は本文が完全に非表示だった）。通常モーション時の挙動に回帰がないことも別途スクリーンショットで確認。
+- 未対応・次の作業：なし。
