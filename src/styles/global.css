@@ -240,15 +240,16 @@
   pointer-events: none;
 }
 
-/* コンセプト：MV左側にスクロールで流れ込む。--hero-progressで駆動（JS追加なし） */
+/* コンセプト：MV・オファーカードは固定のまま、スクロールで上へ流れる（クレジットロール）。--hero-progressで駆動 */
 .hero-concept {
   position: absolute;
   z-index: 6;
   top: 17%;
   left: max(4.5vw, 30px);
   width: min(45vw, 620px);
-  /* 全体をゆるやかに上へパララックス */
-  transform: translate3d(0, calc(var(--hero-progress) * -4vh), 0);
+  /* 進捗0.2で登場し、ブロック全体がゆっくり上へスクロールして3つの特長を順に見せる */
+  opacity: clamp(0, calc((var(--hero-progress) - 0.2) * 6), 1);
+  transform: translate3d(0, calc((0.6 - var(--hero-progress)) * 80vh), 0);
   pointer-events: none;
   color: #1c1e21;
 }
@@ -268,10 +269,7 @@
 }
 
 .hero-concept-head {
-  /* 進捗0.2〜0.4でフェードイン＋下から浮上 */
-  --in: clamp(0, calc((var(--hero-progress) - 0.2) * 5), 1);
-  opacity: var(--in);
-  transform: translate3d(0, calc((1 - var(--in)) * 5vh), 0);
+  margin-bottom: 4px;
 }
 
 .hero-concept-kicker {
@@ -316,10 +314,6 @@
   gap: 16px;
   padding: 12px 2px;
   border-bottom: 1px solid rgba(28, 30, 33, 0.2);
-  /* 各項目をスクロールで順に（--iで段差）フェードイン */
-  --in: clamp(0, calc((var(--hero-progress) - 0.32 - var(--i) * 0.06) * 7), 1);
-  opacity: var(--in);
-  transform: translate3d(0, calc((1 - var(--in)) * 3vh), 0);
   text-shadow: 0 1px 14px rgba(247, 247, 244, 0.9);
 }
 
@@ -553,8 +547,12 @@
   .hero-copy { top: 13%; left: 5%; }
   .hero-copy h1 { font-size: clamp(42px, 11.5vw, 64px); }
   .hero-copy-sub { max-width: 60vw; margin-top: 16px; font-size: 10px; letter-spacing: 0.09em; line-height: 1.9; }
-  /* コンセプト（SP/タブレット）：見出し＋特長タイトルのみコンパクトに流し込む */
-  .hero-concept { top: 11%; left: 5%; width: 90%; }
+  /* コンセプト（SP/タブレット）：オファーカードを先に約2スクロール見せ、進捗0.52以降に登場。見出し＋特長タイトルのみ */
+  .hero-concept {
+    top: 15%; left: 5%; width: 90%;
+    opacity: clamp(0, calc((var(--hero-progress) - 0.52) * 6), 1);
+    transform: translate3d(0, calc((0.74 - var(--hero-progress)) * 26svh), 0);
+  }
   .hero-concept::before {
     top: -34px; bottom: -34px; left: -8vw; right: -8vw;
     background: linear-gradient(180deg, rgba(247, 247, 244, 0.9) 52%, rgba(247, 247, 244, 0.5) 84%, rgba(247, 247, 244, 0) 100%);
@@ -566,13 +564,17 @@
   .hero-concept-points li { padding: 8px 2px; gap: 12px; border-bottom-color: rgba(28, 30, 33, 0.16); }
   .hero-concept-points strong { margin-bottom: 0; font-size: 16px; }
   .hero-concept-points i { display: none; }
+  /* オファーカードは前半に主役として表示し、進捗0.5以降にフェード＋下方向へ退場してコンセプトへ主役を譲る */
   .hero-offer {
     left: 5%;
     bottom: 5%;
     width: 90%;
     padding: 20px;
-    transform: translate3d(0, calc((1 - var(--offer-t)) * 8vh), 0);
+    --offer-out: clamp(0, calc((var(--hero-progress) - 0.5) * 5), 1);
+    opacity: calc(var(--offer-t) * (1 - var(--offer-out)));
+    transform: translate3d(0, calc((1 - var(--offer-t)) * 8vh + var(--offer-out) * 24svh), 0);
   }
+  .hero-scrub.is-offer-leaving .hero-offer { pointer-events: none; }
   .hero-offer-heading p { font-size: 24px; }
   .hero-offer-price { padding: 12px 0 14px; }
   .hero-offer-price strong { font-size: clamp(38px, 11vw, 54px); }
@@ -608,9 +610,10 @@
 
   .hero-line-inner { animation: none; transform: none; }
   .hero-copy-sub { animation: none; }
-  /* 静止表示はスクロール終端（コンセプトが流れ込んだ状態）を初期表示にする。
-     hero-copy・hero-conceptは--hero-progress:1の自然な計算値のまま（copyは透明・conceptは不透明）にし、
-     CONCEPT本文（差別化3点）が非表示のまま失われないようにする */
+  /* 静止表示：キャッチコピーは隠し、コンセプトとオファーカードを動きなしで表示（3つの特長も欠落させない） */
+  .hero-copy { opacity: 0; }
+  .hero-concept { opacity: 1; transform: none; }
+  .hero-concept::before { opacity: 1; }
 }
 
 /* モバイル固定CTA（画面下部の電話・WEB予約バー）。SPのみ表示 */
