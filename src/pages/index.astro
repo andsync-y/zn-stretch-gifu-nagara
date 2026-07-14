@@ -68,8 +68,8 @@ const marqueeWords = [
 ];
 ---
 <Base title={title} description={description} path="/" jsonld={[faqSchema]}>
-  <!-- HERO：連番フレーム（動画のコマ）をスクロールに同期してスクラブ再生する3Dスクロール演出 -->
-  <section class="hero-scrub" data-hero>
+  <!-- HERO：連番フレーム（動画のコマ）をスクロールに同期してスクラブ再生。コンセプトはMV左側にパララックスで流れ込む -->
+  <section id="concept" class="hero-scrub" data-hero>
     <div class="hero-scrub-stage">
       <picture>
         <source media="(max-width: 768px)" srcset="/frames/sp/frame_0001.webp" type="image/webp" />
@@ -85,6 +85,23 @@ const marqueeWords = [
           <span class="sr-only">｜全力ストレッチ岐阜長良店（岐阜市長良の個室パーソナルストレッチ専門店）</span>
         </h1>
         <p class="hero-copy-sub">岐阜市長良・個室の<br class="lg:hidden" />パーソナルストレッチ専門店</p>
+      </div>
+
+      <!-- コンセプト：スクロールに応じてMV左側に情報がパララックスで流れ込む（--hero-progressで駆動） -->
+      <div class="hero-concept">
+        <div class="hero-concept-head">
+          <p class="hero-concept-kicker">Concept — Our Philosophy</p>
+          <h2 class="hero-concept-lead">動ける身体を、<br />取り戻す。</h2>
+          <p class="hero-concept-sub">日々の疲労や姿勢の崩れから、ゴルフの飛距離まで。元格闘家考案の独自メソッド「体感軸調整法」が、個室のプライベート空間で身体の可動域を引き出します。</p>
+        </div>
+        <ul class="hero-concept-points">
+          {concepts.map((c) => (
+            <li style={`--i:${Number(c.no)}`}>
+              <b>{c.no}</b>
+              <span><strong>{c.title}</strong><i>{c.body}</i></span>
+            </li>
+          ))}
+        </ul>
       </div>
 
       <div class="hero-offer">
@@ -117,7 +134,7 @@ const marqueeWords = [
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
     const OFFER_AT = 0.03; // オファーカードを出すスクロール進捗（少しでもスクロールしたら表示）
-    const SCRUB_END = 0.85; // ここまでで最終フレームに到達し、残りは静止
+    const SCRUB_END = 0.58; // ここまでで動画は最終フレームに到達。残りはコンセプトが流れ込む区間
     // PCとSPは別動画（PC=横1920x1080/169枚・SP=縦720x1280/106枚）
     const cfg = window.innerWidth <= 768
       ? { dir: '/frames/sp', count: 106 }
@@ -215,45 +232,6 @@ const marqueeWords = [
       }
     }
   </script>
-
-  <!-- CONCEPT -->
-  <section id="concept" class="home-concept section-grid relative border-b border-ink/20 px-5 py-24 sm:px-10 sm:py-36 xl:px-14">
-    <span class="side-label">Concept — 01</span>
-    <div class="mx-auto max-w-[1440px]">
-      <div class="mb-12 flex items-end justify-between gap-8 sm:mb-20">
-        <h2 class="display-title rise">CONCEPT</h2>
-        <p class="editorial-kicker hidden sm:inline-flex">OUR PHILOSOPHY</p>
-      </div>
-      <div class="grid items-center gap-12 lg:grid-cols-[520px_1fr] lg:gap-[88px]">
-        <div class="rise relative order-2 lg:order-1">
-          <span class="absolute -left-3 -top-5 z-10 bg-ink px-3 py-1 font-script text-[9px] font-extrabold tracking-[0.18em] text-white">01 / BODY AXIS</span>
-          <div class="parallax-media h-[420px] w-full overflow-hidden lg:h-[850px]">
-            <img src={PHOTOS.concept} alt="マンツーマンで行う体感軸調整ストレッチ" width="1060" height="1700" loading="lazy" decoding="async" class="h-full w-full object-cover" style="object-position:center 62%" />
-          </div>
-        </div>
-        <div class="rise order-1 lg:order-2">
-          <p class="mb-7 text-[23px] font-black leading-[1.8] sm:text-[32px] lg:text-[40px] lg:leading-[1.7]">
-            <span class="text-[30px] leading-[1.6] sm:text-[42px] lg:text-[54px] lg:leading-[1.5]">動ける身体を取り戻す。</span><br />
-            大人のための<span class="frame-word">体感軸</span><br />パーソナルストレッチ。
-          </p>
-          <p class="mb-10 text-[15px] leading-[2.2] tracking-[0.03em] text-muted sm:mb-12 sm:text-[17px]">
-            日々の疲労、姿勢の崩れからゴルフの飛距離まで。元格闘家考案の独自メソッドが、個室のプライベート空間であなたの身体の可動域を引き出します。
-          </p>
-          <div class="rule-top">
-            {concepts.map((c) => (
-              <div class="rule-row flex items-baseline gap-4 px-1 py-5 sm:gap-6">
-                <span class="shrink-0 font-script text-[12px] font-extrabold leading-none tracking-[0.16em] text-[#92745e]">{c.no}</span>
-                <div class="text-[15px] leading-[2] text-muted sm:text-[17px]">
-                  <span class="mb-1.5 block text-[21px] font-black text-ink sm:mb-2 sm:text-[28px]">{c.title}</span>
-                  {c.body}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
 
   <!-- MARQUEE（キーワードのみ・グリッド背景） -->
   <section class="home-marquee section-grid overflow-hidden py-8 sm:py-10" aria-hidden="true">

@@ -194,24 +194,6 @@
       }
     }
 
-    /* スクロール連動パララックス：マスク内で画像が上下にドリフトし奥行きを出す。
-       マスク(.parallax-media)は overflow:hidden でスクロールコンテナになるため、
-       view() を画像に直接付けるとタイムラインがマスク基準になり進行しない。
-       マスク自身に名前付き view-timeline を張り、ビューポート基準で画像を駆動する。 */
-    .parallax-media {
-      view-timeline-name: --parallax-media;
-      view-timeline-axis: block;
-    }
-    .parallax-media > img {
-      animation: parallaxDrift linear both;
-      animation-timeline: --parallax-media;
-      animation-range: cover 0% cover 100%;
-      will-change: transform;
-    }
-    @keyframes parallaxDrift {
-      from { transform: translateY(-6.5%) scale(1.16); }
-      to   { transform: translateY(6.5%) scale(1.16); }
-    }
   }
 }
 
@@ -219,7 +201,7 @@
 .hero-scrub {
   --hero-progress: 0;
   position: relative;
-  height: 300vh;
+  height: 440vh;
   background: #f7f7f4;
 }
 
@@ -247,15 +229,124 @@
   transition: opacity 0.2s linear;
 }
 
-/* キャッチコピー：行マスクのテキストアニメーション。スクロールでフェードアウト */
+/* キャッチコピー：行マスクのテキストアニメーション。コンセプトが流れ込む前にフェードアウト */
 .hero-copy {
   position: absolute;
   z-index: 5;
   top: 24%;
   left: max(4.5vw, 28px);
-  opacity: clamp(0, calc(1 - var(--hero-progress) * 2.4), 1);
-  transform: translate3d(0, calc(var(--hero-progress) * -6vh), 0);
+  opacity: clamp(0, calc(1 - var(--hero-progress) * 5.5), 1);
+  transform: translate3d(0, calc(var(--hero-progress) * -7vh), 0);
   pointer-events: none;
+}
+
+/* コンセプト：MV左側にスクロールで流れ込む。--hero-progressで駆動（JS追加なし） */
+.hero-concept {
+  position: absolute;
+  z-index: 6;
+  top: 17%;
+  left: max(4.5vw, 30px);
+  width: min(45vw, 620px);
+  /* 全体をゆるやかに上へパララックス */
+  transform: translate3d(0, calc(var(--hero-progress) * -4vh), 0);
+  pointer-events: none;
+  color: #1c1e21;
+}
+
+/* 左側の可読性を確保する淡いグラデーションスクリム（右へ抜けて人物・オファーは妨げない） */
+.hero-concept::before {
+  content: "";
+  position: absolute;
+  top: -72px;
+  bottom: -90px;
+  left: -35vw;
+  right: -6%;
+  z-index: -1;
+  background: linear-gradient(100deg, rgba(247, 247, 244, 0.86) 40%, rgba(247, 247, 244, 0.46) 66%, rgba(247, 247, 244, 0) 86%);
+  opacity: clamp(0, calc((var(--hero-progress) - 0.16) * 6), 1);
+  pointer-events: none;
+}
+
+.hero-concept-head {
+  /* 進捗0.2〜0.4でフェードイン＋下から浮上 */
+  --in: clamp(0, calc((var(--hero-progress) - 0.2) * 5), 1);
+  opacity: var(--in);
+  transform: translate3d(0, calc((1 - var(--in)) * 5vh), 0);
+}
+
+.hero-concept-kicker {
+  margin: 0 0 14px;
+  font-family: "Inter", sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: #92745e;
+}
+
+.hero-concept-lead {
+  margin: 0 0 14px;
+  font-size: clamp(32px, 4vw, 56px);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  line-height: 1.22;
+  text-shadow: 0 2px 26px rgba(247, 247, 244, 0.85);
+}
+
+.hero-concept-sub {
+  max-width: 30em;
+  margin: 0 0 20px;
+  font-size: clamp(13px, 1.05vw, 15px);
+  font-weight: 600;
+  line-height: 1.9;
+  color: #33373b;
+  text-shadow: 0 1px 16px rgba(247, 247, 244, 0.9);
+}
+
+.hero-concept-points {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid rgba(28, 30, 33, 0.28);
+}
+
+.hero-concept-points li {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  padding: 12px 2px;
+  border-bottom: 1px solid rgba(28, 30, 33, 0.2);
+  /* 各項目をスクロールで順に（--iで段差）フェードイン */
+  --in: clamp(0, calc((var(--hero-progress) - 0.32 - var(--i) * 0.06) * 7), 1);
+  opacity: var(--in);
+  transform: translate3d(0, calc((1 - var(--in)) * 3vh), 0);
+  text-shadow: 0 1px 14px rgba(247, 247, 244, 0.9);
+}
+
+.hero-concept-points b {
+  flex-shrink: 0;
+  font-family: "Inter", sans-serif;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: #92745e;
+}
+
+.hero-concept-points strong {
+  display: block;
+  margin-bottom: 4px;
+  font-size: clamp(16px, 1.5vw, 20px);
+  font-weight: 900;
+  color: #15171a;
+}
+
+.hero-concept-points i {
+  display: block;
+  font-style: normal;
+  font-size: clamp(12px, 0.95vw, 14px);
+  font-weight: 500;
+  line-height: 1.72;
+  color: #454b4f;
 }
 
 /* 添付デザイン準拠：背景なし・極太斜体・2行目を大きく（1行目は約0.7倍で右に少し寄せる） */
@@ -319,9 +410,10 @@
 .hero-offer {
   position: absolute;
   z-index: 8;
-  left: max(4.5vw, 28px);
+  right: max(4.5vw, 28px);
+  left: auto;
   bottom: 8%;
-  width: min(43vw, 620px);
+  width: min(40vw, 560px);
   padding: clamp(24px, 2.3vw, 38px);
   background: rgba(244, 245, 242, 0.96);
   border: 1px solid rgba(23, 30, 32, 0.8);
@@ -456,11 +548,24 @@
 }
 
 @media (max-width: 1023px) {
-  .hero-scrub { height: 260svh; }
+  .hero-scrub { height: 380svh; }
   .hero-scrub-stage { top: 64px; height: calc(100svh - 64px); min-height: 480px; }
   .hero-copy { top: 13%; left: 5%; }
   .hero-copy h1 { font-size: clamp(42px, 11.5vw, 64px); }
   .hero-copy-sub { max-width: 60vw; margin-top: 16px; font-size: 10px; letter-spacing: 0.09em; line-height: 1.9; }
+  /* コンセプト（SP/タブレット）：見出し＋特長タイトルのみコンパクトに流し込む */
+  .hero-concept { top: 11%; left: 5%; width: 90%; }
+  .hero-concept::before {
+    top: -34px; bottom: -34px; left: -8vw; right: -8vw;
+    background: linear-gradient(180deg, rgba(247, 247, 244, 0.9) 52%, rgba(247, 247, 244, 0.5) 84%, rgba(247, 247, 244, 0) 100%);
+  }
+  .hero-concept-kicker { font-size: 9px; margin-bottom: 9px; }
+  .hero-concept-lead { font-size: clamp(29px, 8.4vw, 44px); margin-bottom: 12px; }
+  .hero-concept-sub { display: none; }
+  .hero-concept-points { border-top: none; }
+  .hero-concept-points li { padding: 8px 2px; gap: 12px; border-bottom-color: rgba(28, 30, 33, 0.16); }
+  .hero-concept-points strong { margin-bottom: 0; font-size: 16px; }
+  .hero-concept-points i { display: none; }
   .hero-offer {
     left: 5%;
     bottom: 5%;
@@ -472,6 +577,11 @@
   .hero-offer-price { padding: 12px 0 14px; }
   .hero-offer-price strong { font-size: clamp(38px, 11vw, 54px); }
   .hero-scroll-sign { right: 3%; bottom: 4%; }
+}
+
+/* スマホは下部の固定CTAバー（54px）分、オファーカードを持ち上げて重なりを防ぐ */
+@media (max-width: 767px) {
+  .hero-offer { bottom: 74px; }
 }
 
 @media (max-width: 480px) {
@@ -497,8 +607,10 @@
   .hero-scroll-sign { display: none; }
 
   .hero-line-inner { animation: none; transform: none; }
-  .hero-copy-sub { animation: none; opacity: 1; }
-  .hero-copy { opacity: 1; transform: none; }
+  .hero-copy-sub { animation: none; }
+  /* 静止表示はスクロール終端（コンセプトが流れ込んだ状態）を初期表示にする。
+     hero-copy・hero-conceptは--hero-progress:1の自然な計算値のまま（copyは透明・conceptは不透明）にし、
+     CONCEPT本文（差別化3点）が非表示のまま失われないようにする */
 }
 
 /* モバイル固定CTA（画面下部の電話・WEB予約バー）。SPのみ表示 */
