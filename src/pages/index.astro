@@ -35,9 +35,9 @@ const concepts = [
 
 // METHOD 3本柱（ジグザグ）
 const methods = [
-  { no: '01', en: 'Pelvis', title: '骨盤へのアプローチ', body: '体の土台となる骨盤まわりの筋肉をゆるめ、軸を意識しやすい状態へ整えていきます。', photo: PHOTOS.method1, alt: '骨盤まわりへのパーソナルストレッチ' },
-  { no: '02', en: 'Posture', title: '猫背・巻き肩へのアプローチ', body: '縮こまりがちな胸や肩まわりの筋肉を伸ばし、胸を開きやすい状態を目指します。', photo: PHOTOS.method2, alt: '猫背・巻き肩へのパーソナルストレッチ', flip: true },
-  { no: '03', en: 'Deep Muscle', title: '筋膜ほぐし＋深層筋ストレッチ', body: '表層をほぐしてから、自分では届きにくい深層の筋肉までじっくりストレッチします。', photo: PHOTOS.method3, alt: '深層筋へのパーソナルストレッチ' },
+  { no: '01', en: 'Body Axis', title: 'ZST協会認定「体感軸調整法」', body: '元格闘家考案の独自の可動域調整法で、骨盤や肩甲骨など深層筋へアプローチ。認定プロが身体を整え、慢性的な不調の根本ケアをサポートします。', photo: PHOTOS.method1, alt: '体感軸調整法によるパーソナルストレッチ' },
+  { no: '02', en: 'Release', title: '揉みほぐし×ストレッチ', body: '全身もみほぐしとストレッチ整体を融合。手技では届かないインナーマッスルを伸ばし、癒着を剥がします。女性による極上の癒やしと技術を同時に提供します。', photo: PHOTOS.method2, alt: 'もみほぐしとストレッチを融合した施術', flip: true },
+  { no: '03', en: 'Effect', title: '圧倒的な「即効性」と「具体的効果」', body: 'デスクワークの蓄積疲労をリセット。独自の可動域調整で肩こり解消や仕事の集中力向上、ゴルフ飛距離UPまでも叶えます。施術直後から実感できる変化が、ビジネスと趣味の両方でパフォーマンスを劇的に進化させます。', photo: PHOTOS.method3, alt: '施術直後から実感できる変化' },
 ];
 
 // TOPのよくある質問（FAQPage構造化データと一致させる）
@@ -47,7 +47,7 @@ const faqs = [
   { q: '駐車場はありますか？', a: 'ビル東側に共同駐車場が10台以上ございます。岐阜市外からもお車で通いやすい立地です。' },
   { q: '男性でも利用できますか？', a: 'はい、男性のお客様も多くご利用いただいています。トレーナーは全員女性で、施術はすべて個室・マンツーマンで行います。' },
   { q: '施術は痛くないですか？', a: '「痛気持ちいい」と感じる強さを目安に、その日の体の状態に合わせて調整します。強さのご希望は施術中いつでもお伝えください。' },
-  { q: '初回はどのコースを選べばいいですか？', a: '初めての方は集中ケアコース（60分）が人気です。全身をじっくりケアしたい方は全身ケアコース（90分）をおすすめしています。' },
+  { q: '初回はどのコースを選べばいいですか？', a: '全身をしっかりケアできる全身ケアコース（90分）が一番人気です。まずは気になる部分を集中的にほぐしたい方には集中ケアコース（60分）、頭の疲れもすっきりさせたい方には全身ケア＋ヘッドスパ（120分）もおすすめしています。' },
 ];
 
 const faqSchema = {
@@ -64,7 +64,7 @@ const marqueeWords = [
   '#岐阜初出店',
   '#独自の体感軸調整法',
   '#深層筋にアプローチ',
-  '#根本改善',
+  '#根本ケア',
 ];
 ---
 <Base title={title} description={description} path="/" jsonld={[faqSchema]}>
@@ -117,6 +117,10 @@ const marqueeWords = [
           <p><span>全身ケアコース</span><b>90 min.</b></p>
           <p><del>¥19,800</del><strong>¥4,900</strong><small>税込</small></p>
         </div>
+        <div class="hero-offer-price">
+          <p><span>全身ケア＋ヘッドスパ</span><b>120 min.</b></p>
+          <p><del>¥26,400</del><strong>¥13,200</strong><small>税込</small></p>
+        </div>
         <a href={SITE.urls.reserve} target="_blank" rel="noopener">WEB予約 <span aria-hidden="true">↗</span></a>
         <p class="hero-offer-note">※初回価格はおひとり様1回限り。価格は変更となる場合があります。</p>
       </div>
@@ -132,6 +136,7 @@ const marqueeWords = [
     const offer = hero?.querySelector<HTMLElement>('.hero-offer');
     const ctx = canvas?.getContext('2d');
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const narrow = window.matchMedia('(max-width: 1023px)'); // SP/タブレット。PCはオファーカードを固定表示のまま常時操作可能にする
 
     const OFFER_AT = 0.03; // オファーカードを出すスクロール進捗（少しでもスクロールしたら表示）
     const SCRUB_END = 0.42; // ここまでで動画は最終フレームに到達。以降はMV固定のままコンセプトが上へ流れる区間
@@ -196,9 +201,10 @@ const marqueeWords = [
       const progress = reduceMotion.matches ? 1 : Math.min(1, Math.max(0, -rect.top / distance));
       hero.style.setProperty('--hero-progress', progress.toFixed(4));
       hero.classList.toggle('is-offer-visible', progress >= OFFER_AT);
-      // モバイル：オファーカードが退場したら（進捗0.5超）タップを透過し、下部固定CTA・コンセプトを妨げない
-      hero.classList.toggle('is-offer-leaving', progress > 0.5 && !reduceMotion.matches);
-      offer?.toggleAttribute('inert', (progress < OFFER_AT || progress > 0.55) && !reduceMotion.matches);
+      // SP/タブレットのみ：オファーカードが退場したら（進捗0.3超）タップを透過し、下部固定CTA・コンセプトを妨げない。PCではカードは固定のまま操作可能
+      const offerLeaving = narrow.matches && progress > 0.3;
+      hero.classList.toggle('is-offer-leaving', offerLeaving && !reduceMotion.matches);
+      offer?.toggleAttribute('inert', (progress < OFFER_AT || (offerLeaving && progress > 0.4)) && !reduceMotion.matches);
       currentFrame = Math.min(FRAME_COUNT - 1, Math.floor((progress / SCRUB_END) * FRAME_COUNT));
       if (currentFrame !== drawnFrame) draw();
     };
@@ -256,7 +262,7 @@ const marqueeWords = [
         <p class="editorial-kicker mb-7">HOW WE MOVE</p>
         <h2 class="display-title mb-8">METHOD</h2>
         <p class="mb-16 max-w-[640px] text-[15px] leading-[2.1] tracking-[0.03em] text-muted sm:mb-[88px] sm:text-[17px]">
-          元格闘家のオーナーが考案した独自の「体感軸調整法」。もみほぐしではなく、体の軸をつくる筋肉へのストレッチで深い部分からアプローチします。
+          元格闘家のオーナーが考案した独自の「体感軸調整法」。全身のもみほぐしとストレッチを融合し、体の軸をつくる深層筋までじっくりアプローチします。
         </p>
       </div>
       <div class="flex flex-col gap-16 sm:gap-24">
@@ -290,7 +296,7 @@ const marqueeWords = [
         <p class="editorial-kicker mb-4 !text-[#df342f]">FIND YOUR CONDITION</p>
         <div class="mb-9 grid items-end gap-4 sm:mb-11 lg:grid-cols-[auto_1fr] lg:gap-12">
           <h2 class="display-title !text-inkpaper">SYMPTOMS</h2>
-          <p class="max-w-[620px] pb-2 text-[14px] leading-[1.9] tracking-[0.03em] text-inkmuted sm:text-[15px]">お悩みから探す。気になる項目にカーソルを合わせると、該当する部位が赤く光ります。</p>
+          <p class="max-w-[620px] pb-2 text-[14px] leading-[1.9] tracking-[0.03em] text-inkmuted sm:text-[15px]">気になる症状に、当店がどうアプローチするかを知る。項目を選ぶと、該当する部位が赤く光ります。</p>
         </div>
       </div>
       <InteractiveSymptoms />
