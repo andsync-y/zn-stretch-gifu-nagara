@@ -486,7 +486,9 @@
   font-size: clamp(38px, 4vw, 62px);
   letter-spacing: -0.05em;
 }
-.hero-offer-price small { margin-left: 6px; font-size: 10px; }
+.hero-offer-price small { margin-left: 6px; font-size: 10px; white-space: nowrap; }
+/* コース名は数字と競合しても崩れないよう改行を許可（120分＝全身ケア＋ヘッドスパはSPで2行に） */
+.hero-offer-price p:first-child span { word-break: normal; overflow-wrap: anywhere; }
 
 .hero-offer > a {
   display: flex;
@@ -579,6 +581,8 @@
   .hero-offer-heading p { font-size: 24px; }
   .hero-offer-price { padding: 12px 0 14px; }
   .hero-offer-price strong { font-size: clamp(38px, 11vw, 54px); }
+  /* 6桁価格の行（全身ケア＋ヘッドスパ 120分 ¥13,200）は、狭い端末でも名前・価格・税込が1行ずつ収まるよう少し縮小 */
+  .hero-offer-price.is-long strong { font-size: clamp(32px, 9vw, 50px); }
   .hero-scroll-sign { right: 3%; bottom: 4%; }
 }
 
