@@ -547,32 +547,33 @@
   .hero-copy { top: 13%; left: 5%; }
   .hero-copy h1 { font-size: clamp(42px, 11.5vw, 64px); }
   .hero-copy-sub { max-width: 60vw; margin-top: 16px; font-size: 10px; letter-spacing: 0.09em; line-height: 1.9; }
-  /* コンセプト（SP/タブレット）：オファーカードを先に約2スクロール見せ、進捗0.52以降に登場。見出し＋特長タイトルのみ */
+  /* コンセプト（SP/タブレット）：オファーカードを先に見せ、進捗0.3以降に登場。見出し＋サブ＋特長3点の全文をクレジットロールで表示 */
   .hero-concept {
-    top: 15%; left: 5%; width: 90%;
-    opacity: clamp(0, calc((var(--hero-progress) - 0.52) * 6), 1);
-    transform: translate3d(0, calc((0.74 - var(--hero-progress)) * 26svh), 0);
+    top: 14%; left: 5%; width: 90%;
+    /* カードが退場し切る0.4以降に登場（重なりを避ける） */
+    opacity: clamp(0, calc((var(--hero-progress) - 0.4) * 7), 1);
+    transform: translate3d(0, calc((0.5 - var(--hero-progress)) * 96svh), 0);
   }
   .hero-concept::before {
-    top: -34px; bottom: -34px; left: -8vw; right: -8vw;
-    background: linear-gradient(180deg, rgba(247, 247, 244, 0.9) 52%, rgba(247, 247, 244, 0.5) 84%, rgba(247, 247, 244, 0) 100%);
+    top: -30px; bottom: -44px; left: -8vw; right: -8vw;
+    background: linear-gradient(180deg, rgba(247, 247, 244, 0.92) 62%, rgba(247, 247, 244, 0.55) 85%, rgba(247, 247, 244, 0) 100%);
   }
   .hero-concept-kicker { font-size: 9px; margin-bottom: 9px; }
-  .hero-concept-lead { font-size: clamp(29px, 8.4vw, 44px); margin-bottom: 12px; }
-  .hero-concept-sub { display: none; }
-  .hero-concept-points { border-top: none; }
-  .hero-concept-points li { padding: 8px 2px; gap: 12px; border-bottom-color: rgba(28, 30, 33, 0.16); }
-  .hero-concept-points strong { margin-bottom: 0; font-size: 16px; }
-  .hero-concept-points i { display: none; }
-  /* オファーカードは前半に主役として表示し、進捗0.5以降にフェード＋下方向へ退場してコンセプトへ主役を譲る */
+  .hero-concept-lead { font-size: clamp(26px, 7.4vw, 40px); margin-bottom: 12px; }
+  .hero-concept-sub { max-width: none; font-size: 12px; line-height: 1.8; margin-bottom: 16px; }
+  .hero-concept-points { border-top: 1px solid rgba(28, 30, 33, 0.22); }
+  .hero-concept-points li { padding: 10px 2px; gap: 12px; border-bottom-color: rgba(28, 30, 33, 0.16); }
+  .hero-concept-points strong { margin-bottom: 3px; font-size: 15px; }
+  .hero-concept-points i { font-size: 12px; line-height: 1.65; }
+  /* オファーカードは前半に表示し、進捗0.3以降にフェード＋下方向へ退場（表示時間を短縮）してコンセプトへ主役を譲る */
   .hero-offer {
     left: 5%;
     bottom: 5%;
     width: 90%;
     padding: 20px;
-    --offer-out: clamp(0, calc((var(--hero-progress) - 0.5) * 5), 1);
+    --offer-out: clamp(0, calc((var(--hero-progress) - 0.3) * 8), 1);
     opacity: calc(var(--offer-t) * (1 - var(--offer-out)));
-    transform: translate3d(0, calc((1 - var(--offer-t)) * 8vh + var(--offer-out) * 24svh), 0);
+    transform: translate3d(0, calc((1 - var(--offer-t)) * 8vh + var(--offer-out) * 30svh), 0);
   }
   .hero-scrub.is-offer-leaving .hero-offer { pointer-events: none; }
   .hero-offer-heading p { font-size: 24px; }
@@ -614,6 +615,18 @@
   .hero-copy { opacity: 0; }
   .hero-concept { opacity: 1; transform: none; }
   .hero-concept::before { opacity: 1; }
+}
+
+/* 静止表示のSP/タブレット：固定高の中に「全文コンセプト＋3コースのカード」は収まらないため、
+   コンセプトは見出し＋特長タイトルのみのコンパクト表示にしてカードとの重なりを防ぐ（本文はDOMには残る） */
+@media (prefers-reduced-motion: reduce) and (max-width: 1023px) {
+  .hero-concept { top: 4%; }
+  .hero-concept-kicker { margin-bottom: 6px; }
+  .hero-concept-lead { font-size: clamp(23px, 6.2vw, 32px); margin-bottom: 8px; }
+  .hero-concept-sub { display: none; }
+  .hero-concept-points { border-top: none; }
+  .hero-concept-points li { padding: 6px 2px; }
+  .hero-concept-points i { display: none; }
 }
 
 /* モバイル固定CTA（画面下部の電話・WEB予約バー）。SPのみ表示 */
