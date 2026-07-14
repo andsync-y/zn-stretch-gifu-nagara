@@ -47,6 +47,19 @@ const jobStats = [
             </div>
           </div>
 
+          <svg class="age-leaders-mobile" viewBox="0 0 360 360" aria-hidden="true" focusable="false">
+            <path d="M155 52h23l20 18"></path>
+            <circle cx="198" cy="70" r="2.5"></circle>
+            <path d="M312 90h-18l-14 40"></path>
+            <circle cx="280" cy="130" r="2.5"></circle>
+            <path d="M72 92h22l35-12"></path>
+            <circle cx="129" cy="80" r="2.5"></circle>
+            <path d="M56 310v-57l25-57"></path>
+            <circle cx="81" cy="196" r="2.5"></circle>
+            <path d="M308 310h-33l-64-35"></path>
+            <circle cx="211" cy="275" r="2.5"></circle>
+          </svg>
+
           {ageSegments.map((item) => (
             <p class={`age-label age-${item.key}`}>
               <span>{item.label}</span>
@@ -107,7 +120,20 @@ const jobStats = [
     font-family: "Noto Sans JP", sans-serif;
   }
 
+  .data-section::before {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(21, 23, 25, 0.055) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(21, 23, 25, 0.055) 1px, transparent 1px);
+    background-size: 42px 42px;
+    content: '';
+    pointer-events: none;
+  }
+
   .data-inner {
+    position: relative;
+    z-index: 1;
     width: min(100%, 1540px);
     margin: 0 auto;
   }
@@ -248,6 +274,8 @@ const jobStats = [
     box-shadow: 0 0 0 9px var(--data-paper), 0 0 0 10px rgba(21, 23, 25, 0.18);
     transform: translate(-50%, -50%);
   }
+
+  .age-leaders-mobile { display: none; }
 
   .age-chart::before {
     position: absolute;
@@ -532,8 +560,8 @@ const jobStats = [
       grid-template-columns: 1fr 1fr;
       grid-template-rows: auto auto auto;
       grid-template-areas:
-        "age age"
         "network gender"
+        "age age"
         "jobs repeat";
       gap: 26px 34px;
       height: auto;
@@ -560,50 +588,75 @@ const jobStats = [
     .data-composition {
       grid-template-columns: 1fr 1fr;
       grid-template-areas:
-        "age age"
         "network gender"
+        "age age"
         "jobs repeat";
       gap: 18px 12px;
     }
     .data-age { min-height: 0; }
     .age-visual {
-      display: grid;
-      grid-template-columns: repeat(5, minmax(0, 1fr));
-      gap: 9px 3px;
+      display: block;
+      position: relative;
+      width: 100%;
+      max-width: 420px;
+      aspect-ratio: 1;
       height: auto;
       min-height: 0;
-      padding: 3px 0 4px;
+      margin: 0 auto;
+      padding: 0;
     }
     .age-chart {
-      position: relative;
-      top: auto;
-      left: auto;
-      grid-column: 1 / -1;
-      width: min(59vw, 242px);
-      margin: 0 auto 5px;
+      position: absolute;
+      z-index: 0;
+      top: 50%;
+      left: 50%;
+      width: 62%;
+      margin: 0;
       box-shadow: 0 0 0 6px var(--data-paper), 0 0 0 7px rgba(21, 23, 25, 0.18);
-      transform: none;
+      transform: translate(-50%, -50%);
     }
+    .age-leaders-mobile {
+      position: absolute;
+      z-index: 1;
+      inset: 0;
+      display: block;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+      pointer-events: none;
+    }
+    .age-leaders-mobile path {
+      fill: none;
+      stroke: var(--data-ink);
+      stroke-width: 1;
+      vector-effect: non-scaling-stroke;
+    }
+    .age-leaders-mobile circle { fill: var(--data-ink); }
     .age-chart-center { border-width: 3px; }
     .age-chart-center span,
     .age-chart-center strong { font-size: clamp(13px, 3.8vw, 17px); }
     .age-chart-center i { width: 24px; margin: 8px 0 6px; }
     .age-chart-center small { font-size: 6px; }
     .age-label {
-      position: static;
+      position: absolute;
+      z-index: 2;
       min-width: 0;
-      text-align: center;
-      white-space: normal;
+      white-space: nowrap;
     }
     .age-label::before,
     .age-label::after { display: none; }
     .age-label span {
-      min-height: 2.6em;
+      min-height: 0;
       margin: 0;
-      font-size: clamp(7px, 2.15vw, 9px);
+      font-size: clamp(8px, 2.3vw, 10px);
       line-height: 1.3;
     }
-    .age-label strong { font-size: clamp(20px, 6.4vw, 27px); }
+    .age-label strong { font-size: clamp(22px, 6.8vw, 29px); }
+    .age-under20 { top: 0; left: 50%; text-align: center; transform: translateX(-50%); }
+    .age-thirties { top: 17%; right: 0; text-align: right; }
+    .age-over60 { top: 17%; left: 0; text-align: left; }
+    .age-fifties { bottom: 0; left: 0; text-align: left; }
+    .age-forties { right: 0; bottom: 0; text-align: right; }
     .data-network { width: min(43vw, 170px); }
     .data-network strong { font-size: clamp(65px, 20vw, 84px); }
     .data-network span,
@@ -628,6 +681,7 @@ const jobStats = [
     .data-repeat h3 { top: 15%; }
     .data-repeat strong { font-size: clamp(53px, 16vw, 68px); }
     .data-note { margin-top: 18px; font-size: 7px; text-align: left; }
+    .data-section::before { background-size: 28px 28px; }
   }
 
   @media (prefers-reduced-motion: reduce) {
