@@ -201,14 +201,16 @@
 .hero-scrub {
   --hero-progress: 0;
   position: relative;
-  height: 440vh;
+  height: 360vh;
   background: #f7f7f4;
+  /* ヘッダー(sticky・透明・76px)の下にMVを回り込ませて全面表示にし、上部のクリーム帯をなくす */
+  margin-top: -76px;
 }
 
 .hero-scrub-stage {
   position: sticky;
-  top: 76px;
-  height: calc(100vh - 76px);
+  top: 0;
+  height: 100vh;
   min-height: 560px;
   overflow: hidden;
   background: #f7f7f4;
@@ -220,6 +222,33 @@
   inset: 0;
   width: 100%;
   height: 100%;
+}
+
+/* 透過ヘッダーの可読性確保：MV上端に淡いグラデーション（バーではなく上端のソフトなフェード）。
+   人物の暗部にナビが重なっても文字が読めるようにする。canvasより上・テキストより下に配置 */
+.hero-scrub-stage::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 118px;
+  z-index: 1;
+  background: linear-gradient(180deg, rgba(247, 247, 244, 0.72) 0%, rgba(247, 247, 244, 0.34) 48%, rgba(247, 247, 244, 0) 100%);
+  pointer-events: none;
+}
+
+/* テキストオーバーレイのクリップ枠。MV(canvas)は全面（stage top:0）だが、コピー・コンセプト・オファーは
+   ヘッダー(76px)の下でクリップして、ロール時にヘッダーへ被らないようにする */
+.hero-overlays {
+  position: absolute;
+  top: 76px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 2;
 }
 
 /* JS無効・canvas描画前のフォールバック（1フレーム目の静止画） */
@@ -410,7 +439,7 @@
   left: auto;
   bottom: 8%;
   width: min(40vw, 560px);
-  padding: clamp(24px, 2.3vw, 38px);
+  padding: clamp(18px, 1.7vw, 30px);
   background: rgba(244, 245, 242, 0.96);
   border: 1px solid rgba(23, 30, 32, 0.8);
   box-shadow: 12px 12px 0 rgba(146, 116, 94, 0.15);
@@ -431,7 +460,7 @@
   align-items: flex-start;
   justify-content: space-between;
   gap: 20px;
-  padding-bottom: 14px;
+  padding-bottom: 11px;
   border-bottom: 1px solid rgba(23, 30, 32, 0.32);
 }
 
@@ -458,11 +487,11 @@
   align-items: flex-end;
   justify-content: space-between;
   gap: 24px;
-  padding: 14px 0 16px;
+  padding: 10px 0 12px;
 }
 
 .hero-offer-price + .hero-offer-price {
-  padding-top: 12px;
+  padding-top: 9px;
   border-top: 1px solid rgba(23, 30, 32, 0.18);
 }
 
@@ -510,7 +539,7 @@
 .hero-offer > a:hover { background: #92745e; }
 .hero-offer > a span { font-size: 19px; font-weight: 400; }
 .hero-offer-note {
-  margin: 9px 0 0;
+  margin: 7px 0 0;
   color: #6b777a;
   font-size: 9px;
   line-height: 1.5;
@@ -547,8 +576,11 @@
 }
 
 @media (max-width: 1023px) {
-  .hero-scrub { height: 380svh; }
+  .hero-scrub { height: 380svh; margin-top: 0; }
   .hero-scrub-stage { top: 64px; height: calc(100svh - 64px); min-height: 480px; }
+  /* モバイルはステージ自体がヘッダー下(64px)から始まるため、オーバーレイの追加クリップ・上端フェードは不要 */
+  .hero-overlays { top: 0; }
+  .hero-scrub-stage::before { display: none; }
   .hero-copy { top: 13%; left: 5%; }
   .hero-copy h1 { font-size: clamp(42px, 11.5vw, 64px); }
   .hero-copy-sub { max-width: 60vw; margin-top: 16px; font-size: 10px; letter-spacing: 0.09em; line-height: 1.9; }
@@ -612,7 +644,7 @@
     animation: none !important;
   }
 
-  .hero-scrub { height: auto; }
+  .hero-scrub { height: auto; margin-top: 0; }
   .hero-scrub-stage { position: relative; top: auto; height: min(820px, 100svh); }
   .hero-offer { opacity: 1; transform: none; }
   .hero-scroll-sign { display: none; }

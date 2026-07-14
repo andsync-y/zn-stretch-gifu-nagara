@@ -77,6 +77,8 @@ const marqueeWords = [
       </picture>
       <canvas data-hero-canvas aria-hidden="true"></canvas>
 
+      <!-- テキストオーバーレイ群：ヘッダー下でクリップ（MV=canvasは全面のまま、コンセプトのロールがヘッダーに被らない） -->
+      <div class="hero-overlays">
       <!-- キャッチコピー（動画には文字が入っていないため、HTMLテキストで表示・アニメーション） -->
       <div class="hero-copy">
         <h1>
@@ -126,6 +128,7 @@ const marqueeWords = [
       </div>
 
       <div class="hero-scroll-sign" aria-hidden="true"><span>SCROLL TO MOVE</span><i></i></div>
+      </div>
     </div>
   </section>
 
@@ -161,8 +164,8 @@ const marqueeWords = [
     const draw = () => {
       if (!canvas || !ctx || !hero) return;
       const stage = canvas.parentElement as HTMLElement;
-      // モバイルはcanvasの解像度上限を下げて1フレームの再描画を軽くし、スクロール追従を滑らかに（SP素材は720px幅のため画質劣化はほぼ無い）
-      const dpr = Math.min(window.innerWidth <= 768 ? 1.5 : 2, window.devicePixelRatio || 1);
+      // canvasの解像度上限を1.5に抑えて1フレームの再描画コストを削減（元動画は横1920/縦720px幅のため画質劣化はほぼ無い）。PC/SP共通で軽くする
+      const dpr = Math.min(1.5, window.devicePixelRatio || 1);
       const cw = stage.clientWidth;
       const ch = stage.clientHeight;
       if (canvas.width !== Math.round(cw * dpr) || canvas.height !== Math.round(ch * dpr)) {
@@ -178,8 +181,7 @@ const marqueeWords = [
       const scale = Math.max(canvas.width / iw, canvas.height / ih);
       const dw = iw * scale;
       const dh = ih * scale;
-      ctx.fillStyle = '#f7f7f4';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      // coverスケールで必ず全面を覆うため、毎フレームのfillRect（背景塗り）は省略して描画を軽量化
       ctx.drawImage(img, (canvas.width - dw) / 2, (canvas.height - dh) / 2, dw, dh);
       drawnFrame = idx;
       if (fallback && fallback.style.opacity !== '0') fallback.style.opacity = '0';
