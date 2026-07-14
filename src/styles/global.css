@@ -237,6 +237,7 @@
   left: max(4.5vw, 28px);
   opacity: clamp(0, calc(1 - var(--hero-progress) * 5.5), 1);
   transform: translate3d(0, calc(var(--hero-progress) * -7vh), 0);
+  will-change: transform, opacity;
   pointer-events: none;
 }
 
@@ -250,6 +251,7 @@
   /* 進捗0.2で登場し、ブロック全体がゆっくり上へスクロールして3つの特長を順に見せる */
   opacity: clamp(0, calc((var(--hero-progress) - 0.2) * 6), 1);
   transform: translate3d(0, calc((0.6 - var(--hero-progress)) * 80vh), 0);
+  will-change: transform, opacity;
   pointer-events: none;
   color: #1c1e21;
 }
@@ -416,6 +418,7 @@
   --offer-t: clamp(0, calc((var(--hero-progress) - 0.02) * 14), 1);
   opacity: var(--offer-t);
   transform: translate3d(0, calc((1 - var(--offer-t)) * 8vh), 0);
+  will-change: transform, opacity;
   pointer-events: none;
 }
 
@@ -557,8 +560,9 @@
     transform: translate3d(0, calc((0.5 - var(--hero-progress)) * 96svh), 0);
   }
   .hero-concept::before {
-    top: -30px; bottom: -44px; left: -8vw; right: -8vw;
-    background: linear-gradient(180deg, rgba(247, 247, 244, 0.92) 62%, rgba(247, 247, 244, 0.55) 85%, rgba(247, 247, 244, 0) 100%);
+    /* 上方向へ大きく広げてヘッダー直下まで白で満たす（はみ出しはステージのoverflow:hiddenでクリップ＝上部の隙間を解消） */
+    top: -220px; bottom: -44px; left: -8vw; right: -8vw;
+    background: linear-gradient(180deg, rgba(247, 247, 244, 0.94) 84%, rgba(247, 247, 244, 0.5) 94%, rgba(247, 247, 244, 0) 100%);
   }
   .hero-concept-kicker { font-size: 9px; margin-bottom: 9px; }
   .hero-concept-lead { font-size: clamp(26px, 7.4vw, 40px); margin-bottom: 12px; }

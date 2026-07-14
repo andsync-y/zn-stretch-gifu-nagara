@@ -161,7 +161,8 @@ const marqueeWords = [
     const draw = () => {
       if (!canvas || !ctx || !hero) return;
       const stage = canvas.parentElement as HTMLElement;
-      const dpr = Math.min(2, window.devicePixelRatio || 1);
+      // モバイルはcanvasの解像度上限を下げて1フレームの再描画を軽くし、スクロール追従を滑らかに（SP素材は720px幅のため画質劣化はほぼ無い）
+      const dpr = Math.min(window.innerWidth <= 768 ? 1.5 : 2, window.devicePixelRatio || 1);
       const cw = stage.clientWidth;
       const ch = stage.clientHeight;
       if (canvas.width !== Math.round(cw * dpr) || canvas.height !== Math.round(ch * dpr)) {
@@ -223,7 +224,7 @@ const marqueeWords = [
         updateHero();
       } else {
         load(0, () => { draw(); });
-        // 残りは同時6本ずつ順次プリロード
+        // 残りは同時8本ずつ順次プリロード（フレーム未読込による飛び＝カクつきを減らす）
         let next = 1;
         const pump = () => {
           if (next >= FRAME_COUNT) return;
@@ -233,7 +234,7 @@ const marqueeWords = [
             pump();
           });
         };
-        for (let c = 0; c < 6; c++) pump();
+        for (let c = 0; c < 8; c++) pump();
         updateHero();
         addEventListener('scroll', requestHeroUpdate, { passive: true });
         addEventListener('resize', () => { drawnFrame = -1; requestHeroUpdate(); }, { passive: true });
