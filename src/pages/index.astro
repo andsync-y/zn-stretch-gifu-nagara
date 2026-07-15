@@ -169,6 +169,28 @@ const marqueeWords = [
     let drawnFrame = -1;
     let ticking = false;
 
+    // スクラブの平滑化：スクロール由来の目標フレームへ毎フレーム少しずつ追従させ、
+    // 1コマ単位の即時切替による「ガタつき」を滑らかな再生に変える
+    let targetFrame = 0;
+    let smoothFrame = 0;
+    let scrubPlaying = false;
+    const playTowardTarget = () => {
+      smoothFrame += (targetFrame - smoothFrame) * 0.22;
+      if (Math.abs(targetFrame - smoothFrame) < 0.6) smoothFrame = targetFrame;
+      const f = Math.round(smoothFrame);
+      if (f !== currentFrame) {
+        currentFrame = f;
+        draw();
+      }
+      if (smoothFrame !== targetFrame) requestAnimationFrame(playTowardTarget);
+      else scrubPlaying = false;
+    };
+    const requestScrub = () => {
+      if (scrubPlaying) return;
+      scrubPlaying = true;
+      requestAnimationFrame(playTowardTarget);
+    };
+
     // 表示中フレーム以下で読み込み済みの直近フレームを描く（読み込み中の飛びを防ぐ）
     const nearestLoaded = (i: number) => {
       for (let k = i; k >= 0; k--) if (images[k]?.complete) return k;
@@ -300,8 +322,8 @@ const marqueeWords = [
       // 動画フレームはピン留め全区間（heroDist＝展開A＋被せB）に均等配分。
       // METHOD透過背景の背後でも進み続け、ヒーロー解放（METHOD終端）で最終フレームに到達する
       const pTotal = reduceMotion.matches ? 1 : Math.min(1, Math.max(0, scrolled / heroDist));
-      currentFrame = Math.min(FRAME_COUNT - 1, Math.floor(pTotal * FRAME_COUNT));
-      if (currentFrame !== drawnFrame) draw();
+      targetFrame = Math.min(FRAME_COUNT - 1, Math.floor(pTotal * FRAME_COUNT));
+      if (targetFrame !== currentFrame) requestScrub();
     };
 
     const requestHeroUpdate = () => {
@@ -344,7 +366,17 @@ const marqueeWords = [
           }
         }
         addEventListener('scroll', requestHeroUpdate, { passive: true });
-        addEventListener('resize', () => { sizeHero(); drawnFrame = -1; requestHeroUpdate(); }, { passive: true });
+        // モバイルのURLバー伸縮は「高さだけのresize」を連発する。そのたびにヒーロー寸法を
+        // 再計算するとスクロール中にレイアウトが跳ねてガタつくため、幅が変わった時だけ再計算する
+        let lastW = window.innerWidth;
+        addEventListener('resize', () => {
+          if (window.innerWidth !== lastW) {
+            lastW = window.innerWidth;
+            sizeHero();
+            drawnFrame = -1;
+          }
+          requestHeroUpdate();
+        }, { passive: true });
       }
     }
   </script>
