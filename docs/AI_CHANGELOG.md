@@ -972,3 +972,18 @@ Git履歴が「何を変更したか」、このファイルが「なぜ変更�
 - 主な変更ファイル：`src/styles/global.css`（.hero-offer背景・影／SP gap）／`src/components/InteractiveSymptoms.astro`（自動送りロジック）
 - 確認結果：`npm run build` 成功（19ページ）。Chromiumで確認——SP(390)：カードが透過し枠線のみ、MVが薄く透け価格判読可、カード⇄コンセプト間の余白拡大を確認。PC(1120)：カード透過でも斜め構図・判読性維持。SP SYMPTOMSはdata-active が shoulder→lower-back→neck-eyes→lower-legs と1秒ごとに遷移し、骨格の赤発光も肩→腰→脚へ連動移動することをスクショ列で確認。
 - 未対応・次の作業：実機での体感確認（自動送りの速度は1000msで調整可）。
+
+## 2026-07-15 — Claude Code
+
+- 担当：Claude Code
+- ブランチ：`claude/apply-design-patch-xbq1gz`
+- 関連PR：FIRST SESSIONカードを単独で浮かせる／カード⇄コンセプト余白拡大／カード出現を早める／SYMPTOMS自動送りを1.8秒に
+- 変更内容：
+  - 【カードを浮かせる】イントロ（.hero-intro）の周囲ガラス背景（PC 0.56／SP 0.64）を廃止し`transparent`に。カード周辺はMVがそのまま見える。カード（.hero-offer）は不透明パネル（rgba(248,248,245,0.97)）＋やわらかいドロップシャドウ（0 30px 60px / 0 10px 26px）に変更し、MVから持ち上がって単独で浮いて見える構成に。
+  - 【コンセプトの可読性】ガラス背景廃止に伴い、コンセプト見出し・本文・箇条書きのtext-shadow（淡いハロー）を強化（2層化）。MV上でも判読できるようにしつつ、パネルは再導入しない。
+  - 【余白拡大】SP縦積みのカード⇄コンセプト間隔をgap 52px→72pxへ。
+  - 【カード出現を早める】「カードが出るまで気持ち長い」との声に対応し、MV展開区間A（迫り上がり前のスクラブ単独区間）をSP 2.2→2.0・PC 2.6→2.3画面に短縮。ピン留め終端＝METHOD終端の同期・フレーム配分（heroDist全体にマップ）は維持のまま、シートが早めに迫り上がる。
+  - 【SYMPTOMS自動送り】スマホ等の自動切り替え間隔を1000ms→1800msに延長（感覚が短すぎたため）。
+- 主な変更ファイル：`src/styles/global.css`（イントロ背景・カード浮遊化・コンセプトのハロー・SP gap）／`src/pages/index.astro`（unfoldLen係数）／`src/components/InteractiveSymptoms.astro`（interval 1800ms）
+- 確認結果：`npm run build` 成功（19ページ）。Chromiumで確認——SP(390)：カードが影付きで浮きMVが周囲に見える、カード⇄コンセプト余白拡大、コンセプトはハロー強化で判読可。PC(1120)：カード浮遊＋斜め構図維持、コンセプト判読可。SYMPTOMS自動送りは約7.2秒で4回遷移＝約1.8秒間隔を確認。
+- 未対応・次の作業：実機での体感確認（コンセプトがMVの明部/繁部と重なる箇所の可読性、カード出現タイミング、送り速度は微調整可）。
