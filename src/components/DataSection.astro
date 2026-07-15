@@ -52,7 +52,7 @@ const jobStats = [
 ];
 ---
 
-<section id="data" class="data-section" aria-labelledby="data-title">
+<section id="data" class="data-section section-grid" aria-labelledby="data-title">
   <div class="data-inner">
     <header class="data-header rise">
       <p>FACTS &amp; FIGURES</p>
@@ -186,21 +186,10 @@ const jobStats = [
     position: relative;
     overflow: hidden;
     border-bottom: 1px solid rgba(21, 23, 25, 0.24);
-    background: var(--data-paper);
+    background-color: var(--data-paper);
     color: var(--data-ink);
     padding: clamp(42px, 5vw, 72px) clamp(20px, 4vw, 64px) clamp(32px, 3.5vw, 52px);
     font-family: "Noto Sans JP", sans-serif;
-  }
-
-  .data-section::before {
-    position: absolute;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(21, 23, 25, 0.055) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(21, 23, 25, 0.055) 1px, transparent 1px);
-    background-size: 42px 42px;
-    content: '';
-    pointer-events: none;
   }
 
   .data-inner {
@@ -857,7 +846,6 @@ const jobStats = [
     .data-repeat h3 { top: 15%; }
     .data-repeat strong { font-size: clamp(53px, 16vw, 68px); }
     .data-note { margin-top: 18px; font-size: 7px; text-align: left; }
-    .data-section::before { background-size: 28px 28px; }
   }
 
   @media (prefers-reduced-motion: reduce) {
