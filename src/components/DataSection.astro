@@ -47,6 +47,19 @@ const jobStats = [
             </div>
           </div>
 
+          <svg class="age-leaders-desktop" viewBox="0 0 720 600" aria-hidden="true" focusable="false">
+            <path d="M394 87V72"></path>
+            <circle cx="394" cy="87" r="3"></circle>
+            <path d="M552 202L590 155H620"></path>
+            <circle cx="552" cy="202" r="3"></circle>
+            <path d="M262 108L225 82H150"></path>
+            <circle cx="262" cy="108" r="3"></circle>
+            <path d="M147 334L110 360H90"></path>
+            <circle cx="147" cy="334" r="3"></circle>
+            <path d="M427 505L460 535H565"></path>
+            <circle cx="427" cy="505" r="3"></circle>
+          </svg>
+
           <svg class="age-leaders-mobile" viewBox="0 0 360 360" aria-hidden="true" focusable="false">
             <path d="M197 75L201 52H184"></path>
             <circle cx="197" cy="75" r="2.2"></circle>
@@ -71,13 +84,17 @@ const jobStats = [
 
       <article class="data-gender">
         <h3>男女比</h3>
+        <p class="gender-female-legend"><i></i><span>女性</span><strong>20%</strong></p>
         <div class="gender-chart" role="img" aria-label="男性80%、女性20%">
+          <svg class="gender-ring" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+            <circle class="gender-ring-female" cx="50" cy="50" r="40"></circle>
+            <circle class="gender-ring-male" cx="50" cy="50" r="40" pathLength="100"></circle>
+          </svg>
           <div>
             <span>男性</span>
             <strong>80<small>%</small></strong>
           </div>
         </div>
-        <p>女性 20%</p>
       </article>
 
       <article class="data-jobs">
@@ -187,7 +204,7 @@ const jobStats = [
   }
 
   .data-network { grid-area: network; }
-  .data-age { grid-area: age; align-self: stretch; }
+  .data-age { grid-area: age; align-self: stretch; display: grid; place-items: center; }
   .data-gender { grid-area: gender; }
   .data-jobs { grid-area: jobs; align-self: start; }
   .data-repeat { grid-area: repeat; }
@@ -204,12 +221,12 @@ const jobStats = [
   .data-network > img {
     position: absolute;
     z-index: -1;
-    width: 46%;
-    height: 78%;
+    width: 58%;
+    height: 84%;
     object-fit: contain;
-    opacity: 0.075;
+    opacity: 0.06;
     filter: grayscale(1) contrast(1.1);
-    transform: translate(5%, -2%);
+    transform: translate(2%, 0);
   }
 
   .data-dot-ring {
@@ -256,9 +273,11 @@ const jobStats = [
 
   .age-visual {
     position: relative;
-    width: 100%;
-    height: 100%;
+    width: min(100%, 650px);
+    height: auto;
+    aspect-ratio: 6 / 5;
     min-height: 0;
+    margin: auto;
   }
 
   .age-chart {
@@ -266,7 +285,7 @@ const jobStats = [
     top: 50%;
     left: 50%;
     display: grid;
-    width: clamp(300px, 28vw, 430px);
+    width: min(60%, 430px);
     aspect-ratio: 1;
     place-items: center;
     border-radius: 50%;
@@ -274,6 +293,30 @@ const jobStats = [
     box-shadow: 0 0 0 9px var(--data-paper), 0 0 0 10px rgba(21, 23, 25, 0.18);
     transform: translate(-50%, -50%);
   }
+
+  .age-leaders-desktop,
+  .age-leaders-mobile {
+    position: absolute;
+    z-index: 1;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    pointer-events: none;
+  }
+
+  .age-leaders-desktop path,
+  .age-leaders-mobile path {
+    fill: none;
+    stroke: rgba(21, 23, 25, 0.64);
+    stroke-width: 0.9;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .age-leaders-desktop circle,
+  .age-leaders-mobile circle { fill: rgba(21, 23, 25, 0.7); }
 
   .age-leaders-mobile { display: none; }
 
@@ -363,43 +406,14 @@ const jobStats = [
     font-size: 0.5em;
   }
 
-  .age-label::before {
-    position: absolute;
-    width: 6px;
-    aspect-ratio: 1;
-    border-radius: 50%;
-    background: var(--data-ink);
-    content: '';
-  }
+  .age-label::before,
+  .age-label::after { display: none; }
 
-  .age-label::after {
-    position: absolute;
-    width: var(--leader-width, 86px);
-    height: 1px;
-    background: var(--data-ink);
-    content: '';
-    transform-origin: 0 50%;
-  }
-
-  .age-under20 { top: 3%; left: 8%; }
-  .age-under20::after { top: 73px; left: 72px; --leader-width: 94px; transform: rotate(42deg); }
-  .age-under20::before { top: 132px; left: 139px; }
-
-  .age-thirties { top: 8%; right: 4%; }
-  .age-thirties::after { top: 64px; right: 74px; --leader-width: 84px; transform: rotate(138deg); }
-  .age-thirties::before { top: 118px; right: 136px; }
-
-  .age-over60 { top: 43%; left: 0; text-align: right; }
-  .age-over60::after { top: 57px; left: calc(100% + 8px); --leader-width: 80px; }
-  .age-over60::before { top: 54px; left: calc(100% + 85px); }
-
-  .age-fifties { bottom: 0; left: 12%; }
-  .age-fifties::after { top: 0; left: 82px; --leader-width: 75px; transform: rotate(-52deg); }
-  .age-fifties::before { top: -60px; left: 128px; }
-
-  .age-forties { right: 9%; bottom: 0; }
-  .age-forties::after { top: 0; right: 80px; --leader-width: 78px; transform: rotate(232deg); }
-  .age-forties::before { top: -63px; right: 129px; }
+  .age-under20 { top: 0; left: 50%; text-align: center; transform: translateX(-50%); }
+  .age-thirties { top: 13%; right: 0; text-align: right; }
+  .age-over60 { top: 9%; left: 0; text-align: left; }
+  .age-fifties { top: 56%; left: 0; text-align: left; }
+  .age-forties { top: 76%; right: 0; text-align: right; }
 
   .data-gender {
     display: grid;
@@ -418,16 +432,43 @@ const jobStats = [
   }
 
   .gender-chart {
+    position: relative;
     display: grid;
     width: 78%;
     aspect-ratio: 1;
     place-items: center;
-    margin-top: 9px;
+    margin-top: 5px;
     border-radius: 50%;
-    background: conic-gradient(var(--data-ink) 0 80%, #d7cfc4 80% 100%);
+    background: transparent;
+  }
+
+  .gender-ring {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    shape-rendering: geometricPrecision;
+  }
+
+  .gender-ring circle {
+    fill: none;
+    stroke-width: 20;
+  }
+
+  .gender-ring-female { stroke: #d7cfc4; }
+
+  .gender-ring-male {
+    stroke: var(--data-ink);
+    stroke-dasharray: 80 20;
+    stroke-linecap: butt;
+    transform: rotate(-90deg);
+    transform-origin: 50% 50%;
   }
 
   .gender-chart > div {
+    position: relative;
+    z-index: 1;
     display: grid;
     width: 58%;
     aspect-ratio: 1;
@@ -451,10 +492,26 @@ const jobStats = [
 
   .gender-chart strong small { font-size: 0.42em; }
 
-  .data-gender > p {
-    margin: 7px 0 0;
+  .gender-female-legend {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    margin: 6px 0 0;
     font-size: clamp(9px, 0.82vw, 12px);
     font-weight: 800;
+  }
+
+  .gender-female-legend i {
+    width: 8px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: #d7cfc4;
+  }
+
+  .gender-female-legend strong {
+    font-family: "Archivo Black", "Noto Sans JP", sans-serif;
+    font-size: 1.08em;
   }
 
   .data-jobs {
@@ -537,6 +594,56 @@ const jobStats = [
     letter-spacing: 0.04em;
   }
 
+  @media (min-width: 1280px) {
+    .data-inner {
+      display: grid;
+      grid-template-columns: clamp(190px, 15vw, 250px) minmax(0, 1fr);
+      grid-template-areas:
+        "header composition"
+        ". note";
+      column-gap: clamp(28px, 3.2vw, 58px);
+      align-items: start;
+    }
+
+    .data-header {
+      grid-area: header;
+      align-self: start;
+      margin: clamp(34px, 5.5vw, 82px) 0 0;
+    }
+
+    .data-header h2 {
+      font-size: clamp(32px, 2.65vw, 46px);
+      line-height: 1.08;
+      text-align: left;
+      white-space: normal;
+    }
+
+    .data-header h2 span {
+      display: block;
+      margin: 0.18em 0 0;
+    }
+
+    .data-composition {
+      grid-area: composition;
+      grid-template-columns: minmax(170px, 0.82fr) minmax(390px, 1.55fr) minmax(165px, 0.78fr);
+      height: clamp(450px, 55svh, 530px);
+      gap-inline: clamp(10px, 1.2vw, 20px);
+    }
+
+    .data-network { width: clamp(205px, 16vw, 275px); }
+    .data-network strong { font-size: clamp(80px, 8vw, 128px); }
+    .data-network span,
+    .data-network b { font-size: clamp(13px, 1.05vw, 18px); }
+    .age-visual { width: min(100%, 560px); }
+    .age-label span { font-size: clamp(11px, 0.9vw, 14px); }
+    .age-label strong { font-size: clamp(31px, 2.75vw, 45px); }
+    .data-gender { width: clamp(145px, 12vw, 190px); }
+    .data-jobs { width: clamp(215px, 17vw, 270px); }
+    .data-repeat { width: clamp(175px, 15vw, 230px); }
+    .data-repeat strong { font-size: clamp(58px, 5.8vw, 90px); }
+    .data-note { grid-area: note; }
+  }
+
   @media (max-width: 1180px) {
     .data-composition {
       grid-template-columns: minmax(190px, 0.8fr) minmax(460px, 1.6fr) minmax(190px, 0.8fr);
@@ -545,12 +652,6 @@ const jobStats = [
     .data-network { width: clamp(210px, 21vw, 270px); }
     .data-network strong { font-size: clamp(84px, 10vw, 120px); }
     .age-visual { min-height: 0; }
-    .age-chart { width: clamp(280px, 29vw, 360px); }
-    .age-under20 { left: 3%; }
-    .age-thirties { right: 1%; }
-    .age-over60 { left: -1%; }
-    .age-fifties { left: 8%; }
-    .age-forties { right: 5%; }
   }
 
   @media (max-width: 900px) {
@@ -567,8 +668,6 @@ const jobStats = [
       height: auto;
     }
     .data-age { min-height: 520px; }
-    .age-visual { min-height: 520px; }
-    .age-chart { width: min(54vw, 390px); }
     .data-network { justify-self: center; width: min(34vw, 285px); }
     .data-gender { width: min(27vw, 225px); }
     .data-jobs { align-self: center; width: min(36vw, 305px); }
@@ -615,6 +714,7 @@ const jobStats = [
       box-shadow: 0 0 0 6px var(--data-paper), 0 0 0 7px rgba(21, 23, 25, 0.18);
       transform: translate(-50%, -50%);
     }
+    .age-leaders-desktop { display: none; }
     .age-leaders-mobile {
       position: absolute;
       z-index: 1;
@@ -671,7 +771,7 @@ const jobStats = [
     .gender-chart { width: 78%; margin-top: 6px; }
     .gender-chart span { font-size: 8px; }
     .gender-chart strong { font-size: 28px; }
-    .data-gender > p { margin-top: 5px; font-size: 8px; }
+    .gender-female-legend { margin-top: 4px; font-size: 8px; }
     .data-jobs { width: 100%; padding-left: 4px; }
     .data-jobs h3 { margin-bottom: 12px; }
     .data-jobs dl { gap: 9px; }
