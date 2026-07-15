@@ -86,6 +86,7 @@ const hotspots = [
     const entries = [...explorer.querySelectorAll<HTMLElement>('[data-symptom-entry]')];
     const hotspots = [...explorer.querySelectorAll<HTMLElement>('[data-hotspot]')];
     const desktopHover = matchMedia('(min-width: 768px) and (hover: hover)');
+    const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
 
     const setActive = (key: string) => {
       explorer.dataset.active = key;
@@ -103,6 +104,53 @@ const hotspots = [
     });
 
     setActive('shoulder');
+
+    // ホバーが効かない端末（スマホ等）では、1秒ごとに項目を自動で切り替え、
+    // 対応する骨格のホットスポット（赤）も一緒に移動させる。
+    const keys = entries.map((entry) => entry.dataset.symptomEntry ?? 'shoulder');
+    let autoTimer: number | null = null;
+    let cursor = 0;
+
+    const autoAllowed = () => !desktopHover.matches && !reduceMotion.matches && keys.length > 1;
+
+    const startAuto = () => {
+      if (autoTimer !== null || !autoAllowed()) return;
+      autoTimer = window.setInterval(() => {
+        cursor = (cursor + 1) % keys.length;
+        setActive(keys[cursor]);
+      }, 1000);
+    };
+
+    const stopAuto = () => {
+      if (autoTimer !== null) {
+        clearInterval(autoTimer);
+        autoTimer = null;
+      }
+    };
+
+    // 表示中だけ回す（画面外では止めて無駄な更新を避ける）
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver(
+        (records) => records.forEach((record) => (record.isIntersecting ? startAuto() : stopAuto())),
+        { threshold: 0.25 },
+      );
+      io.observe(explorer);
+    } else {
+      startAuto();
+    }
+
+    // 入力方式・モーション設定の変化に追従（PCへ切替時などは自動送りを止めて初期表示へ）
+    const syncMode = () => {
+      if (autoAllowed()) {
+        startAuto();
+      } else {
+        stopAuto();
+        cursor = 0;
+        setActive(keys[0] ?? 'shoulder');
+      }
+    };
+    desktopHover.addEventListener('change', syncMode);
+    reduceMotion.addEventListener('change', syncMode);
   }
 </script>
 
