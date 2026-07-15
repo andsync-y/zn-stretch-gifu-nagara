@@ -81,8 +81,8 @@ const marqueeWords = [
   </div>
   <noscript><style>{`.hero-loader { display: none; }`}</style></noscript>
 
-  <!-- HERO：連番フレーム（動画のコマ）をスクロールに同期してスクラブ再生。コンセプトはMV左側にパララックスで流れ込む -->
-  <section id="concept" class="hero-scrub" data-hero>
+  <!-- HERO：連番フレーム（動画のコマ）をスクロールに同期してスクラブ再生。コンセプト等は後続シートに載ってMVの上を通過する -->
+  <section class="hero-scrub" data-hero>
     <div class="hero-scrub-stage">
       <picture>
         <source media="(max-width: 768px)" srcset="/frames/sp/frame_0001.webp" type="image/webp" />
@@ -90,7 +90,7 @@ const marqueeWords = [
       </picture>
       <canvas data-hero-canvas aria-hidden="true"></canvas>
 
-      <!-- テキストオーバーレイ群：ヘッダー下でクリップ（MV=canvasは全面のまま、コンセプトのロールがヘッダーに被らない） -->
+      <!-- テキストオーバーレイ群：ヘッダー下でクリップ -->
       <div class="hero-overlays">
       <!-- キャッチコピー（動画には文字が入っていないため、HTMLテキストで表示・アニメーション） -->
       <div class="hero-copy">
@@ -102,44 +102,6 @@ const marqueeWords = [
         <p class="hero-copy-sub">岐阜市長良・個室の<br class="lg:hidden" />パーソナルストレッチ専門店</p>
       </div>
 
-      <!-- コンセプト：スクロールに応じてMV左側に情報がパララックスで流れ込む（--hero-progressで駆動） -->
-      <div class="hero-concept">
-        <div class="hero-concept-head">
-          <p class="hero-concept-kicker">Concept — Our Philosophy</p>
-          <h2 class="hero-concept-lead">話題のパーソナル<br />ストレッチサロンが<br />岐阜初出店。</h2>
-          <p class="hero-concept-sub">個室・マンツーマンで、担当は全員女性トレーナー。元格闘家考案の独自メソッド「体感軸調整法」が深層筋にアプローチし、動ける身体へ導きます。</p>
-        </div>
-        <ul class="hero-concept-points">
-          {concepts.map((c) => (
-            <li style={`--i:${Number(c.no)}`}>
-              <b>{c.no}</b>
-              <span><strong>{c.title}</strong><i>{c.body}</i></span>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      <div class="hero-offer">
-        <div class="hero-offer-heading">
-          <p><span>FIRST</span><span>SESSION</span></p>
-          <strong>初回限定</strong>
-        </div>
-        <div class="hero-offer-price">
-          <p><span>集中ケアコース</span><b>60 min.</b></p>
-          <p><del>¥13,200</del><strong>¥3,300</strong><small>税込</small></p>
-        </div>
-        <div class="hero-offer-price">
-          <p><span>全身ケアコース</span><b>90 min.</b></p>
-          <p><del>¥19,800</del><strong>¥4,900</strong><small>税込</small></p>
-        </div>
-        <div class="hero-offer-price is-long">
-          <p><span>全身ケア<br class="lg:hidden" />＋ヘッドスパ</span><b>120 min.</b></p>
-          <p><del>¥26,400</del><strong>¥13,200</strong><small>税込</small></p>
-        </div>
-        <a href={SITE.urls.reserve} target="_blank" rel="noopener">WEB予約 <span aria-hidden="true">↗</span></a>
-        <p class="hero-offer-note">※初回価格はおひとり様1回限り。価格は変更となる場合があります。</p>
-      </div>
-
       <div class="hero-scroll-sign" aria-hidden="true"><span>SCROLL TO MOVE</span><i></i></div>
       </div>
     </div>
@@ -149,12 +111,9 @@ const marqueeWords = [
     const hero = document.querySelector<HTMLElement>('[data-hero]');
     const canvas = hero?.querySelector<HTMLCanvasElement>('[data-hero-canvas]');
     const fallback = hero?.querySelector<HTMLElement>('[data-hero-fallback]');
-    const offer = hero?.querySelector<HTMLElement>('.hero-offer');
     const ctx = canvas?.getContext('2d');
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const narrow = window.matchMedia('(max-width: 1023px)'); // SP/タブレット。PCはオファーカードを固定表示のまま常時操作可能にする
-
-    const OFFER_AT = 0.03; // オファーカードを出すスクロール進捗（少しでもスクロールしたら表示）
+    const narrow = window.matchMedia('(max-width: 1023px)');
     // 動画はピン留め区間全体（展開＋シート被せ＝METHODの終わりまで）に均等配分し、
     // ヒーロー解放（METHOD終端）とほぼ同時に最終フレームへ到達する
     // PCとSPは別動画（PC=横1920x1080/169枚・SP=縦720x1280/106枚）
@@ -297,7 +256,8 @@ const marqueeWords = [
         lastVh = Math.max(1, vh);
         const methodBottom = methodSec.offsetTop + methodSec.offsetHeight; // シート上端からMETHOD下端まで
         const coverLen = vh + methodBottom;
-        unfoldLen = Math.round(vh * (narrow.matches ? 3.2 : 4)); // 展開はゆっくり（従来より延長）
+        // コンセプト等はシート側へ移動したため、展開区間＝MVスクラブ＋キャッチコピーのみ。短めで十分
+        unfoldLen = Math.round(vh * (narrow.matches ? 2.2 : 2.6));
         hero.style.height = `${vh + unfoldLen + coverLen}px`;
         sheet.style.marginTop = `-${coverLen}px`;
       }
@@ -315,11 +275,6 @@ const marqueeWords = [
       const cover = reduceMotion.matches || !unfoldLen ? 0 : Math.min(1, Math.max(0, (scrolled - unfoldLen) / lastVh));
       hero.style.setProperty('--hero-progress', progress.toFixed(4));
       hero.style.setProperty('--hero-cover', cover.toFixed(4));
-      hero.classList.toggle('is-offer-visible', progress >= OFFER_AT);
-      // SP/タブレットのみ：オファーカードが退場したら（進捗0.3超）タップを透過し、下部固定CTA・コンセプトを妨げない。PCではカードは固定のまま操作可能
-      const offerLeaving = narrow.matches && progress > 0.3;
-      hero.classList.toggle('is-offer-leaving', offerLeaving && !reduceMotion.matches);
-      offer?.toggleAttribute('inert', (progress < OFFER_AT || (offerLeaving && progress > 0.4)) && !reduceMotion.matches);
       // 動画フレームはピン留め全区間（heroDist＝展開A＋被せB）に均等配分。
       // METHOD透過背景の背後でも進み続け、ヒーロー解放（METHOD終端）で最終フレームに到達する
       const pTotal = reduceMotion.matches ? 1 : Math.min(1, Math.max(0, scrolled / heroDist));
@@ -382,8 +337,50 @@ const marqueeWords = [
     }
   </script>
 
-  <!-- 以降のコンテンツを角丸シートで包み、固定されたヒーローの上へ少し持ち上がって被さる（パララックスで上を通る）演出 -->
+  <!-- 以降のコンテンツはシートとして固定ヒーローの上を通過する（アニメーションなしの純粋なスクロール） -->
   <div class="hero-follow">
+  <!-- INTRO：コンセプト＋FIRST SESSION。薄いガラス面に載ってMVの上をそのまま通る -->
+  <section id="concept" class="hero-intro">
+    <div class="hero-intro-grid">
+      <div class="hero-concept">
+        <div class="hero-concept-head">
+          <p class="hero-concept-kicker">Concept — Our Philosophy</p>
+          <h2 class="hero-concept-lead">話題のパーソナル<br />ストレッチサロンが<br />岐阜初出店。</h2>
+          <p class="hero-concept-sub">個室・マンツーマンで、担当は全員女性トレーナー。元格闘家考案の独自メソッド「体感軸調整法」が深層筋にアプローチし、動ける身体へ導きます。</p>
+        </div>
+        <ul class="hero-concept-points">
+          {concepts.map((c) => (
+            <li>
+              <b>{c.no}</b>
+              <span><strong>{c.title}</strong><i>{c.body}</i></span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="hero-offer">
+        <div class="hero-offer-heading">
+          <p><span>FIRST</span><span>SESSION</span></p>
+          <strong>初回限定</strong>
+        </div>
+        <div class="hero-offer-price">
+          <p><span>集中ケアコース</span><b>60 min.</b></p>
+          <p><del>¥13,200</del><strong>¥3,300</strong><small>税込</small></p>
+        </div>
+        <div class="hero-offer-price">
+          <p><span>全身ケアコース</span><b>90 min.</b></p>
+          <p><del>¥19,800</del><strong>¥4,900</strong><small>税込</small></p>
+        </div>
+        <div class="hero-offer-price is-long">
+          <p><span>全身ケア<br class="lg:hidden" />＋ヘッドスパ</span><b>120 min.</b></p>
+          <p><del>¥26,400</del><strong>¥13,200</strong><small>税込</small></p>
+        </div>
+        <a href={SITE.urls.reserve} target="_blank" rel="noopener">WEB予約 <span aria-hidden="true">↗</span></a>
+        <p class="hero-offer-note">※初回価格はおひとり様1回限り。価格は変更となる場合があります。</p>
+      </div>
+    </div>
+  </section>
+
   <!-- MARQUEE（キーワードのみ・グリッド背景） -->
   <section class="home-marquee section-grid overflow-hidden py-8 sm:py-10" aria-hidden="true">
     <div class="flex w-max animate-marquee">
