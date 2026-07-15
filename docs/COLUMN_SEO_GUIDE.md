@@ -109,7 +109,7 @@ import ColumnLayout from '../../layouts/ColumnLayout.astro';
 
 ルーティンが新規セッションを起動したら、以下を順に行う：
 
-1. `docs/AI_CHANGELOG.md` と本ガイドを読む。作業ブランチ `claude/apply-design-patch-xbq1gz` を用意（`git fetch` → checkout）。
+1. `docs/AI_CHANGELOG.md` と本ガイドを読む。**コラム専用ブランチ `claude/column-auto`** を用意する：`git fetch origin` → 既にあれば checkout して `origin/claude/zenkara-gifu-nagara-seo-ukz0er`（本番）へ rebase、無ければ `origin/claude/zenkara-gifu-nagara-seo-ukz0er` から作成。※デザイン作業ブランチとは分ける（コラムだけを独立してレビュー・公開できるように）。
 2. `docs/column-backlog.md` の未対応（`- [ ]`）から**最上位の1件**を選ぶ。既存 `src/pages/column/*.astro` と意図が被らないか確認。
 3. 本ガイド 3章のテンプレに従い、`src/pages/column/<slug>.astro` を作成（**faq 必須**、内部リンク必須、独自視点必須）。
 4. `src/pages/column/index.astro` の `articles` 配列の**先頭**に新記事（slug / heading / desc / date）を追加。
@@ -122,8 +122,8 @@ import ColumnLayout from '../../layouts/ColumnLayout.astro';
 
 ## 5. 公開方法（レビュー運用）
 
-- **既定：レビューしてから公開。** 生成物は作業ブランチ `claude/apply-design-patch-xbq1gz` にコミット＆プッシュし、**ユーザーが確認して本番ブランチ `claude/zenkara-gifu-nagara-seo-ukz0er` へマージ**（＝公開）。健康系の事実担保・ブランド保護のため。
-- 全自動にする場合は、7の手順で本番ブランチへマージまで行う（品質ガードを厳守できる場合のみ）。
+- **既定：レビューしてから公開。** 生成物はコラム専用ブランチ `claude/column-auto` にコミット＆プッシュし、**ユーザーが確認して本番ブランチ `claude/zenkara-gifu-nagara-seo-ukz0er` へマージ**（＝公開）。健康系の事実担保・ブランド保護のため。**本番ブランチへ自動マージはしない。**
+- 全自動にする場合のみ、`claude/column-auto` を本番ブランチへマージまで行う（品質チェックリストを厳守できる場合に限る）。
 
 ---
 
