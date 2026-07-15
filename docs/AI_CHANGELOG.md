@@ -1028,3 +1028,16 @@ Git履歴が「何を変更したか」、このファイルが「なぜ変更�
 - 主な変更ファイル：`src/components/InteractiveSymptoms.astro`（SP列比率）
 - 確認結果：`npm run build` 成功（19ページ）。Chromium SP390——骨格207pxで大きさ維持、リストは7項目すべて1行表示で余裕あり。SP360でも成立。
 - 未対応・次の作業：実機確認。
+
+## 2026-07-15 — Claude Code
+
+- 担当：Claude Code
+- ブランチ：`claude/apply-design-patch-xbq1gz`
+- 関連PR：コラムのSEO/AIEO/LLMO強化（FAQ構造化データ対応）＋運用ガイド・キーワードバックログ整備
+- 変更内容：
+  - `ColumnLayout.astro` に任意プロップ `faq`（Q&A配列）を追加。渡すと記事末に「よくある質問」セクションを描画し、`FAQPage` 構造化データ（JSON-LD）を出力。AI検索のリッチリザルト＆LLMの引用・抽出に強くする。あわせて Article schema に `dateModified` を追加（省略時は公開日）。既存3記事は `faq` 未指定のため従来どおり（後方互換）。
+  - `docs/COLUMN_SEO_GUIDE.md` を新規作成：更新頻度（週2〜3本推奨・毎日非推奨の理由＝スケールコンテンツ規制/YMYL）、キーワード選定の型（ローカル×症状×意図×属性/季節のロングテール）、AIEO/LLMO対応の記事構成テンプレ（結論先出し・質問形h2・FAQ・独自メソッド・内部リンク）、自動生成セッションの手順、公開＝レビュー運用、品質チェックリスト。人にもルーティン（自動セッション）にも実行可能な形。
+  - `docs/column-backlog.md` を新規作成：優先順のキーワード/トピック30件超（slug/主要KW/意図/内部リンク先）。公開したらチェックを付ける方式で重複を防止。
+- 主な変更ファイル：`src/layouts/ColumnLayout.astro`（faq/FAQPage・dateModified）／`docs/COLUMN_SEO_GUIDE.md`（新規）／`docs/column-backlog.md`（新規）
+- 確認結果：`npm run build` 成功（19ページ、後方互換を確認）。
+- 未対応・次の作業：Claudeのルーティン（スケジュールトリガー）で本ガイドに沿った自動生成を設定。既定は週3（月水金）・レビュー運用（作業ブランチへ下書き→ユーザー確認後に本番マージ）。頻度・全自動化はユーザー選択で変更可。
