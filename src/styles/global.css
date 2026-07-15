@@ -404,7 +404,7 @@
   left: max(4.5vw, 30px);
   width: min(45vw, 620px);
   /* 進捗0.2で登場し、ブロック全体がゆっくり上へスクロールして3つの特長を順に見せる */
-  opacity: calc(clamp(0, calc((var(--hero-progress) - 0.2) * 6), 1) * (1 - var(--hero-cover, 0)));
+  opacity: calc(clamp(0, calc((var(--hero-progress) - 0.18) * 8), 1) * (1 - var(--hero-cover, 0)));
   transform: translate3d(0, calc((0.6 - var(--hero-progress)) * 80vh), 0);
   will-change: transform, opacity;
   pointer-events: none;
@@ -417,10 +417,11 @@
   position: absolute;
   /* グラデーションはやめ、フラットな薄い白で画面全体を満たす（はみ出しはオーバーレイ枠でクリップ）。
      下端まで途切れず、後続シート（マルキー0.78等）と地続きの一枚のガラス面に見せる */
+  /* オーバーレイ枠でクリップされる範囲だけに抑え、巨大レイヤーによる描画負荷を避ける */
   top: -220px;
-  bottom: -120vh;
-  left: -60vw;
-  right: -70vw;
+  bottom: -86vh;
+  left: -50vw;
+  right: -58vw;
   z-index: -1;
   background: rgba(247, 247, 244, 0.5);
   pointer-events: none;
@@ -570,10 +571,10 @@
   background: rgba(244, 245, 242, 0.96);
   border: 1px solid rgba(23, 30, 32, 0.8);
   box-shadow: 12px 12px 0 rgba(146, 116, 94, 0.15);
-  /* 少しでもスクロールしたら即表示（進捗2%〜9%でスライドイン） */
-  --offer-t: clamp(0, calc((var(--hero-progress) - 0.02) * 14), 1);
+  /* 少しでもスクロールしたら即表示。移動量は控えめ・立ち上がり速めで軽い出方に */
+  --offer-t: clamp(0, calc((var(--hero-progress) - 0.02) * 18), 1);
   opacity: calc(var(--offer-t) * (1 - var(--hero-cover, 0)));
-  transform: translate3d(0, calc((1 - var(--offer-t)) * 8vh), 0);
+  transform: translate3d(0, calc((1 - var(--offer-t)) * 4vh), 0);
   will-change: transform, opacity;
   pointer-events: none;
 }
@@ -716,12 +717,12 @@
   .hero-concept {
     top: 14%; left: 5%; width: 90%;
     /* カードが退場し切る0.4以降に登場（重なりを避ける）。シート被覆時はフェードアウト */
-    opacity: calc(clamp(0, calc((var(--hero-progress) - 0.4) * 7), 1) * (1 - var(--hero-cover, 0)));
+    opacity: calc(clamp(0, calc((var(--hero-progress) - 0.38) * 9), 1) * (1 - var(--hero-cover, 0)));
     transform: translate3d(0, calc((0.5 - var(--hero-progress)) * 96svh), 0);
   }
   .hero-concept::before {
     /* SPもフラットな薄い白で全面（少しだけ濃くして本文の可読性を確保） */
-    top: -220px; bottom: -120svh; left: -12vw; right: -12vw;
+    top: -220px; bottom: -95svh; left: -12vw; right: -12vw;
     background: rgba(247, 247, 244, 0.62);
   }
   .hero-concept-kicker { font-size: 9px; margin-bottom: 9px; }
@@ -739,7 +740,7 @@
     padding: 20px;
     --offer-out: clamp(0, calc((var(--hero-progress) - 0.3) * 8), 1);
     opacity: calc(var(--offer-t) * (1 - var(--offer-out)));
-    transform: translate3d(0, calc((1 - var(--offer-t)) * 8vh + var(--offer-out) * 30svh), 0);
+    transform: translate3d(0, calc((1 - var(--offer-t)) * 4vh + var(--offer-out) * 30svh), 0);
   }
   .hero-scrub.is-offer-leaving .hero-offer { pointer-events: none; }
   .hero-offer-heading p { font-size: 24px; }

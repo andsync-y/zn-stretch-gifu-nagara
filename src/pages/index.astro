@@ -175,8 +175,9 @@ const marqueeWords = [
     let smoothFrame = 0;
     let scrubPlaying = false;
     const playTowardTarget = () => {
-      smoothFrame += (targetFrame - smoothFrame) * 0.22;
-      if (Math.abs(targetFrame - smoothFrame) < 0.6) smoothFrame = targetFrame;
+      // 追従係数は控えめ（0.14）：フリック後も映像がふわっと追いつき、自然な再生感になる
+      smoothFrame += (targetFrame - smoothFrame) * 0.14;
+      if (Math.abs(targetFrame - smoothFrame) < 0.4) smoothFrame = targetFrame;
       const f = Math.round(smoothFrame);
       if (f !== currentFrame) {
         currentFrame = f;
@@ -227,7 +228,7 @@ const marqueeWords = [
     const loader = document.querySelector<HTMLElement>('[data-hero-loader]');
     const loaderCount = loader?.querySelector<HTMLElement>('[data-loader-count]');
     const LOADER_TARGET = Math.min(FRAME_COUNT, 24); // 初期表示に必要とみなす枚数
-    const LOADER_MIN_MS = 650; // ブランド表示の最低時間（キャッシュ時の一瞬のチラつき防止）
+    const LOADER_MIN_MS = 1150; // ブランド表示の最低時間（キャッシュ時の一瞬のチラつき防止）
     const LOADER_MAX_MS = 3800; // 回線が遅くてもこれ以上は待たせない
     const loaderStart = performance.now();
     let loadedCount = 0;
