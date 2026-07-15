@@ -959,3 +959,16 @@ Git履歴が「何を変更したか」、このファイルが「なぜ変更�
 - 主な変更ファイル：`src/pages/index.astro`（`.hero-intro-grid`のDOM順入替）／`src/styles/global.css`（グリッド行列の明示配置・SPリセット）
 - 確認結果：`npm run build` 成功（19ページ）。Chromium PC(1120×640)——迫り上がり途中で右上にFIRST SESSIONカード・左下にコンセプトが現れる斜め構図を確認。全景でもカード（3コース＋WEB予約）が上寄り、コンセプトが下寄りで先行が成立。SP(360×720)も「カード→コンセプト」の縦積みを確認。
 - 未対応・次の作業：実機での体感確認。
+
+## 2026-07-15 — Claude Code
+
+- 担当：Claude Code
+- ブランチ：`claude/apply-design-patch-xbq1gz`
+- 関連PR：FIRST SESSIONカードの透過白パネル廃止＋コンセプトとの余白拡大＋SYMPTOMSをスマホで1秒ごと自動送り
+- 変更内容：
+  - 【カード背景】FIRST SESSIONカードの半透明白パネル（rgba(244,245,242,0.96)）を廃止し`background: transparent`に。イントロのガラス面（PC 0.56／SP 0.64）へ直接載り、MVがカード越しに薄く透けて地続きの見た目に。あわせて「浮いた白カード」を前提としたハードシャドウ（12px 12px 0）を削除し、枠線（1px）のみ残して価格表の区切りを維持。価格・ラベルの判読性は維持。
+  - 【余白】SPの縦積み（カード→コンセプト）の間隔を`.hero-intro-grid`のgap 34px→52pxに拡大し、カードとコンセプトの間にゆとりを追加。
+  - 【SYMPTOMS自動送り】ホバーが効かない端末（スマホ等）向けに、`InteractiveSymptoms.astro`へ自動切り替えを追加。ホバー不可（`!(min-width:768px and hover:hover)`）かつ`prefers-reduced-motion`でない場合のみ、1秒ごとに項目の赤ハイライトと骨格の赤ホットスポットを次の部位へ移動（DOM順で循環）。IntersectionObserver（threshold 0.25）で画面内表示中だけ回し、画面外では停止。入力方式・モーション設定の変化にも追従（PCへ切替時は停止して初期表示へ）。PCのホバー動作は従来どおり。
+- 主な変更ファイル：`src/styles/global.css`（.hero-offer背景・影／SP gap）／`src/components/InteractiveSymptoms.astro`（自動送りロジック）
+- 確認結果：`npm run build` 成功（19ページ）。Chromiumで確認——SP(390)：カードが透過し枠線のみ、MVが薄く透け価格判読可、カード⇄コンセプト間の余白拡大を確認。PC(1120)：カード透過でも斜め構図・判読性維持。SP SYMPTOMSはdata-active が shoulder→lower-back→neck-eyes→lower-legs と1秒ごとに遷移し、骨格の赤発光も肩→腰→脚へ連動移動することをスクショ列で確認。
+- 未対応・次の作業：実機での体感確認（自動送りの速度は1000msで調整可）。

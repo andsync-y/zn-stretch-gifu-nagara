@@ -566,9 +566,9 @@
   width: 100%;
   max-width: 560px;
   padding: clamp(18px, 1.7vw, 30px);
-  background: rgba(244, 245, 242, 0.96);
+  /* 透過白のパネルは廃止し、イントロのガラス面に直接載せて地続きに。枠線のみ残す */
+  background: transparent;
   border: 1px solid rgba(23, 30, 32, 0.8);
-  box-shadow: 12px 12px 0 rgba(146, 116, 94, 0.15);
 }
 
 .hero-offer-heading {
@@ -703,7 +703,7 @@
   .hero-copy-sub { max-width: 60vw; margin-top: 16px; font-size: 10px; letter-spacing: 0.09em; line-height: 1.9; }
   /* INTRO（SP/タブレット）：縦積み（カード→コンセプトの順）。ガラス面は少し濃くして可読性確保 */
   .hero-intro { background: rgba(247, 247, 244, 0.64); padding: 44px 5% 48px; }
-  .hero-intro-grid { grid-template-columns: minmax(0, 1fr); gap: 34px; }
+  .hero-intro-grid { grid-template-columns: minmax(0, 1fr); gap: 52px; }
   .hero-intro-grid .hero-offer { grid-column: auto; grid-row: auto; }
   .hero-concept { grid-column: auto; grid-row: auto; margin-top: 0; }
   .hero-concept-kicker { font-size: 9px; margin-bottom: 9px; }
