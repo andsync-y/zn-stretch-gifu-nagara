@@ -2,30 +2,13 @@
 import Base from '../../layouts/Base.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import ReserveCTA from '../../components/ReserveCTA.astro';
+import { COLUMNS } from '../../data/columns';
 
 const title = 'コラム｜岐阜市長良のパーソナルストレッチ専門店 全力ストレッチ岐阜長良店';
 const description = '肩こり・腰の重さ・スポーツ前後のケアなど、毎日を軽やかに動くためのセルフストレッチと体の知識を、岐阜市長良のパーソナルストレッチ専門店のトレーナーがお届けします。';
 
-const articles = [
-  {
-    slug: 'katakori-desk-stretch',
-    heading: 'デスクワークの肩こり対策｜肩甲骨をゆるめるセルフストレッチ5選',
-    desc: '肩が重くなる仕組みと、仕事の合間に椅子に座ったままできる肩甲骨まわりのストレッチをご紹介。',
-    date: '2026-07-14',
-  },
-  {
-    slug: 'youtsu-morning-stretch',
-    heading: '朝、腰が重い方へ｜股関節・お尻のセルフストレッチと座り方のコツ',
-    desc: '腰と関係の深い股関節・お尻まわりのゆるめ方と、腰への負担を減らす座り方のポイントを解説。',
-    date: '2026-07-14',
-  },
-  {
-    slug: 'golf-stretch-routine',
-    heading: 'ゴルフ前後のストレッチ｜スイングを支える股関節・肩甲骨ルーティン',
-    desc: 'ラウンド前のウォームアップと、翌日に張りを残しにくくするクールダウンの約5分ルーティン。',
-    date: '2026-07-14',
-  },
-];
+// 記事一覧の実体は src/data/columns.ts（/content.json と共有の単一ソース）
+const articles = COLUMNS;
 
 const breadcrumb = {
   '@context': 'https://schema.org', '@type': 'BreadcrumbList',

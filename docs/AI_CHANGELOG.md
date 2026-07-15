@@ -1041,3 +1041,18 @@ Git履歴が「何を変更したか」、このファイルが「なぜ変更�
 - 主な変更ファイル：`src/layouts/ColumnLayout.astro`（faq/FAQPage・dateModified）／`docs/COLUMN_SEO_GUIDE.md`（新規）／`docs/column-backlog.md`（新規）
 - 確認結果：`npm run build` 成功（19ページ、後方互換を確認）。
 - 未対応・次の作業：Claudeのルーティン（スケジュールトリガー）で本ガイドに沿った自動生成を設定。既定は週3（月水金）・レビュー運用（作業ブランチへ下書き→ユーザー確認後に本番マージ）。頻度・全自動化はユーザー選択で変更可。
+
+## 2026-07-15 — Claude Code
+
+- 担当：Claude Code
+- ブランチ：`claude/apply-design-patch-xbq1gz`
+- 関連PR：SNS運用システム（AIコンテンツ運用基盤）向け `/content.json` を実装＋コラム一覧の単一ソース化
+- 変更内容：
+  - 「AIコンテンツ運用システム 設計図 v2」§12〜14に準拠し、`src/pages/content.json.ts`（Astro静的エンドポイント）を新設。症状7件・コラム3件・店舗情報1件の計11 itemsを ContentItem 形式（id/type/slug/title/summary/target/causes/keyPoints/tags/url/publishedAt/updatedAt）で出力。ビルド時生成＝公開済みコンテンツのみが載る。
+  - `src/data/symptom-content.ts` 新設：症状ページ（src/pages/symptoms/*.astro の props）から causes・keyPoints・target 等を構造化。<br>タグ除去済み。症状ページ更新時はこのファイルと updatedAt も更新する運用。
+  - `src/data/columns.ts` 新設＝コラム一覧の単一ソース（tags・relatedSymptoms付き）。`/column` 一覧（index.astro）と `/content.json` の両方がここを参照。index.astro のローカル articles 配列は削除。
+  - `docs/COLUMN_SEO_GUIDE.md` の手順4を更新（新記事は src/data/columns.ts へ追加）。コラム自動生成ルーティンも同手順に合わせて再作成（旧trig_019MRw…を削除→trig_013sdqM57LnrKH7wcez1VgHi）。
+  - ※SNS運用システム本体（Next.js/Supabase）は別プロジェクトのため本リポジトリでは実装しない（設計書§3の役割分担どおり、本サイトは構造化データの提供のみ）。
+- 主な変更ファイル：`src/pages/content.json.ts`（新規）／`src/data/symptom-content.ts`（新規）／`src/data/columns.ts`（新規）／`src/pages/column/index.astro`（データ参照先変更）／`docs/COLUMN_SEO_GUIDE.md`
+- 確認結果：`npm run build` 成功（19ページ）。dist/content.json に11 items（symptom×7・column×3・store×1）が設計書§14の形式で出力されることを確認。/column 一覧も従来どおり3記事表示。
+- 未対応・次の作業：本番デプロイ後 `https://zn-stretch-gifu.com/content.json` で取得可能になる。SNS運用システム（Next.js）は置き場所（新規リポジトリ）確定後に別途構築。

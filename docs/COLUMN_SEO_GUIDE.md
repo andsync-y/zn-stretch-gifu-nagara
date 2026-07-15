@@ -112,7 +112,7 @@ import ColumnLayout from '../../layouts/ColumnLayout.astro';
 1. `docs/AI_CHANGELOG.md` と本ガイドを読む。**コラム専用ブランチ `claude/column-auto`** を用意する：`git fetch origin` → 既にあれば checkout して `origin/claude/zenkara-gifu-nagara-seo-ukz0er`（本番）へ rebase、無ければ `origin/claude/zenkara-gifu-nagara-seo-ukz0er` から作成。※デザイン作業ブランチとは分ける（コラムだけを独立してレビュー・公開できるように）。
 2. `docs/column-backlog.md` の未対応（`- [ ]`）から**最上位の1件**を選ぶ。既存 `src/pages/column/*.astro` と意図が被らないか確認。
 3. 本ガイド 3章のテンプレに従い、`src/pages/column/<slug>.astro` を作成（**faq 必須**、内部リンク必須、独自視点必須）。
-4. `src/pages/column/index.astro` の `articles` 配列の**先頭**に新記事（slug / heading / desc / date）を追加。
+4. `src/data/columns.ts` の `COLUMNS` 配列の**先頭**に新記事を追加（slug / heading / desc / date / tags / relatedSymptoms）。この配列は `/column` 一覧と `/content.json`（SNS運用システム向け構造化データ）の両方の単一ソース。
 5. `npm run build` が通ることを確認（19→20ページに増える）。
 6. `docs/column-backlog.md` の該当行を `- [x]` に更新。`docs/AI_CHANGELOG.md` に作業記録を追記。
 7. **公開方法（下記5章）に従ってコミット／プッシュ。**
