@@ -317,9 +317,10 @@ const hotspots = [
   }
 
   @media (max-width: 767px) {
-    /* SPも2カラム：左にスケルトン、右に項目リスト。骨格を大きく（約1.5倍）見せる */
+    /* SPも2カラム：左にスケルトン、右に項目リスト。骨格を大きく見せつつ、
+       項目が窮屈になりすぎないよう比率を調整（骨格は左端食い込み分で稼ぐ） */
     .symptoms-explorer {
-      grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
       gap: 8px;
       min-height: 0;
       align-items: center;
