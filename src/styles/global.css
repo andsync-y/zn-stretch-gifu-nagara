@@ -409,12 +409,22 @@
   margin: 0 auto;
   grid-template-columns: minmax(0, 620px) minmax(0, 560px);
   justify-content: space-between;
-  align-items: center;
+  align-items: start;
   gap: clamp(36px, 5vw, 90px);
+}
+
+/* PCは「カード高め（右）・コンセプト低め（左）」の斜め構図。
+   シートが上がってくる際、カードが先に見えてからコンセプトが続く */
+.hero-intro-grid .hero-offer {
+  grid-column: 2;
+  grid-row: 1;
 }
 
 /* コンセプト：通常フローのテキストブロック（アニメーションなし） */
 .hero-concept {
+  grid-column: 1;
+  grid-row: 1;
+  margin-top: clamp(120px, 22vh, 240px);
   color: #1c1e21;
 }
 
@@ -691,9 +701,11 @@
   .hero-copy { top: 13%; left: 5%; }
   .hero-copy h1 { font-size: clamp(42px, 11.5vw, 64px); }
   .hero-copy-sub { max-width: 60vw; margin-top: 16px; font-size: 10px; letter-spacing: 0.09em; line-height: 1.9; }
-  /* INTRO（SP/タブレット）：縦積み（コンセプト→カード）。ガラス面は少し濃くして可読性確保 */
+  /* INTRO（SP/タブレット）：縦積み（カード→コンセプトの順）。ガラス面は少し濃くして可読性確保 */
   .hero-intro { background: rgba(247, 247, 244, 0.64); padding: 44px 5% 48px; }
   .hero-intro-grid { grid-template-columns: minmax(0, 1fr); gap: 34px; }
+  .hero-intro-grid .hero-offer { grid-column: auto; grid-row: auto; }
+  .hero-concept { grid-column: auto; grid-row: auto; margin-top: 0; }
   .hero-concept-kicker { font-size: 9px; margin-bottom: 9px; }
   .hero-concept-lead { font-size: clamp(26px, 7.4vw, 40px); margin-bottom: 12px; }
   .hero-concept-sub { max-width: none; font-size: 12px; line-height: 1.8; margin-bottom: 16px; }
