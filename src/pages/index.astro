@@ -3,6 +3,7 @@ import Base from '../layouts/Base.astro';
 import ReserveCTA from '../components/ReserveCTA.astro';
 import PriceRows from '../components/PriceRows.astro';
 import InteractiveSymptoms from '../components/InteractiveSymptoms.astro';
+import DataSection from '../components/DataSection.astro';
 import FAQ from '../components/FAQ.astro';
 import { SITE, BRAND, STAFF, PHOTOS, REVIEWS } from '../consts';
 
@@ -55,6 +56,7 @@ const faqSchema = {
   '@type': 'FAQPage',
   mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
 };
+
 
 const marqueeWords = [
   '#個室',
@@ -256,6 +258,10 @@ const marqueeWords = [
       ))}
     </div>
   </section>
+
+
+  <!-- DATA -->
+  <DataSection />
 
   <!-- METHOD -->
   <section id="method" class="home-method relative border-b border-ink/20 bg-paper2 px-5 py-24 sm:px-10 sm:py-36 xl:px-14">
