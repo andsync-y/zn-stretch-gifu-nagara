@@ -1,0 +1,856 @@
+---
+const ageData = [
+  { key: 'under20', label: '20代以下', value: 5, color: '#e7e5df' },
+  { key: 'thirties', label: '30代', value: 25, color: '#c7b8a3' },
+  { key: 'forties', label: '40代', value: 30, color: '#b5b0a7' },
+  { key: 'fifties', label: '50代', value: 25, color: '#777a79' },
+  { key: 'over60', label: '60代以上', value: 15, color: '#444748' },
+];
+
+let ageStart = 0;
+const ageSegments = ageData.map((item) => {
+  const segment = { ...item, start: ageStart, end: ageStart + item.value };
+  ageStart += item.value;
+  return segment;
+});
+
+const polarPoint = (radius: number, percentage: number) => {
+  const angle = percentage * 3.6 * Math.PI / 180;
+  return {
+    x: 50 + radius * Math.sin(angle),
+    y: 50 - radius * Math.cos(angle),
+  };
+};
+
+const donutSegmentPath = (start: number, end: number) => {
+  const outerStart = polarPoint(48, start);
+  const outerEnd = polarPoint(48, end);
+  const innerEnd = polarPoint(25, end);
+  const innerStart = polarPoint(25, start);
+  const largeArc = end - start > 50 ? 1 : 0;
+
+  return [
+    `M ${outerStart.x} ${outerStart.y}`,
+    `A 48 48 0 ${largeArc} 1 ${outerEnd.x} ${outerEnd.y}`,
+    `L ${innerEnd.x} ${innerEnd.y}`,
+    `A 25 25 0 ${largeArc} 0 ${innerStart.x} ${innerStart.y}`,
+    'Z',
+  ].join(' ');
+};
+
+const ageBoundaries = ageSegments.map((item) => ({
+  key: item.key,
+  inner: polarPoint(25, item.start),
+  outer: polarPoint(48, item.start),
+}));
+
+const jobStats = [
+  { label: 'デスクワーク', value: 45, color: '#c7b8a3' },
+  { label: '立ち仕事・現場作業', value: 25, color: '#777a79' },
+  { label: '接客・サービス業', value: 15, color: '#a7aaa9' },
+  { label: 'その他', value: 15, color: '#d9d9d5' },
+];
+---
+
+<section id="data" class="data-section section-grid" aria-labelledby="data-title">
+  <div class="data-inner">
+    <header class="data-header rise">
+      <p>FACTS &amp; FIGURES</p>
+      <h2 id="data-title">
+        <span class="data-title-copy">DATAで見る</span>
+        <img class="data-title-logo" src="/images/logo.png" width="1200" height="307" alt="全力ストレッチ" />
+      </h2>
+      <p>BRAND DATA — 2024</p>
+    </header>
+
+    <div class="data-composition rise">
+      <article class="data-network" aria-label="全国70店舗展開">
+        <img src="/images/map-japan.svg" width="180" height="300" loading="lazy" decoding="async" alt="" aria-hidden="true" />
+        <svg class="data-dot-ring" viewBox="0 0 100 100" aria-hidden="true">
+          <circle cx="50" cy="50" r="44" pathLength="100"></circle>
+        </svg>
+        <div>
+          <span>全国</span>
+          <strong>70</strong>
+          <b>店舗展開</b>
+        </div>
+      </article>
+
+      <article class="data-age">
+        <div class="age-visual" role="img" aria-label="お客様の年齢層。20代以下5%、30代25%、40代30%、50代25%、60代以上15%">
+          <div class="age-chart" aria-hidden="true">
+            <svg class="age-ring" viewBox="0 0 100 100" focusable="false">
+              {ageSegments.map((item) => (
+                <path d={donutSegmentPath(item.start, item.end)} fill={item.color}></path>
+              ))}
+              {ageBoundaries.map((boundary) => (
+                <line
+                  x1={boundary.inner.x}
+                  y1={boundary.inner.y}
+                  x2={boundary.outer.x}
+                  y2={boundary.outer.y}
+                ></line>
+              ))}
+              <circle class="age-ring-edge" cx="50" cy="50" r="48"></circle>
+              <circle class="age-ring-edge" cx="50" cy="50" r="25"></circle>
+            </svg>
+            <div class="age-chart-center">
+              <span>お客様の</span>
+              <strong>年齢層</strong>
+              <i></i>
+              <small>AGE BALANCE</small>
+            </div>
+          </div>
+
+          <svg class="age-leaders-desktop" viewBox="0 0 720 600" aria-hidden="true" focusable="false">
+            <path d="M394 87V72"></path>
+            <circle cx="394" cy="87" r="3"></circle>
+            <path d="M552 202L590 155H620"></path>
+            <circle cx="552" cy="202" r="3"></circle>
+            <path d="M262 108L225 82H150"></path>
+            <circle cx="262" cy="108" r="3"></circle>
+            <path d="M147 334L110 360H90"></path>
+            <circle cx="147" cy="334" r="3"></circle>
+            <path d="M427 505L460 535H565"></path>
+            <circle cx="427" cy="505" r="3"></circle>
+          </svg>
+
+          <svg class="age-leaders-mobile" viewBox="0 0 360 360" aria-hidden="true" focusable="false">
+            <path d="M197 75L201 52H184"></path>
+            <circle cx="197" cy="75" r="2.2"></circle>
+            <path d="M276 132L299 120H315"></path>
+            <circle cx="276" cy="132" r="2.2"></circle>
+            <path d="M132 86L120 62H64"></path>
+            <circle cx="132" cy="86" r="2.2"></circle>
+            <path d="M75 197L59 200"></path>
+            <circle cx="75" cy="197" r="2.2"></circle>
+            <path d="M213 281L230 305H300"></path>
+            <circle cx="213" cy="281" r="2.2"></circle>
+          </svg>
+
+          {ageSegments.map((item) => (
+            <p class={`age-label age-${item.key}`}>
+              <span>{item.label}</span>
+              <strong>{item.value}<small>%</small></strong>
+            </p>
+          ))}
+        </div>
+      </article>
+
+      <article class="data-gender">
+        <h3>お客様の男女比</h3>
+        <div class="gender-chart" role="img" aria-label="男性80%、女性20%">
+          <svg class="gender-ring" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+            <circle class="gender-ring-female" cx="50" cy="50" r="40"></circle>
+            <circle class="gender-ring-male" cx="50" cy="50" r="40" pathLength="100"></circle>
+          </svg>
+          <p class="gender-female-value"><span>女性</span><strong>20%</strong></p>
+          <div>
+            <span>男性</span>
+            <strong>80<small>%</small></strong>
+          </div>
+        </div>
+      </article>
+
+      <article class="data-jobs">
+        <h3>お客様の職業</h3>
+        <dl>
+          {jobStats.map((job) => (
+            <div>
+              <dt><i style={`--job-color:${job.color}`}></i>{job.label}</dt>
+              <dd>{job.value}<small>%</small></dd>
+            </div>
+          ))}
+        </dl>
+      </article>
+
+      <article class="data-repeat" aria-label="リピート率93%">
+        <h3>リピート率</h3>
+        <svg class="data-dot-ring" viewBox="0 0 100 100" aria-hidden="true">
+          <circle cx="50" cy="50" r="44" pathLength="100"></circle>
+        </svg>
+        <strong>93<small>%</small></strong>
+      </article>
+    </div>
+
+    <p class="data-note">※データは2024年時点の自社調べです。店舗数は全力ストレッチブランド全体の実績です。</p>
+  </div>
+</section>
+
+<style>
+  .data-section {
+    --data-ink: #151719;
+    --data-paper: #f7f7f4;
+    --data-accent: #c7b8a3;
+    --data-muted: #6c706f;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid rgba(21, 23, 25, 0.24);
+    background-color: var(--data-paper);
+    color: var(--data-ink);
+    padding: clamp(42px, 5vw, 72px) clamp(20px, 4vw, 64px) clamp(32px, 3.5vw, 52px);
+    font-family: "Noto Sans JP", sans-serif;
+  }
+
+  .data-inner {
+    position: relative;
+    z-index: 1;
+    width: min(100%, 1540px);
+    margin: 0 auto;
+  }
+
+  .data-header {
+    display: block;
+    margin-bottom: clamp(22px, 2.4vw, 36px);
+  }
+
+  .data-header > p {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .data-header h2 {
+    display: grid;
+    gap: clamp(11px, 1.2vw, 18px);
+    justify-items: center;
+    margin: 0;
+    font-family: "Archivo Black", "Noto Sans JP", sans-serif;
+    font-size: clamp(28px, 3.2vw, 52px);
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -0.055em;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .data-title-copy { display: block; }
+
+  .data-title-logo {
+    display: block;
+    width: clamp(240px, 28vw, 390px);
+    max-width: 100%;
+    height: auto;
+  }
+
+  .data-composition {
+    display: grid;
+    grid-template-columns: minmax(220px, 0.9fr) minmax(520px, 1.65fr) minmax(220px, 0.9fr);
+    grid-template-rows: minmax(235px, 1fr) minmax(205px, 0.86fr);
+    grid-template-areas:
+      "network age gender"
+      "jobs age repeat";
+    align-items: center;
+    gap: 4px clamp(14px, 1.5vw, 26px);
+    height: clamp(500px, 62svh, 610px);
+  }
+
+  .data-network,
+  .data-gender,
+  .data-jobs,
+  .data-repeat,
+  .data-age {
+    position: relative;
+    min-width: 0;
+  }
+
+  .data-network { grid-area: network; }
+  .data-age { grid-area: age; align-self: stretch; display: grid; place-items: center; }
+  .data-gender { grid-area: gender; }
+  .data-jobs { grid-area: jobs; align-self: start; }
+  .data-repeat { grid-area: repeat; }
+
+  .data-network {
+    display: grid;
+    width: clamp(225px, 22vw, 330px);
+    aspect-ratio: 1;
+    place-items: center;
+    justify-self: start;
+    isolation: isolate;
+  }
+
+  .data-network > img {
+    position: absolute;
+    z-index: -1;
+    width: 96%;
+    height: 130%;
+    object-fit: contain;
+    opacity: 0.055;
+    filter: grayscale(1) contrast(1.1);
+    transform: translate(6%, 1%);
+  }
+
+  .data-dot-ring {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  .data-dot-ring circle {
+    fill: none;
+    stroke: var(--data-accent);
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-dasharray: 0.1 4.45;
+  }
+
+  .data-network > div {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    text-align: center;
+  }
+
+  .data-network span,
+  .data-network b {
+    display: block;
+    font-size: clamp(15px, 1.35vw, 21px);
+    font-weight: 900;
+    letter-spacing: 0.12em;
+  }
+
+  .data-network strong {
+    display: block;
+    margin: -0.04em 0 -0.07em;
+    font-family: "Archivo Black", "Noto Sans JP", sans-serif;
+    font-size: clamp(88px, 10vw, 154px);
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -0.09em;
+  }
+
+  .age-visual {
+    position: relative;
+    width: min(100%, 650px);
+    height: auto;
+    aspect-ratio: 6 / 5;
+    min-height: 0;
+    margin: auto;
+  }
+
+  .age-chart {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: grid;
+    width: min(60%, 430px);
+    aspect-ratio: 1;
+    place-items: center;
+    border-radius: 50%;
+    background: transparent;
+    box-shadow: 0 0 0 9px var(--data-paper), 0 0 0 10px rgba(21, 23, 25, 0.18);
+    transform: translate(-50%, -50%);
+  }
+
+  .age-ring {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    shape-rendering: geometricPrecision;
+  }
+
+  .age-ring path {
+    stroke: none;
+  }
+
+  .age-ring line,
+  .age-ring-edge {
+    fill: none;
+    stroke: var(--data-paper);
+    stroke-width: 1.25;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .age-ring line {
+    stroke-linecap: butt;
+  }
+
+  .age-leaders-desktop,
+  .age-leaders-mobile {
+    position: absolute;
+    z-index: 1;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    pointer-events: none;
+  }
+
+  .age-leaders-desktop path,
+  .age-leaders-mobile path {
+    fill: none;
+    stroke: rgba(21, 23, 25, 0.64);
+    stroke-width: 0.9;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .age-leaders-desktop circle,
+  .age-leaders-mobile circle { fill: rgba(21, 23, 25, 0.7); }
+
+  .age-leaders-mobile { display: none; }
+
+  .age-chart-center {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    width: 51%;
+    aspect-ratio: 1;
+    place-items: center;
+    align-content: center;
+    border: 4px solid var(--data-paper);
+    border-radius: 50%;
+    background: var(--data-ink);
+    color: #fff;
+    text-align: center;
+  }
+
+  .age-chart-center span,
+  .age-chart-center strong {
+    display: block;
+    font-size: clamp(18px, 1.6vw, 25px);
+    font-weight: 900;
+    line-height: 1.4;
+    letter-spacing: 0.04em;
+  }
+
+  .age-chart-center i {
+    width: 38px;
+    height: 1px;
+    margin: 13px 0 9px;
+    background: rgba(255, 255, 255, 0.72);
+  }
+
+  .age-chart-center small {
+    font-family: "Inter", sans-serif;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+  }
+
+  .age-label {
+    position: absolute;
+    z-index: 2;
+    margin: 0;
+    font-weight: 900;
+    white-space: nowrap;
+  }
+
+  .age-label span {
+    display: block;
+    margin-bottom: 1px;
+    font-size: clamp(12px, 1.05vw, 16px);
+  }
+
+  .age-label strong {
+    font-family: "Archivo Black", "Noto Sans JP", sans-serif;
+    font-size: clamp(34px, 3.4vw, 54px);
+    line-height: 1;
+    letter-spacing: -0.055em;
+  }
+
+  .age-label strong small {
+    margin-left: 2px;
+    font-family: inherit;
+    font-size: 0.5em;
+  }
+
+  .age-label::before,
+  .age-label::after { display: none; }
+
+  .age-under20 { top: -5%; left: 50%; text-align: center; transform: translateX(-50%); }
+  .age-thirties { top: 13%; right: 0; text-align: right; }
+  .age-over60 { top: 9%; left: 0; text-align: left; }
+  .age-fifties { top: 56%; left: 0; text-align: left; }
+  .age-forties { top: 76%; right: 0; text-align: right; }
+
+  .data-gender {
+    display: grid;
+    width: clamp(155px, 15vw, 225px);
+    justify-self: center;
+    place-items: center;
+  }
+
+  .data-gender h3,
+  .data-jobs h3,
+  .data-repeat h3 {
+    margin: 0;
+    font-size: clamp(15px, 1.25vw, 20px);
+    font-weight: 900;
+    letter-spacing: 0.04em;
+  }
+
+  .gender-chart {
+    position: relative;
+    display: grid;
+    width: 78%;
+    aspect-ratio: 1;
+    place-items: center;
+    margin-top: 5px;
+    border-radius: 50%;
+    background: transparent;
+  }
+
+  .gender-ring {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    shape-rendering: geometricPrecision;
+  }
+
+  .gender-ring circle {
+    fill: none;
+    stroke-width: 20;
+  }
+
+  .gender-ring-female { stroke: #d7cfc4; }
+
+  .gender-ring-male {
+    stroke: var(--data-ink);
+    stroke-dasharray: 80 20;
+    stroke-linecap: butt;
+    transform: rotate(-90deg);
+    transform-origin: 50% 50%;
+  }
+
+  .gender-chart > div {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    width: 58%;
+    aspect-ratio: 1;
+    place-items: center;
+    align-content: center;
+    border-radius: 50%;
+    background: var(--data-paper);
+  }
+
+  .gender-chart > div span {
+    font-size: clamp(10px, 0.9vw, 14px);
+    font-weight: 900;
+  }
+
+  .gender-chart > div strong {
+    font-family: "Archivo Black", "Noto Sans JP", sans-serif;
+    font-size: clamp(31px, 3vw, 46px);
+    line-height: 0.95;
+    letter-spacing: -0.07em;
+  }
+
+  .gender-chart > div strong small { font-size: 0.42em; }
+
+  .gender-female-value {
+    position: absolute;
+    z-index: 2;
+    top: 18%;
+    left: 27%;
+    display: grid;
+    margin: 0;
+    color: var(--data-ink);
+    line-height: 1;
+    text-align: center;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+  }
+
+  .gender-female-value span {
+    font-size: clamp(8px, 0.7vw, 11px);
+    font-weight: 900;
+  }
+
+  .gender-female-value strong {
+    margin-top: 1px;
+    font-family: "Archivo Black", "Noto Sans JP", sans-serif;
+    font-size: clamp(13px, 1.1vw, 18px);
+    letter-spacing: -0.04em;
+  }
+
+  .data-jobs {
+    width: clamp(230px, 20vw, 305px);
+    justify-self: center;
+  }
+
+  .data-jobs h3 { margin-bottom: 18px; }
+  .data-jobs dl { display: grid; gap: 12px; margin: 0; }
+  .data-jobs dl > div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+  }
+
+  .data-jobs dt {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    gap: 9px;
+    font-size: clamp(10px, 0.86vw, 13px);
+    font-weight: 800;
+    white-space: nowrap;
+  }
+
+  .data-jobs dt i {
+    flex: 0 0 auto;
+    width: 11px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: var(--job-color);
+  }
+
+  .data-jobs dd {
+    margin: 0;
+    font-family: "Archivo Black", "Noto Sans JP", sans-serif;
+    font-size: clamp(16px, 1.5vw, 23px);
+    line-height: 1;
+  }
+
+  .data-jobs dd small { font-size: 0.52em; }
+
+  .data-repeat {
+    display: grid;
+    width: clamp(190px, 18vw, 270px);
+    aspect-ratio: 1;
+    place-items: center;
+    justify-self: center;
+  }
+
+  .data-repeat h3 {
+    position: absolute;
+    top: 16%;
+    z-index: 1;
+  }
+
+  .data-repeat .data-dot-ring { inset: 9%; width: 82%; height: 82%; }
+
+  .data-repeat strong {
+    position: relative;
+    z-index: 1;
+    font-family: "Archivo Black", "Noto Sans JP", sans-serif;
+    font-size: clamp(64px, 7vw, 106px);
+    line-height: 1;
+    letter-spacing: -0.08em;
+  }
+
+  .data-repeat strong small {
+    margin-left: 3px;
+    font-size: 0.38em;
+  }
+
+  .data-note {
+    margin: clamp(12px, 1.6vw, 22px) 0 0;
+    color: var(--data-muted);
+    font-size: 8px;
+    line-height: 1.7;
+    text-align: right;
+    letter-spacing: 0.04em;
+  }
+
+  @media (min-width: 1280px) {
+    .data-inner {
+      display: grid;
+      grid-template-columns: clamp(330px, 22vw, 420px) minmax(0, 1fr);
+      grid-template-areas:
+        "header composition"
+        ". note";
+      column-gap: clamp(28px, 3.2vw, 58px);
+      align-items: start;
+    }
+
+    .data-header {
+      grid-area: header;
+      align-self: start;
+      margin: clamp(34px, 5.5vw, 82px) 0 0;
+    }
+
+    .data-header h2 {
+      font-size: clamp(26px, 1.7vw, 32px);
+      line-height: 1.08;
+      text-align: left;
+      word-break: keep-all;
+      overflow-wrap: normal;
+      white-space: nowrap;
+      justify-items: start;
+    }
+
+    .data-title-logo { width: min(100%, 390px); }
+
+    .data-composition {
+      grid-area: composition;
+      grid-template-columns: minmax(170px, 0.82fr) minmax(390px, 1.55fr) minmax(165px, 0.78fr);
+      height: clamp(450px, 55svh, 530px);
+      gap-inline: clamp(10px, 1.2vw, 20px);
+    }
+
+    .data-network { width: clamp(205px, 16vw, 275px); }
+    .data-network strong { font-size: clamp(80px, 8vw, 128px); }
+    .data-network span,
+    .data-network b { font-size: clamp(13px, 1.05vw, 18px); }
+    .age-visual { width: min(100%, 560px); }
+    .age-label span { font-size: clamp(11px, 0.9vw, 14px); }
+    .age-label strong { font-size: clamp(31px, 2.75vw, 45px); }
+    .data-gender { width: clamp(145px, 12vw, 190px); }
+    .data-jobs { width: clamp(215px, 17vw, 270px); }
+    .data-repeat { width: clamp(175px, 15vw, 230px); }
+    .data-repeat strong { font-size: clamp(58px, 5.8vw, 90px); }
+    .data-note { grid-area: note; }
+  }
+
+  @media (max-width: 1180px) {
+    .data-composition {
+      grid-template-columns: minmax(190px, 0.8fr) minmax(460px, 1.6fr) minmax(190px, 0.8fr);
+      height: clamp(500px, 62svh, 560px);
+    }
+    .data-network { width: clamp(210px, 21vw, 270px); }
+    .data-network strong { font-size: clamp(84px, 10vw, 120px); }
+    .age-visual { min-height: 0; }
+  }
+
+  @media (max-width: 900px) {
+    .data-section { padding-inline: 26px; }
+    .data-header { margin-bottom: 26px; }
+    .data-composition {
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto auto auto;
+      grid-template-areas:
+        "network gender"
+        "age age"
+        "jobs repeat";
+      gap: 26px 34px;
+      height: auto;
+    }
+    .data-age { min-height: 520px; }
+    .data-network { justify-self: center; width: min(34vw, 285px); }
+    .data-gender { width: min(27vw, 225px); }
+    .data-jobs { align-self: center; width: min(36vw, 305px); }
+    .data-repeat { width: min(30vw, 250px); }
+  }
+
+  @media (max-width: 600px) {
+    .data-section { padding: 36px 16px 30px; }
+    .data-header { margin-bottom: 16px; }
+    .data-header h2 {
+      font-size: clamp(26px, 7.1vw, 32px);
+      line-height: 1.18;
+      text-align: center;
+      white-space: normal;
+    }
+    .data-title-logo { width: min(75vw, 280px); }
+    .data-composition {
+      grid-template-columns: 1fr 1fr;
+      grid-template-areas:
+        "network gender"
+        "age age"
+        "jobs repeat";
+      gap: 18px 12px;
+    }
+    .data-age { min-height: 0; }
+    .age-visual {
+      display: block;
+      position: relative;
+      width: 100%;
+      max-width: 420px;
+      aspect-ratio: 1;
+      height: auto;
+      min-height: 0;
+      margin: 0 auto;
+      padding: 0;
+    }
+    .age-chart {
+      position: absolute;
+      z-index: 0;
+      top: 50%;
+      left: 50%;
+      width: 62%;
+      margin: 0;
+      box-shadow: 0 0 0 6px var(--data-paper), 0 0 0 7px rgba(21, 23, 25, 0.18);
+      transform: translate(-50%, -50%);
+    }
+    .age-leaders-desktop { display: none; }
+    .age-leaders-mobile {
+      position: absolute;
+      z-index: 1;
+      inset: 0;
+      display: block;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+      pointer-events: none;
+    }
+    .age-leaders-mobile path {
+      fill: none;
+      stroke: rgba(21, 23, 25, 0.64);
+      stroke-width: 0.9;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      vector-effect: non-scaling-stroke;
+    }
+    .age-leaders-mobile circle { fill: rgba(21, 23, 25, 0.68); }
+    .age-chart-center { border-width: 3px; }
+    .age-chart-center span,
+    .age-chart-center strong { font-size: clamp(13px, 3.8vw, 17px); }
+    .age-chart-center i { width: 24px; margin: 8px 0 6px; }
+    .age-chart-center small { font-size: 6px; }
+    .age-label {
+      position: absolute;
+      z-index: 2;
+      min-width: 0;
+      white-space: nowrap;
+    }
+    .age-label::before,
+    .age-label::after { display: none; }
+    .age-label span {
+      min-height: 0;
+      margin: 0;
+      font-size: clamp(8px, 2.3vw, 10px);
+      line-height: 1.3;
+    }
+    .age-label strong { font-size: clamp(22px, 6.8vw, 29px); }
+    .age-under20 { top: -2%; left: 50%; text-align: center; transform: translateX(-50%); }
+    .age-thirties { top: 19%; right: 0; text-align: right; }
+    .age-over60 { top: 12%; left: 0; text-align: left; }
+    .age-fifties { top: 52%; bottom: auto; left: 0; text-align: left; }
+    .age-forties { top: 73%; right: 0; bottom: auto; text-align: right; }
+    .data-network { width: min(43vw, 170px); }
+    .data-network strong { font-size: clamp(65px, 20vw, 84px); }
+    .data-network span,
+    .data-network b { font-size: 10px; }
+    .data-network > img { width: 78%; height: 116%; transform: translate(5%, 1%); }
+    .data-gender { width: min(38vw, 150px); }
+    .data-gender h3,
+    .data-jobs h3,
+    .data-repeat h3 { font-size: 12px; }
+    .gender-chart { width: 78%; margin-top: 6px; }
+    .gender-chart > div span { font-size: 8px; }
+    .gender-chart > div strong { font-size: 28px; }
+    .gender-female-value span { font-size: 7px; }
+    .gender-female-value strong { font-size: 11px; }
+    .data-jobs { width: 100%; padding-left: 4px; }
+    .data-jobs h3 { margin-bottom: 12px; }
+    .data-jobs dl { gap: 9px; }
+    .data-jobs dl > div { gap: 5px; }
+    .data-jobs dt { gap: 6px; font-size: clamp(7px, 2.2vw, 9px); letter-spacing: -0.03em; }
+    .data-jobs dt i { width: 8px; }
+    .data-jobs dd { font-size: 14px; }
+    .data-repeat { width: min(42vw, 164px); }
+    .data-repeat h3 { top: 15%; }
+    .data-repeat strong { font-size: clamp(53px, 16vw, 68px); }
+    .data-note { margin-top: 18px; font-size: 7px; text-align: left; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .data-section *,
+    .data-section *::before,
+    .data-section *::after { animation: none !important; transition: none !important; }
+  }
+</style>
