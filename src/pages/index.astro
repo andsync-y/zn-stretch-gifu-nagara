@@ -259,12 +259,38 @@ const marqueeWords = [
       heroDist = Math.max(1, hero.offsetHeight - window.innerHeight);
     };
 
+    // ヒーローのピン留めを「METHODの終わり」まで延長する動的サイズ調整。
+    // 展開（スクラブ＋コンセプト）区間A → シート（マルキー→DATA→半透明METHOD）が上を通る区間B、
+    // METHOD下端が画面上端に達した瞬間にヒーローが解放される（B = 1画面 + シート上端からMETHOD下端まで）。
+    const sheet = document.querySelector<HTMLElement>('.hero-follow');
+    const methodSec = document.getElementById('method');
+    let unfoldLen = 0; // A：ヒーロー展開に使うスクロール量
+    let lastVh = 1;
+    const sizeHero = () => {
+      if (!hero) return;
+      if (!reduceMotion.matches && sheet && methodSec) {
+        const vh = window.innerHeight;
+        lastVh = Math.max(1, vh);
+        const methodBottom = methodSec.offsetTop + methodSec.offsetHeight; // シート上端からMETHOD下端まで
+        const coverLen = vh + methodBottom;
+        unfoldLen = Math.round(vh * (narrow.matches ? 3.2 : 4)); // 展開はゆっくり（従来より延長）
+        hero.style.height = `${vh + unfoldLen + coverLen}px`;
+        sheet.style.marginTop = `-${coverLen}px`;
+      }
+      measureHero();
+    };
+
     const updateHero = () => {
       ticking = false;
       if (!hero) return;
       // scrollYのみで進捗を算出（レイアウト読み取りをしないのでスクロールが軽い）
-      const progress = reduceMotion.matches ? 1 : Math.min(1, Math.max(0, (window.scrollY - heroTop) / heroDist));
+      const scrolled = window.scrollY - heroTop;
+      const denom = unfoldLen || heroDist;
+      const progress = reduceMotion.matches ? 1 : Math.min(1, Math.max(0, scrolled / denom));
+      // シートがヒーローを覆う進捗（0=未到達、1=全面被覆）。コンセプト・オファー等のフェードアウトに使う
+      const cover = reduceMotion.matches || !unfoldLen ? 0 : Math.min(1, Math.max(0, (scrolled - unfoldLen) / lastVh));
       hero.style.setProperty('--hero-progress', progress.toFixed(4));
+      hero.style.setProperty('--hero-cover', cover.toFixed(4));
       hero.classList.toggle('is-offer-visible', progress >= OFFER_AT);
       // SP/タブレットのみ：オファーカードが退場したら（進捗0.3超）タップを透過し、下部固定CTA・コンセプトを妨げない。PCではカードは固定のまま操作可能
       const offerLeaving = narrow.matches && progress > 0.3;
@@ -281,9 +307,9 @@ const marqueeWords = [
     };
 
     if (hero && canvas && ctx) {
-      measureHero();
-      // フォント・画像読込でレイアウトが動く可能性があるため、loadでも再計測
-      addEventListener('load', () => { measureHero(); requestHeroUpdate(); }, { passive: true });
+      sizeHero();
+      // フォント・画像読込でレイアウトが動く可能性があるため、loadでも再計測（METHOD下端位置が変わりうる）
+      addEventListener('load', () => { sizeHero(); requestHeroUpdate(); }, { passive: true });
       if (reduceMotion.matches) {
         // 動きを減らす設定：ローダーは出さず、スクラブせず1フレーム目を静止表示
         loader?.classList.add('is-hidden');
@@ -314,7 +340,7 @@ const marqueeWords = [
           }
         }
         addEventListener('scroll', requestHeroUpdate, { passive: true });
-        addEventListener('resize', () => { measureHero(); drawnFrame = -1; requestHeroUpdate(); }, { passive: true });
+        addEventListener('resize', () => { sizeHero(); drawnFrame = -1; requestHeroUpdate(); }, { passive: true });
       }
     }
   </script>
