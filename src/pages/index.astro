@@ -155,7 +155,8 @@ const marqueeWords = [
     const narrow = window.matchMedia('(max-width: 1023px)'); // SP/タブレット。PCはオファーカードを固定表示のまま常時操作可能にする
 
     const OFFER_AT = 0.03; // オファーカードを出すスクロール進捗（少しでもスクロールしたら表示）
-    const SCRUB_END = 0.42; // ここまでで動画は最終フレームに到達。以降はMV固定のままコンセプトが上へ流れる区間
+    // 動画はピン留め区間全体（展開＋シート被せ＝METHODの終わりまで）に均等配分し、
+    // ヒーロー解放（METHOD終端）とほぼ同時に最終フレームへ到達する
     // PCとSPは別動画（PC=横1920x1080/169枚・SP=縦720x1280/106枚）
     const cfg = window.innerWidth <= 768
       ? { dir: '/frames/sp', count: 106 }
@@ -296,7 +297,10 @@ const marqueeWords = [
       const offerLeaving = narrow.matches && progress > 0.3;
       hero.classList.toggle('is-offer-leaving', offerLeaving && !reduceMotion.matches);
       offer?.toggleAttribute('inert', (progress < OFFER_AT || (offerLeaving && progress > 0.4)) && !reduceMotion.matches);
-      currentFrame = Math.min(FRAME_COUNT - 1, Math.floor((progress / SCRUB_END) * FRAME_COUNT));
+      // 動画フレームはピン留め全区間（heroDist＝展開A＋被せB）に均等配分。
+      // METHOD透過背景の背後でも進み続け、ヒーロー解放（METHOD終端）で最終フレームに到達する
+      const pTotal = reduceMotion.matches ? 1 : Math.min(1, Math.max(0, scrolled / heroDist));
+      currentFrame = Math.min(FRAME_COUNT - 1, Math.floor(pTotal * FRAME_COUNT));
       if (currentFrame !== drawnFrame) draw();
     };
 
