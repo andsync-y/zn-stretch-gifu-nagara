@@ -421,7 +421,8 @@
   grid-row: 1;
 }
 
-/* コンセプト：通常フローのテキストブロック（アニメーションなし） */
+/* コンセプト：通常フローのテキストブロック（アニメーションなし）。
+   背景パネルは敷かずMVをそのまま見せ、可読性は「濃いめの文字＋淡いハロー」で確保する */
 .hero-concept {
   grid-column: 1;
   grid-row: 1;
@@ -440,7 +441,8 @@
   font-weight: 800;
   letter-spacing: 0.24em;
   text-transform: uppercase;
-  color: #92745e;
+  color: #7c5c46;
+  text-shadow: 0 1px 2px rgba(247, 247, 244, 0.95), 0 0 10px rgba(247, 247, 244, 0.8);
 }
 
 .hero-concept-lead {
@@ -449,18 +451,18 @@
   font-weight: 900;
   letter-spacing: -0.02em;
   line-height: 1.22;
-  /* イントロのガラス背景を廃止したため、MV上でも読めるよう淡いハローを強化 */
-  text-shadow: 0 1px 2px rgba(247, 247, 244, 0.9), 0 3px 16px rgba(247, 247, 244, 0.6);
+  /* 背景パネルなしでMV上に載るため、淡い光のハローで輪郭を確保（濃い箇所でも読める） */
+  text-shadow: 0 1px 2px rgba(247, 247, 244, 0.95), 0 0 16px rgba(247, 247, 244, 0.7);
 }
 
 .hero-concept-sub {
   max-width: 30em;
   margin: 0 0 20px;
   font-size: clamp(13px, 1.05vw, 15px);
-  font-weight: 600;
+  font-weight: 700;
   line-height: 1.9;
-  color: #33373b;
-  text-shadow: 0 1px 2px rgba(247, 247, 244, 0.92), 0 2px 12px rgba(247, 247, 244, 0.68);
+  color: #16181b;
+  text-shadow: 0 1px 2px rgba(247, 247, 244, 0.96), 0 0 12px rgba(247, 247, 244, 0.82);
 }
 
 .hero-concept-points {
@@ -475,8 +477,8 @@
   align-items: baseline;
   gap: 16px;
   padding: 12px 2px;
-  border-bottom: 1px solid rgba(28, 30, 33, 0.2);
-  text-shadow: 0 1px 2px rgba(247, 247, 244, 0.92), 0 2px 12px rgba(247, 247, 244, 0.62);
+  border-bottom: 1px solid rgba(28, 30, 33, 0.28);
+  text-shadow: 0 1px 2px rgba(247, 247, 244, 0.96), 0 0 12px rgba(247, 247, 244, 0.8);
 }
 
 .hero-concept-points b {
@@ -500,9 +502,9 @@
   display: block;
   font-style: normal;
   font-size: clamp(12px, 0.95vw, 14px);
-  font-weight: 500;
+  font-weight: 600;
   line-height: 1.72;
-  color: #454b4f;
+  color: #23262a;
 }
 
 /* 添付デザイン準拠：背景なし・極太斜体・2行目を大きく（1行目は約0.7倍で右に少し寄せる） */
