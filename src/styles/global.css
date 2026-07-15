@@ -305,7 +305,7 @@
 
 /* シート先頭（マルキー）：角丸と影で「上へ持ち上がるシート」の輪郭を担う */
 .hero-follow .home-marquee {
-  background: #f7f7f4;
+  background: rgba(247, 247, 244, 0.78);
   border-radius: 30px 30px 0 0;
   box-shadow: 0 -26px 70px rgba(21, 23, 25, 0.22);
 }
@@ -313,14 +313,14 @@
 /* METHOD：背景を半透明にして、背後にピン留めされたヒーローのMVを透かして見せる。
    PCはすりガラス（backdrop-filter）でプレミアムに、SPはコスト回避のため半透明のみ */
 .hero-follow .home-method {
-  background: rgba(236, 237, 234, 0.84);
+  background: rgba(236, 237, 234, 0.66);
 }
 
 @supports (backdrop-filter: blur(1px)) {
   @media (min-width: 1024px) {
     .hero-follow .home-method {
-      background: rgba(236, 237, 234, 0.62);
-      backdrop-filter: blur(14px) saturate(1.05);
+      background: rgba(236, 237, 234, 0.44);
+      backdrop-filter: blur(12px) saturate(1.05);
     }
   }
 }
@@ -421,7 +421,7 @@
   left: -35vw;
   right: -6%;
   z-index: -1;
-  background: linear-gradient(100deg, rgba(247, 247, 244, 0.86) 40%, rgba(247, 247, 244, 0.46) 66%, rgba(247, 247, 244, 0) 86%);
+  background: linear-gradient(100deg, rgba(247, 247, 244, 0.58) 40%, rgba(247, 247, 244, 0.3) 66%, rgba(247, 247, 244, 0) 86%);
   /* スクリム独自の透明度アニメは廃止（親.hero-conceptのopacityと一緒にフェード）。毎フレームの背景再描画を減らして軽くする */
   pointer-events: none;
 }
@@ -722,7 +722,7 @@
   .hero-concept::before {
     /* 上方向へ大きく広げてヘッダー直下まで白で満たす（はみ出しはステージのoverflow:hiddenでクリップ＝上部の隙間を解消） */
     top: -220px; bottom: -44px; left: -8vw; right: -8vw;
-    background: linear-gradient(180deg, rgba(247, 247, 244, 0.94) 84%, rgba(247, 247, 244, 0.5) 94%, rgba(247, 247, 244, 0) 100%);
+    background: linear-gradient(180deg, rgba(247, 247, 244, 0.72) 84%, rgba(247, 247, 244, 0.38) 94%, rgba(247, 247, 244, 0) 100%);
   }
   .hero-concept-kicker { font-size: 9px; margin-bottom: 9px; }
   .hero-concept-lead { font-size: clamp(26px, 7.4vw, 40px); margin-bottom: 12px; }
