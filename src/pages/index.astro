@@ -70,6 +70,17 @@ const marqueeWords = [
 ];
 ---
 <Base title={title} description={description} path="/" jsonld={[faqSchema]}>
+  <!-- ローディング：MVフレームの先読みが済むまで画面を覆い、未読込フレームの乱れた表示を見せない（JS無効・reduced-motionでは非表示） -->
+  <div class="hero-loader" data-hero-loader aria-hidden="true">
+    <div class="hero-loader-inner">
+      <img src="/images/logo.png" alt="" width="1200" height="307" loading="eager" decoding="async" />
+      <p>PHYSICAL CONDITIONING SALON — GIFU NAGARA</p>
+    </div>
+    <b class="hero-loader-count" data-loader-count>0</b>
+    <span class="hero-loader-bar" aria-hidden="true"></span>
+  </div>
+  <noscript><style>{`.hero-loader { display: none; }`}</style></noscript>
+
   <!-- HERO：連番フレーム（動画のコマ）をスクロールに同期してスクラブ再生。コンセプトはMV左側にパララックスで流れ込む -->
   <section id="concept" class="hero-scrub" data-hero>
     <div class="hero-scrub-stage">
@@ -189,12 +200,52 @@ const marqueeWords = [
       if (fallback && fallback.style.opacity !== '0') fallback.style.opacity = '0';
     };
 
+    // ローディング表示：初期表示に必要なフレームが揃うまでMVを覆う（未読込フレームの乱れた露出を防ぐ）
+    const loader = document.querySelector<HTMLElement>('[data-hero-loader]');
+    const loaderCount = loader?.querySelector<HTMLElement>('[data-loader-count]');
+    const LOADER_TARGET = Math.min(FRAME_COUNT, 24); // 初期表示に必要とみなす枚数
+    const LOADER_MIN_MS = 650; // ブランド表示の最低時間（キャッシュ時の一瞬のチラつき防止）
+    const LOADER_MAX_MS = 3800; // 回線が遅くてもこれ以上は待たせない
+    const loaderStart = performance.now();
+    let loadedCount = 0;
+
+    const finishLoader = () => {
+      if (!loader || loader.dataset.done) return;
+      loader.dataset.done = '1';
+      if (loaderCount) loaderCount.textContent = '100';
+      loader.style.setProperty('--load-progress', '1');
+      const wait = Math.max(0, LOADER_MIN_MS - (performance.now() - loaderStart));
+      setTimeout(() => {
+        loader.classList.add('is-done');
+        loader.addEventListener('transitionend', () => loader.classList.add('is-hidden'), { once: true });
+        setTimeout(() => loader.classList.add('is-hidden'), 1100); // transitionendが飛んだ場合の保険
+      }, wait);
+    };
+
+    const updateLoaderUI = () => {
+      if (!loader || !loaderCount || loader.dataset.done) return;
+      const pct = Math.min(100, Math.round((loadedCount / LOADER_TARGET) * 100));
+      loaderCount.textContent = String(pct);
+      loader.style.setProperty('--load-progress', String(pct / 100));
+      if (loadedCount >= LOADER_TARGET) finishLoader();
+    };
+
     const load = (i: number, onload?: () => void) => {
-      if (images[i]) return;
+      const existing = images[i];
+      if (existing) {
+        // 既に読込済み・読込中でも、プリロードのチェーン（pump）が止まらないようコールバックは必ず呼ぶ
+        if (existing.complete) onload?.();
+        else existing.addEventListener('load', () => onload?.(), { once: true });
+        return;
+      }
       const img = new Image();
       img.decoding = 'async';
       img.src = srcOf(i);
-      img.onload = () => onload?.();
+      img.onload = () => {
+        loadedCount++;
+        updateLoaderUI();
+        onload?.();
+      };
       images[i] = img;
     };
 
@@ -234,11 +285,13 @@ const marqueeWords = [
       // フォント・画像読込でレイアウトが動く可能性があるため、loadでも再計測
       addEventListener('load', () => { measureHero(); requestHeroUpdate(); }, { passive: true });
       if (reduceMotion.matches) {
-        // 動きを減らす設定：スクラブせず1フレーム目を静止表示
+        // 動きを減らす設定：ローダーは出さず、スクラブせず1フレーム目を静止表示
+        loader?.classList.add('is-hidden');
         currentFrame = 0;
         load(0, draw);
         updateHero();
       } else {
+        setTimeout(finishLoader, LOADER_MAX_MS);
         load(0, () => { draw(); });
         // 残りは同時8本ずつ順次プリロード（フレーム未読込による飛び＝カクつきを減らす）
         let next = 1;
@@ -252,6 +305,14 @@ const marqueeWords = [
         };
         for (let c = 0; c < 8; c++) pump();
         updateHero();
+        // リロードでスクロール位置が途中に復元された場合、現在位置周辺のフレームを優先読込して
+        // 「先頭フレームだけが表示される不一致（乱れた見た目）」を短時間で解消する
+        if (currentFrame > 8) {
+          for (let k = 0; k < 8; k++) {
+            const idx = Math.min(FRAME_COUNT - 1, currentFrame + k);
+            load(idx, () => { if (idx <= currentFrame && drawnFrame < idx) draw(); });
+          }
+        }
         addEventListener('scroll', requestHeroUpdate, { passive: true });
         addEventListener('resize', () => { measureHero(); drawnFrame = -1; requestHeroUpdate(); }, { passive: true });
       }

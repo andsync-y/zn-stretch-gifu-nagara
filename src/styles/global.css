@@ -198,6 +198,101 @@
 }
 
 /* TOP HERO：連番フレームをスクロールに同期してスクラブ再生する3Dスクロール演出 */
+/* TOPローディング：MVフレームの先読み中に全面を覆うエディトリアル調ローダー
+   （紙色＋グリッド＋ロゴ＋%カウント＋下端プログレスバー）。完了で上方向へワイプして退場 */
+.hero-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 90; /* ヘッダー(50)・モバイルメニュー(49)・固定CTA(45)より上 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    linear-gradient(rgba(21, 23, 25, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(21, 23, 25, 0.05) 1px, transparent 1px),
+    #f7f7f4;
+  background-size: 48px 48px, 48px 48px, auto;
+  transition: transform 0.8s cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+.hero-loader-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+
+.hero-loader-inner img {
+  width: min(46vw, 300px);
+  height: auto;
+  animation: loaderPulse 2s ease-in-out infinite;
+}
+
+.hero-loader-inner p {
+  margin: 0;
+  font-family: "Inter", sans-serif;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.3em;
+  color: #8a857e;
+  text-align: center;
+}
+
+.hero-loader-count {
+  position: absolute;
+  right: max(4.5vw, 24px);
+  bottom: 14px;
+  font-family: "Archivo Black", "Noto Sans JP", sans-serif;
+  font-size: clamp(56px, 9vw, 140px);
+  font-weight: 800;
+  font-style: normal;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: #15171a;
+  font-variant-numeric: tabular-nums;
+}
+
+.hero-loader-count::after {
+  content: "%";
+  margin-left: 0.08em;
+  font-size: 0.32em;
+}
+
+.hero-loader-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  background: rgba(21, 23, 25, 0.12);
+}
+
+.hero-loader-bar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #15171a;
+  transform-origin: left center;
+  transform: scaleX(var(--load-progress, 0));
+  transition: transform 0.3s ease;
+}
+
+.hero-loader.is-done { transform: translateY(-101%); }
+.hero-loader.is-hidden { display: none; }
+
+@media (max-width: 480px) {
+  .hero-loader-inner p { font-size: 8px; letter-spacing: 0.22em; }
+}
+
+@keyframes loaderPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.45; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-loader { display: none; }
+}
+
 /* ヒーロー以降のコンテンツ全体を不透明な角丸シートにして、固定ヒーローの上へ少し持ち上がって被せる。
    スクロール末尾でヒーローの上を通り抜けるパララックス的な層感を出す */
 .hero-follow {
