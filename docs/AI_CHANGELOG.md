@@ -945,3 +945,17 @@ Git履歴が「何を変更したか」、このファイルが「なぜ変更�
 - 主な変更ファイル：`src/pages/index.astro`（マークアップ移動・JS簡素化・A短縮）／`src/styles/global.css`（.hero-intro新設・旧アニメCSS削除・SP/reduced-motionブロック整理）
 - 確認結果：`npm run build` 成功（19ページ）。PC(1440×820)——MVスクラブ後、ガラス面のイントロ（左コンセプト＋右カード）がMVの上を通過し、マルキー→DATAへ連続。SP(390×844)も縦積みで自然に流れ、カード3コース表示・タップ領域も健全。ヒーロー実測7247px・シートmargin -4295px（イントロ842px込みでMETHOD終端まで）と計算どおり。
 - 未対応・次の作業：実機での体感確認。
+
+## 2026-07-15 — Claude Code
+
+- 担当：Claude Code
+- ブランチ：`claude/apply-design-patch-xbq1gz`
+- 関連PR：イントロの登場順を「FIRST SESSIONカード→コンセプト」に変更（カード先行の斜め構図）
+- 変更内容：
+  - 「コンセプトより先にファーストセッションのカードが出てほしい」との要望に対応。シート（.hero-follow）は下から迫り上がるため、上端に近い要素ほど先に姿を見せる。この特性を使い、カードを先に見せる構図へ再配置。
+  - 【DOM順】`.hero-intro-grid`内で`.hero-offer`（FIRST SESSIONカード）を`.hero-concept`より前に移動。
+  - 【PCレイアウト】2カラムのグリッド配置を明示化：カードを右上（grid-column:2 / row:1）、コンセプトを左下（grid-column:1 / row:1・margin-top clamp(120px,22vh,240px)）に置き、`align-items:start`で斜めの構図に。迫り上がり時にまず右上のカードが現れ、続いて左下のコンセプトが姿を見せる。
+  - 【SPレイアウト】縦積みはDOM順どおり「カード→コンセプト」。grid-column/rowをautoへ戻し、コンセプトのmargin-topも0にリセット。
+- 主な変更ファイル：`src/pages/index.astro`（`.hero-intro-grid`のDOM順入替）／`src/styles/global.css`（グリッド行列の明示配置・SPリセット）
+- 確認結果：`npm run build` 成功（19ページ）。Chromium PC(1120×640)——迫り上がり途中で右上にFIRST SESSIONカード・左下にコンセプトが現れる斜め構図を確認。全景でもカード（3コース＋WEB予約）が上寄り、コンセプトが下寄りで先行が成立。SP(360×720)も「カード→コンセプト」の縦積みを確認。
+- 未対応・次の作業：実機での体感確認。

@@ -342,22 +342,7 @@ const marqueeWords = [
   <!-- INTRO：コンセプト＋FIRST SESSION。薄いガラス面に載ってMVの上をそのまま通る -->
   <section id="concept" class="hero-intro">
     <div class="hero-intro-grid">
-      <div class="hero-concept">
-        <div class="hero-concept-head">
-          <p class="hero-concept-kicker">Concept — Our Philosophy</p>
-          <h2 class="hero-concept-lead">話題のパーソナル<br />ストレッチサロンが<br />岐阜初出店。</h2>
-          <p class="hero-concept-sub">個室・マンツーマンで、担当は全員女性トレーナー。元格闘家考案の独自メソッド「体感軸調整法」が深層筋にアプローチし、動ける身体へ導きます。</p>
-        </div>
-        <ul class="hero-concept-points">
-          {concepts.map((c) => (
-            <li>
-              <b>{c.no}</b>
-              <span><strong>{c.title}</strong><i>{c.body}</i></span>
-            </li>
-          ))}
-        </ul>
-      </div>
-
+      <!-- カードを先（セクション上部）に：シートが上がってくる際、コンセプトより先に見える -->
       <div class="hero-offer">
         <div class="hero-offer-heading">
           <p><span>FIRST</span><span>SESSION</span></p>
@@ -377,6 +362,22 @@ const marqueeWords = [
         </div>
         <a href={SITE.urls.reserve} target="_blank" rel="noopener">WEB予約 <span aria-hidden="true">↗</span></a>
         <p class="hero-offer-note">※初回価格はおひとり様1回限り。価格は変更となる場合があります。</p>
+      </div>
+
+      <div class="hero-concept">
+        <div class="hero-concept-head">
+          <p class="hero-concept-kicker">Concept — Our Philosophy</p>
+          <h2 class="hero-concept-lead">話題のパーソナル<br />ストレッチサロンが<br />岐阜初出店。</h2>
+          <p class="hero-concept-sub">個室・マンツーマンで、担当は全員女性トレーナー。元格闘家考案の独自メソッド「体感軸調整法」が深層筋にアプローチし、動ける身体へ導きます。</p>
+        </div>
+        <ul class="hero-concept-points">
+          {concepts.map((c) => (
+            <li>
+              <b>{c.no}</b>
+              <span><strong>{c.title}</strong><i>{c.body}</i></span>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   </section>
