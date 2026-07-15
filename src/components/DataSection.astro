@@ -56,7 +56,10 @@ const jobStats = [
   <div class="data-inner">
     <header class="data-header rise">
       <p>FACTS &amp; FIGURES</p>
-      <h2 id="data-title">データで見る <span>全力ストレッチ</span></h2>
+      <h2 id="data-title">
+        <span class="data-title-copy">DATAで見る</span>
+        <img class="data-title-logo" src="/images/logo.png" width="1200" height="307" alt="全力ストレッチ" />
+      </h2>
       <p>BRAND DATA — 2024</p>
     </header>
 
@@ -222,6 +225,9 @@ const jobStats = [
   }
 
   .data-header h2 {
+    display: grid;
+    gap: clamp(11px, 1.2vw, 18px);
+    justify-items: center;
     margin: 0;
     font-family: "Archivo Black", "Noto Sans JP", sans-serif;
     font-size: clamp(28px, 3.2vw, 52px);
@@ -232,7 +238,14 @@ const jobStats = [
     white-space: nowrap;
   }
 
-  .data-header h2 span { margin-left: 0.34em; }
+  .data-title-copy { display: block; }
+
+  .data-title-logo {
+    display: block;
+    width: clamp(240px, 28vw, 390px);
+    max-width: 100%;
+    height: auto;
+  }
 
   .data-composition {
     display: grid;
@@ -273,12 +286,12 @@ const jobStats = [
   .data-network > img {
     position: absolute;
     z-index: -1;
-    width: 58%;
-    height: 84%;
+    width: 96%;
+    height: 130%;
     object-fit: contain;
-    opacity: 0.06;
+    opacity: 0.055;
     filter: grayscale(1) contrast(1.1);
-    transform: translate(2%, 0);
+    transform: translate(6%, 1%);
   }
 
   .data-dot-ring {
@@ -465,7 +478,7 @@ const jobStats = [
   .age-label::before,
   .age-label::after { display: none; }
 
-  .age-under20 { top: 0; left: 50%; text-align: center; transform: translateX(-50%); }
+  .age-under20 { top: -5%; left: 50%; text-align: center; transform: translateX(-50%); }
   .age-thirties { top: 13%; right: 0; text-align: right; }
   .age-over60 { top: 9%; left: 0; text-align: left; }
   .age-fifties { top: 56%; left: 0; text-align: left; }
@@ -563,14 +576,14 @@ const jobStats = [
   }
 
   .gender-female-value span {
-    font-size: clamp(7px, 0.58vw, 9px);
+    font-size: clamp(8px, 0.7vw, 11px);
     font-weight: 900;
   }
 
   .gender-female-value strong {
     margin-top: 1px;
     font-family: "Archivo Black", "Noto Sans JP", sans-serif;
-    font-size: clamp(9px, 0.75vw, 12px);
+    font-size: clamp(13px, 1.1vw, 18px);
     letter-spacing: -0.04em;
   }
 
@@ -678,12 +691,10 @@ const jobStats = [
       word-break: keep-all;
       overflow-wrap: normal;
       white-space: nowrap;
+      justify-items: start;
     }
 
-    .data-header h2 span {
-      display: inline;
-      margin: 0 0 0 0.28em;
-    }
+    .data-title-logo { width: min(100%, 390px); }
 
     .data-composition {
       grid-area: composition;
@@ -745,7 +756,7 @@ const jobStats = [
       text-align: center;
       white-space: normal;
     }
-    .data-header h2 span { display: block; margin: 3px 0 0; }
+    .data-title-logo { width: min(75vw, 280px); }
     .data-composition {
       grid-template-columns: 1fr 1fr;
       grid-template-areas:
@@ -816,7 +827,7 @@ const jobStats = [
       line-height: 1.3;
     }
     .age-label strong { font-size: clamp(22px, 6.8vw, 29px); }
-    .age-under20 { top: 0; left: 50%; text-align: center; transform: translateX(-50%); }
+    .age-under20 { top: -2%; left: 50%; text-align: center; transform: translateX(-50%); }
     .age-thirties { top: 19%; right: 0; text-align: right; }
     .age-over60 { top: 12%; left: 0; text-align: left; }
     .age-fifties { top: 52%; bottom: auto; left: 0; text-align: left; }
@@ -825,7 +836,7 @@ const jobStats = [
     .data-network strong { font-size: clamp(65px, 20vw, 84px); }
     .data-network span,
     .data-network b { font-size: 10px; }
-    .data-network > img { width: 43%; height: 76%; }
+    .data-network > img { width: 78%; height: 116%; transform: translate(5%, 1%); }
     .data-gender { width: min(38vw, 150px); }
     .data-gender h3,
     .data-jobs h3,
@@ -833,8 +844,8 @@ const jobStats = [
     .gender-chart { width: 78%; margin-top: 6px; }
     .gender-chart > div span { font-size: 8px; }
     .gender-chart > div strong { font-size: 28px; }
-    .gender-female-value span { font-size: 6px; }
-    .gender-female-value strong { font-size: 8px; }
+    .gender-female-value span { font-size: 7px; }
+    .gender-female-value strong { font-size: 11px; }
     .data-jobs { width: 100%; padding-left: 4px; }
     .data-jobs h3 { margin-bottom: 12px; }
     .data-jobs dl { gap: 9px; }
