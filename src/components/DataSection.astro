@@ -48,16 +48,16 @@ const jobStats = [
           </div>
 
           <svg class="age-leaders-mobile" viewBox="0 0 360 360" aria-hidden="true" focusable="false">
-            <path d="M155 52h23l20 18"></path>
-            <circle cx="198" cy="70" r="2.5"></circle>
-            <path d="M312 90h-18l-14 40"></path>
-            <circle cx="280" cy="130" r="2.5"></circle>
-            <path d="M72 92h22l35-12"></path>
-            <circle cx="129" cy="80" r="2.5"></circle>
-            <path d="M56 310v-57l25-57"></path>
-            <circle cx="81" cy="196" r="2.5"></circle>
-            <path d="M308 310h-33l-64-35"></path>
-            <circle cx="211" cy="275" r="2.5"></circle>
+            <path d="M197 75L201 52H184"></path>
+            <circle cx="197" cy="75" r="2.2"></circle>
+            <path d="M276 132L299 120H315"></path>
+            <circle cx="276" cy="132" r="2.2"></circle>
+            <path d="M132 86L120 62H64"></path>
+            <circle cx="132" cy="86" r="2.2"></circle>
+            <path d="M75 197L59 200"></path>
+            <circle cx="75" cy="197" r="2.2"></circle>
+            <path d="M213 281L230 305H300"></path>
+            <circle cx="213" cy="281" r="2.2"></circle>
           </svg>
 
           {ageSegments.map((item) => (
@@ -627,11 +627,13 @@ const jobStats = [
     }
     .age-leaders-mobile path {
       fill: none;
-      stroke: var(--data-ink);
-      stroke-width: 1;
+      stroke: rgba(21, 23, 25, 0.64);
+      stroke-width: 0.9;
+      stroke-linecap: round;
+      stroke-linejoin: round;
       vector-effect: non-scaling-stroke;
     }
-    .age-leaders-mobile circle { fill: var(--data-ink); }
+    .age-leaders-mobile circle { fill: rgba(21, 23, 25, 0.68); }
     .age-chart-center { border-width: 3px; }
     .age-chart-center span,
     .age-chart-center strong { font-size: clamp(13px, 3.8vw, 17px); }
@@ -653,10 +655,10 @@ const jobStats = [
     }
     .age-label strong { font-size: clamp(22px, 6.8vw, 29px); }
     .age-under20 { top: 0; left: 50%; text-align: center; transform: translateX(-50%); }
-    .age-thirties { top: 17%; right: 0; text-align: right; }
-    .age-over60 { top: 17%; left: 0; text-align: left; }
-    .age-fifties { bottom: 0; left: 0; text-align: left; }
-    .age-forties { right: 0; bottom: 0; text-align: right; }
+    .age-thirties { top: 19%; right: 0; text-align: right; }
+    .age-over60 { top: 12%; left: 0; text-align: left; }
+    .age-fifties { top: 52%; bottom: auto; left: 0; text-align: left; }
+    .age-forties { top: 73%; right: 0; bottom: auto; text-align: right; }
     .data-network { width: min(43vw, 170px); }
     .data-network strong { font-size: clamp(65px, 20vw, 84px); }
     .data-network span,
