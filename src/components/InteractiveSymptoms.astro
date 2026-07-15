@@ -317,16 +317,17 @@ const hotspots = [
   }
 
   @media (max-width: 767px) {
-    /* SPも2カラム：左にスケルトン、右に項目リスト。骨格を大きく見せる */
+    /* SPも2カラム：左にスケルトン、右に項目リスト。骨格を大きく（約1.5倍）見せる */
     .symptoms-explorer {
-      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-      gap: 10px;
+      grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+      gap: 8px;
       min-height: 0;
       align-items: center;
     }
 
-    /* 暗パネルを骨格の縦横比に合わせて、上下のレターボックス（余白）をなくす＝骨格が枠いっぱいに */
-    .symptoms-visual { height: auto; min-height: 0; aspect-ratio: 921 / 1708; }
+    /* 暗パネルを骨格の縦横比に合わせて、上下のレターボックス（余白）をなくす＝骨格が枠いっぱいに。
+       左は画面端まで食い込ませ（section px-5＝20px を相殺）、空いていた左余白を骨格の拡大に活用 */
+    .symptoms-visual { height: auto; min-height: 0; aspect-ratio: 921 / 1708; margin-left: -20px; }
     /* パネル＝骨格比のため、幅・高さ100%で満たす。ホットスポット（%指定）も画像に正確に一致する */
     .symptoms-body {
       position: absolute;
@@ -340,12 +341,13 @@ const hotspots = [
       transform: none;
     }
     .symptoms-list { width: 100%; }
-    .symptom-entry { min-height: 60px; grid-template-columns: minmax(0, 1fr) 26px; }
-    .symptom-trigger { grid-template-columns: 18px minmax(0, 1fr); gap: 5px; padding: 8px 2px; }
+    /* 骨格拡大でリスト幅が狭まるため、番号・矢印列と間隔を詰めてテキスト領域を確保 */
+    .symptom-entry { min-height: 56px; grid-template-columns: minmax(0, 1fr) 20px; }
+    .symptom-trigger { grid-template-columns: 14px minmax(0, 1fr); gap: 4px; padding: 8px 0; }
     .symptom-no { font-size: 8px; }
-    .symptom-copy strong { font-size: 12px; }
+    .symptom-copy strong { font-size: 11px; line-height: 1.38; }
     .symptom-copy small { font-size: 8px; }
-    .symptom-link { font-size: 14px; }
+    .symptom-link { font-size: 13px; }
   }
 
   @media (prefers-reduced-motion: reduce) {
