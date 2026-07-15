@@ -293,21 +293,22 @@
   .hero-loader { display: none; }
 }
 
-/* ヒーロー以降のコンテンツ全体を不透明な角丸シートにして、固定ヒーローの上へ少し持ち上がって被せる。
-   スクロール末尾でヒーローの上を通り抜けるパララックス的な層感を出す */
+/* ヒーロー以降のコンテンツ全体を不透明な角丸シートにして、固定されたヒーローの上へ1画面分スライドして被せる。
+   ヒーローは最後までピン留めされたまま、マルキー→DATA→METHODの背景が到達するまで上を通っていく */
 .hero-follow {
   position: relative;
   z-index: 3;
-  margin-top: -7vh;
+  margin-top: -100vh;
+  margin-top: -100svh;
   background: #f7f7f4;
   border-radius: 30px 30px 0 0;
-  box-shadow: 0 -22px 60px rgba(21, 23, 25, 0.16);
+  box-shadow: 0 -26px 70px rgba(21, 23, 25, 0.22);
 }
 
 .hero-scrub {
   --hero-progress: 0;
   position: relative;
-  height: 460vh;
+  height: 500vh;
   background: #f7f7f4;
   /* ヘッダー(sticky・透明・76px)の下にMVを回り込ませて全面表示にし、上部のクリーム帯をなくす */
   margin-top: -76px;
@@ -752,6 +753,8 @@
 
   .hero-scrub { height: auto; margin-top: 0; }
   .hero-scrub-stage { position: relative; top: auto; height: min(820px, 100svh); }
+  /* 静的表示ではシートの持ち上げ（-100vh）は成立しないため通常の続き物レイアウトに戻す */
+  .hero-follow { margin-top: 0; border-radius: 0; box-shadow: none; }
   .hero-offer { opacity: 1; transform: none; }
   .hero-scroll-sign { display: none; }
 
