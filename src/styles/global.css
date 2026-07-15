@@ -399,7 +399,8 @@
 /* INTRO：コンセプト＋FIRST SESSIONを載せる薄いガラス面のセクション。
    シート（.hero-follow）の先頭として固定MVの上をアニメーションなしで通過する */
 .hero-intro {
-  background: rgba(247, 247, 244, 0.56);
+  /* 周りのガラス背景は廃止。MVがそのまま透け、FIRST SESSIONカードだけが浮いて見える */
+  background: transparent;
   padding: clamp(56px, 9vh, 110px) max(4.5vw, 28px) clamp(48px, 8vh, 96px);
 }
 
@@ -448,7 +449,8 @@
   font-weight: 900;
   letter-spacing: -0.02em;
   line-height: 1.22;
-  text-shadow: 0 1px 5px rgba(247, 247, 244, 0.45);
+  /* イントロのガラス背景を廃止したため、MV上でも読めるよう淡いハローを強化 */
+  text-shadow: 0 1px 2px rgba(247, 247, 244, 0.9), 0 3px 16px rgba(247, 247, 244, 0.6);
 }
 
 .hero-concept-sub {
@@ -458,7 +460,7 @@
   font-weight: 600;
   line-height: 1.9;
   color: #33373b;
-  text-shadow: 0 1px 4px rgba(247, 247, 244, 0.55);
+  text-shadow: 0 1px 2px rgba(247, 247, 244, 0.92), 0 2px 12px rgba(247, 247, 244, 0.68);
 }
 
 .hero-concept-points {
@@ -474,7 +476,7 @@
   gap: 16px;
   padding: 12px 2px;
   border-bottom: 1px solid rgba(28, 30, 33, 0.2);
-  text-shadow: 0 1px 4px rgba(247, 247, 244, 0.5);
+  text-shadow: 0 1px 2px rgba(247, 247, 244, 0.92), 0 2px 12px rgba(247, 247, 244, 0.62);
 }
 
 .hero-concept-points b {
@@ -566,9 +568,10 @@
   width: 100%;
   max-width: 560px;
   padding: clamp(18px, 1.7vw, 30px);
-  /* 透過白のパネルは廃止し、イントロのガラス面に直接載せて地続きに。枠線のみ残す */
-  background: transparent;
+  /* カードだけを浮かせる：不透明パネル＋やわらかいドロップシャドウでMVから持ち上げる */
+  background: rgba(248, 248, 245, 0.97);
   border: 1px solid rgba(23, 30, 32, 0.8);
+  box-shadow: 0 30px 60px -28px rgba(16, 20, 24, 0.5), 0 10px 26px -18px rgba(16, 20, 24, 0.38);
 }
 
 .hero-offer-heading {
@@ -702,8 +705,8 @@
   .hero-copy h1 { font-size: clamp(42px, 11.5vw, 64px); }
   .hero-copy-sub { max-width: 60vw; margin-top: 16px; font-size: 10px; letter-spacing: 0.09em; line-height: 1.9; }
   /* INTRO（SP/タブレット）：縦積み（カード→コンセプトの順）。ガラス面は少し濃くして可読性確保 */
-  .hero-intro { background: rgba(247, 247, 244, 0.64); padding: 44px 5% 48px; }
-  .hero-intro-grid { grid-template-columns: minmax(0, 1fr); gap: 52px; }
+  .hero-intro { background: transparent; padding: 44px 5% 48px; }
+  .hero-intro-grid { grid-template-columns: minmax(0, 1fr); gap: 72px; }
   .hero-intro-grid .hero-offer { grid-column: auto; grid-row: auto; }
   .hero-concept { grid-column: auto; grid-row: auto; margin-top: 0; }
   .hero-concept-kicker { font-size: 9px; margin-bottom: 9px; }

@@ -257,7 +257,8 @@ const marqueeWords = [
         const methodBottom = methodSec.offsetTop + methodSec.offsetHeight; // シート上端からMETHOD下端まで
         const coverLen = vh + methodBottom;
         // コンセプト等はシート側へ移動したため、展開区間＝MVスクラブ＋キャッチコピーのみ。短めで十分
-        unfoldLen = Math.round(vh * (narrow.matches ? 2.2 : 2.6));
+        // カード（シート）がやや遅く感じるとの声に合わせ、展開区間Aを気持ち短縮（早めに迫り上がる）
+        unfoldLen = Math.round(vh * (narrow.matches ? 2.0 : 2.3));
         hero.style.height = `${vh + unfoldLen + coverLen}px`;
         sheet.style.marginTop = `-${coverLen}px`;
       }
