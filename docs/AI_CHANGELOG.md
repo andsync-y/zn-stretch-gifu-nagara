@@ -1056,3 +1056,15 @@ Git履歴が「何を変更したか」、このファイルが「なぜ変更�
 - 主な変更ファイル：`src/pages/content.json.ts`（新規）／`src/data/symptom-content.ts`（新規）／`src/data/columns.ts`（新規）／`src/pages/column/index.astro`（データ参照先変更）／`docs/COLUMN_SEO_GUIDE.md`
 - 確認結果：`npm run build` 成功（19ページ）。dist/content.json に11 items（symptom×7・column×3・store×1）が設計書§14の形式で出力されることを確認。/column 一覧も従来どおり3記事表示。
 - 未対応・次の作業：本番デプロイ後 `https://zn-stretch-gifu.com/content.json` で取得可能になる。SNS運用システム（Next.js）は置き場所（新規リポジトリ）確定後に別途構築。
+
+## 2026-07-16 — Claude Code
+
+- 担当：Claude Code
+- ブランチ：`claude/apply-design-patch-xbq1gz`
+- 関連PR：/content.json のコラムに selfCare（具体的手順）を追加
+- 変更内容：
+  - SNS運用システムが生成する投稿が「〜しましょう」の抽象文で終わり具体的なやり方（部位・秒数・回数）を含まない問題への対応。原因の一つが、/content.json のコラム情報が要約のみで記事内の実手順を含まないことだったため、`src/data/columns.ts` に `selfCare` フィールドを新設し、既存3記事の実際の手順（記事本文と一致）を構造化。`content.json.ts` で column アイテムに selfCare を出力。
+  - `docs/COLUMN_SEO_GUIDE.md` 手順4を更新：新規コラム追加時は selfCare も必須で記載。
+- 主な変更ファイル：`src/data/columns.ts`／`src/pages/content.json.ts`／`docs/COLUMN_SEO_GUIDE.md`
+- 確認結果：`npm run build` 成功（19ページ）。dist/content.json の column:youtsu-morning-stretch に selfCare 6件を確認。
+- 未対応・次の作業：本番デプロイ後、SNS側で「今すぐ同期」→再生成すると具体的手順入りの投稿になる。
