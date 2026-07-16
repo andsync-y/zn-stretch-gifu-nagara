@@ -52,6 +52,7 @@ export const GET: APIRoute = () => {
     slug: c.slug,
     title: c.heading,
     summary: c.desc,
+    selfCare: c.selfCare,
     tags: c.tags,
     keyPoints: c.relatedSymptoms?.map((slug) => `related-symptom:${slug}`),
     url: `${ORIGIN}/column/${c.slug}`,
