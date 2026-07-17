@@ -1068,3 +1068,14 @@ Git履歴が「何を変更したか」、このファイルが「なぜ変更�
 - 主な変更ファイル：`src/data/columns.ts`／`src/pages/content.json.ts`／`docs/COLUMN_SEO_GUIDE.md`
 - 確認結果：`npm run build` 成功（19ページ）。dist/content.json の column:youtsu-morning-stretch に selfCare 6件を確認。
 - 未対応・次の作業：本番デプロイ後、SNS側で「今すぐ同期」→再生成すると具体的手順入りの投稿になる。
+
+## 2026-07-17 — Claude Code
+
+- 担当：Claude Code
+- ブランチ：`claude/apply-design-patch-xbq1gz`
+- 関連PR：お悩み別ページの料金リード文を90分コース推しに変更
+- 変更内容：
+  - 症状6ページ（katakori/kubi-ganseihiro/mukumi/shisei/sports/youtsu）の `priceLead` を、60分推し→**90分の全身ケアコースを主役**にした文章へ変更。各症状の文脈（肩こり＝姿勢や体の軸とつながる、腰＝股関節・お尻とセット等）に沿った理由付きで自然に誘導し、60分は「お時間の限られる方向け」の位置づけに。jiritsu は元々90分推しのため変更なし。
+- 主な変更ファイル：`src/pages/symptoms/*.astro`（priceLead 6件）
+- 確認結果：`npm run build` 成功（19ページ）。
+- 未対応・次の作業：なし。
