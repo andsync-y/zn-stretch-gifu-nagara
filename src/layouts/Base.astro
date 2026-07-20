@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import MetaPixel from '../components/MetaPixel.astro';
 import { SITE, PRICING, SAME_AS } from '../consts';
 
 export interface Props {
@@ -96,6 +97,9 @@ const schemas = [localBusiness, ...jsonld];
       <script type="application/ld+json" set:html={JSON.stringify(s)} />
     ))}
 
+    <!-- Meta（Facebook）ピクセル：PUBLIC_META_PIXEL_ID 設定時のみ出力 -->
+    <MetaPixel />
+
     <!-- Google Analytics 4 -->
     <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-L88N21PDK8"></script>
     <script is:inline>
@@ -145,5 +149,35 @@ const schemas = [localBusiness, ...jsonld];
         WEB予約 <span aria-hidden="true">↗</span>
       </a>
     </nav>
+
+    <!--
+      Metaピクセル：CV系CTAのクリック計測（サイト全体で1回）。
+      既存GA4と同じくhref委譲で全CTAを自動計測。data-fb-eventが付いていればそれを優先。
+      preventDefaultはせず外部遷移はそのまま通す（fbqはビーコン送信のためクリック時発火で概ね記録される）。
+        HPB予約/クーポン → Schedule（HPB予約クリック）
+        LINE            → Lead（LINE登録）
+        電話(tel:)      → Contact（電話タップ）
+    -->
+    <script is:inline>
+      document.addEventListener(
+        'click',
+        function (e) {
+          if (typeof window.fbq !== 'function') return;
+          var el = e.target && e.target.closest ? e.target.closest('[data-fb-event], a[href]') : null;
+          if (!el) return;
+          var ev = el.getAttribute('data-fb-event');
+          var label = el.getAttribute('data-fb-label');
+          if (!ev) {
+            var href = (el.getAttribute('href') || '').toLowerCase();
+            if (href.indexOf('lin.ee') !== -1 || href.indexOf('line.me') !== -1) { ev = 'Lead'; label = label || 'LINE登録'; }
+            else if (href.indexOf('hotpepper.jp') !== -1) { ev = 'Schedule'; label = label || 'HPB予約クリック'; }
+            else if (href.indexOf('tel:') === 0) { ev = 'Contact'; label = label || '電話タップ'; }
+          }
+          if (!ev) return;
+          window.fbq('track', ev, { content_name: label || ev });
+        },
+        { capture: true, passive: true }
+      );
+    </script>
   </body>
 </html>
