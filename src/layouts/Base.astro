@@ -183,22 +183,5 @@ const schemas = [localBusiness, ...jsonld];
         { capture: true, passive: true }
       );
     </script>
-
-    <!-- GA4: 電話タップ（tel:リンク）をカスタムイベント tel_tap で送信（拡張計測はtel:非対応のため） -->
-    <script is:inline>
-      document.addEventListener('click', function (e) {
-        const a = e.target.closest && e.target.closest('a[href^="tel:"]');
-        if (!a) return;
-        const payload = {
-          link_url: a.getAttribute('href'),
-          page_path: location.pathname
-        };
-        if (typeof gtag === 'function') {
-          gtag('event', 'tel_tap', payload);
-        } else if (window.dataLayer) {
-          window.dataLayer.push(Object.assign({ event: 'tel_tap' }, payload));
-        }
-      }, true);
-    </script>
   </body>
 </html>
