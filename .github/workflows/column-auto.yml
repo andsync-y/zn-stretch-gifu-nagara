@@ -1,0 +1,228 @@
+name: コラム自動生成（週3本）
+
+# 月・水・金 JST 9:00（UTC 0:00）に1本生成し、claude/column-auto ブランチへPRを作る。
+# 生成物は必ず人がレビューしてから本番ブランチへマージする（自動マージはしない）。
+on:
+  schedule:
+    - cron: '0 0 * * 1,3,5'
+  workflow_dispatch:
+    inputs:
+      topic:
+        description: 'テーマを指定する場合はバックログのslug（空ならバックログ最上位を自動選択）'
+        required: false
+        type: string
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: column-auto
+  cancel-in-progress: false
+
+jobs:
+  generate-column:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: リポジトリを取得
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Node.js セットアップ
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: 依存関係のインストール
+        run: npm ci
+
+      - name: 日付（JST）を取得
+        id: date
+        run: echo "today=$(TZ=Asia/Tokyo date +%F)" >> "$GITHUB_OUTPUT"
+
+      - name: コラム用ブランチを準備
+        id: branch
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BASE_BRANCH: ${{ github.event.repository.default_branch }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          if git ls-remote --exit-code --heads origin claude/column-auto >/dev/null 2>&1; then
+            OPEN_PR="$(gh pr list --head claude/column-auto --state open --json number --jq '.[0].number // empty')"
+          else
+            OPEN_PR=""
+          fi
+
+          if [ -n "$OPEN_PR" ]; then
+            # 未マージのPRが残っている → その続きとして積む（前回の記事を消さない）
+            git checkout -B claude/column-auto "origin/claude/column-auto"
+            echo "mode=append" >> "$GITHUB_OUTPUT"
+            echo "pr_number=$OPEN_PR" >> "$GITHUB_OUTPUT"
+          else
+            # 新規 or 前回マージ済み → 本番ブランチから作り直す
+            git checkout -B claude/column-auto "origin/${BASE_BRANCH}"
+            echo "mode=new" >> "$GITHUB_OUTPUT"
+            echo "pr_number=" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: コラム記事を生成（Claude）
+        uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          claude_args: |
+            --max-turns 30
+            --allowedTools Read,Write,Edit,Glob,Grep,Bash(npm run build)
+          prompt: |
+            あなたは「全力ストレッチ岐阜長良店」（岐阜市長良の個室パーソナルストレッチ専門店）のコラム担当です。
+            このリポジトリに **コラム記事を1本だけ** 追加してください。公開日は ${{ steps.date.outputs.today }} です。
+            ${{ inputs.topic && format('指定テーマ（バックログのslug）: {0}', inputs.topic) || '' }}
+
+            ## 最初に必ず読むファイル
+            - docs/COLUMN_SEO_GUIDE.md （執筆方針・構成テンプレート。3章と6章が特に重要）
+            - docs/column-backlog.md （キーワードのバックログ。未対応 `- [ ]` から選ぶ）
+            - src/data/columns.ts （既存記事の一覧・単一ソース）
+            - src/pages/column/katakori-desk-stretch.astro （既存記事の書き方の実例）
+            - src/layouts/ColumnLayout.astro （使えるprops。faqプロップの形を確認）
+
+            ## 重要：記事はMarkdownではありません
+            記事は **Astroコンポーネント** です。`src/pages/column/<slug>.astro` に1ファイル作成し、
+            `ColumnLayout` に props（slug / title / description / heading / datePublished / related / faq）を渡し、
+            本文は `<p>` `<h2>` `<h3>` `<strong>` `<a>` などのHTMLタグで直接記述します。
+            YAMLフロントマターは使いません。必ず既存記事と同じ書き方に合わせてください。
+
+            ## テーマの選び方
+            - docs/column-backlog.md の未対応（`- [ ]`）から最上位の1件を選ぶ（テーマ指定がある場合はそれを優先）。
+            - **既存3記事と重複しないこと**：肩こり（デスクワーク）／腰（朝の重さ）／ゴルフ は公開済みです。
+              同じ検索意図の記事は書かないでください（カニバリゼーション回避）。
+
+            ## 読者ターゲット
+            岐阜市周辺に住む **40〜60代の男性**。デスクワーク中心、ゴルフをする層。
+            この層が自分ごととして読める具体例・言い回しにしてください。
+
+            ## キーワード設計（このルールが最優先）
+            - 岐阜エリアでは **3語以上の複合キーワードはほぼ検索されません**。
+              **2語以下のシンプルな組み合わせ**を主要キーワードとして狙ってください（例：「首こり ストレッチ」「猫背 ストレッチ」）。
+            - docs/COLUMN_SEO_GUIDE.md には「3〜4語のロングテール」と書かれていますが、
+              **この指示（2語以下）が優先** です。バックログの行に3〜4語が書かれている場合も、
+              テーマの参考として使い、実際に狙う主要キーワードは2語以下に絞ってください。
+            - 1記事1意図。キーワードを詰め込まない。
+
+            ## 薬機法・景表法（絶対厳守）
+            - **禁止**：「治る」「治療」「効果があります」「改善します」「解消」「矯正」「効く」「No.1」「絶対」
+              などの断定表現・医療効果の約束。
+            - **言い換え**：「〜と感じる方が多い」「体感として」「〜しやすくなります」「〜を目指します」
+              「アプローチする」「ゆるめる」など。
+            - 事実として確認できないこと（実績数値・お客様の声・スタッフ経歴）は**創作しない**。
+
+            ## 記事に必ず入れる要素
+            1. **結論先出しのリード**（冒頭で30〜60字の答えを言い切る）
+            2. **h2は質問形**（検索クエリに一致させる）
+            3. 手順は h3 で番号付き、「◯秒 / ◯回」まで具体的に
+            4. **faqプロップに3〜5問**（ColumnLayoutのfaq形式。既存3記事にはまだ無いので、新記事から必ず付ける）
+            5. **独自メソッド「体感軸調整法」への言及を必ず1箇所以上**（E-E-A-T・独自性のため）
+            6. 該当する `/symptoms/*` ページへの本文中の内部リンク、related に2〜3本
+            7. 分量の目安 1,500〜2,500字。薄い水増しはしない。
+
+            ## 記事以外に必ず更新するファイル
+            1. `src/data/columns.ts` の `COLUMNS` 配列の **先頭** に新記事を追加。
+               slug / heading / desc / date（${{ steps.date.outputs.today }}）/ tags / relatedSymptoms / **selfCare** を入れる。
+               `selfCare` には記事本文と一致する具体手順（部位・秒数・回数つき）を配列で入れること
+               （SNS運用システムがこれを「やり方」として再構成します）。
+            2. `docs/column-backlog.md` の該当行を `- [ ]` → `- [x]` に更新。
+            3. `docs/AI_CHANGELOG.md` の末尾に作業記録を追記（既存の書式に合わせる。
+               担当は「GitHub Actions（Claude）」、ブランチは `claude/column-auto`）。
+
+            ## 最後に必ず実行して確認すること
+            - `npm run build` を実行し、**成功する**ことを確認する（ページ数が1つ増えます）。
+              失敗したら原因を直して、成功するまで修正してください。
+
+            ## やらないこと
+            - 既存記事（src/pages/column/*.astro の既存3本）の変更
+            - 1回の実行で2本以上の作成
+            - git のコミット・プッシュ・PR作成（これらはワークフロー側で自動的に行います。あなたはファイルを作るだけです）
+
+      - name: 変更を検出してコミット
+        id: commit
+        run: |
+          set -euo pipefail
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::記事が生成されませんでした（差分なし）"
+            exit 0
+          fi
+
+          # src/data/columns.ts の先頭エントリ＝今回の新記事
+          SLUG="$(grep -m1 "slug: '" src/data/columns.ts | sed "s/.*slug: '\([^']*\)'.*/\1/")"
+          HEADING="$(grep -m1 "heading: '" src/data/columns.ts | sed "s/.*heading: '\([^']*\)'.*/\1/")"
+          [ -n "$HEADING" ] || HEADING="新しいコラム記事"
+
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+          echo "slug=$SLUG" >> "$GITHUB_OUTPUT"
+          echo "heading=$HEADING" >> "$GITHUB_OUTPUT"
+
+          git add -A
+          git commit \
+            -m "コラム追加：${HEADING}（${{ steps.date.outputs.today }}）" \
+            -m "自動生成（GitHub Actions）。公開前に内容のレビューをお願いします。" \
+            -m "記事：src/pages/column/${SLUG}.astro / 一覧：src/data/columns.ts の先頭に追加"
+
+      - name: ブランチをプッシュ
+        if: steps.commit.outputs.changed == 'true'
+        run: |
+          set -euo pipefail
+          if [ "${{ steps.branch.outputs.mode }}" = "append" ]; then
+            git push origin claude/column-auto
+          else
+            git push --force-with-lease origin claude/column-auto
+          fi
+
+      - name: Pull Request を作成
+        if: steps.commit.outputs.changed == 'true' && steps.branch.outputs.mode == 'new'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BASE_BRANCH: ${{ github.event.repository.default_branch }}
+          PR_TITLE: 'コラム：${{ steps.commit.outputs.heading }}（${{ steps.date.outputs.today }}）'
+          PR_BODY: |
+            ## 自動生成されたコラム記事
+
+            GitHub Actions（週3本・月水金 JST 9:00）が自動生成した記事です。
+            **内容を確認してからマージしてください。** マージ＝公開（Vercelが自動デプロイ）です。
+
+            ### レビュー時のチェックリスト
+            - [ ] 1記事1意図。既存記事と内容が重複していない
+            - [ ] 事実と異なる記述・創作された実績や体験談がない
+            - [ ] 薬機法・景表法：「治る」「効果があります」等の断定表現がない
+            - [ ] 「体感軸調整法」への言及がある
+            - [ ] FAQが3〜5問ある
+            - [ ] 該当する `/symptoms/*` への内部リンクがある
+            - [ ] セルフケアの手順が安全（無理な負荷を勧めていない）
+            - [ ] `src/data/columns.ts` の先頭に追加され、selfCare が本文と一致している
+
+            ### 変更ファイル
+            - `src/pages/column/<slug>.astro`（新規）
+            - `src/data/columns.ts`（一覧へ追加）
+            - `docs/column-backlog.md` / `docs/AI_CHANGELOG.md`（運用記録）
+        run: |
+          set -euo pipefail
+          gh pr create \
+            --base "$BASE_BRANCH" \
+            --head claude/column-auto \
+            --title "$PR_TITLE" \
+            --body "$PR_BODY"
+
+      - name: 既存PRに追記したことを通知
+        if: steps.commit.outputs.changed == 'true' && steps.branch.outputs.mode == 'append'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          NOTE_BODY: |
+            記事を追加しました：**${{ steps.commit.outputs.heading }}**（${{ steps.date.outputs.today }}）
+            ※前回の記事が未マージのため、このPRに積み増しています。
+        run: |
+          gh pr comment "${{ steps.branch.outputs.pr_number }}" --body "$NOTE_BODY"
