@@ -183,11 +183,20 @@ jobs:
 
       - name: ブランチをプッシュ
         if: steps.commit.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          if [ "${{ steps.branch.outputs.mode }}" = "append" ]; then
+          # claude-code-action の実行後は actions/checkout が設定した認証情報が失われるため、
+          # プッシュ前にトークン付きのリモートURLを再設定する
+          git remote set-url origin "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+
+          if [ "${{ steps.branch.outputs.mode }}" = "append" ] \
+            || ! git ls-remote --exit-code --heads origin claude/column-auto >/dev/null 2>&1; then
+            # 既存PRへの積み増し、またはリモートに未作成のブランチ → 通常のプッシュ
             git push origin claude/column-auto
           else
+            # 前回分がマージ/クローズ済みでブランチだけ残っている → 作り直しのため上書き
             git push --force-with-lease origin claude/column-auto
           fi
 
