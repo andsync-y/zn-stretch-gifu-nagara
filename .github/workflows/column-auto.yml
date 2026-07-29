@@ -223,7 +223,7 @@ jobs:
             - [ ] `src/data/columns.ts` の先頭に追加され、selfCare が本文と一致している
 
             ### 変更ファイル
-            - `src/pages/column/<slug>.astro`（新規）
+            - `src/pages/column/${{ steps.commit.outputs.slug }}.astro`（新規）
             - `src/data/columns.ts`（一覧へ追加）
             - `docs/column-backlog.md` / `docs/AI_CHANGELOG.md`（運用記録）
         run: |
