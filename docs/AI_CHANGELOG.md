@@ -1079,3 +1079,18 @@ Git履歴が「何を変更したか」、このファイルが「なぜ変更�
 - 主な変更ファイル：`src/pages/symptoms/*.astro`（priceLead 6件）
 - 確認結果：`npm run build` 成功（19ページ）。
 - 未対応・次の作業：なし。
+
+## 2026-07-29 — GitHub Actions（Claude）
+
+- 担当：GitHub Actions（Claude）
+- ブランチ：`claude/column-auto`
+- 関連PR：コラム新規1本追加（夕方の脚のむくみ／authority型）
+- 変更内容：
+  - `docs/column-backlog.md` の未対応 `authority` 最上位「mukumi-yugata-ashi ｜ 夕方 脚 むくみ ふくらはぎ ストレッチ」を執筆し、`src/pages/column/mukumi-yugata-ashi.astro` を新設（ColumnLayout 使用・公開日 2026-07-29）。
+  - 構成は `docs/COLUMN_SEO_GUIDE.md` 3章に準拠：結論先出しリード／h2を質問形（なぜ夕方になると脚がむくむ？／脚のむくみはふくらはぎだけの問題？／ふくらはぎを動かすセルフストレッチ5選／1日何回やればいい？／セルフケアで追いつかないと感じたら）／h3で秒数・回数を明記／`faq` 5問／独自メソッド「体感軸調整法」に言及／本文中に `/symptoms/mukumi` への内部リンク、`related` は mukumi・jiritsu・youtsu の3本。
+  - 読者ターゲット（岐阜市周辺の40〜60代男性・デスクワーク中心）に合わせ、車移動・運転時間の長さを要因として扱い、席を立つタイミングに紐づける習慣化の提案を入れた。既存3記事（肩こり／朝の腰／ゴルフ）と検索意図は重複しない。
+  - 薬機法・景表法に配慮し断定表現は使用せず（「〜と感じにくい」「体感として」等）。片脚のみの急なむくみ・痛み・熱感がある場合の受診案内を本文とFAQの両方に明記。
+  - `src/data/columns.ts` の `COLUMNS` 先頭に新記事を追加（tags／relatedSymptoms／記事本文と一致する `selfCare` 6件）。`docs/column-backlog.md` の該当行を `- [x]` に更新。
+- 主な変更ファイル：`src/pages/column/mukumi-yugata-ashi.astro`（新規）／`src/data/columns.ts`／`docs/column-backlog.md`
+- 確認結果：`npm run build` 成功（19→20ページ）。
+- 未対応・次の作業：次回の `authority` 最上位は「hiesho-shimohanshin ｜ 冷え性 ストレッチ 下半身 血流」。参照先が同じ `/symptoms/mukumi` になるため、本記事（夕方＝時間帯・ふくらはぎのポンプ）と意図が被らないよう、冷え＝下半身の血流・体温という切り口に分けること。

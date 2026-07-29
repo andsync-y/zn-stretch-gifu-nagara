@@ -26,7 +26,7 @@
 ## 優先バックログ
 
 ### むくみ・冷え
-- [ ] mukumi-yugata-ashi ｜ authority ｜ 夕方 脚 むくみ ふくらはぎ ストレッチ ｜ セルフケア ｜ /symptoms/mukumi
+- [x] mukumi-yugata-ashi ｜ authority ｜ 夕方 脚 むくみ ふくらはぎ ストレッチ ｜ セルフケア ｜ /symptoms/mukumi
 - [ ] hiesho-shimohanshin ｜ authority ｜ 冷え性 ストレッチ 下半身 血流 ｜ セルフケア ｜ /symptoms/mukumi
 - [ ] tachishigoto-mukumi ｜ authority ｜ 立ち仕事 むくみ 対策 ｜ 悩み特化 ｜ /symptoms/mukumi
 
