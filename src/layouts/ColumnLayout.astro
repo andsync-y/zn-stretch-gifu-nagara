@@ -20,16 +20,35 @@ export interface Props {
   related: Related[];
   /** よくある質問（AIEO/LLMO・リッチリザルト用。3〜5問推奨） */
   faq?: Faq[];
+  /** アイキャッチ画像のパス。OGP・Article構造化データにも使われる */
+  image?: string;
+  /** アイキャッチのalt（何が写っているかを具体的に。省略時は記事見出しから生成） */
+  imageAlt?: string;
+  /**
+   * 画像の出典・クレジット。
+   * 外部のフリー素材やAI生成画像を使う場合は必ず指定する（自店の写真なら不要）。
+   */
+  imageCredit?: string;
+  /** アイキャッチの切り取り位置（CSSのobject-position）。縦長写真を横帯に収める際の調整用 */
+  imagePosition?: string;
 }
 
-const { slug, title, description, heading, datePublished, dateModified, related, faq = [] } = Astro.props;
+const {
+  slug, title, description, heading, datePublished, dateModified, related, faq = [],
+  image = '/images/photos/hero.webp',
+  imageAlt,
+  imageCredit,
+  imagePosition = 'center 45%',
+} = Astro.props;
 const pagePath = `/column/${slug}`;
+const eyecatchAlt = imageAlt ?? `${heading}｜岐阜市長良のパーソナルストレッチ専門店`;
 
 const articleSchema = {
   '@context': 'https://schema.org',
   '@type': 'Article',
   headline: heading,
   description,
+  image: new URL(image, Astro.site).href,
   datePublished,
   dateModified: dateModified ?? datePublished,
   inLanguage: 'ja',
@@ -62,12 +81,28 @@ const breadcrumbSchema = {
   ],
 };
 ---
-<Base title={title} description={description} path={pagePath} jsonld={[articleSchema, breadcrumbSchema, ...(faqSchema ? [faqSchema] : [])]}>
+<Base title={title} description={description} path={pagePath} ogImage={image} jsonld={[articleSchema, breadcrumbSchema, ...(faqSchema ? [faqSchema] : [])]}>
   <article class="section-grid mx-auto max-w-content border-b border-ink/20 px-5 pb-24 pt-16 sm:px-10 sm:pb-32 sm:pt-[120px]">
     <div class="mb-10 sm:mb-14"><Breadcrumbs items={[{ label: 'トップ', href: '/' }, { label: 'コラム', href: '/column' }, { label: heading }]} /></div>
     <p class="en-label mb-8">Column</p>
     <h1 class="mb-6 max-w-[980px] text-[28px] font-black leading-[1.5] sm:text-[44px]">{heading}</h1>
-    <p class="mb-12 text-[12px] tracking-[0.08em] text-muted sm:mb-16">公開日：{datePublished}／執筆・監修：全力ストレッチ岐阜長良店 体感軸調整トレーナーチーム</p>
+    <p class="mb-8 text-[12px] tracking-[0.08em] text-muted sm:mb-10">公開日：{datePublished}／執筆・監修：全力ストレッチ岐阜長良店 体感軸調整トレーナーチーム</p>
+
+    <figure class="mb-12 sm:mb-16">
+      <img
+        src={image}
+        alt={eyecatchAlt}
+        width="1360"
+        height="620"
+        fetchpriority="high"
+        decoding="async"
+        class="h-[220px] w-full max-w-[980px] object-cover sm:h-[380px]"
+        style={`object-position:${imagePosition}`}
+      />
+      {imageCredit && (
+        <figcaption class="mt-2 max-w-[980px] text-[11px] leading-[1.8] text-faint">{imageCredit}</figcaption>
+      )}
+    </figure>
 
     <div class="column-body max-w-[820px]">
       <slot />
