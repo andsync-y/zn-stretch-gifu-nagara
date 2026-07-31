@@ -8,7 +8,9 @@
  * --source
  *   ai   … 画像生成API（OpenAI gpt-image-1）で生成する。要 OPENAI_API_KEY。
  *          ※人物を含む指示は禁止（後述のガードを参照）
- *   free … Openverse（CCライセンス・APIキー不要）から検索して取得する。
+ *   free … フリー素材を検索して取得する。
+ *          PEXELS_API_KEY があれば Pexels（人物写真の質が高い）を使い、
+ *          無ければ Openverse（CCライセンス・APIキー不要）にフォールバックする。
  *
  * 出力は public/images/column/<slug>.webp。
  * free の場合はクレジット文字列を stdout の最終行に "CREDIT: ..." として出力するので、
@@ -91,6 +93,37 @@ async function generateWithAI() {
   console.log('CREDIT:'); // AI生成は出典表記不要（クレジット空）
 }
 
+/** Pexels（無料・要APIキー）。ストレッチ／ウェルネス系の人物写真の質が高い */
+async function fetchFromPexels() {
+  const key = process.env.PEXELS_API_KEY;
+  if (!key) return false;
+
+  const url =
+    'https://api.pexels.com/v1/search?' +
+    new URLSearchParams({ query, orientation: 'landscape', size: 'large', per_page: '10' });
+
+  const res = await fetch(url, { headers: { authorization: key } });
+  if (!res.ok) {
+    console.error(`[fetch-column-image] Pexels検索が失敗 (${res.status})。Openverseにフォールバックします。`);
+    return false;
+  }
+
+  const { photos = [] } = await res.json();
+  const hit = photos.find((p) => p?.src?.landscape);
+  if (!hit) {
+    console.error(`[fetch-column-image] Pexelsで見つかりませんでした: "${query}"。Openverseにフォールバックします。`);
+    return false;
+  }
+
+  const img = await fetch(hit.src.landscape);
+  if (!img.ok) return false;
+
+  await save(Buffer.from(await img.arrayBuffer()));
+  console.log('SOURCE: pexels');
+  console.log(`CREDIT: 写真：${hit.photographer ?? 'Pexels'}／Pexels`);
+  return true;
+}
+
 async function fetchFromOpenverse() {
   if (!query) fail('--query は必須です');
 
@@ -133,6 +166,12 @@ async function save(buf) {
   console.log(`IMAGE_PATH: /images/column/${slug}.webp`);
 }
 
-if (source === 'ai') await generateWithAI();
-else if (source === 'free') await fetchFromOpenverse();
-else fail(`--source は ai か free を指定してください（指定値: ${source}）`);
+if (source === 'ai') {
+  await generateWithAI();
+} else if (source === 'free') {
+  if (!query) fail('--query は必須です');
+  // Pexels優先（人物写真の質が高い）→ 取得できなければ Openverse
+  if (!(await fetchFromPexels())) await fetchFromOpenverse();
+} else {
+  fail(`--source は ai か free を指定してください（指定値: ${source}）`);
+}
