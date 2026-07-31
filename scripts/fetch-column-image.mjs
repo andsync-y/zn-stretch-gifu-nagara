@@ -39,14 +39,18 @@ function fail(msg) {
 }
 
 /**
- * 人物を含む画像を作らせないためのガード。
- * 実在しないトレーナー/客に見える画像は「創作しない」原則に反し、
- * ストレッチ姿勢をAIに描かせると解剖学的に破綻して誤ったフォームを教える危険があるため。
+ * 「自店で施術を受けている場面」に見える画像を作らせないためのガード。
+ *
+ * 日常シーン（デスクワークで疲れている、朝に伸びをする 等）の人物は許可する。
+ * 一方で、トレーナー／セラピストが施術している場面は、実在しないスタッフを
+ * 自店の人間のように見せることになり「創作しない」原則に反するため禁止する。
+ * また、特定のストレッチ姿勢を正確に描かせる用途にはAIを使わない
+ * （姿勢が解剖学的に破綻し、誤ったフォームを読者に教える危険があるため）。
  */
-const PERSON_WORDS = [
-  'person', 'people', 'man', 'woman', 'human', 'body', 'trainer', 'therapist',
-  'client', 'model', 'portrait', 'face', 'hand', 'leg', 'arm', 'shoulder',
-  'stretching', 'massage', 'pose', 'yoga',
+const BLOCKED_WORDS = [
+  'trainer', 'therapist', 'masseur', 'massage', 'massaging',
+  'salon', 'clinic', 'treatment', 'practitioner', 'patient',
+  'physiotherapy', 'physical therapy', 'chiropract',
 ];
 
 async function generateWithAI() {
@@ -55,20 +59,22 @@ async function generateWithAI() {
   if (!prompt) fail('--prompt は必須です');
 
   const lower = prompt.toLowerCase();
-  const hit = PERSON_WORDS.filter((w) => new RegExp(`\\b${w}`).test(lower));
+  const hit = BLOCKED_WORDS.filter((w) => new RegExp(`\\b${w}`).test(lower));
   if (hit.length > 0) {
     fail(
-      `プロンプトに人物・身体・施術を示す語が含まれています（${hit.join(', ')}）。\n` +
-      '  AI生成は「人物を含まない抽象・エディトリアル画像」に限定してください。\n' +
+      `プロンプトに施術・サロンを示す語が含まれています（${hit.join(', ')}）。\n` +
+      '  実在しないトレーナーを自店スタッフのように見せることになるため生成できません。\n' +
+      '  日常のシーン（デスクワークで疲れている、朝に伸びをする 等）に言い換えてください。\n' +
       '  施術シーンが必要な場合は、自店の実写真（/images/photos/*.webp）を使ってください。'
     );
   }
 
-  // ブランドのトーン（生成り・黒・アンバーのエディトリアル）に寄せる共通指示
+  // 日本人・日本の生活シーンに寄せる（欧米のストック写真的にならないようにする）＋ブランドのトーン
   const styled =
-    `${prompt}. Editorial minimal still-life photography, no people, no text, no logos. ` +
-    'Warm off-white paper background (#F7F5F0), soft natural side light, muted amber accent, ' +
-    'calm and clean Japanese magazine aesthetic, generous negative space.';
+    `${prompt}. Photographed in Japan, Japanese people, natural and understated. ` +
+    'Editorial documentary photography, realistic, no text, no logos, no watermark. ' +
+    'Warm off-white tones, soft natural side light, calm Japanese magazine aesthetic, ' +
+    'generous negative space, shallow depth of field.';
 
   const res = await fetch('https://api.openai.com/v1/images/generations', {
     method: 'POST',
@@ -90,7 +96,8 @@ async function generateWithAI() {
 
   await save(Buffer.from(b64, 'base64'));
   console.log('SOURCE: ai (OpenAI gpt-image-1)');
-  console.log('CREDIT:'); // AI生成は出典表記不要（クレジット空）
+  // 自店で撮影した写真ではないことを明示する（日本のWebサイトの慣行に合わせた表記）
+  console.log('CREDIT: ※画像はイメージです');
 }
 
 /** Pexels（無料・要APIキー）。ストレッチ／ウェルネス系の人物写真の質が高い */
@@ -100,7 +107,13 @@ async function fetchFromPexels() {
 
   const url =
     'https://api.pexels.com/v1/search?' +
-    new URLSearchParams({ query, orientation: 'landscape', size: 'large', per_page: '10' });
+    new URLSearchParams({
+      query,
+      orientation: 'landscape',
+      size: 'large',
+      per_page: '10',
+      locale: 'ja-JP', // 日本語圏に寄せる（ただし人物の国籍までは保証されない）
+    });
 
   const res = await fetch(url, { headers: { authorization: key } });
   if (!res.ok) {

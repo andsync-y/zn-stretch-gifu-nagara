@@ -147,21 +147,29 @@ jobs:
             記事ごとに `image` プロップでアイキャッチを設定します。
             **記事の画像はフリー素材またはAI生成で用意します**（自店の実写真は使いません）。
 
-            **優先1：フリー素材**
+            **優先1：AI生成（人物が写るものは必ずこちら）**
+              node scripts/fetch-column-image.mjs --slug <slug> --source ai --prompt "<英語の説明>"
+            - 読者は岐阜在住の40〜60代の日本人男性です。**海外のストック写真のような外国人の画像は使いません。**
+              AI生成なら日本人・日本の生活シーンを指定できるため、人物が写る画像はこちらで用意します
+              （スクリプトが自動で「日本で撮影・日本人・自然なトーン」の指示を付加します）。
+            - プロンプトは**日常のシーン**にしてください。
+              例：a tired office worker at a desk in the evening（夕方のデスクで疲れている会社員）
+              　　someone reaching up and stretching by a window in the morning（朝、窓辺で伸びをする）
+              　　a commuter sitting on a train after work（仕事帰りの電車で座っている）
+            - **禁止**：トレーナー・セラピストが施術している場面（trainer / therapist / massage / salon / clinic 等）。
+              実在しないスタッフを自店の人間のように見せることになるためです（スクリプト側でも弾かれます）。
+            - **特定のストレッチ姿勢を正確に見せる用途には使わないでください。**
+              AIは関節の角度が破綻しやすく、誤ったフォームを読者に教える危険があります。
+              アイキャッチは「記事の雰囲気を伝える画像」であって、やり方の説明図ではありません。
+            - 実行結果の `CREDIT: ※画像はイメージです` を、そのまま `imageCredit` に設定してください。
+
+            **優先2：フリー素材（人物が写らないものに向く）**
               node scripts/fetch-column-image.mjs --slug <slug> --source free --query "<英語の検索語>"
-            - 記事テーマに合う写真を検索して public/images/column/<slug>.webp に保存します。
-              検索語の例：calf stretch, desk work fatigue, morning stretch at home, running warm up
+            - Pexels／Openverseから取得します。**人物写真は外国人になりやすい**ため、
+              人物が写らないもの（静物・風景・室内）を狙うときに使ってください。
+              検索語の例：rolled towel and water glass, morning light through window, office desk evening
             - 実行結果の最終行に `CREDIT: ...` が出力されます。
               **その文字列を必ず `imageCredit` プロップに設定してください**（出典表示のため）。
-
-            **優先2：AI生成（フリー素材で合うものが無い場合）**
-              node scripts/fetch-column-image.mjs --slug <slug> --source ai --prompt "<英語の説明>"
-            - **人物・身体の部位・施術シーンは絶対に生成しないでください。**
-              AIが描くストレッチ姿勢は解剖学的に破綻しやすく、誤ったフォームを読者に見せる危険があるためです。
-              （スクリプト側でも人物を示す語を検出したら失敗します）
-            - 生成してよいのは**人物を含まない静物・環境・抽象**のみです。
-              例：丸めたタオルと水のグラス、窓辺の観葉植物、朝の光が差す床、椅子とデスクの静物 など
-            - `image="/images/column/<slug>.webp"` を指定します。`imageCredit` は不要です。
 
             ### altテキストの書き方（重要）
             フリー素材・AI生成の画像は**自店で撮影したものではありません**。
