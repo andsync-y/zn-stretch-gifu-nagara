@@ -26,6 +26,9 @@ jobs:
   generate-column:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    env:
+      # アイキャッチのAI生成に使用（未設定でもワークフローは動く＝実写真が使われる）
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
 
     steps:
       - name: リポジトリを取得
@@ -80,7 +83,7 @@ jobs:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           claude_args: |
             --max-turns 30
-            --allowedTools Read,Write,Edit,Glob,Grep,Bash(npm run build)
+            --allowedTools Read,Write,Edit,Glob,Grep,Bash(npm run build),Bash(node scripts/fetch-column-image.mjs:*)
           prompt: |
             あなたは「全力ストレッチ岐阜長良店」（岐阜市長良の個室パーソナルストレッチ専門店）のコラム担当です。
             このリポジトリに **コラム記事を1本だけ** 追加してください。公開日は ${{ steps.date.outputs.today }} です。
@@ -137,6 +140,41 @@ jobs:
             5. **独自メソッド「体感軸調整法」への言及を必ず1箇所以上**（E-E-A-T・独自性のため）
             6. 該当する `/symptoms/*` ページへの本文中の内部リンク、related に2〜3本
             7. 分量の目安 1,500〜2,500字。薄い水増しはしない。
+
+            ## アイキャッチ画像（必ず1枚設定する）
+            記事には `image` プロップでアイキャッチを指定します。次の優先順で決めてください。
+
+            **優先1：自店の実写真（できる限りこれを使う）**
+            `public/images/photos/` にある実際の店舗・トレーナーの施術写真です。
+            実在する自店の写真なので信頼性（E-E-A-T）が最も高く、費用もかかりません。
+            記事のテーマに合うものがあれば必ずこれを選び、`imageCredit` は不要です。
+              - hero.webp … 肩・腕まわりへのアプローチ（肩こり・首まわり向き）
+              - hero2.webp / concept.webp / marquee-3.webp … 脚を持ち上げて伸ばす施術（脚・むくみ・ふくらはぎ向き）
+              - marquee-1.webp / marquee-2.webp … 腰・お尻まわりへのアプローチ（腰痛向き）
+              - method-1.webp … 骨盤まわり（腰痛・姿勢向き）
+              - method-2.webp … 股関節まわり（スポーツ・ゴルフ・股関節向き）
+              - method-3.webp … 背中・肩まわり（姿勢・猫背向き）
+            縦長写真もあるため、構図が偏る場合は `imagePosition`（例 "center 35%"）で調整します。
+
+            **優先2：AI生成（テーマに合う実写真が無い場合のみ）**
+            次のコマンドで生成します（生成物は public/images/column/<slug>.webp に保存されます）。
+              node scripts/fetch-column-image.mjs --slug <slug> --source ai --prompt "<英語の説明>"
+            - **人物・身体の部位・施術シーンは絶対に生成しないでください。**
+              実在しない人物を自店のスタッフのように見せることは、このサイトの「創作しない」原則に反します。
+              また、AIが描くストレッチ姿勢は解剖学的に破綻しやすく、誤ったフォームを読者に見せる危険があります。
+              （スクリプト側でも人物を示す語を検出したら失敗するようになっています）
+            - 生成してよいのは**人物を含まない静物・環境・抽象**のみです。
+              例：丸めたタオルと水のグラス、窓辺の観葉植物、朝の光が差す床、椅子とデスクの静物 など
+            - 生成できたら `image="/images/column/<slug>.webp"` を指定します。`imageCredit` は不要です。
+
+            **優先3：フリー素材（AI生成が使えない場合）**
+              node scripts/fetch-column-image.mjs --slug <slug> --source free --query "<英語の検索語>"
+            - Openverse（CCライセンス）から取得します。
+            - 実行結果の最終行に `CREDIT: ...` が出力されるので、**その文字列を必ず `imageCredit` プロップに設定**してください
+              （ライセンス上、出典表示が必要なためです）。
+
+            **重要**：画像の取得に失敗しても、記事作成を中断しないでください。
+            失敗した場合は優先1の自店写真から最も近いものを選び、そのまま記事を完成させます。
 
             ## 記事以外に必ず更新するファイル
             1. `src/data/columns.ts` の `COLUMNS` 配列の **先頭** に新記事を追加。
