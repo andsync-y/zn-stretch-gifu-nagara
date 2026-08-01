@@ -1094,3 +1094,23 @@ Git履歴が「何を変更したか」、このファイルが「なぜ変更�
 - 主な変更ファイル：`src/pages/column/mukumi-yugata-ashi.astro`（新規）／`src/data/columns.ts`／`docs/column-backlog.md`
 - 確認結果：`npm run build` 成功（19→20ページ）。
 - 未対応・次の作業：次回の `authority` 最上位は「hiesho-shimohanshin ｜ 冷え性 ストレッチ 下半身 血流」。参照先が同じ `/symptoms/mukumi` になるため、本記事（夕方＝時間帯・ふくらはぎのポンプ）と意図が被らないよう、冷え＝下半身の血流・体温という切り口に分けること。
+
+## 2026-08-01 — GitHub Actions（Claude）
+
+- 担当：GitHub Actions（Claude）
+- ブランチ：`claude/column-auto`
+- 関連PR：コラム新規1本追加（冷え性の下半身ストレッチ／authority型）
+- 変更内容：
+  - `docs/column-backlog.md` の未対応 `authority` 最上位「hiesho-shimohanshin ｜ 冷え性 ストレッチ 下半身 血流」を執筆し、`src/pages/column/hiesho-shimohanshin.astro` を新設（ColumnLayout 使用・公開日 2026-08-01）。
+  - 前回記録の申し送り（`/symptoms/mukumi` 参照が連続するため意図を分ける）に対応。前記事（夕方＝時間帯・ふくらはぎのポンプ・水分の滞り）と切り分け、本記事は「体の熱をつくる下半身の大きな筋肉」という切り口に統一。手順も前記事と重複しない5種目（足指グーパー＋足裏ほぐし／内もも／お尻／太もも前側／ハーフスクワット）で構成し、むくみが主な悩みの読者は本文中のリンクで前記事へ振り分ける形にした。
+  - 構成は `docs/COLUMN_SEO_GUIDE.md` 3章に準拠：結論先出しリード／h2を質問形（なぜ冷えは下半身から気になりやすい？／足先を温めるだけでは足りない？／下半身のどこをゆるめればいい？／1日どのくらい、いつやればいい？／夏でも足先が冷たいのはなぜ？／セルフケアで追いつかないと感じたら）／h3で秒数・回数を明記／`faq` 5問／独自メソッド「体感軸調整法」に言及／本文中に `/symptoms/mukumi` と前記事への内部リンク、`related` は mukumi・前記事・jiritsu の3本。
+  - 読者ターゲット（岐阜市周辺の40〜60代男性・デスクワーク中心）に合わせ、「冷えは女性の悩みと思われがち」という前提に触れ、車移動の長さ・冷房の効いたオフィスを具体例に採用。公開日が8月のため「夏でも足先が冷たいのはなぜ？」の季節セクションを追加。
+  - 薬機法・景表法に配慮し、血流や体温に関する断定表現・効果の約束は使用せず（「〜と感じる方が多い」「体感の変化を得やすい」「送り返す手助けをしています」等）。片脚だけが冷たく色が悪い／歩くとふくらはぎが痛み休むと落ち着く／しびれを伴う場合の受診案内を、本文とFAQの両方に明記。
+  - `src/data/columns.ts` の `COLUMNS` 先頭に新記事を追加（tags／relatedSymptoms／記事本文と一致する `selfCare` 6件）。`docs/column-backlog.md` の該当行を `- [x]` に更新。
+- 主な変更ファイル：`src/pages/column/hiesho-shimohanshin.astro`（新規）／`src/data/columns.ts`／`docs/column-backlog.md`
+- 判断・注意点：
+  - アイキャッチ画像は今回も未設定。指示にあった `scripts/fetch-column-image.mjs` がリポジトリに存在せず（`scripts/` ディレクトリ自体が無い）、`ColumnLayout.astro` にも `image` / `imageCredit` プロップが無いため、画像の取得・表示のいずれもできない状態。既存4記事も同様に画像なしのため、既存の実装に合わせて記事本体のみで完成させた。
+- 確認結果：`npm run build` 成功（20→21ページ）。`/content.json` のコラムが5件になり、`column:hiesho-shimohanshin` に selfCare 6件が出力されることを確認。
+- 未対応・次の作業：
+  - アイキャッチ運用を始める場合は、先に `ColumnLayout.astro` へ画像プロップ（`image` / `imageAlt` / `imageCredit`）を追加し、`scripts/fetch-column-image.mjs`（AI生成・フリー素材取得）を実装する必要がある。既存記事への画像後付けも同時に検討。
+  - 次回の `authority` 最上位は「tachishigoto-mukumi ｜ 立ち仕事 むくみ 対策」。`/symptoms/mukumi` 参照が3本連続になるため、座り仕事を前提とした既存2本とは逆の「立ち続けて脚に負担が集中する」層に絞り、意図の重複を避けること。
