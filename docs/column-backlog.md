@@ -28,7 +28,7 @@
 ### むくみ・冷え
 - [x] mukumi-yugata-ashi ｜ authority ｜ 夕方 脚 むくみ ふくらはぎ ストレッチ ｜ セルフケア ｜ /symptoms/mukumi
 - [x] hiesho-shimohanshin ｜ authority ｜ 冷え性 ストレッチ 下半身 血流 ｜ セルフケア ｜ /symptoms/mukumi
-- [ ] tachishigoto-mukumi ｜ authority ｜ 立ち仕事 むくみ 対策 ｜ 悩み特化 ｜ /symptoms/mukumi
+- [x] tachishigoto-mukumi ｜ authority ｜ 立ち仕事 むくみ 対策 ｜ 悩み特化 ｜ /symptoms/mukumi
 
 ### 首こり・眼精疲労
 - [ ] smartphone-kubi ｜ authority ｜ スマホ首 ストレートネック セルフケア ｜ セルフケア ｜ /symptoms/kubi-ganseihiro

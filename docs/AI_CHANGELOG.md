@@ -1114,3 +1114,22 @@ Git履歴が「何を変更したか」、このファイルが「なぜ変更�
 - 未対応・次の作業：
   - アイキャッチ運用を始める場合は、先に `ColumnLayout.astro` へ画像プロップ（`image` / `imageAlt` / `imageCredit`）を追加し、`scripts/fetch-column-image.mjs`（AI生成・フリー素材取得）を実装する必要がある。既存記事への画像後付けも同時に検討。
   - 次回の `authority` 最上位は「tachishigoto-mukumi ｜ 立ち仕事 むくみ 対策」。`/symptoms/mukumi` 参照が3本連続になるため、座り仕事を前提とした既存2本とは逆の「立ち続けて脚に負担が集中する」層に絞り、意図の重複を避けること。
+
+## 2026-08-01 — GitHub Actions（Claude）
+
+- 担当：GitHub Actions（Claude）
+- ブランチ：`claude/column-auto`
+- 関連PR：コラム新規1本追加（立ち仕事のむくみ対策／authority型）
+- 変更内容：
+  - `docs/column-backlog.md` の未対応 `authority` 最上位「tachishigoto-mukumi ｜ 立ち仕事 むくみ 対策」を執筆し、`src/pages/column/tachishigoto-mukumi.astro` を新設（ColumnLayout 使用・公開日 2026-08-01）。
+  - 前回記録の申し送り（`/symptoms/mukumi` 参照が3本連続になるため意図の重複を避ける）に対応。既存2本は「座りっぱなし（夕方・時間帯）」「冷え性（下半身の熱づくり）」が主軸のため、本記事は「立ち続けて筋ポンプが働かない静止性の負荷」という逆の前提に統一。手順も立ったままできる種目（その場足踏み＋重心シフト／立ちカーフレイズ／足指グーパー＋足裏踏みしめ）を中心に構成し、既存2本の主要種目とは重複しない組み立てにした。
+  - 構成は `docs/COLUMN_SEO_GUIDE.md` 3章に準拠：結論先出しリード／h2を質問形（なぜ立ち仕事だとむくみやすい？／デスクワーク中心でも「立ちっぱなし」になる場面は多い／立ち仕事のむくみ対策｜勤務中・休憩時にできるセルフストレッチ5選／立ったまま気をつけたい姿勢のコツ／1日どのくらい、いつやればいい？／セルフケアで追いつかないと感じたら）／h3で秒数・回数を明記／`faq` 5問／独自メソッド「体感軸調整法」に言及／本文中に `/symptoms/mukumi` と前記事（mukumi-yugata-ashi）への内部リンク、`related` は mukumi・mukumi-yugata-ashi（コラム）・jiritsu の3本。
+  - 読者ターゲット（岐阜市周辺の40〜60代男性・デスクワーク中心・ゴルフをする層）が「立ち仕事」を自分ごと化できるよう、立ち会議・来客対応・出張先の展示会や工場巡回・休日の洗車や草むしり・ゴルフのラウンド（歩行＋立位が数時間続くスポーツ）を具体例として本文中に挙げた。
+  - アイキャッチ画像を新設：`node scripts/fetch-column-image.mjs --slug tachishigoto-mukumi --source ai --prompt "a tired middle-aged businessman standing on a train platform in the evening, resting his hand on his lower leg after a long day of standing work"` でAI生成し、`public/images/column/tachishigoto-mukumi.webp` として保存。`imageCredit` はスクリプト出力の「※画像はイメージです」をそのまま設定。既存5記事は画像プロップ未設定のまま（本記事のみ新規に画像あり）。
+  - 薬機法・景表法に配慮し断定表現は使用せず（「〜と感じやすい」「体感として」等）。片脚だけが急に大きくむくむ／押すと跡が残る／痛みや熱感を伴う場合の受診案内を、本文とFAQの両方に明記。
+  - `src/data/columns.ts` の `COLUMNS` 先頭に新記事を追加（tags／relatedSymptoms／記事本文と一致する `selfCare` 6件）。`docs/column-backlog.md` の該当行を `- [x]` に更新。
+- 主な変更ファイル：`src/pages/column/tachishigoto-mukumi.astro`（新規）／`src/data/columns.ts`／`docs/column-backlog.md`／`public/images/column/tachishigoto-mukumi.webp`（新規）
+- 確認結果：`npm run build` 成功（21→22ページ）。`/content.json` のコラムが6件になり、`column:tachishigoto-mukumi` が先頭に出力され `selfCare` 6件が本文と一致することを確認。
+- 未対応・次の作業：
+  - 次回の `authority` 最上位は「首こり・眼精疲労」カテゴリの「smartphone-kubi ｜ スマホ首 ストレートネック セルフケア」。内部リンク先は `/symptoms/kubi-ganseihiro` で、これまでの `/symptoms/mukumi` 連続からは切り替わる。
+  - 既存5記事（画像未設定）へのアイキャッチ後付けは、本記事のスコープ外として未対応のまま。着手する場合は既存記事を変更しない今回の制約と別枠で検討が必要。
