@@ -70,6 +70,14 @@ jobs:
           if [ -n "$OPEN_PR" ]; then
             # 未マージのPRが残っている → その続きとして積む（前回の記事を消さない）
             git checkout -B claude/column-auto "origin/claude/column-auto"
+            # 本番ブランチの最新を取り込む。
+            # これをしないと、ブランチ作成後に本番へ入った変更（画像機能など）が
+            # 見えないまま記事が作られてしまう。
+            if ! git merge --no-edit "origin/${BASE_BRANCH}"; then
+              git merge --abort || true
+              echo "::error::claude/column-auto を本番ブランチへ追従できませんでした（コンフリクト）。手動で解決してください。"
+              exit 1
+            fi
             echo "mode=append" >> "$GITHUB_OUTPUT"
             echo "pr_number=$OPEN_PR" >> "$GITHUB_OUTPUT"
           else
