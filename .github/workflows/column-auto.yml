@@ -26,6 +26,11 @@ jobs:
   generate-column:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    env:
+      # アイキャッチのAI生成に使用（未設定ならフリー素材のみで運用される）
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      # フリー素材の取得に使用（未設定ならAPIキー不要のOpenverseにフォールバック）
+      PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
 
     steps:
       - name: リポジトリを取得
@@ -65,6 +70,14 @@ jobs:
           if [ -n "$OPEN_PR" ]; then
             # 未マージのPRが残っている → その続きとして積む（前回の記事を消さない）
             git checkout -B claude/column-auto "origin/claude/column-auto"
+            # 本番ブランチの最新を取り込む。
+            # これをしないと、ブランチ作成後に本番へ入った変更（画像機能など）が
+            # 見えないまま記事が作られてしまう。
+            if ! git merge --no-edit "origin/${BASE_BRANCH}"; then
+              git merge --abort || true
+              echo "::error::claude/column-auto を本番ブランチへ追従できませんでした（コンフリクト）。手動で解決してください。"
+              exit 1
+            fi
             echo "mode=append" >> "$GITHUB_OUTPUT"
             echo "pr_number=$OPEN_PR" >> "$GITHUB_OUTPUT"
           else
@@ -79,8 +92,9 @@ jobs:
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           claude_args: |
-            --max-turns 30
-            --allowedTools Read,Write,Edit,Glob,Grep,Bash(npm run build)
+            --model claude-sonnet-5
+            --max-turns 60
+            --allowedTools "Read,Write,Edit,Glob,Grep,TodoWrite,Bash(npm:*),Bash(node:*),Bash(ls:*),Bash(cat:*)"
           prompt: |
             あなたは「全力ストレッチ岐阜長良店」（岐阜市長良の個室パーソナルストレッチ専門店）のコラム担当です。
             このリポジトリに **コラム記事を1本だけ** 追加してください。公開日は ${{ steps.date.outputs.today }} です。
@@ -137,6 +151,47 @@ jobs:
             5. **独自メソッド「体感軸調整法」への言及を必ず1箇所以上**（E-E-A-T・独自性のため）
             6. 該当する `/symptoms/*` ページへの本文中の内部リンク、related に2〜3本
             7. 分量の目安 1,500〜2,500字。薄い水増しはしない。
+
+            ## アイキャッチ画像（必ず1枚設定する）
+            記事ごとに `image` プロップでアイキャッチを設定します。
+            **記事の画像はフリー素材またはAI生成で用意します**（自店の実写真は使いません）。
+
+            **優先1：AI生成（人物が写るものは必ずこちら）**
+              node scripts/fetch-column-image.mjs --slug <slug> --source ai --prompt "<英語の説明>"
+            - 読者は岐阜在住の40〜60代の日本人男性です。**海外のストック写真のような外国人の画像は使いません。**
+              AI生成なら日本人・日本の生活シーンを指定できるため、人物が写る画像はこちらで用意します
+              （スクリプトが自動で「日本で撮影・日本人・自然なトーン」の指示を付加します）。
+            - プロンプトは**日常のシーン**にしてください。
+              例：a tired office worker at a desk in the evening（夕方のデスクで疲れている会社員）
+              　　someone reaching up and stretching by a window in the morning（朝、窓辺で伸びをする）
+              　　a commuter sitting on a train after work（仕事帰りの電車で座っている）
+            - **禁止**：トレーナー・セラピストが施術している場面（trainer / therapist / massage / salon / clinic 等）。
+              実在しないスタッフを自店の人間のように見せることになるためです（スクリプト側でも弾かれます）。
+            - **特定のストレッチ姿勢を正確に見せる用途には使わないでください。**
+              AIは関節の角度が破綻しやすく、誤ったフォームを読者に教える危険があります。
+              アイキャッチは「記事の雰囲気を伝える画像」であって、やり方の説明図ではありません。
+            - 実行結果の `CREDIT: ※画像はイメージです` を、そのまま `imageCredit` に設定してください。
+
+            **優先2：フリー素材（人物が写らないものに向く）**
+              node scripts/fetch-column-image.mjs --slug <slug> --source free --query "<英語の検索語>"
+            - Pexels／Openverseから取得します。**人物写真は外国人になりやすい**ため、
+              人物が写らないもの（静物・風景・室内）を狙うときに使ってください。
+              検索語の例：rolled towel and water glass, morning light through window, office desk evening
+            - 実行結果の最終行に `CREDIT: ...` が出力されます。
+              **その文字列を必ず `imageCredit` プロップに設定してください**（出典表示のため）。
+
+            ### altテキストの書き方（重要）
+            フリー素材・AI生成の画像は**自店で撮影したものではありません**。
+            そのため alt に「全力ストレッチ岐阜長良店の施術」など、
+            **自店の写真だと誤解させる説明を書かないでください**（このサイトの「創作しない」原則に反します）。
+            写っているものをそのまま説明してください。
+              良い例：「ふくらはぎを伸ばすストレッチのイメージ」「窓辺に置かれた観葉植物と朝の光」
+              悪い例：「当店でのふくらはぎへの施術」「全力ストレッチ岐阜長良店のトレーナー」
+
+            **重要**：画像の取得に失敗しても、記事作成を中断しないでください。
+            どちらの方法でも取得できなかった場合に限り、最後の手段として
+            `public/images/photos/` の自店写真から記事テーマに近いものを選び、記事を完成させます
+            （この場合は自店の実写真なので、altに自店の説明を書いて構いません）。
 
             ## 記事以外に必ず更新するファイル
             1. `src/data/columns.ts` の `COLUMNS` 配列の **先頭** に新記事を追加。
@@ -223,7 +278,7 @@ jobs:
             - [ ] `src/data/columns.ts` の先頭に追加され、selfCare が本文と一致している
 
             ### 変更ファイル
-            - `src/pages/column/<slug>.astro`（新規）
+            - `src/pages/column/${{ steps.commit.outputs.slug }}.astro`（新規）
             - `src/data/columns.ts`（一覧へ追加）
             - `docs/column-backlog.md` / `docs/AI_CHANGELOG.md`（運用記録）
         run: |
