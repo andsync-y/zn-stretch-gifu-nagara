@@ -85,7 +85,7 @@ jobs:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           claude_args: |
             --max-turns 30
-            --allowedTools Read,Write,Edit,Glob,Grep,Bash(npm run build),Bash(node scripts/fetch-column-image.mjs:*)
+            --allowedTools "Read,Write,Edit,Glob,Grep,Bash(npm:*),Bash(node:*)"
           prompt: |
             あなたは「全力ストレッチ岐阜長良店」（岐阜市長良の個室パーソナルストレッチ専門店）のコラム担当です。
             このリポジトリに **コラム記事を1本だけ** 追加してください。公開日は ${{ steps.date.outputs.today }} です。
