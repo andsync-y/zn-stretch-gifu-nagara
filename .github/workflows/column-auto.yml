@@ -162,9 +162,14 @@ jobs:
               AI生成なら日本人・日本の生活シーンを指定できるため、人物が写る画像はこちらで用意します
               （スクリプトが自動で「日本で撮影・日本人・自然なトーン」の指示を付加します）。
             - プロンプトは**日常のシーン**にしてください。
-              例：a tired office worker at a desk in the evening（夕方のデスクで疲れている会社員）
-              　　someone reaching up and stretching by a window in the morning（朝、窓辺で伸びをする）
-              　　a commuter sitting on a train after work（仕事帰りの電車で座っている）
+            - **明るい昼間のシーンを選んでください。** 夕方・夜・逆光を指定すると画面が暗く重くなり、
+              サイト全体の明るいトーンから浮きます。悩みを扱う記事でも、
+              「つらそうな場面」ではなく「これから軽くなる」前向きな場面を選びます。
+              良い例：someone reaching up and stretching by a bright window in the morning（朝、明るい窓辺で伸びをする）
+              　　　　a person walking outdoors on a sunny day（晴れた日に外を歩く）
+              　　　　an office worker standing up from a desk in a bright office（明るいオフィスで席を立つ）
+              　　　　a person relaxing on a sofa in a sunlit living room（日の差すリビングでくつろぐ）
+              避ける例：夕方の駅で疲れている／暗い部屋でうずくまる／夜の帰宅シーン
             - **禁止**：トレーナー・セラピストが施術している場面（trainer / therapist / massage / salon / clinic 等）。
               実在しないスタッフを自店の人間のように見せることになるためです（スクリプト側でも弾かれます）。
             - **特定のストレッチ姿勢を正確に見せる用途には使わないでください。**
