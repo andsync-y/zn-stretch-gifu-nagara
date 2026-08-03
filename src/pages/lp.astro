@@ -1,0 +1,241 @@
+---
+// ============================================================
+// 広告専用ランディングページ /lp
+// Instagram/Meta広告の受け皿。広告の約束（初回最大75%OFF）を
+// ファーストビューでそのまま受け止め、予約行動（HPB/LINE/電話）へ最短で繋ぐ。
+// - ローダー・スクロール演出なし（静的・高速）
+// - TOPのブランド演出は指名・検索流入用に残し、広告流入のみここへ
+// - 検索エンジンには載せない（noindex。広告専用のため重複コンテンツ回避）
+// ============================================================
+import Base from '../layouts/Base.astro';
+import { SITE, PRICING, BRAND, SYMPTOMS, REVIEWS } from '../consts';
+
+const title = '初回体験 最大75%OFF｜全力ストレッチ岐阜長良店【公式】';
+const description = '岐阜市長良の個室パーソナルストレッチ専門店。初回限定 60分¥3,300／90分¥4,900。22時まで営業・駐車場10台以上。WEB予約・LINE・お電話で受付中。';
+
+const faq = [
+  { q: '服装はどうすればいいですか？', a: '動きやすい服装がおすすめですが、お着替えのご用意もあるので仕事帰りでもそのまま来られます。' },
+  { q: '強く伸ばされて痛くないですか？', a: '「痛気持ちいい」と感じる強さへ、その場で確認しながら調整します。ストレッチが初めての方も安心してください。' },
+  { q: '男性でも利用できますか？', a: 'はい、男性のお客様も多数ご利用中です。デスクワークやゴルフをされる40〜60代の男性に特にご好評です。' },
+  { q: '駐車場はありますか？', a: `${SITE.parking}。${SITE.landmark}です。` },
+];
+
+const flow = [
+  { t: 'ご予約', d: 'WEB（24時間）・LINE・お電話から。' },
+  { t: 'カウンセリング', d: '気になる部位や生活習慣を個室でヒアリング。' },
+  { t: '施術（体感軸調整法）', d: 'マンツーマンで深層の筋肉まで伸ばします。' },
+  { t: 'アフターチェック', d: '施術前との違いを確認し、セルフケアもご提案。' },
+];
+
+const reviewPicks = [REVIEWS[7], REVIEWS[9], REVIEWS[3]];
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+};
+---
+<Base title={title} description={description} path="/lp" jsonld={[faqSchema]} minimal>
+  <!-- 広告専用のためnoindex（TOP等と評価を食い合わない） -->
+  <meta slot="head" name="robots" content="noindex, nofollow" />
+
+  <!-- 簡易ヘッダー：ロゴと営業時間だけ。逃げ道になるナビは置かない -->
+  <header class="flex items-center justify-between px-5 py-3">
+    <img src="/images/logo.png" alt="全力ストレッチ" width="1200" height="307" class="h-6 w-auto" />
+    <p class="text-[11px] font-bold tracking-[0.08em] text-sub">{SITE.hours}／{SITE.closed}</p>
+  </header>
+
+  <!-- ▍FV：広告の約束をそのまま受ける -->
+  <section class="relative overflow-hidden border-b border-ink/15 bg-paper px-5 pb-8 pt-4 sm:px-10">
+    <div class="mx-auto max-w-content lg:grid lg:grid-cols-[1fr_420px] lg:items-center lg:gap-12">
+      <div>
+        <p class="mb-3 inline-block bg-amber px-3 py-1.5 text-[12px] font-black tracking-[0.1em] text-white sm:text-[13px]">＼ ご新規様限定 ／ 初回体験 最大75%OFF</p>
+        <h1 class="mb-4 text-[30px] font-black leading-[1.4] sm:text-[44px]">
+          肩・腰のガチガチ、<br />その日のうちに<span class="bg-amber px-1.5 text-white">「軽い」</span>へ。
+        </h1>
+        <p class="mb-5 text-[14px] leading-[1.9] text-sub sm:text-[16px]">
+          {SITE.area}・個室のパーソナルストレッチ専門店。<br class="hidden sm:block" />
+          もみほぐしでは届かない深層の筋肉まで、マンツーマンで伸ばします。
+        </p>
+
+        <!-- 価格の即提示（広告とメッセージ一致） -->
+        <div class="mb-6 grid grid-cols-2 gap-3 sm:max-w-[440px]">
+          {PRICING.courses.filter((c) => c.primary).map((c) => (
+            <div class="border border-ink bg-white p-4 text-center">
+              <p class="whitespace-nowrap text-[11px] font-bold text-sub sm:text-[12px]">{c.name}<span class="ml-1">{c.label}</span></p>
+              <p class="text-[11px] text-muted"><s>通常 {c.normal}</s></p>
+              <p class="whitespace-nowrap text-[26px] font-black leading-tight text-ink sm:text-[30px]">{c.first}<span class="text-[11px] font-bold">税込</span></p>
+            </div>
+          ))}
+        </div>
+
+        <!-- 3つのCTA -->
+        <div class="flex flex-col gap-3 sm:max-w-[440px]">
+          <a href={SITE.urls.reserve} target="_blank" rel="noopener" data-fb-event="Schedule" data-fb-label="HPB予約クリック" class="btn-amber-pill w-full !py-4 text-center text-[16px]">空き状況を見てWEB予約する</a>
+          <div class="grid grid-cols-2 gap-3">
+            <a href={SITE.urls.line} target="_blank" rel="noopener" data-fb-event="Lead" data-fb-label="LINE登録" class="block bg-[#06C755] px-4 py-3.5 text-center text-[14px] font-black text-white">LINEで相談</a>
+            <a href={`tel:${SITE.telLink}`} data-fb-event="Contact" data-fb-label="電話タップ" class="block border border-ink bg-white px-4 py-3.5 text-center text-[14px] font-black text-ink">電話する</a>
+          </div>
+        </div>
+
+        <!-- 安心チップ -->
+        <ul class="mt-5 flex flex-wrap gap-x-4 gap-y-1.5 text-[12px] font-bold text-sub">
+          <li>✓ 夜22時まで営業</li>
+          <li>✓ 駐車場10台以上</li>
+          <li>✓ 完全予約制・個室</li>
+          <li>✓ 着替え無料貸出</li>
+        </ul>
+      </div>
+
+      <div class="mt-8 lg:mt-0">
+        <img src="/images/photos/hero.webp" alt="個室で行うパーソナルストレッチの施術" width="800" height="1000" fetchpriority="high" decoding="async" class="h-[300px] w-full object-cover object-[center_30%] sm:h-[420px]" />
+      </div>
+    </div>
+  </section>
+
+  <!-- ▍お悩みチェック -->
+  <section class="border-b border-ink/15 bg-paper2 px-5 py-12 sm:px-10 sm:py-16">
+    <div class="mx-auto max-w-content">
+      <h2 class="mb-6 text-center text-[22px] font-black sm:text-[28px]">こんな「そのうち治るだろう」、<br class="sm:hidden" />放置していませんか？</h2>
+      <ul class="mx-auto grid max-w-[720px] grid-cols-1 gap-2.5 sm:grid-cols-2">
+        {SYMPTOMS.map((s) => (
+          <li class="flex items-baseline gap-3 border-b border-ink/15 bg-white px-4 py-3">
+            <span class="font-black text-amber-700">✓</span>
+            <span class="text-[14px] font-bold">{s.label}<span class="ml-2 text-[11px] font-normal text-muted">{s.note}</span></span>
+          </li>
+        ))}
+      </ul>
+      <p class="mt-6 text-center text-[14px] font-bold sm:text-[16px]">1つでも当てはまったら、初回体験をどうぞ。</p>
+    </div>
+  </section>
+
+  <!-- ▍選ばれる理由 -->
+  <section class="border-b border-ink/15 px-5 py-12 sm:px-10 sm:py-16">
+    <div class="mx-auto max-w-content">
+      <p class="en-label mb-6 text-center">Why us</p>
+      <h2 class="mb-10 text-center text-[22px] font-black sm:text-[28px]">全力ストレッチが選ばれる理由</h2>
+      <div class="grid gap-8 sm:grid-cols-3">
+        <div class="rule-top pt-5">
+          <h3 class="mb-2 text-[17px] font-black">① 独自の「体感軸調整法」</h3>
+          <p class="text-[14px] leading-[2] text-sub">{BRAND.method}。もみほぐしではなく、体の軸をつくる筋肉を伸ばします。{BRAND.storeCount}で提供される実績あるメソッドです。</p>
+        </div>
+        <div class="rule-top pt-5">
+          <h3 class="mb-2 text-[17px] font-black">② 完全個室・マンツーマン</h3>
+          <p class="text-[14px] leading-[2] text-sub">カウンセリングから施術まで、個室のプライベート空間で担当トレーナーが最後まで対応。人目を気にせず体を預けられます。</p>
+        </div>
+        <div class="rule-top pt-5">
+          <h3 class="mb-2 text-[17px] font-black">③ 通いやすさ</h3>
+          <p class="text-[14px] leading-[2] text-sub">夜{SITE.hoursClose}まで営業だから仕事帰り・ゴルフ帰りに寄れる。{SITE.parking}。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ▍クチコミ -->
+  <section class="border-b border-ink/15 bg-paper2 px-5 py-12 sm:px-10 sm:py-16">
+    <div class="mx-auto max-w-content">
+      <p class="en-label mb-6 text-center">Voice</p>
+      <h2 class="mb-2 text-center text-[22px] font-black sm:text-[28px]">実際に体験した方の声</h2>
+      <p class="mb-8 text-center text-[12px] text-muted">Google マップのクチコミより</p>
+      <div class="grid gap-6 sm:grid-cols-3">
+        {reviewPicks.map((r) => (
+          <figure class="border border-ink/15 bg-white p-5">
+            <p class="mb-2 text-[13px] tracking-[0.2em] text-amber-700">{'★'.repeat(r.stars)}</p>
+            <blockquote class="text-[13px] leading-[2] text-sub">{r.text}</blockquote>
+            <figcaption class="mt-3 text-[12px] font-bold text-muted">{r.name}</figcaption>
+          </figure>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ▍料金 -->
+  <section class="border-b border-ink/15 px-5 py-12 sm:px-10 sm:py-16">
+    <div class="mx-auto max-w-[720px]">
+      <p class="en-label mb-6 text-center">Price</p>
+      <h2 class="mb-8 text-center text-[22px] font-black sm:text-[28px]">初回限定価格</h2>
+      <div class="rule-top">
+        {PRICING.courses.map((c) => (
+          <div class="grid grid-cols-[1fr_auto] items-center gap-3 border-b border-ink/15 px-1 py-4">
+            <div>
+              <p class="text-[15px] font-black">{c.name} <span class="text-[12px] font-bold text-muted">{c.label}</span></p>
+              <p class="text-[11px] text-muted">{c.discount}／<s>通常 {c.normal}</s></p>
+            </div>
+            <p class="text-[24px] font-black">{c.first}</p>
+          </div>
+        ))}
+      </div>
+      <p class="mt-4 text-[11px] leading-[1.9] text-muted">{PRICING.caption}</p>
+      <div class="mt-6 text-center">
+        <a href={SITE.urls.coupon} target="_blank" rel="noopener" data-fb-event="Schedule" data-fb-label="HPB予約クリック" class="btn-ink-pill">初回価格で予約する</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ▍流れ -->
+  <section class="border-b border-ink/15 bg-paper2 px-5 py-12 sm:px-10 sm:py-16">
+    <div class="mx-auto max-w-content">
+      <p class="en-label mb-6 text-center">Flow</p>
+      <h2 class="mb-8 text-center text-[22px] font-black sm:text-[28px]">初回体験の流れ</h2>
+      <ol class="grid gap-6 sm:grid-cols-4">
+        {flow.map((s, i) => (
+          <li class="rule-top pt-4">
+            <p class="mb-1 text-[12px] font-black tracking-[0.2em] text-faint">0{i + 1}</p>
+            <h3 class="mb-1.5 text-[15px] font-black">{s.t}</h3>
+            <p class="text-[13px] leading-[1.9] text-sub">{s.d}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- ▍FAQ -->
+  <section class="border-b border-ink/15 px-5 py-12 sm:px-10 sm:py-16">
+    <div class="mx-auto max-w-[720px]">
+      <p class="en-label mb-6 text-center">FAQ</p>
+      <h2 class="mb-8 text-center text-[22px] font-black sm:text-[28px]">よくあるご質問</h2>
+      <div class="rule-top">
+        {faq.map((f) => (
+          <div class="border-b border-ink/15 py-4">
+            <p class="mb-1.5 text-[14px] font-black">Q. {f.q}</p>
+            <p class="text-[13px] leading-[2] text-sub">A. {f.a}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ▍アクセス -->
+  <section class="border-b border-ink/15 bg-paper2 px-5 py-12 sm:px-10 sm:py-16">
+    <div class="mx-auto max-w-[720px] text-center">
+      <p class="en-label mb-6">Access</p>
+      <h2 class="mb-4 text-[22px] font-black sm:text-[28px]">{SITE.brand}</h2>
+      <p class="text-[14px] leading-[2.1] text-sub">
+        {SITE.addressFull}<br />
+        {SITE.landmark}／{SITE.parking}<br />
+        営業時間 {SITE.hours}（{SITE.closed}）
+      </p>
+      <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(SITE.brand + ' ' + SITE.addressFull)}`} target="_blank" rel="noopener" class="mt-5 inline-block border-b border-ink pb-0.5 text-[13px] font-bold">Googleマップで開く ↗</a>
+    </div>
+  </section>
+
+  <!-- ▍クロージングCTA -->
+  <section class="bg-ink px-5 pb-28 pt-12 text-center text-paper sm:px-10 sm:py-16 sm:pb-28">
+    <p class="mb-2 text-[12px] font-bold tracking-[0.2em] text-amber-200">初回限定 最大75%OFF</p>
+    <h2 class="mb-6 text-[24px] font-black leading-[1.5] sm:text-[32px]">その肩と腰、今日が一番<br class="sm:hidden" />早い日です。</h2>
+    <div class="mx-auto flex max-w-[440px] flex-col gap-3">
+      <a href={SITE.urls.reserve} target="_blank" rel="noopener" data-fb-event="Schedule" data-fb-label="HPB予約クリック" class="btn-amber-pill w-full !py-4 text-[16px]">空き状況を見てWEB予約する</a>
+      <div class="grid grid-cols-2 gap-3">
+        <a href={SITE.urls.line} target="_blank" rel="noopener" data-fb-event="Lead" data-fb-label="LINE登録" class="block bg-[#06C755] px-4 py-3.5 text-[14px] font-black text-white">LINEで相談</a>
+        <a href={`tel:${SITE.telLink}`} data-fb-event="Contact" data-fb-label="電話タップ" class="block border border-paper/60 px-4 py-3.5 text-[14px] font-black text-paper">電話する</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ▍LP専用スティッキーCTA（LINE入り3択・全デバイス） -->
+  <nav class="fixed inset-x-0 bottom-0 z-50 grid grid-cols-3 border-t border-ink/20 bg-white shadow-[0_-4px_16px_rgba(0,0,0,0.08)]" aria-label="予約・相談">
+    <a href={SITE.urls.line} target="_blank" rel="noopener" data-fb-event="Lead" data-fb-label="LINE登録" class="bg-[#06C755] py-3.5 text-center text-[13px] font-black text-white">LINEで相談</a>
+    <a href={SITE.urls.reserve} target="_blank" rel="noopener" data-fb-event="Schedule" data-fb-label="HPB予約クリック" class="bg-ink py-3.5 text-center text-[13px] font-black text-paper">WEB予約</a>
+    <a href={`tel:${SITE.telLink}`} data-fb-event="Contact" data-fb-label="電話タップ" class="bg-white py-3.5 text-center text-[13px] font-black text-ink">電話する</a>
+  </nav>
+</Base>

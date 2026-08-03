@@ -1079,3 +1079,14 @@ Git履歴が「何を変更したか」、このファイルが「なぜ変更�
 - 主な変更ファイル：`src/pages/symptoms/*.astro`（priceLead 6件）
 - 確認結果：`npm run build` 成功（19ページ）。
 - 未対応・次の作業：なし。
+
+## 2026-08-03 — Claude Code
+
+- 担当：Claude Code
+- ブランチ：`claude/lp-proposal`（提案用・未マージ）
+- 変更内容：
+  - 広告専用LP `/lp` のプレビューを新設（HP改修提案の資料。承認前のため本番未反映・広告遷移先も未変更）。
+  - FVで広告の約束（初回最大75%OFF・¥3,300/¥4,900）を即提示し、WEB予約/LINE/電話の3CTA＋LINE入りスティッキーバーを設置。noindex。
+  - Base.astro に `minimal` プロップ（ヘッダー/フッター/共通CTAバー非表示）と `head` スロットを追加。
+- 確認結果：`npm run build` 成功（20ページ）。/lp はHTML24KB・全長6,368px（TOP比1/3）。noindexがhead内に出力されることを確認。
+- 未対応・次の作業：ユーザー承認後に本番ブランチへマージし、広告の遷移先を /lp に変更。Phase B（CTAバーLINE追加等）以降を実施。
