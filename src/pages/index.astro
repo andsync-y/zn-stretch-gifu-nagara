@@ -100,6 +100,7 @@ const marqueeWords = [
           <span class="sr-only">｜全力ストレッチ岐阜長良店（岐阜市長良の個室パーソナルストレッチ専門店）</span>
         </h1>
         <p class="hero-copy-sub">岐阜市長良・個室の<br class="lg:hidden" />パーソナルストレッチ専門店</p>
+        <p class="hero-copy-offer"><a href={SITE.urls.coupon} target="_blank" rel="noopener" data-fb-event="Schedule" data-fb-label="HPB予約クリック">＼ 初回体験 最大75%OFF ¥3,300〜 ／</a></p>
       </div>
 
       <div class="hero-scroll-sign" aria-hidden="true"><span>SCROLL TO MOVE</span><i></i></div>
@@ -186,9 +187,9 @@ const marqueeWords = [
     // ローディング表示：初期表示に必要なフレームが揃うまでMVを覆う（未読込フレームの乱れた露出を防ぐ）
     const loader = document.querySelector<HTMLElement>('[data-hero-loader]');
     const loaderCount = loader?.querySelector<HTMLElement>('[data-loader-count]');
-    const LOADER_TARGET = Math.min(FRAME_COUNT, 24); // 初期表示に必要とみなす枚数
-    const LOADER_MIN_MS = 1150; // ブランド表示の最低時間（キャッシュ時の一瞬のチラつき防止）
-    const LOADER_MAX_MS = 3800; // 回線が遅くてもこれ以上は待たせない
+    const LOADER_TARGET = Math.min(FRAME_COUNT, 10); // 初期表示に必要とみなす枚数（24→10：広告流入の初速優先）
+    const LOADER_MIN_MS = 350; // ブランド表示の最低時間（1150→350ms：待ち時間を最小化）
+    const LOADER_MAX_MS = 2500; // 回線が遅くてもこれ以上は待たせない（3800→2500ms）
     const loaderStart = performance.now();
     let loadedCount = 0;
 
