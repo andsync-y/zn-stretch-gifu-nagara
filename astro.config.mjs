@@ -12,7 +12,10 @@ export default defineConfig({
   trailingSlash: 'ignore',
   integrations: [
     tailwind({ applyBaseStyles: false }),
-    sitemap(),
+    sitemap({
+      // /lp は広告専用（noindex）のためサイトマップから除外
+      filter: (page) => !page.endsWith('/lp') && !page.endsWith('/lp/'),
+    }),
   ],
   build: {
     inlineStylesheets: 'auto',
