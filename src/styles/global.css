@@ -556,6 +556,26 @@
   animation: heroSubIn 0.8s ease 1.15s forwards;
 }
 
+.hero-copy-offer {
+  width: max-content;
+  max-width: 88vw;
+  margin: 14px 0 0 6px;
+  opacity: 0;
+  animation: heroSubIn 0.8s ease 1.35s forwards;
+}
+
+.hero-copy-offer a {
+  display: inline-block;
+  padding: 8px 14px;
+  background: #92745e;
+  color: #fff;
+  font-size: clamp(12px, 1.1vw, 14px);
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  box-shadow: 0 4px 14px rgba(21, 23, 25, 0.18);
+}
+
 @keyframes heroLineIn {
   to { transform: translateY(0); }
 }
@@ -797,6 +817,11 @@
 .mobile-cta-web span {
   font-size: 17px;
   font-weight: 400;
+}
+
+.mobile-cta-line {
+  background: #06c755;
+  color: #fff;
 }
 
 /* PCでは非表示。SPは固定バー分の余白を確保してフッター末尾が隠れないようにする */
