@@ -20,11 +20,28 @@ const faq = [
   { q: '駐車場はありますか？', a: `${SITE.parking}。${SITE.landmark}です。` },
 ];
 
+// 流れの各ステップ（icon はブランドトーンの細線SVG。stroke=currentColor で色はクラス側から制御）
 const flow = [
-  { t: 'ご予約', d: 'WEB（24時間）・LINE・お電話から。' },
-  { t: 'カウンセリング', d: '気になる部位や生活習慣を個室でヒアリング。' },
-  { t: '施術（体感軸調整法）', d: 'マンツーマンで深層の筋肉まで伸ばします。' },
-  { t: 'アフターチェック', d: '施術前との違いを確認し、セルフケアもご提案。' },
+  {
+    t: 'ご予約',
+    d: 'WEB（24時間）・LINE・お電話から。',
+    icon: '<rect x="5" y="8" width="30" height="27" rx="2"/><path d="M5 16h30M13 4v7M27 4v7"/><path d="M12 24l5 5 11-11" stroke-linecap="round" stroke-linejoin="round"/>',
+  },
+  {
+    t: 'カウンセリング',
+    d: '気になる部位や生活習慣を個室でヒアリング。',
+    icon: '<path d="M4 8h22v14H14l-6 6v-6H4z" stroke-linejoin="round"/><path d="M30 15h6v12h-4v5l-5-5h-7" stroke-linejoin="round"/>',
+  },
+  {
+    t: '施術（体感軸調整法）',
+    d: 'マンツーマンで深層の筋肉まで伸ばします。',
+    icon: '<circle cx="20" cy="7.5" r="3.5"/><path d="M20 11v12M20 15l-9 7M20 15l9 7M20 23l-6 11M20 23l6 11" stroke-linecap="round" stroke-linejoin="round"/>',
+  },
+  {
+    t: 'アフターチェック',
+    d: '施術前との違いを確認し、セルフケアもご提案。',
+    icon: '<rect x="8" y="6" width="24" height="30" rx="2"/><path d="M15 4h10v5H15z" stroke-linejoin="round"/><path d="M13 18h8M13 24h8M13 30h5" stroke-linecap="round"/><path d="M24 27l3 3 5-6" stroke-linecap="round" stroke-linejoin="round"/>',
+  },
 ];
 
 const reviewPicks = [REVIEWS[7], REVIEWS[9], REVIEWS[3]];
@@ -42,13 +59,13 @@ const faqSchema = {
   <!-- ▍FV：実写真を全面に敷いたビジュアルヒーロー（広告の約束をそのまま受ける） -->
   <section class="relative overflow-hidden bg-ink">
     <img
-      src="/images/photos/hero.webp"
+      src="/images/photos/lp-hero.webp"
       alt=""
-      width="800"
-      height="1000"
+      width="1085"
+      height="1108"
       fetchpriority="high"
       decoding="async"
-      class="absolute inset-0 h-full w-full object-cover object-[center_22%] lg:object-[center_30%]"
+      class="absolute inset-0 h-full w-full object-cover object-[center_30%]"
     />
     <!-- 可読性のためのスクリム（上下を締めて中央に写真を残す） -->
     <div class="absolute inset-0 bg-gradient-to-b from-ink/85 via-ink/45 to-ink/90"></div>
@@ -185,10 +202,13 @@ const faqSchema = {
     <div class="mx-auto max-w-content">
       <p class="en-label mb-6 text-center">Flow</p>
       <h2 class="mb-8 text-center text-[22px] font-black sm:text-[28px]">初回体験の流れ</h2>
-      <ol class="grid gap-6 sm:grid-cols-4">
+      <ol class="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-4 sm:gap-6">
         {flow.map((s, i) => (
-          <li class="rule-top pt-4">
-            <p class="mb-1 text-[12px] font-black tracking-[0.2em] text-faint">0{i + 1}</p>
+          <li class="rule-top pt-5 text-center sm:text-left">
+            <span class="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full border border-ink/25 bg-white text-ink sm:mx-0">
+              <svg viewBox="0 0 40 40" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" set:html={s.icon} />
+            </span>
+            <p class="mb-1 text-[12px] font-black tracking-[0.2em] text-amber-700">0{i + 1}</p>
             <h3 class="mb-1.5 text-[15px] font-black">{s.t}</h3>
             <p class="text-[13px] leading-[1.9] text-sub">{s.d}</p>
           </li>
