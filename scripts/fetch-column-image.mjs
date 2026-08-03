@@ -69,12 +69,15 @@ async function generateWithAI() {
     );
   }
 
-  // 日本人・日本の生活シーンに寄せる（欧米のストック写真的にならないようにする）＋ブランドのトーン
+  // 日本人・日本の生活シーンに寄せる（欧米のストック写真的にならないようにする）＋ブランドのトーン。
+  // 明るさを明示しないと夕景・逆光の重い画になりやすいため、high-key で指定する。
   const styled =
     `${prompt}. Photographed in Japan, Japanese people, natural and understated. ` +
-    'Editorial documentary photography, realistic, no text, no logos, no watermark. ' +
-    'Warm off-white tones, soft natural side light, calm Japanese magazine aesthetic, ' +
-    'generous negative space, shallow depth of field.';
+    'Editorial lifestyle photography, realistic, no text, no logos, no watermark. ' +
+    'Bright and airy, high-key lighting, abundant soft daylight, light and clean color palette, ' +
+    'warm off-white tones, fresh and calm mood, Japanese magazine aesthetic, ' +
+    'generous negative space, shallow depth of field. ' +
+    'Avoid dark, moody, gloomy, dim, heavy shadows, night scenes and backlit silhouettes.';
 
   const res = await fetch('https://api.openai.com/v1/images/generations', {
     method: 'POST',
@@ -172,10 +175,29 @@ async function fetchFromOpenverse() {
   console.log(`CREDIT: ${credit}`);
 }
 
+/**
+ * 取得した画像をWeb用に圧縮して保存する。
+ * 画像生成APIの出力は1.5MB超になることがあり、そのまま置くと表示速度を大きく損なうため、
+ * 横1600px以内・webp品質80に変換する（実測で 1.7MB → 約50KB）。
+ */
 async function save(buf) {
   await mkdir(dirname(OUT), { recursive: true });
-  await writeFile(OUT, buf);
-  console.log(`保存しました: ${OUT} (${Math.round(buf.length / 1024)}KB)`);
+
+  let out = buf;
+  try {
+    const sharp = (await import('sharp')).default;
+    out = await sharp(buf)
+      .resize(1600, null, { withoutEnlargement: true })
+      .webp({ quality: 80 })
+      .toBuffer();
+    console.log(`圧縮: ${Math.round(buf.length / 1024)}KB → ${Math.round(out.length / 1024)}KB`);
+  } catch (e) {
+    // sharpが使えない環境でも記事作成は止めない（サイズは大きいままになる）
+    console.error(`[fetch-column-image] 警告: 画像を圧縮できませんでした（${e.message}）。元のまま保存します。`);
+  }
+
+  await writeFile(OUT, out);
+  console.log(`保存しました: ${OUT} (${Math.round(out.length / 1024)}KB)`);
   console.log(`IMAGE_PATH: /images/column/${slug}.webp`);
 }
 
