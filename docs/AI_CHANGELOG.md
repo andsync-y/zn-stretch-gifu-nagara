@@ -1133,3 +1133,22 @@ Git履歴が「何を変更したか」、このファイルが「なぜ変更�
 - 未対応・次の作業：
   - 次回の `authority` 最上位は「首こり・眼精疲労」カテゴリの「smartphone-kubi ｜ スマホ首 ストレートネック セルフケア」。内部リンク先は `/symptoms/kubi-ganseihiro` で、これまでの `/symptoms/mukumi` 連続からは切り替わる。
   - 既存5記事（画像未設定）へのアイキャッチ後付けは、本記事のスコープ外として未対応のまま。着手する場合は既存記事を変更しない今回の制約と別枠で検討が必要。
+
+## 2026-08-03 — GitHub Actions（Claude）
+
+- 担当：GitHub Actions（Claude）
+- ブランチ：`claude/column-auto`
+- 関連PR：コラム新規1本追加（スマホ首・ストレートネック対策／authority型）
+- 変更内容：
+  - `docs/column-backlog.md` の未対応 `authority` 最上位「smartphone-kubi ｜ スマホ首 ストレートネック セルフケア」を執筆し、`src/pages/column/smartphone-kubi.astro` を新設（ColumnLayout 使用・公開日 2026-08-03）。
+  - 前回記録の申し送りどおり、内部リンク先を `/symptoms/mukumi` から `/symptoms/kubi-ganseihiro` へ切り替え。既存の `katakori-desk-stretch`（肩甲骨まわし・胸開き・首の横伸ばし・背中丸め・体側伸ばし）と種目が重複しないよう、本記事は「頭が前に出る姿勢を戻す」あご引き・うなずき運動・首の前側ストレッチ・肩甲骨引き寄せ・壁を使った姿勢リセットの5種目に統一し、意図も「肩甲骨をゆるめる」ではなく「スマホ首・ストレートネックの姿勢を戻す」に分けた。
+  - 構成は `docs/COLUMN_SEO_GUIDE.md` 3章に準拠：結論先出しリード／h2を質問形（スマホ首・ストレートネックは、なぜ起こる？／セルフストレッチ5選／スマホを見るときに気をつけたい持ち方／1日どのくらい、いつやればいい？／セルフケアで追いつかないと感じたら）／h3で秒数・回数を明記／`faq` 5問／独自メソッド「体感軸調整法」に言及／本文中に `/symptoms/kubi-ganseihiro` と既存コラム（katakori-desk-stretch）への内部リンク、`related` は kubi-ganseihiro・katakori-desk-stretch（コラム）・shisei の3本。
+  - 読者ターゲット（岐阜市周辺の40〜60代男性・デスクワーク中心）に合わせ、パソコンとスマホ操作の両方が重なる生活を前提に、通勤中・信号待ちなどうつむく時間が長くなる具体場面を挙げた。
+  - アイキャッチ画像を新設：`node scripts/fetch-column-image.mjs --slug smartphone-kubi --source ai --prompt "a Japanese middle-aged man sitting at a bright office desk in the morning, looking up from his smartphone and gently stretching his neck with a relaxed positive expression, sunlight through the window"` でAI生成し、`public/images/column/smartphone-kubi.webp` として保存。`imageCredit` はスクリプト出力の「※画像はイメージです」をそのまま設定。
+  - 薬機法・景表法に配慮し断定表現は使用せず（「〜と感じやすくなります」「近づきやすくなります」等）。首を大きく回す動きは種目に含めず、しびれ・めまい・強い頭痛を伴う場合の受診案内を本文とFAQの両方に明記。
+  - `src/data/columns.ts` の `COLUMNS` 先頭に新記事を追加（tags／relatedSymptoms／記事本文と一致する `selfCare` 6件）。`docs/column-backlog.md` の該当行を `- [x]` に更新。
+- 主な変更ファイル：`src/pages/column/smartphone-kubi.astro`（新規）／`src/data/columns.ts`／`docs/column-backlog.md`／`public/images/column/smartphone-kubi.webp`（新規）
+- 確認結果：`npm run build` 成功（22→23ページ）。
+- 未対応・次の作業：
+  - 次回の `authority` 最上位は「首こり・眼精疲労」カテゴリの「ganseihiro-kubikori ｜ 眼精疲労 首こり ストレッチ」。内部リンク先は同じ `/symptoms/kubi-ganseihiro` になるため、本記事（姿勢のクセ・骨の並び）とは異なり、目の疲れと首こりの相互関係という切り口に分けること。
+  - 既存記事（画像未設定分）へのアイキャッチ後付けは引き続きスコープ外。
