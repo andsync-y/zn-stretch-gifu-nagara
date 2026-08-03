@@ -39,21 +39,33 @@ const faqSchema = {
   <!-- 広告専用のためnoindex（TOP等と評価を食い合わない） -->
   <meta slot="head" name="robots" content="noindex, nofollow" />
 
-  <!-- 簡易ヘッダー：ロゴと営業時間だけ。逃げ道になるナビは置かない -->
-  <header class="flex items-center justify-between px-5 py-3">
-    <img src="/images/logo.png" alt="全力ストレッチ" width="1200" height="307" class="h-6 w-auto" />
-    <p class="text-[11px] font-bold tracking-[0.08em] text-sub">{SITE.hours}／{SITE.closed}</p>
-  </header>
+  <!-- ▍FV：実写真を全面に敷いたビジュアルヒーロー（広告の約束をそのまま受ける） -->
+  <section class="relative overflow-hidden bg-ink">
+    <img
+      src="/images/photos/hero.webp"
+      alt=""
+      width="800"
+      height="1000"
+      fetchpriority="high"
+      decoding="async"
+      class="absolute inset-0 h-full w-full object-cover object-[center_22%] lg:object-[center_30%]"
+    />
+    <!-- 可読性のためのスクリム（上下を締めて中央に写真を残す） -->
+    <div class="absolute inset-0 bg-gradient-to-b from-ink/85 via-ink/45 to-ink/90"></div>
 
-  <!-- ▍FV：広告の約束をそのまま受ける -->
-  <section class="relative overflow-hidden border-b border-ink/15 bg-paper px-5 pb-8 pt-4 sm:px-10">
-    <div class="mx-auto max-w-content lg:grid lg:grid-cols-[1fr_420px] lg:items-center lg:gap-12">
-      <div>
-        <p class="mb-3 inline-block bg-amber px-3 py-1.5 text-[12px] font-black tracking-[0.1em] text-white sm:text-[13px]">＼ ご新規様限定 ／ 初回体験 最大75%OFF</p>
-        <h1 class="mb-4 text-[30px] font-black leading-[1.4] sm:text-[44px]">
+    <!-- 簡易ヘッダー：ロゴと営業時間だけ。逃げ道になるナビは置かない -->
+    <header class="relative z-10 flex items-center justify-between px-5 pt-4 sm:px-10">
+      <img src="/images/logo.png" alt="全力ストレッチ" width="1200" height="307" class="h-6 w-auto invert" />
+      <p class="text-[11px] font-bold tracking-[0.08em] text-paper/85">{SITE.hours}／{SITE.closed}</p>
+    </header>
+
+    <div class="relative z-10 mx-auto max-w-content px-5 pb-9 pt-8 sm:px-10 sm:pb-14 sm:pt-12">
+      <div class="lg:max-w-[680px]">
+        <p class="mb-4 inline-block bg-amber px-3 py-1.5 text-[12px] font-black tracking-[0.1em] text-white sm:text-[13px]">＼ ご新規様限定 ／ 初回体験 最大75%OFF</p>
+        <h1 class="mb-4 text-[30px] font-black leading-[1.4] text-paper drop-shadow-[0_2px_12px_rgba(0,0,0,0.35)] sm:text-[44px]">
           肩・腰のガチガチ、<br />その日のうちに<span class="bg-amber px-1.5 text-white">「軽い」</span>へ。
         </h1>
-        <p class="mb-5 text-[14px] leading-[1.9] text-sub sm:text-[16px]">
+        <p class="mb-6 text-[14px] leading-[1.9] text-paper/90 sm:text-[16px]">
           {SITE.area}・個室のパーソナルストレッチ専門店。<br class="hidden sm:block" />
           もみほぐしでは届かない深層の筋肉まで、マンツーマンで伸ばします。
         </p>
@@ -61,7 +73,7 @@ const faqSchema = {
         <!-- 価格の即提示（広告とメッセージ一致） -->
         <div class="mb-6 grid grid-cols-2 gap-3 sm:max-w-[440px]">
           {PRICING.courses.filter((c) => c.primary).map((c) => (
-            <div class="border border-ink bg-white p-4 text-center">
+            <div class="bg-white/95 p-4 text-center">
               <p class="whitespace-nowrap text-[11px] font-bold text-sub sm:text-[12px]">{c.name}<span class="ml-1">{c.label}</span></p>
               <p class="text-[11px] text-muted"><s>通常 {c.normal}</s></p>
               <p class="whitespace-nowrap text-[26px] font-black leading-tight text-ink sm:text-[30px]">{c.first}<span class="text-[11px] font-bold">税込</span></p>
@@ -71,24 +83,20 @@ const faqSchema = {
 
         <!-- 3つのCTA -->
         <div class="flex flex-col gap-3 sm:max-w-[440px]">
-          <a href={SITE.urls.reserve} target="_blank" rel="noopener" data-fb-event="Schedule" data-fb-label="HPB予約クリック" class="btn-amber-pill w-full !py-4 text-center text-[16px]">空き状況を見てWEB予約する</a>
+          <a href={SITE.urls.reserve} target="_blank" rel="noopener" data-fb-event="Schedule" data-fb-label="HPB予約クリック" class="btn-amber-pill w-full !py-4 text-center text-[16px] shadow-[0_4px_20px_rgba(0,0,0,0.3)]">空き状況を見てWEB予約する</a>
           <div class="grid grid-cols-2 gap-3">
             <a href={SITE.urls.line} target="_blank" rel="noopener" data-fb-event="Lead" data-fb-label="LINE登録" class="block bg-[#06C755] px-4 py-3.5 text-center text-[14px] font-black text-white">LINEで相談</a>
-            <a href={`tel:${SITE.telLink}`} data-fb-event="Contact" data-fb-label="電話タップ" class="block border border-ink bg-white px-4 py-3.5 text-center text-[14px] font-black text-ink">電話する</a>
+            <a href={`tel:${SITE.telLink}`} data-fb-event="Contact" data-fb-label="電話タップ" class="block bg-white px-4 py-3.5 text-center text-[14px] font-black text-ink">電話する</a>
           </div>
         </div>
 
         <!-- 安心チップ -->
-        <ul class="mt-5 flex flex-wrap gap-x-4 gap-y-1.5 text-[12px] font-bold text-sub">
+        <ul class="mt-5 flex flex-wrap gap-x-4 gap-y-1.5 text-[12px] font-bold text-paper/90">
           <li>✓ 夜22時まで営業</li>
           <li>✓ 駐車場10台以上</li>
           <li>✓ 完全予約制・個室</li>
           <li>✓ 着替え無料貸出</li>
         </ul>
-      </div>
-
-      <div class="mt-8 lg:mt-0">
-        <img src="/images/photos/hero.webp" alt="個室で行うパーソナルストレッチの施術" width="800" height="1000" fetchpriority="high" decoding="async" class="h-[300px] w-full object-cover object-[center_30%] sm:h-[420px]" />
       </div>
     </div>
   </section>
