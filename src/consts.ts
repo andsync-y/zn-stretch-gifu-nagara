@@ -21,6 +21,8 @@ export const SITE = {
   hours: '10:00–22:00',
   hoursOpen: '10:00',
   hoursClose: '22:00',
+  /** 最終受付時刻 */
+  lastEntry: '20:30',
   closed: '不定休',
   parking: 'ビル東側に10台以上の共同駐車場あり',
   landmark: 'ヤマダデンキ テックランド岐阜長良のすぐそば',

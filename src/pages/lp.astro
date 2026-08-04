@@ -110,7 +110,7 @@ const faqSchema = {
 
         <!-- 安心チップ -->
         <ul class="mt-5 flex flex-wrap gap-x-4 gap-y-1.5 text-[12px] font-bold text-paper/90">
-          <li>✓ 夜22時まで営業</li>
+          <li>✓ 夜22時まで営業（最終受付{SITE.lastEntry}）</li>
           <li>✓ 駐車場10台以上</li>
           <li>✓ 完全予約制・個室</li>
           <li>✓ 着替え無料貸出</li>
@@ -151,7 +151,7 @@ const faqSchema = {
         </div>
         <div class="rule-top pt-5">
           <h3 class="mb-2 text-[17px] font-black">③ 通いやすさ</h3>
-          <p class="text-[14px] leading-[2] text-sub">夜{SITE.hoursClose}まで営業だから仕事帰り・ゴルフ帰りに寄れる。{SITE.parking}。</p>
+          <p class="text-[14px] leading-[2] text-sub">夜{SITE.hoursClose}まで営業（最終受付{SITE.lastEntry}）だから仕事帰り・ゴルフ帰りに寄れる。{SITE.parking}。</p>
         </div>
       </div>
     </div>
@@ -242,7 +242,7 @@ const faqSchema = {
       <p class="text-[14px] leading-[2.1] text-sub">
         {SITE.addressFull}<br />
         {SITE.landmark}／{SITE.parking}<br />
-        営業時間 {SITE.hours}（{SITE.closed}）
+        営業時間 {SITE.hours}／最終受付 {SITE.lastEntry}（{SITE.closed}）
       </p>
       <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(SITE.brand + ' ' + SITE.addressFull)}`} target="_blank" rel="noopener" class="mt-5 inline-block border-b border-ink pb-0.5 text-[13px] font-bold">Googleマップで開く ↗</a>
     </div>
