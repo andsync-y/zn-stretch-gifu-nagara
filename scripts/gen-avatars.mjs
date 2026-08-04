@@ -11,18 +11,23 @@ if (!KEY) { console.error('OPENAI_API_KEY がありません'); process.exit(1);
 
 // 参考テイスト：日本のストックイラスト風（細い茶系の線・くすみカラー・フラット）
 const STYLE =
-  'Flat Japanese lifestyle stock illustration style: clean thin dark-brown outlines of uniform width, ' +
-  'flat muted dusty colors (beige, olive green, terracotta, dusty grey-blue), absolutely no gradients or shading, ' +
-  'simple minimal facial features (small simple eyes, tiny nose, gentle friendly smile), warm approachable mood. ' +
+  'Chic modern Japanese fashion-editorial illustration: confident thin dark line art, ' +
+  'flat muted sophisticated palette (greige, sage green, rust, slate blue, cream), no gradients, ' +
+  'minimal facial features drawn with elegant simplicity (small refined eyes, delicate nose line, soft smile, subtle blush), ' +
+  'stylish contemporary hairstyle and fashionable minimalist clothing, refined Pinterest-like aesthetic, calm polished mood. ' +
   'Bust-up portrait, facing directly forward, head and shoulders centered, ' +
-  'plain very light warm-grey background (#F2F1EC), generous margins around the figure. ' +
+  'plain warm off-white background (#F2F1EC), generous margins around the figure. ' +
   'No text, no watermark, no logo, no frame.';
 
-// 追加分のみ（既存の ai-m40 / ai-m50 / ai-f40 は再生成しない）
+// 全7人をオシャレ寄りテイストで再生成（既存6人も刷新＋20代後半女性を追加）
 const AVATARS = [
-  { file: 'ai-m30', prompt: `Japanese man in his early 30s with short dark hair, wearing a plain mustard-beige crew-neck top. ${STYLE}` },
-  { file: 'ai-m60', prompt: `Japanese man in his 60s with grey hair, wearing a light grey cardigan over a shirt. ${STYLE}` },
-  { file: 'ai-f50', prompt: `Japanese woman in her 50s with a chin-length dark bob with a little grey, wearing a dusty olive-green blouse. ${STYLE}` },
+  { file: 'ai-f20', prompt: `Japanese woman in her late 20s with a stylish medium bob with see-through bangs, small gold earrings, wearing a fashionable cream blouse. ${STYLE}` },
+  { file: 'ai-f40', prompt: `Japanese woman in her 40s with an elegant shoulder-length lob hairstyle, wearing a refined rust-terracotta top. ${STYLE}` },
+  { file: 'ai-f50', prompt: `Japanese woman in her 50s with a sophisticated chin-length bob with a little grey, wearing a sage-green blouse. ${STYLE}` },
+  { file: 'ai-m30', prompt: `Japanese man in his early 30s with a trendy neat center-parted short hairstyle, wearing a beige band-collar shirt. ${STYLE}` },
+  { file: 'ai-m40', prompt: `Japanese man in his 40s with neatly styled short dark hair, wearing a smart-casual olive shirt. ${STYLE}` },
+  { file: 'ai-m50', prompt: `Japanese man in his 50s with well-groomed grey-flecked short hair, wearing a slate-blue collared shirt. ${STYLE}` },
+  { file: 'ai-m60', prompt: `Japanese man in his 60s with refined silver hair, wearing a light grey cardigan over a shirt, gentle dignified look. ${STYLE}` },
 ];
 
 await mkdir('public/images/avatars', { recursive: true });
