@@ -9,25 +9,26 @@ import { writeFile, mkdir } from 'node:fs/promises';
 const KEY = process.env.OPENAI_API_KEY;
 if (!KEY) { console.error('OPENAI_API_KEY がありません'); process.exit(1); }
 
-// 参考テイスト：日本のストックイラスト風（細い茶系の線・くすみカラー・フラット）
+// 参考テイスト：日本のフリー素材系フラットイラスト風（均一な細い線・白ベース＋差し色のみ・陰影なし）
 const STYLE =
-  'Chic modern Japanese fashion-editorial illustration: confident thin dark line art, ' +
-  'flat muted sophisticated palette (greige, sage green, rust, slate blue, cream), no gradients, ' +
-  'minimal facial features drawn with elegant simplicity (small refined eyes, delicate nose line, soft smile, subtle blush), ' +
-  'stylish contemporary hairstyle and fashionable minimalist clothing, refined Pinterest-like aesthetic, calm polished mood. ' +
+  'Simple flat Japanese stock-illustration style, like modern Japanese free illustration websites: ' +
+  'clean uniform thin dark-navy outline on everything, completely flat solid fills with NO gradients and NO shading, ' +
+  'clothing mostly white or off-white with exactly one flat accent color from this limited palette: soft sky blue, coral red, mustard yellow, or light beige. ' +
+  'Very simplified friendly face: small black dot-like eyes, one tiny short nose line, small simple smile, no blush, no cheek color. ' +
+  'Flat solid dark hair shape with minimal detail lines. Warm, approachable, casual everyday mood — NOT fashionable, NOT editorial. ' +
   'Bust-up portrait, facing directly forward, head and shoulders centered, ' +
-  'plain warm off-white background (#F2F1EC), generous margins around the figure. ' +
+  'plain pure white background, generous margins around the figure. ' +
   'No text, no watermark, no logo, no frame.';
 
-// 全7人をオシャレ寄りテイストで再生成（既存6人も刷新＋20代後半女性を追加）
+// 全7人を線画フラット（日本のゆるいフリー素材風）テイストで再生成
 const AVATARS = [
-  { file: 'ai-f20', prompt: `Japanese woman in her late 20s with a stylish medium bob with see-through bangs, small gold earrings, wearing a fashionable cream blouse. ${STYLE}` },
-  { file: 'ai-f40', prompt: `Japanese woman in her 40s with an elegant shoulder-length lob hairstyle, wearing a refined rust-terracotta top. ${STYLE}` },
-  { file: 'ai-f50', prompt: `Japanese woman in her 50s with a sophisticated chin-length bob with a little grey, wearing a sage-green blouse. ${STYLE}` },
-  { file: 'ai-m30', prompt: `Japanese man in his early 30s with a trendy neat center-parted short hairstyle, wearing a beige band-collar shirt. ${STYLE}` },
-  { file: 'ai-m40', prompt: `Japanese man in his 40s with neatly styled short dark hair, wearing a smart-casual olive shirt. ${STYLE}` },
-  { file: 'ai-m50', prompt: `Japanese man in his 50s with well-groomed grey-flecked short hair, wearing a slate-blue collared shirt. ${STYLE}` },
-  { file: 'ai-m60', prompt: `Japanese man in his 60s with refined silver hair, wearing a light grey cardigan over a shirt, gentle dignified look. ${STYLE}` },
+  { file: 'ai-f20', prompt: `Japanese woman in her late 20s with a simple medium bob with straight bangs, wearing a white blouse with a soft sky blue cardigan. ${STYLE}` },
+  { file: 'ai-f40', prompt: `Japanese woman in her 40s with shoulder-length hair loosely tied back, wearing a coral red top over a white shirt. ${STYLE}` },
+  { file: 'ai-f50', prompt: `Japanese woman in her 50s with a chin-length bob with a little grey, wearing a white blouse with a mustard yellow scarf. ${STYLE}` },
+  { file: 'ai-m30', prompt: `Japanese man in his early 30s with simple neat short dark hair, wearing a white hoodie. ${STYLE}` },
+  { file: 'ai-m40', prompt: `Japanese man in his 40s with short dark hair, wearing a soft sky blue open shirt over a white t-shirt. ${STYLE}` },
+  { file: 'ai-m50', prompt: `Japanese man in his 50s with grey-flecked short hair, wearing a white shirt with a light beige jacket. ${STYLE}` },
+  { file: 'ai-m60', prompt: `Japanese man in his 60s with silver hair, wearing a white shirt under a simple dark navy cardigan, gentle look. ${STYLE}` },
 ];
 
 await mkdir('public/images/avatars', { recursive: true });
