@@ -20,15 +20,11 @@ const STYLE =
   'plain pure white background, generous margins around the figure. ' +
   'No text, no watermark, no logo, no frame.';
 
-// 全7人を線画フラット（日本のゆるいフリー素材風）テイストで再生成
+// クチコミ2段マーキー化に伴う追加3人（既存7人と同テイスト）
 const AVATARS = [
-  { file: 'ai-f20', prompt: `Japanese woman in her late 20s with a simple medium bob with straight bangs, wearing a white blouse with a soft sky blue cardigan. ${STYLE}` },
-  { file: 'ai-f40', prompt: `Japanese woman in her 40s with shoulder-length hair loosely tied back, wearing a coral red top over a white shirt. ${STYLE}` },
-  { file: 'ai-f50', prompt: `Japanese woman in her 50s with a chin-length bob with a little grey, wearing a white blouse with a mustard yellow scarf. ${STYLE}` },
-  { file: 'ai-m30', prompt: `Japanese man in his early 30s with simple neat short dark hair, wearing a white hoodie. ${STYLE}` },
-  { file: 'ai-m40', prompt: `Japanese man in his 40s with short dark hair, wearing a soft sky blue open shirt over a white t-shirt. ${STYLE}` },
-  { file: 'ai-m50', prompt: `Japanese man in his 50s with grey-flecked short hair, wearing a white shirt with a light beige jacket. ${STYLE}` },
-  { file: 'ai-m60', prompt: `Japanese man in his 60s with silver hair, wearing a white shirt under a simple dark navy cardigan, gentle look. ${STYLE}` },
+  { file: 'ai-m20', prompt: `Japanese man in his early 20s with a simple fresh short haircut, wearing a white t-shirt with a coral red open shirt. ${STYLE}` },
+  { file: 'ai-m35', prompt: `Japanese man in his mid 30s with neat short dark hair and simple thin round glasses, wearing a white shirt with a light beige cardigan. ${STYLE}` },
+  { file: 'ai-f30', prompt: `Japanese woman in her early 30s with a simple low ponytail with side bangs, wearing a white blouse with a soft sky blue scarf. ${STYLE}` },
 ];
 
 await mkdir('public/images/avatars', { recursive: true });
