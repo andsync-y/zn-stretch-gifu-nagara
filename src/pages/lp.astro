@@ -11,7 +11,7 @@ import Base from '../layouts/Base.astro';
 import { SITE, PRICING, BRAND, SYMPTOMS, REVIEWS } from '../consts';
 
 const title = '初回体験 最大75%OFF｜全力ストレッチ岐阜長良店【公式】';
-const description = '岐阜市長良の個室パーソナルストレッチ専門店。初回限定 60分¥3,300／90分¥4,900。22時まで営業・駐車場10台以上。WEB予約・LINE・お電話で受付中。';
+const description = '岐阜市長良の個室パーソナルストレッチ専門店。初回限定 60分¥3,300／90分¥4,900／120分¥13,200。22時まで営業・駐車場10台以上。WEB予約・LINE・お電話で受付中。';
 
 const faq = [
   { q: '服装はどうすればいいですか？', a: '動きやすい服装がおすすめですが、お着替えのご用意もあるので仕事帰りでもそのまま来られます。' },
@@ -88,15 +88,33 @@ const faqSchema = {
           もみほぐしでは届かない深層の筋肉まで、マンツーマンで伸ばします。
         </p>
 
-        <!-- 価格の即提示（広告とメッセージ一致） -->
-        <div class="mb-6 grid grid-cols-2 gap-3 sm:max-w-[440px]">
-          {PRICING.courses.filter((c) => c.primary).map((c) => (
-            <div class="bg-white/95 p-4 text-center">
-              <p class="whitespace-nowrap text-[11px] font-bold text-sub sm:text-[12px]">{c.name}<span class="ml-1">{c.label}</span></p>
-              <p class="text-[11px] text-muted"><s>通常 {c.normal}</s></p>
-              <p class="whitespace-nowrap text-[26px] font-black leading-tight text-ink sm:text-[30px]">{c.first}<span class="text-[11px] font-bold">税込</span></p>
-            </div>
-          ))}
+        <!-- 価格の即提示（初回限定を明示・全3コース掲載・価格を主役に） -->
+        <div class="mb-6 overflow-hidden bg-white/95 sm:max-w-[480px]">
+          <p class="bg-amber px-4 py-2 text-center text-[13px] font-black tracking-[0.08em] text-white sm:text-[14px]">＼ ご新規様限定 ／ 初回おためし価格</p>
+          <div class="divide-y divide-ink/10">
+            {PRICING.courses.map((c) => (
+              <div class="flex items-center justify-between gap-3 px-4 py-3">
+                <div class="min-w-0">
+                  <p class="text-[14px] font-black leading-snug sm:text-[15px]">
+                    {c.name.includes('＋')
+                      ? <>{c.label} {c.name.split('＋')[0]}<br />＋{c.name.split('＋')[1]}</>
+                      : <>{c.label} {c.name}</>}
+                  </p>
+                  <p class="mt-1 flex flex-wrap items-center gap-1.5">
+                    <span class="bg-ink px-1.5 py-0.5 text-[10px] font-black tracking-wide text-paper">{c.discount.replace('初回限定', '')}</span>
+                    {!c.primary && <span class="border border-amber-700 px-1.5 py-0.5 text-[10px] font-black text-amber-700">スタッフおすすめ</span>}
+                  </p>
+                </div>
+                <div class="shrink-0 text-right">
+                  <p class="text-[10px] text-muted"><s>通常 {c.normal}</s></p>
+                  <p class="whitespace-nowrap leading-tight">
+                    <span class="mr-0.5 align-middle text-[11px] font-black text-amber-700">初回</span><span class="text-[28px] font-black tracking-tight text-amber-700 sm:text-[31px]">{c.first}</span><span class="ml-0.5 text-[10px] font-bold text-sub">税込</span>
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+          <p class="border-t border-ink/10 px-4 py-1.5 text-[10px] text-muted">※初回限定価格はおひとり様1回限りです。</p>
         </div>
 
         <!-- 3つのCTA -->
