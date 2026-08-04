@@ -18,10 +18,11 @@ const STYLE =
   'plain very light warm-grey background (#F2F1EC), generous margins around the figure. ' +
   'No text, no watermark, no logo, no frame.';
 
+// 追加分のみ（既存の ai-m40 / ai-m50 / ai-f40 は再生成しない）
 const AVATARS = [
-  { file: 'ai-m40', prompt: `Japanese man in his 40s with short dark hair, wearing a plain olive-green crew-neck top. ${STYLE}` },
-  { file: 'ai-m50', prompt: `Japanese man in his 50s with very short grey-flecked hair, wearing a dusty grey-blue collared shirt. ${STYLE}` },
-  { file: 'ai-f40', prompt: `Japanese woman in her 40s with shoulder-length dark hair parted in the middle, wearing a simple terracotta blouse. ${STYLE}` },
+  { file: 'ai-m30', prompt: `Japanese man in his early 30s with short dark hair, wearing a plain mustard-beige crew-neck top. ${STYLE}` },
+  { file: 'ai-m60', prompt: `Japanese man in his 60s with grey hair, wearing a light grey cardigan over a shirt. ${STYLE}` },
+  { file: 'ai-f50', prompt: `Japanese woman in her 50s with a chin-length dark bob with a little grey, wearing a dusty olive-green blouse. ${STYLE}` },
 ];
 
 await mkdir('public/images/avatars', { recursive: true });
