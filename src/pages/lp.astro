@@ -59,17 +59,23 @@ const faqSchema = {
 
   <!-- ▍FV：実写真を全面に敷いたビジュアルヒーロー（広告の約束をそのまま受ける） -->
   <section class="relative overflow-hidden bg-ink">
-    <img
-      src="/images/photos/lp-hero.webp"
-      alt=""
-      width="1085"
-      height="1108"
-      fetchpriority="high"
-      decoding="async"
-      class="absolute inset-0 h-full w-full object-cover object-[center_30%]"
-    />
-    <!-- 可読性のためのスクリム（上下を締めて中央に写真を残す） -->
-    <div class="absolute inset-0 bg-gradient-to-b from-ink/85 via-ink/45 to-ink/90"></div>
+    <!--
+      モバイル：写真は上部バンドに等倍に近い表示（縦長画面全体へのcoverだと約3.6倍ズームされ
+      何の写真か分からなくなるため）。下端をinkへ溶かし、価格表以降は無地の黒地に載せる。
+      sm以上：従来どおり全面カバー。
+    -->
+    <div class="absolute inset-x-0 top-0 sm:inset-0">
+      <img
+        src="/images/photos/lp-hero.webp"
+        alt=""
+        width="1085"
+        height="1108"
+        fetchpriority="high"
+        decoding="async"
+        class="h-auto w-full sm:h-full sm:object-cover sm:object-[center_40%]"
+      />
+      <div class="absolute inset-0 bg-gradient-to-b from-ink/75 via-ink/30 to-ink"></div>
+    </div>
 
     <!-- 簡易ヘッダー：ロゴと営業時間だけ。逃げ道になるナビは置かない -->
     <header class="relative z-10 flex items-center justify-between px-5 pt-4 sm:px-10">
@@ -80,8 +86,8 @@ const faqSchema = {
     <div class="relative z-10 mx-auto max-w-content px-5 pb-9 pt-8 sm:px-10 sm:pb-14 sm:pt-12">
       <div class="lg:max-w-[680px]">
         <p class="mb-4 inline-block bg-amber px-3 py-1.5 text-[12px] font-black tracking-[0.1em] text-white sm:text-[13px]">＼ ご新規様限定 ／ 初回体験 最大75%OFF</p>
-        <h1 class="mb-4 text-[30px] font-black leading-[1.4] text-paper drop-shadow-[0_2px_12px_rgba(0,0,0,0.35)] sm:text-[44px]">
-          肩・腰のガチガチ、<br />その日のうちに<span class="bg-amber px-1.5 text-white">「軽い」</span>へ。
+        <h1 class="mb-4 text-[32px] font-black leading-[1.42] text-paper drop-shadow-[0_2px_12px_rgba(0,0,0,0.35)] sm:text-[44px]">
+          肩・腰のガチガチ、<br />その日のうちに<br class="sm:hidden" /><span class="bg-amber px-1.5 text-white">「軽い」</span>へ。
         </h1>
         <p class="mb-6 text-[14px] leading-[1.9] text-paper/90 sm:text-[16px]">
           {SITE.area}・個室のパーソナルストレッチ専門店。<br class="hidden sm:block" />
