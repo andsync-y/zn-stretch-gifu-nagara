@@ -45,7 +45,13 @@ const flow = [
   },
 ];
 
-const reviewPicks = [REVIEWS[7], REVIEWS[9], REVIEWS[3]];
+// クチコミに添えるアバター（自作SVGイラスト。読者層に合わせ男性2:女性1）
+// クチコミは匿名（イニシャル）のためイラストはイメージであり、実在の顔を示すものではない
+const reviewPicks = [
+  { r: REVIEWS[7], avatar: '/images/avatars/rev-m40.svg' },
+  { r: REVIEWS[9], avatar: '/images/avatars/rev-m50.svg' },
+  { r: REVIEWS[3], avatar: '/images/avatars/rev-f40.svg' },
+];
 
 const faqSchema = {
   '@context': 'https://schema.org',
@@ -186,14 +192,19 @@ const faqSchema = {
     <div class="mx-auto max-w-content">
       <p class="en-label mb-6 text-center">Voice</p>
       <h2 class="mb-2 text-center text-[22px] font-black sm:text-[28px]">実際に体験した方の声</h2>
-      <p class="mb-8 text-center text-[12px] text-muted">Google マップのクチコミより</p>
+      <p class="mb-8 text-center text-[12px] text-muted">Google マップのクチコミより（イラストはイメージです）</p>
       <div class="grid gap-6 sm:grid-cols-3">
-        {reviewPicks.map((r) => (
-          <figure class="border border-ink/15 bg-white p-5">
-            <p class="mb-2 text-[13px] tracking-[0.2em] text-amber-700">{'★'.repeat(r.stars)}</p>
-            <blockquote class="text-[13px] leading-[2] text-sub">{r.text}</blockquote>
-            <figcaption class="mt-3 text-[12px] font-bold text-muted">{r.name}</figcaption>
-          </figure>
+        {reviewPicks.map((p) => (
+          <div class="border border-ink/15 bg-white p-5">
+            <div class="mb-3 flex items-center gap-3">
+              <img src={p.avatar} alt="" width="96" height="96" loading="lazy" decoding="async" class="h-12 w-12 rounded-full" />
+              <div>
+                <p class="text-[13px] font-bold">{p.r.name}</p>
+                <p class="text-[12px] tracking-[0.18em] text-amber-700">{'★'.repeat(p.r.stars)}</p>
+              </div>
+            </div>
+            <blockquote class="text-[13px] leading-[2] text-sub">{p.r.text}</blockquote>
+          </div>
         ))}
       </div>
     </div>
