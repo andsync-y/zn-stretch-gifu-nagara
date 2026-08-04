@@ -20,28 +20,28 @@ const faq = [
   { q: '駐車場はありますか？', a: `${SITE.parking}。${SITE.landmark}です。` },
 ];
 
-// 流れの各ステップ（icon はブランドトーンの細線SVG。stroke=currentColor で色はクラス側から制御）
+// 流れの各ステップ。アイコンは Tabler Icons（MITライセンス / tabler.io/icons）の
+// アウトライン版パスデータを使用（viewBox 24・stroke 2・丸端）。
 const flow = [
   {
     t: 'ご予約',
     d: 'WEB（24時間）・LINE・お電話から。',
-    icon: '<rect x="5" y="8" width="30" height="27" rx="2"/><path d="M5 16h30M13 4v7M27 4v7"/><path d="M12 24l5 5 11-11" stroke-linecap="round" stroke-linejoin="round"/>',
+    icon: '<path d="M11.5 21h-5.5a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v6" /><path d="M16 3v4" /><path d="M8 3v4" /><path d="M4 11h16" /><path d="M15 19l2 2l4 -4" />',
   },
   {
     t: 'カウンセリング',
     d: '気になる部位や生活習慣を個室でヒアリング。',
-    icon: '<path d="M4 8h22v14H14l-6 6v-6H4z" stroke-linejoin="round"/><path d="M30 15h6v12h-4v5l-5-5h-7" stroke-linejoin="round"/>',
+    icon: '<path d="M21 14l-3 -3h-7a1 1 0 0 1 -1 -1v-6a1 1 0 0 1 1 -1h9a1 1 0 0 1 1 1v10" /><path d="M14 15v2a1 1 0 0 1 -1 1h-7l-3 3v-10a1 1 0 0 1 1 -1h2" />',
   },
   {
     t: '施術（体感軸調整法）',
     d: 'マンツーマンで深層の筋肉まで伸ばします。',
-    // 施術ベッドに横になるお客様＋上から施術するトレーナー（オリジナル線画）
-    icon: '<circle cx="14.5" cy="7.5" r="3"/><path d="M14.5 10.5c1 2.2 2.2 3.6 4 4.7" stroke-linecap="round"/><path d="M16 13.5L21.5 23M18.5 14L27 22.5" stroke-linecap="round"/><circle cx="32" cy="23" r="2.6"/><path d="M5.5 25.5h23" stroke-linecap="round"/><path d="M4 28.5h32M8.5 28.5v6.5M31.5 28.5v6.5" stroke-linecap="round"/>',
+    icon: '<path d="M3 17a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M8 5a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M4 22l4 -2v-3h12" /><path d="M11 20h9" /><path d="M8 14l3 -2l1 -4c3 1 3 4 3 6" />',
   },
   {
     t: 'アフターチェック',
     d: '施術前との違いを確認し、セルフケアもご提案。',
-    icon: '<rect x="8" y="6" width="24" height="30" rx="2"/><path d="M15 4h10v5H15z" stroke-linejoin="round"/><path d="M13 18h8M13 24h8M13 30h5" stroke-linecap="round"/><path d="M24 27l3 3 5-6" stroke-linecap="round" stroke-linejoin="round"/>',
+    icon: '<path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" /><path d="M9 5a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2" /><path d="M9 14l2 2l4 -4" />',
   },
 ];
 
@@ -207,7 +207,7 @@ const faqSchema = {
         {flow.map((s, i) => (
           <li class="rule-top pt-5 text-center sm:text-left">
             <span class="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full border border-ink/25 bg-white text-ink sm:mx-0">
-              <svg viewBox="0 0 40 40" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" set:html={s.icon} />
+              <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={s.icon} />
             </span>
             <p class="mb-1 text-[12px] font-black tracking-[0.2em] text-amber-700">0{i + 1}</p>
             <h3 class="mb-1.5 text-[15px] font-black">{s.t}</h3>
