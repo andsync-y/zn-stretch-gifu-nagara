@@ -45,12 +45,15 @@ const flow = [
   },
 ];
 
-// クチコミに添えるアバター（AI生成イラスト。読者層に合わせ男性2:女性1）
+// クチコミに添えるアバター（AI生成イラスト。読者層に合わせ男性4:女性2・30〜60代）
 // クチコミは匿名（イニシャル）のためイラストはイメージであり、実在の顔を示すものではない
 const reviewPicks = [
-  { r: REVIEWS[7], avatar: '/images/avatars/ai-m40.webp' },
   { r: REVIEWS[9], avatar: '/images/avatars/ai-m50.webp' },
   { r: REVIEWS[3], avatar: '/images/avatars/ai-f40.webp' },
+  { r: REVIEWS[7], avatar: '/images/avatars/ai-m40.webp' },
+  { r: REVIEWS[6], avatar: '/images/avatars/ai-f50.webp' },
+  { r: REVIEWS[1], avatar: '/images/avatars/ai-m30.webp' },
+  { r: REVIEWS[2], avatar: '/images/avatars/ai-m60.webp' },
 ];
 
 const faqSchema = {
@@ -95,38 +98,25 @@ const faqSchema = {
         <h1 class="mb-4 text-[32px] font-black leading-[1.42] text-paper drop-shadow-[0_2px_12px_rgba(0,0,0,0.35)] sm:text-[44px]">
           肩・腰のガチガチ、<br />その日のうちに<br class="sm:hidden" /><span class="bg-amber px-1.5 text-white">「軽い」</span>へ。
         </h1>
-        <p class="mb-6 text-[14px] leading-[1.9] text-paper/90 sm:text-[16px]">
-          {SITE.area}・個室のパーソナルストレッチ専門店。<br class="hidden sm:block" />
-          もみほぐしでは届かない深層の筋肉まで、マンツーマンで伸ばします。
+        <p class="mb-7 text-[14px] leading-[1.9] text-paper/90 sm:text-[16px]">
+          {SITE.area}・個室のパーソナルストレッチ専門店。
         </p>
 
-        <!-- 価格の即提示（初回限定を明示・全3コース掲載・価格を主役に） -->
-        <div class="mb-6 overflow-hidden bg-white/95 sm:max-w-[480px]">
+        <!-- 価格の即提示（3カラム・価格を主役に余白ですっきり見せる） -->
+        <div class="mb-7 overflow-hidden bg-white/95 sm:max-w-[480px]">
           <p class="bg-amber px-4 py-2 text-center text-[13px] font-black tracking-[0.08em] text-white sm:text-[14px]">＼ ご新規様限定 ／ 初回おためし価格</p>
-          <div class="divide-y divide-ink/10">
+          <div class="grid grid-cols-3 divide-x divide-ink/10">
             {PRICING.courses.map((c) => (
-              <div class="flex items-center justify-between gap-3 px-4 py-3">
-                <div class="min-w-0">
-                  <p class="text-[14px] font-black leading-snug sm:text-[15px]">
-                    {c.name.includes('＋')
-                      ? <>{c.label} {c.name.split('＋')[0]}<br />＋{c.name.split('＋')[1]}</>
-                      : <>{c.label} {c.name}</>}
-                  </p>
-                  <p class="mt-1 flex flex-wrap items-center gap-1.5">
-                    <span class="bg-ink px-1.5 py-0.5 text-[10px] font-black tracking-wide text-paper">{c.discount.replace('初回限定', '')}</span>
-                    {!c.primary && <span class="border border-amber-700 px-1.5 py-0.5 text-[10px] font-black text-amber-700">スタッフおすすめ</span>}
-                  </p>
-                </div>
-                <div class="shrink-0 text-right">
-                  <p class="text-[10px] text-muted"><s>通常 {c.normal}</s></p>
-                  <p class="whitespace-nowrap leading-tight">
-                    <span class="mr-0.5 align-middle text-[11px] font-black text-amber-700">初回</span><span class="text-[28px] font-black tracking-tight text-amber-700 sm:text-[31px]">{c.first}</span><span class="ml-0.5 text-[10px] font-bold text-sub">税込</span>
-                  </p>
-                </div>
+              <div class="flex flex-col items-center px-1.5 pb-4 pt-3.5 text-center">
+                <p class="text-[14px] font-black">{c.label}</p>
+                <p class="min-h-[28px] text-[10px] leading-[1.35] text-muted">{c.name}</p>
+                <p class="mt-1 text-[10px] text-muted"><s>{c.normal}</s></p>
+                <p class="whitespace-nowrap text-[19px] font-black tracking-tight text-amber-700 sm:text-[22px]">{c.first}</p>
+                <p class="mt-1 text-[10px] font-black text-amber-700">{c.discount.replace('初回限定', '')}{!c.primary && ' ・おすすめ'}</p>
               </div>
             ))}
           </div>
-          <p class="border-t border-ink/10 px-4 py-1.5 text-[10px] text-muted">※初回限定価格はおひとり様1回限りです。</p>
+          <p class="border-t border-ink/10 px-4 py-1.5 text-center text-[10px] text-muted">※税込・おひとり様1回限りです。</p>
         </div>
 
         <!-- 3つのCTA -->
@@ -138,12 +128,11 @@ const faqSchema = {
           </div>
         </div>
 
-        <!-- 安心チップ -->
-        <ul class="mt-5 flex flex-wrap gap-x-4 gap-y-1.5 text-[12px] font-bold text-paper/90">
-          <li>✓ 夜22時まで営業（最終受付{SITE.lastEntry}）</li>
+        <!-- 安心チップ（FVは3点に絞る。着替え等はFAQで） -->
+        <ul class="mt-6 flex flex-wrap gap-x-4 gap-y-1.5 text-[12px] font-bold text-paper/90">
+          <li>✓ 22時まで営業（最終受付{SITE.lastEntry}）</li>
           <li>✓ 駐車場10台以上</li>
           <li>✓ 完全予約制・個室</li>
-          <li>✓ 着替え無料貸出</li>
         </ul>
       </div>
     </div>
@@ -193,19 +182,23 @@ const faqSchema = {
       <p class="en-label mb-6 text-center">Voice</p>
       <h2 class="mb-2 text-center text-[22px] font-black sm:text-[28px]">実際に体験した方の声</h2>
       <p class="mb-8 text-center text-[12px] text-muted">Google マップのクチコミより（イラストはイメージです）</p>
-      <div class="grid gap-6 sm:grid-cols-3">
-        {reviewPicks.map((p) => (
-          <div class="border border-ink/15 bg-white p-5">
-            <div class="mb-3 flex items-center gap-3">
-              <img src={p.avatar} alt="" width="96" height="96" loading="lazy" decoding="async" class="h-12 w-12 rounded-full" />
-              <div>
-                <p class="text-[13px] font-bold">{p.r.name}</p>
-                <p class="text-[12px] tracking-[0.18em] text-amber-700">{'★'.repeat(p.r.stars)}</p>
+      <!-- 掲載領域を広げず件数を増やすため、横スクロールのカルーセルにする -->
+      <div class="-mx-5 px-5 sm:mx-0 sm:px-0">
+        <div class="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2" style="scrollbar-width:thin">
+          {reviewPicks.map((p) => (
+            <div class="w-[280px] shrink-0 snap-start border border-ink/15 bg-white p-5 sm:w-[300px]">
+              <div class="mb-3 flex items-center gap-3">
+                <img src={p.avatar} alt="" width="96" height="96" loading="lazy" decoding="async" class="h-12 w-12 rounded-full" />
+                <div>
+                  <p class="text-[13px] font-bold">{p.r.name}</p>
+                  <p class="text-[12px] tracking-[0.18em] text-amber-700">{'★'.repeat(p.r.stars)}</p>
+                </div>
               </div>
+              <blockquote class="line-clamp-[8] text-[13px] leading-[2] text-sub">{p.r.text}</blockquote>
             </div>
-            <blockquote class="text-[13px] leading-[2] text-sub">{p.r.text}</blockquote>
-          </div>
-        ))}
+          ))}
+        </div>
+        <p class="mt-2 text-center text-[11px] text-muted">→ 横にスクロールすると、ほかの声もご覧いただけます</p>
       </div>
     </div>
   </section>
