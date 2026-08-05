@@ -76,9 +76,11 @@ const faqSchema = {
 <Base title={title} description={description} path="/lp" jsonld={[faqSchema]} minimal>
   <!-- 広告専用のためnoindex（TOP等と評価を食い合わない） -->
   <meta slot="head" name="robots" content="noindex, nofollow" />
-  <!-- メインキャッチ用フォント：黒華明朝（OFL-1.1・使用15グリフのみサブセット・約5KB・自前配信）
-       ライセンス表記は public/fonts/OFL-KuroHanaMincho.txt -->
-  <link slot="head" rel="preload" as="font" type="font/woff2" href="/fonts/kurohana-subset.woff2" crossorigin />
+  <!-- メインキャッチ用フォント：PC/Macは遊ゴシック（システム）、スマホは近似のZen Kaku Gothic Newを
+       text=で使用グリフのみサブセット配信してフォールバックさせる -->
+  <link slot="head" rel="preconnect" href="https://fonts.googleapis.com" />
+  <link slot="head" rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link slot="head" rel="stylesheet" href={`https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@700&text=${encodeURIComponent('その身体の悩みに、直接届く。')}&display=swap`} />
 
   <!-- ▍PC用ブランドパネル（コンテンツ列の左右余白を飾る装飾。情報は列内と重複するため装飾扱い） -->
   <div class="fixed inset-0 z-0 hidden bg-ink lg:block" aria-hidden="true">
@@ -86,8 +88,8 @@ const faqSchema = {
       <img src="/images/logo.png" alt="" width="1200" height="307" class="h-8 w-auto invert" />
       <p class="text-[14px] font-black tracking-[0.3em] text-paper">岐阜長良店</p>
       <p class="lp-catch mt-8 text-paper">
-        <span class="lp-catch-line lp-catch-line-c block"><span class="text-[27px]">ガチガチ</span><span class="text-[17px]">の</span><span class="text-[31px]">身体</span><span class="text-[17px]">が、</span></span>
-        <span class="lp-catch-line lp-catch-line-c mt-1 block text-[30px]">じんわりゆるむ。</span>
+        <span class="lp-catch-line lp-catch-line-c block text-[26px]">その身体の悩みに、</span>
+        <span class="lp-catch-line lp-catch-line-c mt-1 block text-[38px]">直接届く。</span>
       </p>
       <p class="mt-1 text-[13px] font-bold tracking-[0.1em] text-amber-200">＼ ご新規様限定 ／ 初回体験 最大75%OFF</p>
     </div>
@@ -124,11 +126,11 @@ const faqSchema = {
 
     <div class="relative z-10 px-5 pb-9 pt-8">
       <p class="mb-4 inline-block bg-amber px-3 py-1.5 text-[12px] font-black tracking-[0.1em] text-white">＼ ご新規様限定 ／ 初回体験 最大75%OFF</p>
-      <!-- メインキャッチ：3行組み。結びの「ゆるむ。」を最大サイズにして視線の終点をつくる -->
+      <!-- メインキャッチ：3行組み。結びの「直接届く。」を最大サイズにして視線の終点をつくる -->
       <h1 class="lp-catch mb-5 text-paper drop-shadow-[0_2px_16px_rgba(0,0,0,0.55)]">
-        <span class="lp-catch-line block"><span class="text-[40px]">ガチガチ</span><span class="text-[26px]">の</span><span class="text-[46px]">身体</span><span class="text-[26px]">が、</span></span>
-        <span class="lp-catch-line mt-1 block pl-14"><span class="text-[64px]">じんわり</span></span>
-        <span class="lp-catch-line block"><span class="text-[92px]">ゆるむ</span><span class="text-[56px]">。</span></span>
+        <span class="lp-catch-line block"><span class="text-[44px]">その</span><span class="text-[58px]">身体</span><span class="text-[44px]">の</span></span>
+        <span class="lp-catch-line mt-1 block pl-12"><span class="text-[56px]">悩みに、</span></span>
+        <span class="lp-catch-line block"><span class="text-[76px]">直接届く</span><span class="text-[50px]">。</span></span>
       </h1>
       <p class="mb-7 text-[14px] leading-[1.9] text-paper/90 drop-shadow-[0_1px_8px_rgba(0,0,0,0.5)]">
         癒しで終わらない。<br />もみほぐしでは届かない<br />"深い伸び"を体感してください。
@@ -324,17 +326,10 @@ const faqSchema = {
   </nav>
 
   <style is:global>
-    /* メインキャッチ：黒華明朝（サブセット自前配信）。書体自体が縦長なのでscaleは控えめ */
-    @font-face {
-      font-family: 'KuroHanaMincho';
-      src: url('/fonts/kurohana-subset.woff2') format('woff2');
-      font-weight: normal;
-      font-style: normal;
-      font-display: swap;
-    }
+    /* メインキャッチ：遊ゴシック（スマホはZen Kaku Gothic Newで代替） */
     .lp-catch {
-      font-family: 'KuroHanaMincho', 'Hiragino Mincho ProN', 'Yu Mincho', serif;
-      font-weight: normal;
+      font-family: 'Yu Gothic', YuGothic, 'Zen Kaku Gothic New', 'Hiragino Kaku Gothic ProN', sans-serif;
+      font-weight: 700;
       line-height: 1.12;
       letter-spacing: 0.02em;
     }
