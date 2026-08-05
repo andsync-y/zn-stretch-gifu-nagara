@@ -76,10 +76,11 @@ const faqSchema = {
 <Base title={title} description={description} path="/lp" jsonld={[faqSchema]} minimal>
   <!-- 広告専用のためnoindex（TOP等と評価を食い合わない） -->
   <meta slot="head" name="robots" content="noindex, nofollow" />
-  <!-- メインキャッチ用の明朝体（text=で使用グリフのみサブセット配信。十数KB程度） -->
+  <!-- メインキャッチ用フォント：PCは遊ゴシック（システム）、スマホは近いZen Kaku Gothic Newを
+       text=で使用グリフのみサブセット配信（十数KB程度）してフォールバックさせる -->
   <link slot="head" rel="preconnect" href="https://fonts.googleapis.com" />
   <link slot="head" rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link slot="head" rel="stylesheet" href={`https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@600&text=${encodeURIComponent('ガチガチの身体が、じんわりゆるむ。')}&display=swap`} />
+  <link slot="head" rel="stylesheet" href={`https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@700&text=${encodeURIComponent('ガチガチの身体が、じんわりゆるむ。')}&display=swap`} />
 
   <!-- ▍PC用ブランドパネル（コンテンツ列の左右余白を飾る装飾。情報は列内と重複するため装飾扱い） -->
   <div class="fixed inset-0 z-0 hidden bg-ink lg:block" aria-hidden="true">
@@ -324,10 +325,10 @@ const faqSchema = {
   </nav>
 
   <style is:global>
-    /* メインキャッチ：やさしい明朝（600）。scaleで少し縦長に見せる */
+    /* メインキャッチ：遊ゴシック（スマホはZen Kaku Gothic Newで代替）。scaleで少し縦長に見せる */
     .lp-catch {
-      font-family: 'Shippori Mincho', 'Hiragino Mincho ProN', 'Yu Mincho', 'Noto Serif JP', serif;
-      font-weight: 600;
+      font-family: 'Yu Gothic', YuGothic, 'Zen Kaku Gothic New', 'Hiragino Kaku Gothic ProN', sans-serif;
+      font-weight: 700;
       line-height: 1.3;
       letter-spacing: 0.04em;
     }
