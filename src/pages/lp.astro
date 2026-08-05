@@ -76,13 +76,20 @@ const faqSchema = {
 <Base title={title} description={description} path="/lp" jsonld={[faqSchema]} minimal>
   <!-- 広告専用のためnoindex（TOP等と評価を食い合わない） -->
   <meta slot="head" name="robots" content="noindex, nofollow" />
+  <!-- メインキャッチ用の明朝体（text=で使用グリフのみサブセット配信。十数KB程度） -->
+  <link slot="head" rel="preconnect" href="https://fonts.googleapis.com" />
+  <link slot="head" rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link slot="head" rel="stylesheet" href={`https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@600&text=${encodeURIComponent('ガチガチの身体が、じんわりゆるむ。')}&display=swap`} />
 
   <!-- ▍PC用ブランドパネル（コンテンツ列の左右余白を飾る装飾。情報は列内と重複するため装飾扱い） -->
   <div class="fixed inset-0 z-0 hidden bg-ink lg:block" aria-hidden="true">
     <div class="absolute inset-y-0 left-0 flex w-[calc(50%-215px)] flex-col items-center justify-center gap-3 px-10 text-center">
       <img src="/images/logo.png" alt="" width="1200" height="307" class="h-8 w-auto invert" />
       <p class="text-[14px] font-black tracking-[0.3em] text-paper">岐阜長良店</p>
-      <img src="/images/lp-catch.webp" alt="" width="960" height="312" loading="lazy" decoding="async" class="mt-8 h-auto w-[300px]" />
+      <p class="lp-catch mt-8 text-paper">
+        <span class="lp-catch-line lp-catch-line-c block"><span class="text-[27px]">ガチガチ</span><span class="text-[17px]">の</span><span class="text-[31px]">身体</span><span class="text-[17px]">が、</span></span>
+        <span class="lp-catch-line lp-catch-line-c mt-1 block text-[30px]">じんわりゆるむ。</span>
+      </p>
       <p class="mt-1 text-[13px] font-bold tracking-[0.1em] text-amber-200">＼ ご新規様限定 ／ 初回体験 最大75%OFF</p>
     </div>
     <p class="absolute right-10 top-1/2 -translate-y-1/2 text-[64px] font-black leading-none tracking-[0.35em] text-paper/[0.06] [writing-mode:vertical-rl]">ZENRYOKU STRETCH</p>
@@ -118,17 +125,10 @@ const faqSchema = {
 
     <div class="relative z-10 px-5 pb-9 pt-8">
       <p class="mb-4 inline-block bg-amber px-3 py-1.5 text-[12px] font-black tracking-[0.1em] text-white">＼ ご新規様限定 ／ 初回体験 最大75%OFF</p>
-      <!-- メインキャッチ：オーナー支給のタイポ画像（白抜き透過に加工済み）。テキストはaltで担保 -->
-      <h1 class="mb-5">
-        <img
-          src="/images/lp-catch.webp"
-          alt="ガチガチの身体が、じんわりゆるむ。"
-          width="960"
-          height="312"
-          fetchpriority="high"
-          decoding="async"
-          class="h-auto w-full drop-shadow-[0_2px_16px_rgba(0,0,0,0.55)]"
-        />
+      <!-- メインキャッチ：やさしい明朝（ウェイト600）を縦長スケールで組む。強弱は控えめ -->
+      <h1 class="lp-catch mb-5 text-paper drop-shadow-[0_2px_16px_rgba(0,0,0,0.55)]">
+        <span class="lp-catch-line block"><span class="text-[38px]">ガチガチ</span><span class="text-[24px]">の</span><span class="text-[44px]">身体</span><span class="text-[24px]">が、</span></span>
+        <span class="lp-catch-line mt-1 block pl-6 text-[42px]">じんわりゆるむ。</span>
       </h1>
       <p class="mb-7 text-[14px] leading-[1.9] text-paper/90 drop-shadow-[0_1px_8px_rgba(0,0,0,0.5)]">
         癒しで終わらない。<br />もみほぐしでは届かない<br />"深い伸び"を体感してください。
@@ -324,6 +324,21 @@ const faqSchema = {
   </nav>
 
   <style is:global>
+    /* メインキャッチ：やさしい明朝（600）。scaleで少し縦長に見せる */
+    .lp-catch {
+      font-family: 'Shippori Mincho', 'Hiragino Mincho ProN', 'Yu Mincho', 'Noto Serif JP', serif;
+      font-weight: 600;
+      line-height: 1.3;
+      letter-spacing: 0.04em;
+    }
+    .lp-catch-line {
+      white-space: nowrap;
+      transform: scale(0.9, 1.12);
+      transform-origin: left bottom;
+    }
+    /* PCパネル用（中央揃えのため中心基準でスケール） */
+    .lp-catch-line-c { transform-origin: center bottom; }
+
     /* クチコミ2段マーキー：中身を2セット並べて50%移動でシームレスにループ */
     @keyframes lp-marquee-left {
       from { transform: translateX(-50%); }
