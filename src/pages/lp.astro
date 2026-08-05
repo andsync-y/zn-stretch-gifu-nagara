@@ -76,11 +76,9 @@ const faqSchema = {
 <Base title={title} description={description} path="/lp" jsonld={[faqSchema]} minimal>
   <!-- 広告専用のためnoindex（TOP等と評価を食い合わない） -->
   <meta slot="head" name="robots" content="noindex, nofollow" />
-  <!-- メインキャッチ用フォント：PCは遊ゴシック（システム）、スマホは近いZen Kaku Gothic Newを
-       text=で使用グリフのみサブセット配信（十数KB程度）してフォールバックさせる -->
-  <link slot="head" rel="preconnect" href="https://fonts.googleapis.com" />
-  <link slot="head" rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link slot="head" rel="stylesheet" href={`https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@700&text=${encodeURIComponent('ガチガチの身体が、じんわりゆるむ。')}&display=swap`} />
+  <!-- メインキャッチ用フォント：黒華明朝（OFL-1.1・使用15グリフのみサブセット・約5KB・自前配信）
+       ライセンス表記は public/fonts/OFL-KuroHanaMincho.txt -->
+  <link slot="head" rel="preload" as="font" type="font/woff2" href="/fonts/kurohana-subset.woff2" crossorigin />
 
   <!-- ▍PC用ブランドパネル（コンテンツ列の左右余白を飾る装飾。情報は列内と重複するため装飾扱い） -->
   <div class="fixed inset-0 z-0 hidden bg-ink lg:block" aria-hidden="true">
@@ -325,16 +323,23 @@ const faqSchema = {
   </nav>
 
   <style is:global>
-    /* メインキャッチ：遊ゴシック（スマホはZen Kaku Gothic Newで代替）。scaleで少し縦長に見せる */
+    /* メインキャッチ：黒華明朝（サブセット自前配信）。書体自体が縦長なのでscaleは控えめ */
+    @font-face {
+      font-family: 'KuroHanaMincho';
+      src: url('/fonts/kurohana-subset.woff2') format('woff2');
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
+    }
     .lp-catch {
-      font-family: 'Yu Gothic', YuGothic, 'Zen Kaku Gothic New', 'Hiragino Kaku Gothic ProN', sans-serif;
-      font-weight: 700;
+      font-family: 'KuroHanaMincho', 'Hiragino Mincho ProN', 'Yu Mincho', serif;
+      font-weight: normal;
       line-height: 1.3;
       letter-spacing: 0.04em;
     }
     .lp-catch-line {
       white-space: nowrap;
-      transform: scale(0.9, 1.12);
+      transform: scale(0.96, 1.06);
       transform-origin: left bottom;
     }
     /* PCパネル用（中央揃えのため中心基準でスケール） */

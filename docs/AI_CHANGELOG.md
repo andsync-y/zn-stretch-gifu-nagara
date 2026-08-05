@@ -1164,3 +1164,13 @@ Git履歴が「何を変更したか」、このファイルが「なぜ変更�
   - /lp メインキャッチの書体を明朝からゴシックに変更。PC/Macは遊ゴシック（システムフォント）、遊ゴシックが無いスマホは近似のZen Kaku Gothic New 700（使用グリフのみサブセット配信・約5KB）にフォールバック。縦長スケール・サイズ強弱の組みは維持。
 - 確認結果：`npm run build` 成功（20ページ）。サブセットwoff2をローカル配信した実レンダリングでモバイル・PC表示を確認。
 - 未対応・次の作業：なし。
+
+## 2026-08-05 — Claude Code（追記）
+
+- 担当：Claude Code
+- ブランチ：`claude/zenkara-gifu-nagara-seo-ukz0er`（本番）
+- 変更内容：
+  - /lp メインキャッチの書体を黒華明朝（KuroHanaMincho ExtraBold・SIL OFL-1.1・RFN宣言なし）に変更。オーナーがBOOTHから取得したTTFを使用15グリフのみサブセット化してwoff2（5.4KB）で自前配信（public/fonts/）。ライセンス表記を public/fonts/OFL-KuroHanaMincho.txt に同梱し、preloadで先読み。
+  - 書体自体が縦長のため縦長スケールを scale(0.96,1.06) に緩和。Google Fonts（Zen Kaku Gothic New）読み込みは撤去。
+- 確認結果：`npm run build` 成功（20ページ）。モバイル390px・デスクトップ1440pxのスクリーンショットで黒華明朝の表示を確認（自前配信のため全デバイス同一表示）。
+- 未対応・次の作業：なし。

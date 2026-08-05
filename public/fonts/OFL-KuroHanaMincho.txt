@@ -1,0 +1,5 @@
+kurohana-subset.woff2 は「黒華明朝 (KuroHanaMincho) ExtraBold」（作者: lavsic / 源ノ明朝ベース）を
+本サイトの表示に必要なグリフのみにサブセット化したものです。
+This Font Software is licensed under the SIL Open Font License, Version 1.1.
+https://openfontlicense.org
+配布元: https://booth.pm/ja/items/8271642
