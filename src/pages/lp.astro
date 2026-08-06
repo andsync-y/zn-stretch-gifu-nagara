@@ -1,0 +1,360 @@
+---
+// ============================================================
+// 広告専用ランディングページ /lp
+// Instagram/Meta広告の受け皿。広告の約束（初回最大75%OFF）を
+// ファーストビューでそのまま受け止め、予約行動（HPB/LINE/電話）へ最短で繋ぐ。
+// - ローダー・スクロール演出なし（静的・高速）
+// - TOPのブランド演出は指名・検索流入用に残し、広告流入のみここへ
+// - 検索エンジンには載せない（noindex。広告専用のため重複コンテンツ回避）
+// - レイアウトは常時スマホ幅（max-w-430px）。PCでは左右の余白に
+//   ブランドパネルを敷く「アプリ枠」形式（コンテンツはレスポンシブ分岐なし）
+// ============================================================
+import Base from '../layouts/Base.astro';
+import { SITE, PRICING, BRAND, SYMPTOMS, REVIEWS } from '../consts';
+
+const title = '初回体験 最大75%OFF｜全力ストレッチ岐阜長良店【公式】';
+const description = '岐阜市長良の個室パーソナルストレッチ専門店。初回限定 60分¥3,300／90分¥4,900／120分¥13,200。22時まで営業・駐車場10台以上。WEB予約・LINE・お電話で受付中。';
+
+const faq = [
+  { q: '服装はどうすればいいですか？', a: '動きやすい服装がおすすめですが、お着替えのご用意もあるので仕事帰りでもそのまま来られます。' },
+  { q: '強く伸ばされて痛くないですか？', a: '「痛気持ちいい」と感じる強さへ、その場で確認しながら調整します。ストレッチが初めての方も安心してください。' },
+  { q: '男性でも利用できますか？', a: 'はい、男性のお客様も多数ご利用中です。デスクワークやゴルフをされる40〜60代の男性に特にご好評です。' },
+  { q: '駐車場はありますか？', a: `${SITE.parking}。${SITE.landmark}です。` },
+];
+
+// 流れの各ステップ。アイコンは Tabler Icons（MITライセンス / tabler.io/icons）の
+// アウトライン版パスデータを使用（viewBox 24・stroke 2・丸端）。
+const flow = [
+  {
+    t: 'ご予約',
+    d: 'WEB（24時間）・LINE・お電話から。',
+    icon: '<path d="M11.5 21h-5.5a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v6" /><path d="M16 3v4" /><path d="M8 3v4" /><path d="M4 11h16" /><path d="M15 19l2 2l4 -4" />',
+  },
+  {
+    t: 'カウンセリング',
+    d: '気になる部位や生活習慣を個室でヒアリング。',
+    icon: '<path d="M21 14l-3 -3h-7a1 1 0 0 1 -1 -1v-6a1 1 0 0 1 1 -1h9a1 1 0 0 1 1 1v10" /><path d="M14 15v2a1 1 0 0 1 -1 1h-7l-3 3v-10a1 1 0 0 1 1 -1h2" />',
+  },
+  {
+    t: '施術（体感軸調整法）',
+    d: 'マンツーマンで深層の筋肉まで伸ばします。',
+    icon: '<path d="M3 17a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M8 5a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M4 22l4 -2v-3h12" /><path d="M11 20h9" /><path d="M8 14l3 -2l1 -4c3 1 3 4 3 6" />',
+  },
+  {
+    t: 'アフターチェック',
+    d: '施術前との違いを確認し、セルフケアもご提案。',
+    icon: '<path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" /><path d="M9 5a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2" /><path d="M9 14l2 2l4 -4" />',
+  },
+];
+
+// クチコミ2段マーキー（1段目：左→右、2段目：右→左）。全10件を5件ずつ掲載。
+// アバターはAI生成イラスト（男性6:女性4・20〜60代）。クチコミは匿名（イニシャル）のため
+// イラストはイメージであり、実在の顔を示すものではない
+const reviewRows = [
+  [
+    { r: REVIEWS[9], avatar: '/images/avatars/ai-m50.webp' },
+    { r: REVIEWS[0], avatar: '/images/avatars/ai-f20.webp' },
+    { r: REVIEWS[3], avatar: '/images/avatars/ai-f40.webp' },
+    { r: REVIEWS[7], avatar: '/images/avatars/ai-m40.webp' },
+    { r: REVIEWS[6], avatar: '/images/avatars/ai-f50.webp' },
+  ],
+  [
+    { r: REVIEWS[1], avatar: '/images/avatars/ai-m30.webp' },
+    { r: REVIEWS[2], avatar: '/images/avatars/ai-m60.webp' },
+    { r: REVIEWS[4], avatar: '/images/avatars/ai-m35.webp' },
+    { r: REVIEWS[5], avatar: '/images/avatars/ai-m20.webp' },
+    { r: REVIEWS[8], avatar: '/images/avatars/ai-f30.webp' },
+  ],
+];
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+};
+---
+<Base title={title} description={description} path="/lp" jsonld={[faqSchema]} minimal>
+  <!-- 広告専用のためnoindex（TOP等と評価を食い合わない） -->
+  <meta slot="head" name="robots" content="noindex, nofollow" />
+  <!-- メインキャッチ用フォント：PC/Macは遊ゴシック（システム）、スマホは近似のZen Kaku Gothic Newを
+       text=で使用グリフのみサブセット配信してフォールバックさせる -->
+  <link slot="head" rel="preconnect" href="https://fonts.googleapis.com" />
+  <link slot="head" rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link slot="head" rel="stylesheet" href={`https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@700&text=${encodeURIComponent('その身体の悩みに、直接届く。')}&display=swap`} />
+
+  <!-- ▍PC用ブランドパネル（コンテンツ列の左右余白を飾る装飾。情報は列内と重複するため装飾扱い） -->
+  <div class="fixed inset-0 z-0 hidden bg-ink lg:block" aria-hidden="true">
+    <div class="absolute inset-y-0 left-0 flex w-[calc(50%-215px)] flex-col items-center justify-center gap-3 px-10 text-center">
+      <img src="/images/logo.png" alt="" width="1200" height="307" class="h-8 w-auto invert" />
+      <p class="text-[14px] font-black tracking-[0.3em] text-paper">岐阜長良店</p>
+      <p class="lp-catch mt-8 text-paper">
+        <span class="lp-catch-line lp-catch-line-c block text-[26px]">その身体の悩みに、</span>
+        <span class="lp-catch-line lp-catch-line-c mt-1 block text-[38px]">直接届く。</span>
+      </p>
+      <p class="mt-1 text-[13px] font-bold tracking-[0.1em] text-amber-200">＼ ご新規様限定 ／ 初回体験 最大75%OFF</p>
+    </div>
+    <p class="absolute right-10 top-1/2 -translate-y-1/2 text-[64px] font-black leading-none tracking-[0.35em] text-paper/[0.06] [writing-mode:vertical-rl]">ZENRYOKU STRETCH</p>
+  </div>
+
+  <!-- ▍コンテンツ列：常にスマホ幅。PCでは中央に固定幅で表示 -->
+  <div class="relative z-10 mx-auto w-full max-w-[430px] bg-paper lg:shadow-[0_0_80px_rgba(0,0,0,0.6)]">
+
+  <!-- ▍FV：実写真を全面に敷いたビジュアルヒーロー（広告の約束をそのまま受ける） -->
+  <section class="relative overflow-hidden bg-ink">
+    <!-- 写真は上部バンドに等倍に近い表示。下端をinkへ溶かし、価格表以降は無地の黒地に載せる -->
+    <div class="absolute inset-x-0 top-0">
+      <img
+        src="/images/photos/lp-hero2.webp"
+        alt=""
+        width="1200"
+        height="982"
+        fetchpriority="high"
+        decoding="async"
+        class="h-auto w-full"
+      />
+      <div class="absolute inset-0 bg-gradient-to-b from-ink/70 via-ink/25 to-ink"></div>
+    </div>
+
+    <!-- 簡易ヘッダー：ロゴ・店名と営業時間だけ。逃げ道になるナビは置かない -->
+    <header class="relative z-10 flex items-center justify-between px-5 pt-4">
+      <div class="flex items-center gap-2">
+        <img src="/images/logo.png" alt="全力ストレッチ" width="1200" height="307" class="h-5 w-auto invert" />
+        <span class="border-l border-paper/40 pl-2 text-[11px] font-black tracking-[0.06em] text-paper">岐阜長良店</span>
+      </div>
+      <p class="text-[10px] font-bold tracking-[0.06em] text-paper/85">{SITE.hours}／{SITE.closed}</p>
+    </header>
+
+    <div class="relative z-10 px-5 pb-9 pt-8">
+      <p class="mb-4 inline-block bg-amber px-3 py-1.5 text-[12px] font-black tracking-[0.1em] text-white">＼ ご新規様限定 ／ 初回体験 最大75%OFF</p>
+      <!-- メインキャッチ：3行組み。結びの「直接届く。」を最大サイズにして視線の終点をつくる -->
+      <h1 class="lp-catch mb-5 text-paper drop-shadow-[0_2px_16px_rgba(0,0,0,0.55)]">
+        <span class="lp-catch-line block"><span class="text-[44px]">その</span><span class="text-[58px]">身体</span><span class="text-[44px]">の</span></span>
+        <span class="lp-catch-line mt-1 block pl-12"><span class="text-[56px]">悩みに、</span></span>
+        <span class="lp-catch-line block"><span class="text-[76px]">直接届く</span><span class="text-[50px]">。</span></span>
+      </h1>
+      <p class="mb-7 text-[14px] leading-[1.9] text-paper/90 drop-shadow-[0_1px_8px_rgba(0,0,0,0.5)]">
+        癒しで終わらない。<br />もみほぐしでは届かない<br />"深い伸び"を体感してください。
+      </p>
+
+      <!-- 価格の即提示（3カラム・価格を主役に余白ですっきり見せる） -->
+      <div class="mb-7 overflow-hidden bg-white/95">
+        <p class="bg-amber px-4 py-2 text-center text-[13px] font-black tracking-[0.08em] text-white">＼ ご新規様限定 ／ 初回おためし価格</p>
+        <div class="grid grid-cols-3 divide-x divide-ink/10">
+          {PRICING.courses.map((c) => (
+            <div class="flex flex-col items-center px-1.5 pb-4 pt-3.5 text-center">
+              <p class="text-[14px] font-black">{c.label}</p>
+              <p class="min-h-[28px] text-[10px] leading-[1.35] text-muted">{c.name}</p>
+              <p class="mt-1 text-[10px] text-muted"><s>{c.normal}</s></p>
+              <p class="whitespace-nowrap text-[19px] font-black tracking-tight text-amber-700">{c.first}</p>
+              <p class="mt-1 text-[10px] font-black text-amber-700">{c.discount.replace('初回限定', '')}{!c.primary && ' ・おすすめ'}</p>
+            </div>
+          ))}
+        </div>
+        <p class="border-t border-ink/10 px-4 py-1.5 text-center text-[10px] text-muted">※税込・おひとり様1回限りです。</p>
+      </div>
+
+      <!-- 3つのCTA -->
+      <div class="flex flex-col gap-3">
+        <a href={SITE.urls.reserve} target="_blank" rel="noopener" data-fb-event="Schedule" data-fb-label="HPB予約クリック" class="btn-amber-pill w-full !py-4 text-center text-[16px] shadow-[0_4px_20px_rgba(0,0,0,0.3)]">空き状況を見てWEB予約する</a>
+        <div class="grid grid-cols-2 gap-3">
+          <a href={SITE.urls.line} target="_blank" rel="noopener" data-fb-event="Lead" data-fb-label="LINE登録" class="block bg-[#06C755] px-4 py-3.5 text-center text-[14px] font-black text-white">LINEで相談</a>
+          <a href={`tel:${SITE.telLink}`} data-fb-event="Contact" data-fb-label="電話タップ" class="block bg-white px-4 py-3.5 text-center text-[14px] font-black text-ink">電話する</a>
+        </div>
+      </div>
+
+      <!-- 安心チップ（FVは3点に絞る。着替え等はFAQで） -->
+      <ul class="mt-6 flex flex-wrap gap-x-4 gap-y-1.5 text-[12px] font-bold text-paper/90">
+        <li>✓ 22時まで営業（最終受付{SITE.lastEntry}）</li>
+        <li>✓ 駐車場10台以上</li>
+        <li>✓ 完全予約制・個室</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ▍お悩みチェック -->
+  <section class="border-b border-ink/15 bg-paper2 px-5 py-12">
+    <h2 class="mb-6 text-center text-[22px] font-black">こんな「そのうち治るだろう」、<br />放置していませんか？</h2>
+    <ul class="grid grid-cols-1 gap-2.5">
+      {SYMPTOMS.map((s) => (
+        <li class="flex items-baseline gap-3 border-b border-ink/15 bg-white px-4 py-3">
+          <span class="font-black text-amber-700">✓</span>
+          <span class="text-[14px] font-bold">{s.label}<span class="ml-2 text-[11px] font-normal text-muted">{s.note}</span></span>
+        </li>
+      ))}
+    </ul>
+    <p class="mt-6 text-center text-[14px] font-bold">1つでも当てはまったら、初回体験をどうぞ。</p>
+  </section>
+
+  <!-- ▍選ばれる理由 -->
+  <section class="border-b border-ink/15 px-5 py-12">
+    <p class="en-label mb-6 text-center">Why us</p>
+    <h2 class="mb-10 text-center text-[22px] font-black">全力ストレッチが選ばれる理由</h2>
+    <div class="grid gap-8">
+      <div class="rule-top pt-5">
+        <h3 class="mb-2 text-[17px] font-black">① 独自の「体感軸調整法」</h3>
+        <p class="text-[14px] leading-[2] text-sub">{BRAND.method}。もみほぐしではなく、体の軸をつくる筋肉を伸ばします。{BRAND.storeCount}で提供される実績あるメソッドです。</p>
+      </div>
+      <div class="rule-top pt-5">
+        <h3 class="mb-2 text-[17px] font-black">② 完全個室・マンツーマン</h3>
+        <p class="text-[14px] leading-[2] text-sub">カウンセリングから施術まで、個室のプライベート空間で担当トレーナーが最後まで対応。人目を気にせず体を預けられます。</p>
+      </div>
+      <div class="rule-top pt-5">
+        <h3 class="mb-2 text-[17px] font-black">③ 通いやすさ</h3>
+        <p class="text-[14px] leading-[2] text-sub">夜{SITE.hoursClose}まで営業（最終受付{SITE.lastEntry}）だから仕事帰り・ゴルフ帰りに寄れる。{SITE.parking}。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ▍クチコミ（2段マーキー：1段目 左→右、2段目 右→左。ホバーで一時停止） -->
+  <section class="overflow-hidden border-b border-ink/15 bg-paper2 py-12">
+    <p class="en-label mb-6 text-center">Voice</p>
+    <h2 class="mb-2 text-center text-[22px] font-black">実際に体験した方の声</h2>
+    <p class="mb-8 text-center text-[12px] text-muted">Google マップのクチコミより（イラストはイメージです）</p>
+    <div class="flex flex-col gap-4">
+      {reviewRows.map((row, i) => (
+        <div class="overflow-hidden">
+          <div class={`flex w-max ${i === 0 ? 'lp-marquee-l' : 'lp-marquee-r'}`}>
+            {[0, 1].map((copy) => (
+              <div class="flex gap-4 pr-4" aria-hidden={copy === 1 ? 'true' : undefined}>
+                {row.map((p) => (
+                  <div class="w-[280px] shrink-0 border border-ink/15 bg-white p-5">
+                    <div class="mb-3 flex items-center gap-3">
+                      <img src={p.avatar} alt="" width="96" height="96" loading="lazy" decoding="async" class="h-12 w-12 rounded-full" />
+                      <div>
+                        <p class="text-[13px] font-bold">{p.r.name}</p>
+                        <p class="text-[12px] tracking-[0.18em] text-amber-700">{'★'.repeat(p.r.stars)}</p>
+                      </div>
+                    </div>
+                    <blockquote class="line-clamp-[7] text-[13px] leading-[2] text-sub">{p.r.text}</blockquote>
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- ▍料金 -->
+  <section class="border-b border-ink/15 px-5 py-12">
+    <p class="en-label mb-6 text-center">Price</p>
+    <h2 class="mb-8 text-center text-[22px] font-black">初回限定価格</h2>
+    <div class="rule-top">
+      {PRICING.courses.map((c) => (
+        <div class="grid grid-cols-[1fr_auto] items-center gap-3 border-b border-ink/15 px-1 py-4">
+          <div>
+            <p class="text-[15px] font-black">{c.name} <span class="text-[12px] font-bold text-muted">{c.label}</span></p>
+            <p class="text-[11px] text-muted">{c.discount}／<s>通常 {c.normal}</s></p>
+          </div>
+          <p class="text-[24px] font-black">{c.first}</p>
+        </div>
+      ))}
+    </div>
+    <p class="mt-4 text-[11px] leading-[1.9] text-muted">{PRICING.caption}</p>
+    <div class="mt-6 text-center">
+      <a href={SITE.urls.coupon} target="_blank" rel="noopener" data-fb-event="Schedule" data-fb-label="HPB予約クリック" class="btn-ink-pill">初回価格で予約する</a>
+    </div>
+  </section>
+
+  <!-- ▍流れ -->
+  <section class="border-b border-ink/15 bg-paper2 px-5 py-12">
+    <p class="en-label mb-6 text-center">Flow</p>
+    <h2 class="mb-8 text-center text-[22px] font-black">初回体験の流れ</h2>
+    <ol class="grid grid-cols-2 gap-x-4 gap-y-8">
+      {flow.map((s, i) => (
+        <li class="rule-top pt-5 text-center">
+          <span class="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full border border-ink/25 bg-white text-ink">
+            <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={s.icon} />
+          </span>
+          <p class="mb-1 text-[12px] font-black tracking-[0.2em] text-amber-700">0{i + 1}</p>
+          <h3 class="mb-1.5 text-[15px] font-black">{s.t}</h3>
+          <p class="text-[13px] leading-[1.9] text-sub">{s.d}</p>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <!-- ▍FAQ -->
+  <section class="border-b border-ink/15 px-5 py-12">
+    <p class="en-label mb-6 text-center">FAQ</p>
+    <h2 class="mb-8 text-center text-[22px] font-black">よくあるご質問</h2>
+    <div class="rule-top">
+      {faq.map((f) => (
+        <div class="border-b border-ink/15 py-4">
+          <p class="mb-1.5 text-[14px] font-black">Q. {f.q}</p>
+          <p class="text-[13px] leading-[2] text-sub">A. {f.a}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- ▍アクセス -->
+  <section class="border-b border-ink/15 bg-paper2 px-5 py-12">
+    <div class="text-center">
+      <p class="en-label mb-6">Access</p>
+      <h2 class="mb-4 text-[22px] font-black">{SITE.brand}</h2>
+      <p class="text-[14px] leading-[2.1] text-sub">
+        {SITE.addressFull}<br />
+        {SITE.landmark}／{SITE.parking}<br />
+        営業時間 {SITE.hours}／最終受付 {SITE.lastEntry}（{SITE.closed}）
+      </p>
+      <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(SITE.brand + ' ' + SITE.addressFull)}`} target="_blank" rel="noopener" class="mt-5 inline-block border-b border-ink pb-0.5 text-[13px] font-bold">Googleマップで開く ↗</a>
+    </div>
+  </section>
+
+  <!-- ▍クロージングCTA -->
+  <section class="bg-ink px-5 pb-28 pt-12 text-center text-paper">
+    <p class="mb-2 text-[12px] font-bold tracking-[0.2em] text-amber-200">初回限定 最大75%OFF</p>
+    <h2 class="mb-6 text-[24px] font-black leading-[1.5]">その肩と腰に向き合うなら、<br />今日がいちばん早い日です。</h2>
+    <div class="mx-auto flex flex-col gap-3">
+      <a href={SITE.urls.reserve} target="_blank" rel="noopener" data-fb-event="Schedule" data-fb-label="HPB予約クリック" class="btn-amber-pill w-full !py-4 text-[16px]">空き状況を見てWEB予約する</a>
+      <div class="grid grid-cols-2 gap-3">
+        <a href={SITE.urls.line} target="_blank" rel="noopener" data-fb-event="Lead" data-fb-label="LINE登録" class="block bg-[#06C755] px-4 py-3.5 text-[14px] font-black text-white">LINEで相談</a>
+        <a href={`tel:${SITE.telLink}`} data-fb-event="Contact" data-fb-label="電話タップ" class="block border border-paper/60 px-4 py-3.5 text-[14px] font-black text-paper">電話する</a>
+      </div>
+    </div>
+  </section>
+
+  </div><!-- /コンテンツ列 -->
+
+  <!-- ▍LP専用スティッキーCTA（LINE入り3択・コンテンツ列と同幅で中央固定） -->
+  <nav class="fixed bottom-0 left-1/2 z-50 grid w-full max-w-[430px] -translate-x-1/2 grid-cols-3 border-t border-ink/20 bg-white shadow-[0_-4px_16px_rgba(0,0,0,0.08)]" aria-label="予約・相談">
+    <a href={SITE.urls.line} target="_blank" rel="noopener" data-fb-event="Lead" data-fb-label="LINE登録" class="bg-[#06C755] py-3.5 text-center text-[13px] font-black text-white">LINEで相談</a>
+    <a href={SITE.urls.reserve} target="_blank" rel="noopener" data-fb-event="Schedule" data-fb-label="HPB予約クリック" class="bg-ink py-3.5 text-center text-[13px] font-black text-paper">WEB予約</a>
+    <a href={`tel:${SITE.telLink}`} data-fb-event="Contact" data-fb-label="電話タップ" class="bg-white py-3.5 text-center text-[13px] font-black text-ink">電話する</a>
+  </nav>
+
+  <style is:global>
+    /* メインキャッチ：遊ゴシック（スマホはZen Kaku Gothic Newで代替） */
+    .lp-catch {
+      font-family: 'Yu Gothic', YuGothic, 'Zen Kaku Gothic New', 'Hiragino Kaku Gothic ProN', sans-serif;
+      font-weight: 700;
+      line-height: 1.12;
+      letter-spacing: 0.02em;
+    }
+    .lp-catch-line {
+      white-space: nowrap;
+      transform: scale(0.96, 1.06);
+      transform-origin: left bottom;
+    }
+    /* PCパネル用（中央揃えのため中心基準でスケール） */
+    .lp-catch-line-c { transform-origin: center bottom; }
+
+    /* クチコミ2段マーキー：中身を2セット並べて50%移動でシームレスにループ */
+    @keyframes lp-marquee-left {
+      from { transform: translateX(-50%); }
+      to { transform: translateX(0); }
+    }
+    @keyframes lp-marquee-right {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+    .lp-marquee-l { animation: lp-marquee-left 45s linear infinite; }
+    .lp-marquee-r { animation: lp-marquee-right 40s linear infinite; }
+    .lp-marquee-l:hover, .lp-marquee-r:hover { animation-play-state: paused; }
+    @media (prefers-reduced-motion: reduce) {
+      .lp-marquee-l, .lp-marquee-r { animation: none; }
+    }
+  </style>
+</Base>

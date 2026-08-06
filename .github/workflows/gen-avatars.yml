@@ -1,0 +1,31 @@
+name: アバター画像生成（手動・一時利用）
+
+# LPクチコミ用アバターをOpenAIで生成してコミットする使い捨てワークフロー。
+# サンドボックスからOpenAI APIに到達できないため、Actions経由で実行する。
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  gen:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+      - run: npm ci
+      - run: node scripts/gen-avatars.mjs
+      - name: 生成画像をコミット（未参照アセットなのでサイト表示に影響なし）
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/images/avatars
+          git diff --cached --quiet && echo "変更なし" || git commit -m "chore: AI生成アバター画像を追加（gen-avatars.yml）"
+          git push
