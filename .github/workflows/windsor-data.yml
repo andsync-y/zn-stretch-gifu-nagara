@@ -1,0 +1,35 @@
+name: 広告データ取得（Windsor中継）
+
+# Windsor MCPコネクタの接続断対策：毎朝、REST APIから数字を取得して
+# windsor-dataブランチにコミットする。9時のデイリー監視Routineはgit経由で読む。
+on:
+  schedule:
+    - cron: '0 23 * * *' # JST 8:00（監視Routineの1時間前）
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      WINDSOR_API_KEY: ${{ secrets.WINDSOR_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node scripts/fetch-windsor-data.mjs
+      - name: windsor-dataブランチへ強制コミット（履歴は持たない・Vercelビルドはスキップ）
+        run: |
+          cd out
+          git init -b windsor-data
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "data: $(date -u +%Y-%m-%dT%H:%M)Z [skip ci]"
+          git push --force "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" windsor-data
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

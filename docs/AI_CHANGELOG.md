@@ -1283,3 +1283,12 @@ Git履歴が「何を変更したか」、このファイルが「なぜ変更�
   - 書体を遊ゴシック（PC/Macシステム）＋Zen Kaku Gothic New 700（スマホ用サブセット約4KB・Google Fonts text=配信）に変更。黒華明朝のwoff2/ライセンスファイルは再利用に備えて残置（未参照）。PC左パネルも新コピーに更新。
 - 確認結果：`npm run build` 成功（20ページ）。サブセットwoff2ローカル配信の実レンダリングでモバイル・PC表示を確認。
 - 未対応・次の作業：なし。
+
+## 2026-08-07 — Claude Code（追記）
+
+- 担当：Claude Code
+- ブランチ：`claude/zenkara-gifu-nagara-seo-ukz0er`（本番）
+- 変更内容：
+  - Windsor MCPコネクタの接続断で広告デイリー監視Routineが失敗する問題の恒久対策として、GitHub Actions中継（windsor-data.yml + scripts/fetch-windsor-data.mjs）を新設。毎朝JST8:00にWindsor REST API（要 WINDSOR_API_KEY シークレット）からMeta/Google/GA4の数字を取得し、windsor-dataブランチへ[skip ci]付きで強制コミット。監視Routineはgit経由でJSONを読む（MCP不依存）。一部クエリ失敗は許容し取得分を保存。
+- 確認結果：構文チェックのみ（実行はWINDSOR_API_KEYシークレット登録後にworkflow_dispatchで検証予定）。
+- 未対応・次の作業：ユーザーによるWINDSOR_API_KEYのGitHubシークレット登録→テスト実行→Routineプロンプトのデータソース切替。
