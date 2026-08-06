@@ -21,6 +21,11 @@ const QUERIES = [
   { name: 'google_search_terms_7d', connector: 'google_ads', params: { date_preset: 'last_7d', fields: 'date,search_term,clicks,conversions' } },
   { name: 'ga4_events_7d', connector: 'googleanalytics4', params: { date_preset: 'last_7d', fields: 'date,event_name,event_count,session_source_medium' } },
   { name: 'ga4_pages_7d', connector: 'googleanalytics4', params: { date_preset: 'last_7d', fields: 'date,page_path,session_source_medium,sessions' } },
+  // 月次の媒体別コンバージョン（サロン側の来店経路との突き合わせ用）
+  { name: 'ga4_events_30d', connector: 'googleanalytics4', params: { date_preset: 'last_30d', fields: 'date,event_name,event_count,session_source_medium' } },
+  { name: 'ga4_sessions_30d', connector: 'googleanalytics4', params: { date_preset: 'last_30d', fields: 'date,session_source_medium,sessions' } },
+  { name: 'google_ads_30d', connector: 'google_ads', params: { date_preset: 'last_30d', fields: 'date,campaign,spend,clicks,conversions' } },
+  { name: 'facebook_30d', connector: 'facebook', params: { date_preset: 'last_30d', fields: 'date,ad_name,spend,clicks' } },
 ];
 
 await mkdir('out', { recursive: true });
