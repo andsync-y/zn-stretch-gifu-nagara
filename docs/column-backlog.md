@@ -26,12 +26,12 @@
 ## 優先バックログ
 
 ### むくみ・冷え
-- [ ] mukumi-yugata-ashi ｜ authority ｜ 夕方 脚 むくみ ふくらはぎ ストレッチ ｜ セルフケア ｜ /symptoms/mukumi
-- [ ] hiesho-shimohanshin ｜ authority ｜ 冷え性 ストレッチ 下半身 血流 ｜ セルフケア ｜ /symptoms/mukumi
-- [ ] tachishigoto-mukumi ｜ authority ｜ 立ち仕事 むくみ 対策 ｜ 悩み特化 ｜ /symptoms/mukumi
+- [x] mukumi-yugata-ashi ｜ authority ｜ 夕方 脚 むくみ ふくらはぎ ストレッチ ｜ セルフケア ｜ /symptoms/mukumi
+- [x] hiesho-shimohanshin ｜ authority ｜ 冷え性 ストレッチ 下半身 血流 ｜ セルフケア ｜ /symptoms/mukumi
+- [x] tachishigoto-mukumi ｜ authority ｜ 立ち仕事 むくみ 対策 ｜ 悩み特化 ｜ /symptoms/mukumi
 
 ### 首こり・眼精疲労
-- [ ] smartphone-kubi ｜ authority ｜ スマホ首 ストレートネック セルフケア ｜ セルフケア ｜ /symptoms/kubi-ganseihiro
+- [x] smartphone-kubi ｜ authority ｜ スマホ首 ストレートネック セルフケア ｜ セルフケア ｜ /symptoms/kubi-ganseihiro
 - [ ] ganseihiro-kubikori ｜ authority ｜ 眼精疲労 首こり ストレッチ ｜ 関係解説 ｜ /symptoms/kubi-ganseihiro
 - [ ] pc-kubikori-reset ｜ authority ｜ パソコン 首こり 1時間ごと リセット ｜ セルフケア ｜ /symptoms/kubi-ganseihiro
 

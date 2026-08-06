@@ -1080,6 +1080,78 @@ Git履歴が「何を変更したか」、このファイルが「なぜ変更�
 - 確認結果：`npm run build` 成功（19ページ）。
 - 未対応・次の作業：なし。
 
+## 2026-07-29 — GitHub Actions（Claude）
+
+- 担当：GitHub Actions（Claude）
+- ブランチ：`claude/column-auto`
+- 関連PR：コラム新規1本追加（夕方の脚のむくみ／authority型）
+- 変更内容：
+  - `docs/column-backlog.md` の未対応 `authority` 最上位「mukumi-yugata-ashi ｜ 夕方 脚 むくみ ふくらはぎ ストレッチ」を執筆し、`src/pages/column/mukumi-yugata-ashi.astro` を新設（ColumnLayout 使用・公開日 2026-07-29）。
+  - 構成は `docs/COLUMN_SEO_GUIDE.md` 3章に準拠：結論先出しリード／h2を質問形（なぜ夕方になると脚がむくむ？／脚のむくみはふくらはぎだけの問題？／ふくらはぎを動かすセルフストレッチ5選／1日何回やればいい？／セルフケアで追いつかないと感じたら）／h3で秒数・回数を明記／`faq` 5問／独自メソッド「体感軸調整法」に言及／本文中に `/symptoms/mukumi` への内部リンク、`related` は mukumi・jiritsu・youtsu の3本。
+  - 読者ターゲット（岐阜市周辺の40〜60代男性・デスクワーク中心）に合わせ、車移動・運転時間の長さを要因として扱い、席を立つタイミングに紐づける習慣化の提案を入れた。既存3記事（肩こり／朝の腰／ゴルフ）と検索意図は重複しない。
+  - 薬機法・景表法に配慮し断定表現は使用せず（「〜と感じにくい」「体感として」等）。片脚のみの急なむくみ・痛み・熱感がある場合の受診案内を本文とFAQの両方に明記。
+  - `src/data/columns.ts` の `COLUMNS` 先頭に新記事を追加（tags／relatedSymptoms／記事本文と一致する `selfCare` 6件）。`docs/column-backlog.md` の該当行を `- [x]` に更新。
+- 主な変更ファイル：`src/pages/column/mukumi-yugata-ashi.astro`（新規）／`src/data/columns.ts`／`docs/column-backlog.md`
+- 確認結果：`npm run build` 成功（19→20ページ）。
+- 未対応・次の作業：次回の `authority` 最上位は「hiesho-shimohanshin ｜ 冷え性 ストレッチ 下半身 血流」。参照先が同じ `/symptoms/mukumi` になるため、本記事（夕方＝時間帯・ふくらはぎのポンプ）と意図が被らないよう、冷え＝下半身の血流・体温という切り口に分けること。
+
+## 2026-08-01 — GitHub Actions（Claude）
+
+- 担当：GitHub Actions（Claude）
+- ブランチ：`claude/column-auto`
+- 関連PR：コラム新規1本追加（冷え性の下半身ストレッチ／authority型）
+- 変更内容：
+  - `docs/column-backlog.md` の未対応 `authority` 最上位「hiesho-shimohanshin ｜ 冷え性 ストレッチ 下半身 血流」を執筆し、`src/pages/column/hiesho-shimohanshin.astro` を新設（ColumnLayout 使用・公開日 2026-08-01）。
+  - 前回記録の申し送り（`/symptoms/mukumi` 参照が連続するため意図を分ける）に対応。前記事（夕方＝時間帯・ふくらはぎのポンプ・水分の滞り）と切り分け、本記事は「体の熱をつくる下半身の大きな筋肉」という切り口に統一。手順も前記事と重複しない5種目（足指グーパー＋足裏ほぐし／内もも／お尻／太もも前側／ハーフスクワット）で構成し、むくみが主な悩みの読者は本文中のリンクで前記事へ振り分ける形にした。
+  - 構成は `docs/COLUMN_SEO_GUIDE.md` 3章に準拠：結論先出しリード／h2を質問形（なぜ冷えは下半身から気になりやすい？／足先を温めるだけでは足りない？／下半身のどこをゆるめればいい？／1日どのくらい、いつやればいい？／夏でも足先が冷たいのはなぜ？／セルフケアで追いつかないと感じたら）／h3で秒数・回数を明記／`faq` 5問／独自メソッド「体感軸調整法」に言及／本文中に `/symptoms/mukumi` と前記事への内部リンク、`related` は mukumi・前記事・jiritsu の3本。
+  - 読者ターゲット（岐阜市周辺の40〜60代男性・デスクワーク中心）に合わせ、「冷えは女性の悩みと思われがち」という前提に触れ、車移動の長さ・冷房の効いたオフィスを具体例に採用。公開日が8月のため「夏でも足先が冷たいのはなぜ？」の季節セクションを追加。
+  - 薬機法・景表法に配慮し、血流や体温に関する断定表現・効果の約束は使用せず（「〜と感じる方が多い」「体感の変化を得やすい」「送り返す手助けをしています」等）。片脚だけが冷たく色が悪い／歩くとふくらはぎが痛み休むと落ち着く／しびれを伴う場合の受診案内を、本文とFAQの両方に明記。
+  - `src/data/columns.ts` の `COLUMNS` 先頭に新記事を追加（tags／relatedSymptoms／記事本文と一致する `selfCare` 6件）。`docs/column-backlog.md` の該当行を `- [x]` に更新。
+- 主な変更ファイル：`src/pages/column/hiesho-shimohanshin.astro`（新規）／`src/data/columns.ts`／`docs/column-backlog.md`
+- 判断・注意点：
+  - アイキャッチ画像は今回も未設定。指示にあった `scripts/fetch-column-image.mjs` がリポジトリに存在せず（`scripts/` ディレクトリ自体が無い）、`ColumnLayout.astro` にも `image` / `imageCredit` プロップが無いため、画像の取得・表示のいずれもできない状態。既存4記事も同様に画像なしのため、既存の実装に合わせて記事本体のみで完成させた。
+- 確認結果：`npm run build` 成功（20→21ページ）。`/content.json` のコラムが5件になり、`column:hiesho-shimohanshin` に selfCare 6件が出力されることを確認。
+- 未対応・次の作業：
+  - アイキャッチ運用を始める場合は、先に `ColumnLayout.astro` へ画像プロップ（`image` / `imageAlt` / `imageCredit`）を追加し、`scripts/fetch-column-image.mjs`（AI生成・フリー素材取得）を実装する必要がある。既存記事への画像後付けも同時に検討。
+  - 次回の `authority` 最上位は「tachishigoto-mukumi ｜ 立ち仕事 むくみ 対策」。`/symptoms/mukumi` 参照が3本連続になるため、座り仕事を前提とした既存2本とは逆の「立ち続けて脚に負担が集中する」層に絞り、意図の重複を避けること。
+
+## 2026-08-01 — GitHub Actions（Claude）
+
+- 担当：GitHub Actions（Claude）
+- ブランチ：`claude/column-auto`
+- 関連PR：コラム新規1本追加（立ち仕事のむくみ対策／authority型）
+- 変更内容：
+  - `docs/column-backlog.md` の未対応 `authority` 最上位「tachishigoto-mukumi ｜ 立ち仕事 むくみ 対策」を執筆し、`src/pages/column/tachishigoto-mukumi.astro` を新設（ColumnLayout 使用・公開日 2026-08-01）。
+  - 前回記録の申し送り（`/symptoms/mukumi` 参照が3本連続になるため意図の重複を避ける）に対応。既存2本は「座りっぱなし（夕方・時間帯）」「冷え性（下半身の熱づくり）」が主軸のため、本記事は「立ち続けて筋ポンプが働かない静止性の負荷」という逆の前提に統一。手順も立ったままできる種目（その場足踏み＋重心シフト／立ちカーフレイズ／足指グーパー＋足裏踏みしめ）を中心に構成し、既存2本の主要種目とは重複しない組み立てにした。
+  - 構成は `docs/COLUMN_SEO_GUIDE.md` 3章に準拠：結論先出しリード／h2を質問形（なぜ立ち仕事だとむくみやすい？／デスクワーク中心でも「立ちっぱなし」になる場面は多い／立ち仕事のむくみ対策｜勤務中・休憩時にできるセルフストレッチ5選／立ったまま気をつけたい姿勢のコツ／1日どのくらい、いつやればいい？／セルフケアで追いつかないと感じたら）／h3で秒数・回数を明記／`faq` 5問／独自メソッド「体感軸調整法」に言及／本文中に `/symptoms/mukumi` と前記事（mukumi-yugata-ashi）への内部リンク、`related` は mukumi・mukumi-yugata-ashi（コラム）・jiritsu の3本。
+  - 読者ターゲット（岐阜市周辺の40〜60代男性・デスクワーク中心・ゴルフをする層）が「立ち仕事」を自分ごと化できるよう、立ち会議・来客対応・出張先の展示会や工場巡回・休日の洗車や草むしり・ゴルフのラウンド（歩行＋立位が数時間続くスポーツ）を具体例として本文中に挙げた。
+  - アイキャッチ画像を新設：`node scripts/fetch-column-image.mjs --slug tachishigoto-mukumi --source ai --prompt "a tired middle-aged businessman standing on a train platform in the evening, resting his hand on his lower leg after a long day of standing work"` でAI生成し、`public/images/column/tachishigoto-mukumi.webp` として保存。`imageCredit` はスクリプト出力の「※画像はイメージです」をそのまま設定。既存5記事は画像プロップ未設定のまま（本記事のみ新規に画像あり）。
+  - 薬機法・景表法に配慮し断定表現は使用せず（「〜と感じやすい」「体感として」等）。片脚だけが急に大きくむくむ／押すと跡が残る／痛みや熱感を伴う場合の受診案内を、本文とFAQの両方に明記。
+  - `src/data/columns.ts` の `COLUMNS` 先頭に新記事を追加（tags／relatedSymptoms／記事本文と一致する `selfCare` 6件）。`docs/column-backlog.md` の該当行を `- [x]` に更新。
+- 主な変更ファイル：`src/pages/column/tachishigoto-mukumi.astro`（新規）／`src/data/columns.ts`／`docs/column-backlog.md`／`public/images/column/tachishigoto-mukumi.webp`（新規）
+- 確認結果：`npm run build` 成功（21→22ページ）。`/content.json` のコラムが6件になり、`column:tachishigoto-mukumi` が先頭に出力され `selfCare` 6件が本文と一致することを確認。
+- 未対応・次の作業：
+  - 次回の `authority` 最上位は「首こり・眼精疲労」カテゴリの「smartphone-kubi ｜ スマホ首 ストレートネック セルフケア」。内部リンク先は `/symptoms/kubi-ganseihiro` で、これまでの `/symptoms/mukumi` 連続からは切り替わる。
+  - 既存5記事（画像未設定）へのアイキャッチ後付けは、本記事のスコープ外として未対応のまま。着手する場合は既存記事を変更しない今回の制約と別枠で検討が必要。
+
+## 2026-08-03 — GitHub Actions（Claude）
+
+- 担当：GitHub Actions（Claude）
+- ブランチ：`claude/column-auto`
+- 関連PR：コラム新規1本追加（スマホ首・ストレートネック対策／authority型）
+- 変更内容：
+  - `docs/column-backlog.md` の未対応 `authority` 最上位「smartphone-kubi ｜ スマホ首 ストレートネック セルフケア」を執筆し、`src/pages/column/smartphone-kubi.astro` を新設（ColumnLayout 使用・公開日 2026-08-03）。
+  - 前回記録の申し送りどおり、内部リンク先を `/symptoms/mukumi` から `/symptoms/kubi-ganseihiro` へ切り替え。既存の `katakori-desk-stretch`（肩甲骨まわし・胸開き・首の横伸ばし・背中丸め・体側伸ばし）と種目が重複しないよう、本記事は「頭が前に出る姿勢を戻す」あご引き・うなずき運動・首の前側ストレッチ・肩甲骨引き寄せ・壁を使った姿勢リセットの5種目に統一し、意図も「肩甲骨をゆるめる」ではなく「スマホ首・ストレートネックの姿勢を戻す」に分けた。
+  - 構成は `docs/COLUMN_SEO_GUIDE.md` 3章に準拠：結論先出しリード／h2を質問形（スマホ首・ストレートネックは、なぜ起こる？／セルフストレッチ5選／スマホを見るときに気をつけたい持ち方／1日どのくらい、いつやればいい？／セルフケアで追いつかないと感じたら）／h3で秒数・回数を明記／`faq` 5問／独自メソッド「体感軸調整法」に言及／本文中に `/symptoms/kubi-ganseihiro` と既存コラム（katakori-desk-stretch）への内部リンク、`related` は kubi-ganseihiro・katakori-desk-stretch（コラム）・shisei の3本。
+  - 読者ターゲット（岐阜市周辺の40〜60代男性・デスクワーク中心）に合わせ、パソコンとスマホ操作の両方が重なる生活を前提に、通勤中・信号待ちなどうつむく時間が長くなる具体場面を挙げた。
+  - アイキャッチ画像を新設：`node scripts/fetch-column-image.mjs --slug smartphone-kubi --source ai --prompt "a Japanese middle-aged man sitting at a bright office desk in the morning, looking up from his smartphone and gently stretching his neck with a relaxed positive expression, sunlight through the window"` でAI生成し、`public/images/column/smartphone-kubi.webp` として保存。`imageCredit` はスクリプト出力の「※画像はイメージです」をそのまま設定。
+  - 薬機法・景表法に配慮し断定表現は使用せず（「〜と感じやすくなります」「近づきやすくなります」等）。首を大きく回す動きは種目に含めず、しびれ・めまい・強い頭痛を伴う場合の受診案内を本文とFAQの両方に明記。
+  - `src/data/columns.ts` の `COLUMNS` 先頭に新記事を追加（tags／relatedSymptoms／記事本文と一致する `selfCare` 6件）。`docs/column-backlog.md` の該当行を `- [x]` に更新。
+- 主な変更ファイル：`src/pages/column/smartphone-kubi.astro`（新規）／`src/data/columns.ts`／`docs/column-backlog.md`／`public/images/column/smartphone-kubi.webp`（新規）
+- 確認結果：`npm run build` 成功（22→23ページ）。
+- 未対応・次の作業：
+  - 次回の `authority` 最上位は「首こり・眼精疲労」カテゴリの「ganseihiro-kubikori ｜ 眼精疲労 首こり ストレッチ」。内部リンク先は同じ `/symptoms/kubi-ganseihiro` になるため、本記事（姿勢のクセ・骨の並び）とは異なり、目の疲れと首こりの相互関係という切り口に分けること。
+  - 既存記事（画像未設定分）へのアイキャッチ後付けは引き続きスコープ外。
 ## 2026-08-03 — Claude Code
 
 - 担当：Claude Code
