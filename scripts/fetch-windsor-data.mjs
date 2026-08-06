@@ -26,6 +26,11 @@ const QUERIES = [
   { name: 'ga4_sessions_30d', connector: 'googleanalytics4', params: { date_preset: 'last_30d', fields: 'date,session_source_medium,sessions' } },
   { name: 'google_ads_30d', connector: 'google_ads', params: { date_preset: 'last_30d', fields: 'date,campaign,spend,clicks,conversions' } },
   { name: 'facebook_30d', connector: 'facebook', params: { date_preset: 'last_30d', fields: 'date,ad_name,spend,clicks' } },
+  // 入札戦略の取得を試す（有効なフィールド名が不明なため複数パターンを個別に投げ、
+  // 失敗時のエラーメッセージから正しい名前を特定する）
+  { name: 'probe_bid_a', connector: 'google_ads', params: { date_preset: 'last_3d', fields: 'date,campaign,bidding_strategy_type' } },
+  { name: 'probe_bid_b', connector: 'google_ads', params: { date_preset: 'last_3d', fields: 'date,campaign,campaign_bidding_strategy_type,target_cpa' } },
+  { name: 'probe_bid_c', connector: 'google_ads', params: { date_preset: 'last_3d', fields: 'date,campaign,bidding_strategy,average_cpc,campaign_status' } },
 ];
 
 await mkdir('out', { recursive: true });
