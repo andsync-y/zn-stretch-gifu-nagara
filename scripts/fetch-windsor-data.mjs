@@ -15,6 +15,9 @@ const QUERIES = [
   { name: 'facebook_7d', connector: 'facebook', params: { date_preset: 'last_7d', fields: 'date,ad_name,ad_id,spend,clicks' } },
   { name: 'google_ads_yesterday', connector: 'google_ads', params: { date_preset: 'last_1d', fields: 'date,campaign,spend,clicks,conversions' } },
   { name: 'google_ads_7d', connector: 'google_ads', params: { date_preset: 'last_7d', fields: 'date,campaign,spend,clicks,conversions' } },
+  // 予算が足りているか（=増額すべきか）の判定用。budget_lost_impression_shareが高ければ機会損失
+  { name: 'google_budget_7d', connector: 'google_ads', params: { date_preset: 'last_7d', fields: 'date,campaign,campaign_budget,search_impression_share,search_budget_lost_impression_share,search_rank_lost_impression_share' } },
+  { name: 'facebook_budget', connector: 'facebook', params: { date_preset: 'last_3d', fields: 'date,campaign,adset_name,daily_budget,budget_remaining,spend' } },
   { name: 'google_search_terms_7d', connector: 'google_ads', params: { date_preset: 'last_7d', fields: 'date,search_term,clicks,conversions' } },
   { name: 'ga4_events_7d', connector: 'googleanalytics4', params: { date_preset: 'last_7d', fields: 'date,event_name,event_count,session_source_medium' } },
   { name: 'ga4_pages_7d', connector: 'googleanalytics4', params: { date_preset: 'last_7d', fields: 'date,page_path,session_source_medium,sessions' } },
