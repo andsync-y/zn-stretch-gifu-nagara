@@ -33,7 +33,7 @@
 ### 首こり・眼精疲労
 - [x] smartphone-kubi ｜ authority ｜ スマホ首 ストレートネック セルフケア ｜ セルフケア ｜ /symptoms/kubi-ganseihiro
 - [x] ganseihiro-kubikori ｜ authority ｜ 眼精疲労 首こり ストレッチ ｜ 関係解説 ｜ /symptoms/kubi-ganseihiro
-- [ ] pc-kubikori-reset ｜ authority ｜ パソコン 首こり 1時間ごと リセット ｜ セルフケア ｜ /symptoms/kubi-ganseihiro
+- [x] pc-kubikori-reset ｜ authority ｜ パソコン 首こり 1時間ごと リセット ｜ セルフケア ｜ /symptoms/kubi-ganseihiro
 
 ### 姿勢・猫背
 - [ ] nekoze-makigata ｜ authority ｜ 猫背 巻き肩 ストレッチ 改善 ｜ セルフケア ｜ /symptoms/shisei

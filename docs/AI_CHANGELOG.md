@@ -1346,3 +1346,25 @@ Git履歴が「何を変更したか」、このファイルが「なぜ変更�
   - column-auto.yml 改修：生成→lint→AIレビュー（自己修正）→lint再判定→ビルド→**PASSなら自動マージ公開／FAILなら「要人間確認」ラベルで保留**。記事プロンプトに挿絵生成手順（参照ポーズ縛り・figcaption「イラストはイメージです」必須・曲芸ポーズ禁止）を追加。
 - 確認結果：lint全記事PASS（8ファイル）。E2Eはworkflow_dispatchで検証実行。
 - 未対応・次の作業：Windsor側にSearch Consoleコネクタが未出現のためGSC取得は保留（Phase 2）。
+
+## 2026-08-07 — GitHub Actions（Claude）
+
+- ブランチ：`claude/column-auto`
+- 関連PR：なし
+- 変更内容：
+  - コラムバックログ（`docs/column-backlog.md`）の `authority` 型から最上位の未対応「pc-kubikori-reset（パソコン 首こり 1時間ごと リセット）」を選び、新規コラム記事を1本作成。
+  - パソコン作業で首こりが悪化しやすい理由と、1時間ごとに区切って行う首こりリセットストレッチ4選（ばんざい・肩甲骨引き寄せ・首の側屈・胸開き）、習慣を続けるコツを解説。既存の「smartphone-kubi」（姿勢・ストレートネック特化）「ganseihiro-kubikori」（目と首の関係解説）とは、時間で区切って習慣化する角度で意図を分け、重複を避けた。
+  - アイキャッチ画像はAI生成（`scripts/fetch-column-image.mjs --source ai`）。明るいオフィスでパソコン作業の合間に伸びをする40代男性のイメージ。
+  - 記事内4手順すべてに、固定キャラクター「ZNちゃん」のストレッチ挿絵をAI生成して挿入（`scripts/gen-stretch-illustrations.mjs`）。
+- 主な変更ファイル：
+  - `src/pages/column/pc-kubikori-reset.astro`（新規）
+  - `public/images/column/pc-kubikori-reset.webp`（新規）
+  - `public/images/column/stretch/pc-kubikori-reset/`（新規4枚）
+  - `src/data/columns.ts`（COLUMNS配列の先頭に追加）
+  - `docs/column-backlog.md`（該当行を `- [x]` に更新）
+- 判断・注意点：
+  - faqプロップに5問、独自メソッド「体感軸調整法」への言及、`/symptoms/kubi-ganseihiro` への内部リンクを含めた。
+  - 薬機法・景表法に抵触する断定表現（治る・治療・解消・矯正等）は使用していないことを確認済み。
+  - `node scripts/lint-column.mjs` で対象ファイルをチェックしPASSを確認。
+- 確認結果：`npm run build` 成功（25→26ページ）。
+- 未対応・次の作業：ユーザーによるレビュー後、本番ブランチ `claude/zenkara-gifu-nagara-seo-ukz0er` へのマージ（本記録の時点では未マージ）。
