@@ -82,13 +82,18 @@ for (const file of files) {
     if (NG_ALT.test(alt)) fail(file, `imageAltが自店写真と誤認させる表現: 「${alt}」`);
   }
 
-  // 3) ストレッチ挿絵（キャラクターイラスト）を使う場合の必須事項
-  if (src.includes('/images/column/stretch/')) {
+  // 3) ストレッチ挿絵（固定ライブラリ）を使う場合の必須事項
+  if (src.includes('/images/stretch-poses/') || src.includes('/images/column/stretch/')) {
     if (!/イラストはイメージです/.test(src)) fail(file, 'ストレッチ挿絵に「イラストはイメージです」の注記がない');
-    for (const m of src.matchAll(/src="(\/images\/column\/stretch\/[^"]+)"/g)) {
-      try { await access(`public${m[1]}`); } catch { fail(file, `挿絵ファイルが存在しない: ${m[1]}`); }
-    }
   }
+  // 記事内のすべてのimg srcが実在するか
+  for (const m of src.matchAll(/src="(\/images\/[^"]+)"/g)) {
+    try { await access(`public${m[1]}`); } catch { fail(file, `画像ファイルが存在しない: ${m[1]}`); }
+  }
+  // 同一ポーズ画像の重複使用
+  const poses = [...src.matchAll(/src="(\/images\/stretch-poses\/[^"]+)"/g)].map((m) => m[1]);
+  const dupPose = poses.filter((v, i) => poses.indexOf(v) !== i);
+  if (dupPose.length) fail(file, `同じポーズ画像を複数回使用: ${[...new Set(dupPose)].join(', ')}`);
 
   // 4) 内部リンクの実在
   for (const m of src.matchAll(/href="(\/[^"#]*)"/g)) {
