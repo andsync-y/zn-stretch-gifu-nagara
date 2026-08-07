@@ -5,10 +5,11 @@
  * そのまま16分割した画像。キャラクターの見た目はこのChatGPT生成物が「正」であり、
  * コラム記事はここから選んで使う（APIで新規生成しない。生成では画風が再現できないため）。
  *
- * 新しいポーズが必要になったら：オーナーがChatGPTで同キャラの追加ポーズを生成し、
- * ここに画像とエントリを追加する（運用メモ: docs/AI_CHANGELOG.md 2026-08-07 参照）。
+ * 新しいポーズが必要になったら：続編シートを scripts/gen-pose-sheet.mjs で生成し、
+ * オーナーが目視で合格を出したものだけ scripts/ingest-pose-sheet.mjs で分割して追加する
+ * （シート2＝ポーズ17〜32はこの方法でオーナー合格済み。docs/stretch-pose-library.md 参照）。
  *
- * 各画像はタイトル・手順テキストを含む「説明カード」形式（313x313px）。
+ * 各画像はタイトル・手順テキストを含む「説明カード」形式。
  */
 export type StretchPose = {
   /** 画像パス（public/images/stretch-poses/） */
@@ -21,7 +22,7 @@ export type StretchPose = {
   /** カードに書かれている手順（記事の手順はこれと矛盾しないこと） */
   desc: string;
   /** 姿勢（記事のシーンに合わせて選ぶ） */
-  position: '床・座位' | '床・仰向け' | '床・四つん這い' | '立位' | '座位または立位';
+  position: '床・座位' | '床・仰向け' | '床・四つん這い' | '立位' | '座位または立位' | '椅子・座位';
 };
 
 export const STRETCH_POSES: StretchPose[] = [
@@ -41,4 +42,20 @@ export const STRETCH_POSES: StretchPose[] = [
   { file: '/images/stretch-poses/pose-14.webp', width: 312, height: 254, name: '肩甲骨のストレッチ', desc: '腕を前に伸ばして背中を丸め、肩甲骨を広げる', position: '座位または立位' },
   { file: '/images/stretch-poses/pose-15.webp', width: 313, height: 254, name: '足首のストレッチ', desc: '片脚を前に出してつま先を引き上げ、ふくらはぎと足首を伸ばす', position: '床・座位' },
   { file: '/images/stretch-poses/pose-16.webp', width: 316, height: 254, name: '全身のストレッチ（ばんざい）', desc: '両手を上に伸ばして体を大きく伸ばし、全身をリフレッシュ', position: '座位または立位' },
+  { file: '/images/stretch-poses/pose-17.webp', width: 255, height: 257, name: '肩甲骨引き寄せ', desc: '椅子に浅く座り、ひじを軽く曲げて後ろへ引き肩甲骨を背骨に寄せる', position: '椅子・座位' },
+  { file: '/images/stretch-poses/pose-18.webp', width: 255, height: 257, name: '首の前倒し', desc: '両手を後頭部に軽く添え、うなずくように頭を前に倒して首の後ろを伸ばす', position: '椅子・座位' },
+  { file: '/images/stretch-poses/pose-19.webp', width: 256, height: 257, name: '首の回旋ストレッチ', desc: '背すじを伸ばして座り、ゆっくり真横を向いて首すじを伸ばす', position: '椅子・座位' },
+  { file: '/images/stretch-poses/pose-20.webp', width: 258, height: 257, name: 'あご引きエクササイズ', desc: 'あごを水平に後ろへ引き、頭を背骨の上に戻して2秒キープ', position: '椅子・座位' },
+  { file: '/images/stretch-poses/pose-21.webp', width: 255, height: 255, name: '手首・前腕のストレッチ', desc: '片腕を前に伸ばして手のひらを上に向け、反対の手で指先をやさしく引く', position: '椅子・座位' },
+  { file: '/images/stretch-poses/pose-22.webp', width: 255, height: 255, name: '壁で胸を開くストレッチ', desc: '壁に前腕をつけて体をゆっくり反対へひねり、胸の前を伸ばす', position: '立位' },
+  { file: '/images/stretch-poses/pose-23.webp', width: 256, height: 255, name: '脇・体側のストレッチ', desc: '椅子に座り片腕を斜め上へ伸ばし、体をやや横に倒して体側を伸ばす', position: '椅子・座位' },
+  { file: '/images/stretch-poses/pose-24.webp', width: 258, height: 255, name: '首すじのストレッチ', desc: '片手を背中に回し、頭を斜め前に倒して首すじを伸ばす', position: '椅子・座位' },
+  { file: '/images/stretch-poses/pose-25.webp', width: 255, height: 245, name: 'こめかみほぐし', desc: '両手の指先をこめかみに当て、やさしく円を描くようにほぐす', position: '椅子・座位' },
+  { file: '/images/stretch-poses/pose-26.webp', width: 255, height: 245, name: '肩回し', desc: '両肩に指先を軽く添え、ひじで大きく円を描いて後ろ回しする', position: '椅子・座位' },
+  { file: '/images/stretch-poses/pose-27.webp', width: 256, height: 245, name: '座ったままツイスト', desc: '椅子に浅く座り、椅子の背に手を添えて上体をゆっくりひねる', position: '椅子・座位' },
+  { file: '/images/stretch-poses/pose-28.webp', width: 258, height: 245, name: '立って体側伸ばし', desc: '足を腰幅に開いて立ち、両手を頭上で組んで真横にゆっくり倒す', position: '立位' },
+  { file: '/images/stretch-poses/pose-29.webp', width: 255, height: 267, name: '椅子で脱力前屈', desc: '椅子に浅く座り、力を抜いて上体を前に倒し腕をだらんと垂らす', position: '椅子・座位' },
+  { file: '/images/stretch-poses/pose-30.webp', width: 255, height: 267, name: '深呼吸ストレッチ', desc: '片手を胸、片手をお腹に当ててゆっくり深呼吸する', position: '床・座位' },
+  { file: '/images/stretch-poses/pose-31.webp', width: 256, height: 267, name: '立って肩甲骨寄せ', desc: '後ろで手を組んで腕を斜め下に伸ばし、胸を開いて肩甲骨を寄せる', position: '立位' },
+  { file: '/images/stretch-poses/pose-32.webp', width: 258, height: 267, name: '足首回し', desc: '椅子に座り片脚を浮かせて足首をゆっくり回す', position: '椅子・座位' },
 ];

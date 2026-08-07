@@ -1,8 +1,17 @@
-# ポーズシート続編（17〜32）をAPIで1枚生成できるかの一発テスト。
-# 結果は pose-sheet-test ブランチ（デプロイ無効）に置く。判定後このワークフローは削除する。
+# ポーズシート続編をAPIで生成する一発ワークフロー（2026-08-07 シート2で検証済み・オーナー合格）。
+# 結果は pose-sheet-test ブランチ（デプロイ無効）に置き、オーナー合格後に ingest-pose-sheet.mjs で取り込む。
 name: pose-sheet-test
 on:
   workflow_dispatch:
+    inputs:
+      spec:
+        description: '仕様JSONのパス（scripts/sheet2-spec.json 形式・16件）'
+        required: false
+        default: 'scripts/sheet2-spec.json'
+      count:
+        description: '生成する候補枚数'
+        required: false
+        default: '2'
 
 permissions:
   contents: write
@@ -16,12 +25,12 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: シート2候補を生成（2枚）
+      - name: シート候補を生成
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
           mkdir -p out
-          node scripts/gen-pose-sheet.mjs --spec scripts/sheet2-spec.json --out out/sheet2-cand.png --n 2
+          node scripts/gen-pose-sheet.mjs --spec "${{ github.event.inputs.spec || 'scripts/sheet2-spec.json' }}" --out out/sheet-cand.png --n "${{ github.event.inputs.count || '2' }}"
       - name: 結果をpose-sheet-testブランチへ
         run: |
           mkdir pub && cp out/*.png pub/
@@ -31,7 +40,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add -A
-          git commit -m "pose sheet 2 candidates [skip ci]"
+          git commit -m "pose sheet candidates [skip ci]"
           git push -f "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}" pose-sheet-test
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

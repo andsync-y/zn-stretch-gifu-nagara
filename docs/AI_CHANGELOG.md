@@ -1421,3 +1421,12 @@ Git履歴が「何を変更したか」、このファイルが「なぜ変更�
 - 追加: `scripts/sheet2-spec.json`（docs/stretch-pose-library.md シート2の16コマ仕様）
 - 追加: `.github/workflows/pose-sheet-test.yml`（workflow_dispatchの一発テスト。候補2枚を pose-sheet-test ブランチ＝デプロイ無効へ出力。判定後に削除予定）
 - 判定基準はオーナーの目視（キャラ・画風・日本語テキストの正確さ）。不合格ならChatGPTアプリ経由（既存プロンプト）の運用を継続
+
+## 2026-08-07 (Claude Code) シート2をAPI生成→オーナー合格→ライブラリ32ポーズ化
+- `pose-sheet-test` ワークフローでシート2候補2枚を生成し、オーナーが候補1を**合格**判定（API生成ルート確立。以後シート3もAPIで作成可）
+- 合格シートを `scripts/assets/pose-sheet-2.png` として保存し、`ingest-pose-sheet.mjs --start 17` で pose-17〜32.webp に分割
+- `src/data/stretchPoses.ts` に16件追加（計32ポーズ）。position に「椅子・座位」を追加
+- `column/pc-kubikori-reset` のステップ2「肩甲骨引き寄せ」に pose-17 の挿絵を追加（ポーズ未収載リクエスト#1解消）
+- `docs/stretch-pose-library.md` を更新：API生成を正規手順に、ChatGPTアプリは予備手段に変更。ワークフローは spec/count 入力で汎用化
+- 検証: lint-column PASS（9ファイル）、astro build 成功（26ページ）
+- 留意: pose-30（深呼吸ストレッチ）は椅子ではなく床あぐらの絵。マニフェストは「床・座位」として登録済み
