@@ -25,6 +25,9 @@ jobs:
       - name: windsor-dataブランチへ強制コミット（履歴は持たない・Vercelビルドはスキップ）
         run: |
           cd out
+          # このブランチはデータ置き場でありサイトのソースを含まない。
+          # Vercelがプレビュービルドを試みて必ず失敗するため、明示的に無効化する。
+          printf '{\n  "git": {\n    "deploymentEnabled": {\n      "windsor-data": false\n    }\n  }\n}\n' > vercel.json
           git init -b windsor-data
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"

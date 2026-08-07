@@ -1292,3 +1292,18 @@ Git履歴が「何を変更したか」、このファイルが「なぜ変更�
   - Windsor MCPコネクタの接続断で広告デイリー監視Routineが失敗する問題の恒久対策として、GitHub Actions中継（windsor-data.yml + scripts/fetch-windsor-data.mjs）を新設。毎朝JST8:00にWindsor REST API（要 WINDSOR_API_KEY シークレット）からMeta/Google/GA4の数字を取得し、windsor-dataブランチへ[skip ci]付きで強制コミット。監視Routineはgit経由でJSONを読む（MCP不依存）。一部クエリ失敗は許容し取得分を保存。
 - 確認結果：構文チェックのみ（実行はWINDSOR_API_KEYシークレット登録後にworkflow_dispatchで検証予定）。
 - 未対応・次の作業：ユーザーによるWINDSOR_API_KEYのGitHubシークレット登録→テスト実行→Routineプロンプトのデータソース切替。
+
+## 2026-08-07 — Claude Code（追記）
+
+- 担当：Claude Code
+- ブランチ：`claude/zenkara-gifu-nagara-seo-ukz0er`（本番）
+- 変更内容：
+  - コラム自動生成が8/5に失敗していた原因を特定し修正。`docs/AI_CHANGELOG.md` の末尾追記どうしが
+    appendモードのマージで必ず衝突していたため、`.gitattributes` で `merge=union` を指定。
+  - Vercelのプレビュービルド失敗（メール通知）の原因を特定。データ中継用の `windsor-data` ブランチ
+    （JSONのみでサイトのソースを含まない）がプレビュー対象になっていた。`vercel.json` の
+    `git.deploymentEnabled` でこのブランチのデプロイを無効化。本番デプロイには影響なし。
+  - Google広告の入札戦略切替（MAXIMIZE_CONVERSIONS）と予算¥6,000への変更を確認・記録。
+    自動リバートの実行手順（campaign_id・パラメータ）を docs/ads-ops-guardrails.md に確定。
+- 確認結果：ワークフローの構文確認済み。次回の自動実行で効果を検証する。
+- 未対応・次の作業：デイリー監視Routineのプロンプト更新（管理ツールが認証待ちのため保留）。
