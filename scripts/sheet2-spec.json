@@ -1,0 +1,18 @@
+[
+  { "num": 17, "title": "肩甲骨引き寄せ", "steps": ["椅子に浅く座る", "ひじを軽く曲げて後ろへ引く", "肩甲骨を背骨に寄せて2秒キープ"], "pose_en": "sitting on a chair, elbows bent at her sides, pulling them back to squeeze her shoulder blades together toward the spine" },
+  { "num": 18, "title": "首の前倒し", "steps": ["両手を後頭部に軽く添える", "うなずくように頭を前に倒す", "首の後ろの伸びを感じて深呼吸"], "pose_en": "sitting, both hands resting gently on the back of her head, tilting her head forward to stretch the back of her neck" },
+  { "num": 19, "title": "首の回旋ストレッチ", "steps": ["背すじを伸ばして座る", "ゆっくり真横を向く", "伸びを感じたら反対側も"], "pose_en": "sitting upright, slowly turning her head to look to the side, stretching the side of her neck" },
+  { "num": 20, "title": "あご引きエクササイズ", "steps": ["背すじを伸ばして前を向く", "あごを水平に後ろへ引く", "2秒キープして戻す"], "pose_en": "sitting upright facing forward, tucking her chin straight back (chin tuck), head aligned over her spine" },
+  { "num": 21, "title": "手首・前腕のストレッチ", "steps": ["片腕を前に伸ばす", "手のひらを上に向ける", "反対の手で指先をやさしく引く"], "pose_en": "one arm extended forward with palm up, gently pulling the fingers back with the other hand" },
+  { "num": 22, "title": "壁で胸を開くストレッチ", "steps": ["壁に前腕をつける", "体をゆっくり反対へひねる", "胸の前の伸びを感じてキープ"], "pose_en": "standing beside a wall, forearm placed on the wall, rotating her torso away to open and stretch her chest" },
+  { "num": 23, "title": "脇・体側のストレッチ", "steps": ["椅子に座り片腕を斜め上へ", "体をやや横に倒す", "脇から体側の伸びを感じる"], "pose_en": "sitting on a chair, one arm raised diagonally overhead, leaning her torso slightly to the side" },
+  { "num": 24, "title": "首すじのストレッチ", "steps": ["片手を背中に回す", "頭を斜め前に倒す", "首すじの伸びを感じてキープ"], "pose_en": "sitting, one hand tucked behind her lower back, tilting her head diagonally forward to stretch the side of her neck" },
+  { "num": 25, "title": "こめかみほぐし", "steps": ["両手の指先をこめかみに当てる", "やさしく円を描くように動かす", "呼吸を止めずに10秒ほど"], "pose_en": "sitting with eyes closed, fingertips of both hands on her temples, massaging in gentle circles" },
+  { "num": 26, "title": "肩回し", "steps": ["両肩に指先を軽く添える", "ひじで大きく円を描く", "後ろ回しでゆっくり5回"], "pose_en": "sitting, fingertips resting on her shoulders, rolling her elbows in large backward circles" },
+  { "num": 27, "title": "座ったままツイスト", "steps": ["椅子に浅く座る", "椅子の背に手を添える", "上体をゆっくりひねる"], "pose_en": "sitting on a chair, one hand on the backrest, gently twisting her upper body to the side" },
+  { "num": 28, "title": "立って体側伸ばし", "steps": ["足を腰幅に開いて立つ", "両手を頭上で組む", "真横にゆっくり倒す"], "pose_en": "standing with feet hip-width apart, hands clasped overhead, bending her torso to the side" },
+  { "num": 29, "title": "椅子で脱力前屈", "steps": ["椅子に浅く座る", "力を抜いて上体を前に倒す", "腕は下にだらんと垂らす"], "pose_en": "sitting on a chair, folding her relaxed upper body forward over her thighs, arms hanging loosely down" },
+  { "num": 30, "title": "深呼吸ストレッチ", "steps": ["背すじを伸ばして座る", "片手を胸、片手をお腹に当てる", "ゆっくり深呼吸を5回"], "pose_en": "sitting upright with a calm expression, one hand on her chest and one hand on her belly, breathing deeply" },
+  { "num": 31, "title": "立って肩甲骨寄せ", "steps": ["後ろで手を組む", "腕を斜め下に伸ばす", "胸を開いて2〜3秒キープ"], "pose_en": "standing, hands clasped behind her back, arms extended downward, chest opened and shoulder blades squeezed together" },
+  { "num": 32, "title": "足首回し", "steps": ["椅子に座り片脚を浮かせる", "足首をゆっくり回す", "反対回しも同じように"], "pose_en": "sitting on a chair, one leg lifted slightly off the floor, rotating her ankle in slow circles" }
+]

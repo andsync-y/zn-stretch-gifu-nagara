@@ -1414,3 +1414,10 @@ Git履歴が「何を変更したか」、このファイルが「なぜ変更�
   - scripts/ingest-pose-sheet.mjs 新設：続編シートの取り込みを自動化（バッジ色検出で行境界・白ガター検出で列境界を自動特定→16分割→マニフェスト追記ひな形を出力）。
 - 確認結果：スクリプトは既存シートの境界検出ロジックと同一（検証済み）。
 - 未対応・次の作業：オーナーによるシート2・3の生成待ち。
+
+## 2026-08-07 (Claude Code) ポーズシート続編のAPI生成テスト準備
+- 目的: シート2（ポーズ17〜32）をChatGPT APIで「元設定表の続きの1枚」としてまるごと生成できるか検証（オーナー判定用）
+- 追加: `scripts/gen-pose-sheet.mjs`（gpt-image-2 / images/edits / input_fidelity=high、元シートを参照画像に同一フォーマットの続編1枚を生成）
+- 追加: `scripts/sheet2-spec.json`（docs/stretch-pose-library.md シート2の16コマ仕様）
+- 追加: `.github/workflows/pose-sheet-test.yml`（workflow_dispatchの一発テスト。候補2枚を pose-sheet-test ブランチ＝デプロイ無効へ出力。判定後に削除予定）
+- 判定基準はオーナーの目視（キャラ・画風・日本語テキストの正確さ）。不合格ならChatGPTアプリ経由（既存プロンプト）の運用を継続
