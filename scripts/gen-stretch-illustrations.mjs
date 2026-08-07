@@ -2,10 +2,12 @@
 /**
  * コラム内ストレッチ手順の挿絵を、固定キャラクター（ZNちゃん）で生成する。
  *
- * キャラクター品質の担保：
- *   scripts/assets/stretch-character-ref.png（16ポーズのキャラ設定表）を
- *   OpenAI images/edits の参照画像として渡し、同一キャラ・同一画風で
- *   指定ポーズを描かせる。ゼロから生成するより同一性が大幅に安定する。
+ * キャラクター品質の担保（3層）：
+ *   1. 参照画像2枚（16ポーズ設定表＋顔クローズアップ）を images/edits に渡す
+ *   2. 既定は「グリッドモード」：全ポーズを1回の生成で1枚のグリッド画像に描かせ、
+ *      分割して使う。1回の生成内では顔・画風が揃うため、シーン間の顔ブレを構造的に防ぐ
+ *      （ユーザー提供の設定表内で顔が揃っているのと同じ原理）。--mode single で従来方式。
+ *   3. input_fidelity=high で参照への忠実度を最大化
  *
  * 使い方（コラム生成ワークフローから呼ばれる想定）:
  *   node scripts/gen-stretch-illustrations.mjs --slug <slug> --spec stretch-spec.json
@@ -28,14 +30,15 @@ const specPath = get('--spec');
 const MODEL = get('--model') || 'gpt-image-1';
 const QUALITY = get('--quality') || 'high';
 const OUTDIR_OVERRIDE = get('--outdir');
+const MODE = get('--mode') || 'grid';
 if (!slug || !specPath) { console.error('使い方: --slug <slug> --spec <spec.json>'); process.exit(1); }
 
 const spec = JSON.parse(await readFile(specPath, 'utf8'));
 if (!Array.isArray(spec) || spec.length === 0) { console.error('specが空です'); process.exit(1); }
 if (spec.length > 6) { console.error('挿絵は最大6枚までにしてください'); process.exit(1); }
 
-const REF = 'scripts/assets/stretch-character-ref.png';
-const refBuf = await readFile(REF);
+const refBuf = await readFile('scripts/assets/stretch-character-ref.png');
+const faceBuf = await readFile('scripts/assets/character-face-ref.png');
 const outDir = OUTDIR_OVERRIDE || `public/images/column/stretch/${slug}`;
 await mkdir(outDir, { recursive: true });
 const sharp = (await import('sharp')).default;
@@ -53,55 +56,89 @@ const STYLE =
   'would approve, no extreme flexibility. Prefer poses close to the ones shown in the reference sheet. ' +
   'No text, no numbers, no watermark, no frame.';
 
-let ok = 0;
-for (const item of spec) {
-  const prompt = `She is performing this stretch: ${item.pose}. ${STYLE}`;
-  try {
+async function callEdit(prompt, size) {
+  const build = (withFidelity) => {
     const form = new FormData();
     form.append('model', MODEL);
-    form.append('image[]', new Blob([refBuf], { type: 'image/png' }), 'ref.png');
+    form.append('image[]', new Blob([refBuf], { type: 'image/png' }), 'ref-sheet.png');
+    form.append('image[]', new Blob([faceBuf], { type: 'image/png' }), 'ref-face.png');
     form.append('prompt', prompt);
-    form.append('size', '1024x1024');
+    form.append('size', size);
     form.append('quality', QUALITY);
-    // 参照画像（キャラと画風）への忠実度を最大化する
-    form.append('input_fidelity', 'high');
+    if (withFidelity) form.append('input_fidelity', 'high');
     form.append('n', '1');
-    const res = await fetch('https://api.openai.com/v1/images/edits', {
-      method: 'POST',
-      headers: { authorization: `Bearer ${KEY}` },
-      body: form,
-      signal: AbortSignal.timeout(180000),
+    return form;
+  };
+  let res = await fetch('https://api.openai.com/v1/images/edits', {
+    method: 'POST', headers: { authorization: `Bearer ${KEY}` },
+    body: build(true), signal: AbortSignal.timeout(300000),
+  });
+  if (res.status === 400 && (await res.clone().text()).includes('input_fidelity')) {
+    // 新モデルが input_fidelity 未対応の場合はパラメータ無しで再試行
+    res = await fetch('https://api.openai.com/v1/images/edits', {
+      method: 'POST', headers: { authorization: `Bearer ${KEY}` },
+      body: build(false), signal: AbortSignal.timeout(300000),
     });
-    if (!res.ok) {
-      const body = await res.text();
-      // 新モデルが input_fidelity 未対応の場合はパラメータ無しで1回だけ再試行
-      if (res.status === 400 && body.includes('input_fidelity')) {
-        form.delete('input_fidelity');
-        const res2 = await fetch('https://api.openai.com/v1/images/edits', {
-          method: 'POST', headers: { authorization: `Bearer ${KEY}` }, body: form,
-          signal: AbortSignal.timeout(180000),
-        });
-        if (!res2.ok) throw new Error(`HTTP ${res2.status}: ${(await res2.text()).slice(0, 200)}`);
-        const b64r = (await res2.json())?.data?.[0]?.b64_json;
-        if (!b64r) throw new Error('レスポンスに画像なし');
-        const outr = await sharp(Buffer.from(b64r, 'base64')).resize(900).webp({ quality: 85 }).toBuffer();
-        const pathr = `${outDir}/${item.file}.webp`;
-        await writeFile(pathr, outr);
-        ok++;
-        console.log(`OK(no-fidelity): ${pathr} (${Math.round(outr.length / 1024)}KB)`);
-        continue;
-      }
-      throw new Error(`HTTP ${res.status}: ${body.slice(0, 200)}`);
+  }
+  if (!res.ok) throw new Error(`HTTP ${res.status}: ${(await res.text()).slice(0, 250)}`);
+  const b64 = (await res.json())?.data?.[0]?.b64_json;
+  if (!b64) throw new Error('レスポンスに画像なし');
+  return Buffer.from(b64, 'base64');
+}
+
+let ok = 0;
+
+if (MODE === 'grid') {
+  // ===== グリッドモード（既定）：1回の生成で全ポーズ → 分割 =====
+  const n = spec.length;
+  const cols = 2;
+  const rows = Math.ceil(n / cols);
+  // 埋め草ポーズでグリッドを完全に埋める（中途半端なグリッドは崩れやすい）
+  const cells = [...spec];
+  while (cells.length < rows * cols) {
+    cells.push({ file: `_spare-${cells.length}`, pose: 'standing upright and relaxed, smiling, arms at her sides' });
+  }
+  const size = rows >= 3 ? '1024x1536' : '1024x1024';
+  const panelLines = cells.map((c, i) => `Panel ${i + 1}: ${c.pose}.`).join('\n');
+  const prompt =
+    `One single image laid out as a strict ${rows}x${cols} grid of ${rows * cols} equal-sized rectangular panels, ` +
+    `separated by clean straight thin white gutters. No borders, no numbers, no text. ` +
+    `EVERY panel shows the exact same character with an IDENTICAL face, hairstyle, outfit and art style. ` +
+    `Panels are numbered left-to-right, top-to-bottom:\n${panelLines}\n${STYLE}`;
+  try {
+    const buf = await callEdit(prompt, size);
+    const img = sharp(buf);
+    const meta = await img.metadata();
+    const cw = Math.floor(meta.width / cols);
+    const ch = Math.floor(meta.height / rows);
+    for (let i = 0; i < n; i++) {
+      const r = Math.floor(i / cols), c = i % cols;
+      // ガター中央で切り、端の見切れを避けるためわずかに内側へ寄せる
+      const inset = Math.round(cw * 0.01);
+      const out = await sharp(buf)
+        .extract({ left: c * cw + inset, top: r * ch + inset, width: cw - inset * 2, height: ch - inset * 2 })
+        .resize(900).webp({ quality: 85 }).toBuffer();
+      const path = `${outDir}/${spec[i].file}.webp`;
+      await writeFile(path, out);
+      ok++;
+      console.log(`OK: ${path} (${Math.round(out.length / 1024)}KB)`);
     }
-    const b64 = (await res.json())?.data?.[0]?.b64_json;
-    if (!b64) throw new Error('レスポンスに画像なし');
-    const out = await sharp(Buffer.from(b64, 'base64')).resize(900).webp({ quality: 85 }).toBuffer();
-    const path = `${outDir}/${item.file}.webp`;
-    await writeFile(path, out);
-    ok++;
-    console.log(`OK: ${path} (${Math.round(out.length / 1024)}KB)`);
   } catch (e) {
-    console.error(`FAIL: ${item.file} - ${String(e).slice(0, 200)}`);
+    console.error(`GRID FAIL: ${String(e).slice(0, 250)}`);
+  }
+} else {
+  // ===== 従来モード：1枚ずつ生成（--mode single）=====
+  for (const item of spec) {
+    try {
+      const buf = await callEdit(`She is performing this stretch: ${item.pose}. ${STYLE}`, '1024x1024');
+      const out = await sharp(buf).resize(900).webp({ quality: 85 }).toBuffer();
+      const path = `${outDir}/${item.file}.webp`;
+      await writeFile(path, out);
+      ok++;
+      console.log(`OK: ${path} (${Math.round(out.length / 1024)}KB)`);
+    } catch (e) {
+      console.error(`FAIL: ${item.file} - ${String(e).slice(0, 200)}`);
+    }
   }
 }
 console.log(`完了: ${ok}/${spec.length} 枚生成`);
