@@ -12,7 +12,8 @@
  *   spec: [{ "file": "01-neck-side", "pose": "sitting cross-legged, tilting head to the right..." }, ...]
  *
  * 出力: public/images/column/stretch/<slug>/<file>.webp（幅900px）
- * 費用目安: gpt-image-1 quality=medium で1枚あたり約$0.04〜0.05（記事1本・4枚で約¥30）
+ * 費用目安: quality=high + input_fidelity=high で1枚あたり約$0.19（記事1本・4枚で約¥120）
+ *          （quality=medium なら約$0.07/枚。--quality で切替可）
  * 一部失敗は許容（成功分だけ保存し、結果を標準出力に出す）。全滅時のみ exit 1。
  */
 import { writeFile, mkdir, readFile } from 'node:fs/promises';
@@ -24,6 +25,9 @@ const args = process.argv.slice(2);
 const get = (k) => { const i = args.indexOf(k); return i >= 0 ? args[i + 1] : null; };
 const slug = get('--slug');
 const specPath = get('--spec');
+const MODEL = get('--model') || 'gpt-image-1';
+const QUALITY = get('--quality') || 'high';
+const OUTDIR_OVERRIDE = get('--outdir');
 if (!slug || !specPath) { console.error('使い方: --slug <slug> --spec <spec.json>'); process.exit(1); }
 
 const spec = JSON.parse(await readFile(specPath, 'utf8'));
@@ -32,16 +36,19 @@ if (spec.length > 6) { console.error('挿絵は最大6枚までにしてくだ�
 
 const REF = 'scripts/assets/stretch-character-ref.png';
 const refBuf = await readFile(REF);
-const outDir = `public/images/column/stretch/${slug}`;
+const outDir = OUTDIR_OVERRIDE || `public/images/column/stretch/${slug}`;
 await mkdir(outDir, { recursive: true });
 const sharp = (await import('sharp')).default;
 
-// キャラクターと画風の固定指示（毎回同一）
+// キャラクターと画風の固定指示（毎回同一）。
+// 画風は言葉で再定義せず「参照シートを完全コピー」とだけ指示する
+// （形容詞で塗り・背景を指定すると参照の画風を上書きしてしまうため）。
 const STYLE =
-  'Draw the EXACT SAME anime character as in the reference sheet: a young Japanese woman with long wavy ' +
-  'brown hair, wearing a plain white t-shirt with a small "ZN" logo on the chest, light blue leggings and ' +
-  'white socks. Keep the identical clean anime illustration style, soft flat colors, gentle smile, ' +
-  'plain very light warm-gray background, single character, full body visible. ' +
+  'Reproduce the EXACT art style of the reference sheet with perfect fidelity: same character ' +
+  '(young Japanese woman, long wavy brown hair, plain white t-shirt with a small "ZN" logo, ' +
+  'light blue leggings, white socks), same face, same body proportions, same line quality, ' +
+  'same shading and rendering, same plain light neutral-gray background color as the sheet. ' +
+  'Single character, full body visible. ' +
   'The pose must be anatomically correct, gentle and safe — a standard stretching form a physiotherapist ' +
   'would approve, no extreme flexibility. Prefer poses close to the ones shown in the reference sheet. ' +
   'No text, no numbers, no watermark, no frame.';
@@ -51,11 +58,13 @@ for (const item of spec) {
   const prompt = `She is performing this stretch: ${item.pose}. ${STYLE}`;
   try {
     const form = new FormData();
-    form.append('model', 'gpt-image-1');
+    form.append('model', MODEL);
     form.append('image[]', new Blob([refBuf], { type: 'image/png' }), 'ref.png');
     form.append('prompt', prompt);
     form.append('size', '1024x1024');
-    form.append('quality', 'medium');
+    form.append('quality', QUALITY);
+    // 参照画像（キャラと画風）への忠実度を最大化する
+    form.append('input_fidelity', 'high');
     form.append('n', '1');
     const res = await fetch('https://api.openai.com/v1/images/edits', {
       method: 'POST',
