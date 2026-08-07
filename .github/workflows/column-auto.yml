@@ -1,7 +1,8 @@
 name: コラム自動生成（週3本）
 
 # 月・水・金 JST 9:00（UTC 0:00）に1本生成し、claude/column-auto ブランチへPRを作る。
-# 生成物は必ず人がレビューしてから本番ブランチへマージする（自動マージはしない）。
+# 品質GATE（scripts/lint-column.mjs ＋ AIレビュー）を通過した記事のみ自動マージ＝公開する。
+# GATEを通らない場合はPRに「要人間確認」ラベルを付けて公開せず停止する（オーナー承認済みの運用・2026-08-07）。
 on:
   schedule:
     - cron: '0 0 * * 1,3,5'
@@ -185,6 +186,30 @@ jobs:
             - 実行結果の最終行に `CREDIT: ...` が出力されます。
               **その文字列を必ず `imageCredit` プロップに設定してください**（出典表示のため）。
 
+            ## ストレッチ手順の挿絵（キャラクターイラスト・必ず入れる）
+            記事内の各ストレッチ手順（h3）に、固定キャラクター「ZNちゃん」がそのストレッチを
+            実践しているイラストを1枚ずつ入れます。手順は次のとおりです。
+
+            1. 記事本文を書き終えたら、各ストレッチ手順に対応するポーズ指定を `stretch-spec.json` に書く：
+               [{ "file": "01-<英語の短い名前>", "pose": "<英語でポーズを具体的に描写>" }, ...]
+               - 枚数は手順の数と同じ（3〜5枚。最大6枚）。
+               - pose は scripts/assets/stretch-character-ref.png にある16の標準ポーズ
+                 （首の側屈・ハムストリング・開脚前屈・ふくらはぎ壁押し・キャット&カウ・胸開き・
+                 お尻ツイスト・大腿四頭筋・膝抱え・体側・バタフライ・スレッドザニードル・ランジ・
+                 肩甲骨・足首・ばんざい）**に近い、一般的で安全な形だけ**を指定します。
+                 曲芸的・複雑・新奇なポーズを発明しないでください（作画が破綻し、誤ったフォームを
+                 読者に教える危険があるため）。
+            2. `node scripts/gen-stretch-illustrations.mjs --slug <slug> --spec stretch-spec.json` を実行。
+            3. 生成された画像を各h3の直後に入れる：
+               <figure class="my-4">
+                 <img src="/images/column/stretch/<slug>/<file>.webp" alt="<ポーズの説明>のイラスト"
+                      width="900" height="900" loading="lazy" decoding="async" />
+                 <figcaption class="mt-1 text-[11px] text-muted">イラストはイメージです。動作の詳細は本文の手順に従ってください。</figcaption>
+               </figure>
+               ※「イラストはイメージです」の注記は必須（品質GATEで機械チェックされます）。
+            4. 一部の画像が生成失敗した場合は、失敗した手順の挿絵だけ省いて構いません（記事は完成させる）。
+            5. 最後に `stretch-spec.json` を削除してください（コミットに含めない）。
+
             ### altテキストの書き方（重要）
             フリー素材・AI生成の画像は**自店で撮影したものではありません**。
             そのため alt に「全力ストレッチ岐阜長良店の施術」など、
@@ -216,10 +241,59 @@ jobs:
             - 1回の実行で2本以上の作成
             - git のコミット・プッシュ・PR作成（これらはワークフロー側で自動的に行います。あなたはファイルを作るだけです）
 
+      # ============ 品質GATE 第1段：機械チェック ============
+      - name: 品質GATE（lint 1回目）
+        id: lint1
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          rm -f stretch-spec.json
+          CHANGED="$(git status --porcelain src/pages/column/ | awk '{print $2}' | grep '\.astro$' || true)"
+          node scripts/lint-column.mjs $CHANGED 2>&1 | tee lint-result.txt
+
+      # ============ 品質GATE 第2段：AIレビュー（lint失敗の修正＋文脈チェック） ============
+      - name: 品質GATE（AIレビュー・修正）
+        uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          claude_args: |
+            --model claude-sonnet-5
+            --max-turns 30
+            --allowedTools "Read,Write,Edit,Glob,Grep,Bash(npm:*),Bash(node:*),Bash(git:*),Bash(ls:*),Bash(cat:*)"
+          prompt: |
+            あなたは薬機法・景表法に厳格なレビュアー兼、検索意図の編集者です。
+            直前に生成されたコラム記事（git status で差分のある src/pages/column/*.astro）をレビューし、
+            問題があれば**あなた自身がファイルを修正**してください。新しい記事は作りません。
+
+            1. まず lint-result.txt を読む。FAILの指摘があれば全て修正する。
+            2. 機械チェックをすり抜ける文脈的な効能断定が無いか読む
+               （例：「痛みが消えていく」「二度と戻らない体へ」のような婉曲的な断定・保証）。
+               見つけたら docs/yakkihou-ng-ok.md の言い換えに従って修正。
+            3. タイトルのキーワードで検索する人の疑問に、冒頭200字で答えているか。弱ければリード文を修正。
+            4. 「岐阜市長良の専門店のトレーナーが解説」の立場が一貫しているか。「体感軸調整法」への言及があるか。
+            5. セルフケア手順が安全か（無理な負荷・痛みを我慢させる指示がないか）。
+            6. 挿絵の figcaption「イラストはイメージです」が全ての挿絵にあるか。
+            修正後、`node scripts/lint-column.mjs <対象ファイル>` と `npm run build` が通ることを確認。
+            問題がなければ何も変更せず「レビューOK」とだけ出力して終了。
+
+      - name: 品質GATE（lint 2回目・最終判定）
+        id: lint2
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          rm -f stretch-spec.json lint-result.txt
+          CHANGED="$(git status --porcelain src/pages/column/ | awk '{print $2}' | grep '\.astro$' || true)"
+          if node scripts/lint-column.mjs $CHANGED 2>&1 | tee lint-final.txt && npm run build; then
+            echo "verdict=PASS" >> "$GITHUB_OUTPUT"
+          else
+            echo "verdict=FAIL" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: 変更を検出してコミット
         id: commit
         run: |
           set -euo pipefail
+          # 品質GATEの一時ファイルは .gitignore 済み（lint-final.txt は不合格通知で使うため消さない）
           if [ -z "$(git status --porcelain)" ]; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
             echo "::warning::記事が生成されませんでした（差分なし）"
@@ -270,9 +344,10 @@ jobs:
             ## 自動生成されたコラム記事
 
             GitHub Actions（週3本・月水金 JST 9:00）が自動生成した記事です。
-            **内容を確認してからマージしてください。** マージ＝公開（Vercelが自動デプロイ）です。
+            **品質GATE（機械チェック＋AIレビュー＋ビルド）を通過すると自動でマージ＝公開されます。**
+            不合格の場合は「要人間確認」ラベルが付き、公開されずに保留されます。
 
-            ### レビュー時のチェックリスト
+            ### 品質GATEのチェック内容
             - [ ] 1記事1意図。既存記事と内容が重複していない
             - [ ] 事実と異なる記述・創作された実績や体験談がない
             - [ ] 薬機法・景表法：「治る」「効果があります」等の断定表現がない
@@ -303,3 +378,33 @@ jobs:
             ※前回の記事が未マージのため、このPRに積み増しています。
         run: |
           gh pr comment "${{ steps.branch.outputs.pr_number }}" --body "$NOTE_BODY"
+
+      # ============ 品質GATE通過 → 自動マージ（＝公開） ============
+      - name: 自動マージ（品質GATE通過時のみ）
+        if: steps.commit.outputs.changed == 'true' && steps.lint2.outputs.verdict == 'PASS'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          PR="$(gh pr list --head claude/column-auto --state open --json number --jq '.[0].number // empty')"
+          if [ -z "$PR" ]; then echo "::error::マージ対象のPRが見つかりません"; exit 1; fi
+          gh pr comment "$PR" --body "✅ 品質GATE通過（機械チェック＋AIレビュー＋ビルド）。自動公開ポリシーに基づきマージします。"
+          gh pr merge "$PR" --merge
+          echo "公開: PR #$PR"
+
+      - name: GATE不合格→公開せず人間へ引き継ぎ
+        if: steps.commit.outputs.changed == 'true' && steps.lint2.outputs.verdict != 'PASS'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh label create "要人間確認" --color D93F0B --description "品質GATE不合格。人のレビューが必要" 2>/dev/null || true
+          PR="$(gh pr list --head claude/column-auto --state open --json number --jq '.[0].number // empty')"
+          if [ -n "$PR" ]; then
+            gh pr edit "$PR" --add-label "要人間確認"
+            BODY="⚠️ 品質GATE不合格のため公開を保留しました。内容を確認してください。"
+            if [ -f lint-final.txt ]; then BODY="$BODY"$'\n\n```\n'"$(cat lint-final.txt)"$'\n```'; fi
+            gh pr comment "$PR" --body "$BODY"
+          fi
+          echo "::error::品質GATE不合格。PR #${PR} を公開せず保留しました。"
+          exit 1

@@ -1335,3 +1335,14 @@ Git履歴が「何を変更したか」、このファイルが「なぜ変更�
   - SEO自動運転システムの設計書 docs/SEO_AUTOPILOT.md を新規作成。7プロセス（サイト構築〜リライト）の現状マップ、アーキテクチャ、各ワークフローのプロンプト全文、実装ロードマップ6段階、コスト試算、目標のキャリブレーションを記載。実装は未着手（設計のみ）。
 - 確認結果：ドキュメントのみのため対象外。
 - 未対応・次の作業：Phase 1（品質GATE）の実装承認待ち。Phase 2はオーナーによるWindsorでのSearch Consoleコネクタ認証が前提。
+
+## 2026-08-07 — Claude Code（追記）
+
+- 担当：Claude Code
+- ブランチ：`claude/zenkara-gifu-nagara-seo-ukz0er`（本番）
+- 変更内容（SEO自動運転 Phase 1: 品質GATE ＋ キャラクター挿絵）：
+  - scripts/lint-column.mjs 新設：薬機法NG表現・画像出典表記・alt誤認・内部リンク実在・FAQ数・columns.ts登録・体感軸調整法言及を機械チェック（自店実写真とAI/フリー画像で基準を分岐。レガシー3本はFAQ免除）。
+  - scripts/gen-stretch-illustrations.mjs 新設：固定キャラクター（scripts/assets/stretch-character-ref.png・16ポーズ設定表）を参照画像にしたOpenAI images/editsで、記事内ストレッチ手順の挿絵を生成（900px webp・記事あたり3〜5枚・quality medium）。
+  - column-auto.yml 改修：生成→lint→AIレビュー（自己修正）→lint再判定→ビルド→**PASSなら自動マージ公開／FAILなら「要人間確認」ラベルで保留**。記事プロンプトに挿絵生成手順（参照ポーズ縛り・figcaption「イラストはイメージです」必須・曲芸ポーズ禁止）を追加。
+- 確認結果：lint全記事PASS（8ファイル）。E2Eはworkflow_dispatchで検証実行。
+- 未対応・次の作業：Windsor側にSearch Consoleコネクタが未出現のためGSC取得は保留（Phase 2）。
