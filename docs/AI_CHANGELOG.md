@@ -1293,6 +1293,25 @@ Git履歴が「何を変更したか」、このファイルが「なぜ変更�
 - 確認結果：構文チェックのみ（実行はWINDSOR_API_KEYシークレット登録後にworkflow_dispatchで検証予定）。
 - 未対応・次の作業：ユーザーによるWINDSOR_API_KEYのGitHubシークレット登録→テスト実行→Routineプロンプトのデータソース切替。
 
+## 2026-08-07 — GitHub Actions（Claude）
+
+- ブランチ：`claude/column-auto`
+- 関連PR：なし
+- 変更内容：
+  - コラムバックログ（`docs/column-backlog.md`）の `authority` 型から最上位の未対応「ganseihiro-kubikori（眼精疲労 首こり ストレッチ）」を選び、新規コラム記事を1本作成。
+  - 眼精疲労と首こりが同時に起こりやすい仕組みと、目のまわり・後頭部・首すじをゆるめるセルフストレッチ5選、頻度の目安を解説。既存の「smartphone-kubi」（姿勢・スマホ首特化）とは意図を分け、目と首の関係解説として重複を避けた。
+  - アイキャッチ画像はAI生成（`scripts/fetch-column-image.mjs --source ai`）。明るいオフィスで席を立ち首や肩を伸ばす日本人男性のイメージ。
+- 主な変更ファイル：
+  - `src/pages/column/ganseihiro-kubikori.astro`（新規）
+  - `public/images/column/ganseihiro-kubikori.webp`（新規）
+  - `src/data/columns.ts`（COLUMNS配列の先頭に追加）
+  - `docs/column-backlog.md`（該当行を `- [x]` に更新）
+- 判断・注意点：
+  - faqプロップに5問、独自メソッド「体感軸調整法」への言及、`/symptoms/kubi-ganseihiro` への内部リンクを含めた。
+  - 薬機法・景表法に抵触する断定表現（治る・治療・解消・矯正等）は使用していないことを確認済み。
+- 確認結果：`npm run build` 成功（24→25ページ）。
+- 未対応・次の作業：ユーザーによるレビュー後、本番ブランチ `claude/zenkara-gifu-nagara-seo-ukz0er` へのマージ（本記録の時点では未マージ）。
+
 ## 2026-08-07 — Claude Code（追記）
 
 - 担当：Claude Code
