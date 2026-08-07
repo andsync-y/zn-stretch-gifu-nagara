@@ -14,8 +14,8 @@
  *   spec: [{ "file": "01-neck-side", "pose": "sitting cross-legged, tilting head to the right..." }, ...]
  *
  * 出力: public/images/column/stretch/<slug>/<file>.webp（幅900px）
- * 費用目安: quality=high + input_fidelity=high で1枚あたり約$0.19（記事1本・4枚で約¥120）
- *          （quality=medium なら約$0.07/枚。--quality で切替可）
+ * 既定: gpt-image-2 × グリッド一括生成 × quality=high × input_fidelity=high
+ * 費用目安: グリッド1回の生成で全ポーズが出るため記事1本あたり約$0.25（約¥40）
  * 一部失敗は許容（成功分だけ保存し、結果を標準出力に出す）。全滅時のみ exit 1。
  */
 import { writeFile, mkdir, readFile } from 'node:fs/promises';
@@ -27,7 +27,7 @@ const args = process.argv.slice(2);
 const get = (k) => { const i = args.indexOf(k); return i >= 0 ? args[i + 1] : null; };
 const slug = get('--slug');
 const specPath = get('--spec');
-const MODEL = get('--model') || 'gpt-image-1';
+const MODEL = get('--model') || 'gpt-image-2';
 const QUALITY = get('--quality') || 'high';
 const OUTDIR_OVERRIDE = get('--outdir');
 const MODE = get('--mode') || 'grid';

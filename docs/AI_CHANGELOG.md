@@ -1368,3 +1368,16 @@ Git履歴が「何を変更したか」、このファイルが「なぜ変更�
   - `node scripts/lint-column.mjs` で対象ファイルをチェックしPASSを確認。
 - 確認結果：`npm run build` 成功（25→26ページ）。
 - 未対応・次の作業：ユーザーによるレビュー後、本番ブランチ `claude/zenkara-gifu-nagara-seo-ukz0er` へのマージ（本記録の時点では未マージ）。
+
+## 2026-08-07 — Claude Code（追記）
+
+- 担当：Claude Code
+- ブランチ：`claude/zenkara-gifu-nagara-seo-ukz0er`（本番）
+- 変更内容（キャラ挿絵の品質改善：シーン間の顔ブレ対策）：
+  - 生成方式を3周の比較テスト（旧設定／設定改善版gpt-image-1／gpt-image-2／グリッド一括×両モデル）で検証し、**gpt-image-2 × グリッド一括生成 × input_fidelity=high** を既定に採用。全ポーズを1回の生成で1枚に描かせてから分割するため、シーン間で顔・画風が構造的に揃う（オーナー提供の設定表内で顔が揃うのと同じ原理）。参照画像は設定表＋顔クローズアップ（character-face-ref.png・新規）の2枚構成。
+  - 公開済み記事 pc-kubikori-reset の挿絵4枚を新方式の生成物に差し替え。
+  - 比較用の一時ワークフロー illust-test.yml を削除（結果はillust-testブランチに残置）。
+  - 費用: グリッド化により記事あたり約¥120→約¥40に低減。
+  - 備考: chatgpt-image-latest は images/edits 非対応のため不採用。
+- 確認結果：品質GATE PASS（9ファイル）・ビルド成功。
+- 未対応・次の作業：なし。
