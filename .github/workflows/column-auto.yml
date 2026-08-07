@@ -198,7 +198,7 @@ jobs:
             3. 該当する手順のh3の直後に挿絵を入れる：
                <figure class="my-4">
                  <img src="{pose.file}" alt="{poseの内容}のイラスト"
-                      width="313" height="313" loading="lazy" decoding="async" class="mx-auto" />
+                      width="{pose.width}" height="{pose.height}" loading="lazy" decoding="async" class="mx-auto" />
                  <figcaption class="mt-1 text-center text-[11px] text-muted">イラストはイメージです。動作の詳細は本文の手順に従ってください。</figcaption>
                </figure>
                ※「イラストはイメージです」の注記は必須（品質GATEで機械チェックされます）。
