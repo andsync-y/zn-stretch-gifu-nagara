@@ -37,10 +37,10 @@ jobs:
             { "file": "04-chest-open", "pose": "sitting on a chair, both hands clasped behind the back, arms extended, opening the chest and stretching the shoulders" }
           ]
           EOF
-      - name: 高品質＋高忠実度で生成
-        run: node scripts/gen-stretch-illustrations.mjs --slug test --spec test-spec.json --quality high --outdir out/high
-      - name: 中品質＋高忠実度で生成（コスト比較用）
-        run: node scripts/gen-stretch-illustrations.mjs --slug test --spec test-spec.json --quality medium --outdir out/medium
+      - name: chatgpt-image-latest で生成
+        run: node scripts/gen-stretch-illustrations.mjs --slug test --spec test-spec.json --model chatgpt-image-latest --quality high --outdir out/chatgpt-latest || true
+      - name: gpt-image-2 で生成
+        run: node scripts/gen-stretch-illustrations.mjs --slug test --spec test-spec.json --model gpt-image-2 --quality high --outdir out/image2 || true
       - name: illust-testブランチへコミット（デプロイ無効）
         run: |
           cd out

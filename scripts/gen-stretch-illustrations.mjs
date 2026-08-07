@@ -72,7 +72,27 @@ for (const item of spec) {
       body: form,
       signal: AbortSignal.timeout(180000),
     });
-    if (!res.ok) throw new Error(`HTTP ${res.status}: ${(await res.text()).slice(0, 200)}`);
+    if (!res.ok) {
+      const body = await res.text();
+      // 新モデルが input_fidelity 未対応の場合はパラメータ無しで1回だけ再試行
+      if (res.status === 400 && body.includes('input_fidelity')) {
+        form.delete('input_fidelity');
+        const res2 = await fetch('https://api.openai.com/v1/images/edits', {
+          method: 'POST', headers: { authorization: `Bearer ${KEY}` }, body: form,
+          signal: AbortSignal.timeout(180000),
+        });
+        if (!res2.ok) throw new Error(`HTTP ${res2.status}: ${(await res2.text()).slice(0, 200)}`);
+        const b64r = (await res2.json())?.data?.[0]?.b64_json;
+        if (!b64r) throw new Error('レスポンスに画像なし');
+        const outr = await sharp(Buffer.from(b64r, 'base64')).resize(900).webp({ quality: 85 }).toBuffer();
+        const pathr = `${outDir}/${item.file}.webp`;
+        await writeFile(pathr, outr);
+        ok++;
+        console.log(`OK(no-fidelity): ${pathr} (${Math.round(outr.length / 1024)}KB)`);
+        continue;
+      }
+      throw new Error(`HTTP ${res.status}: ${body.slice(0, 200)}`);
+    }
     const b64 = (await res.json())?.data?.[0]?.b64_json;
     if (!b64) throw new Error('レスポンスに画像なし');
     const out = await sharp(Buffer.from(b64, 'base64')).resize(900).webp({ quality: 85 }).toBuffer();
