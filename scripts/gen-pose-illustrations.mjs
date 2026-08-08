@@ -41,17 +41,24 @@ for (let b = 0; b < poses.length / 4; b++) {
   const batch = poses.slice(b * 4, b * 4 + 4);
   const form = new FormData();
   form.append('model', 'gpt-image-2');
+  // 1枚目＝「正」のChatGPT設定表（顔・画風のアンカー）。2〜5枚目＝ポーズカード。
+  const refBuf = await readFile('scripts/assets/stretch-character-ref.png');
+  form.append('image[]', new Blob([refBuf], { type: 'image/png' }), 'character-ref.png');
   for (const p of batch) {
     const buf = await readFile(`public/images/stretch-poses/${p.id}.webp`);
     form.append('image[]', new Blob([buf], { type: 'image/webp' }), `${p.id}.webp`);
   }
   const prompt =
-    `Attached are 4 reference cards (in order: card1..card4) from a Japanese stretch-exercise guide, all featuring the SAME original character ` +
-    `(young Japanese woman, long wavy brown hair, white t-shirt with a small "ZN" logo, light blue leggings, white socks).\n` +
+    `The FIRST attached image is the official character reference sheet — the canonical look of this original character. ` +
+    `The next 4 images are pose cards (card1..card4) featuring the same character.\n` +
     `Create ONE image: a 2x2 grid on a plain very light warm-gray background (#f2f0ee), divided into 4 equal square cells with no visible grid lines or borders.\n` +
     batch.map((p, i) => `- ${POS[i]} cell = the pose from card${i + 1} (${p.desc})${HINTS[p.id] ? ` — IMPORTANT: ${HINTS[p.id]}` : ''}`).join('\n') + '\n' +
-    `In each cell, redraw ONLY the character demonstrating EXACTLY the same pose as in the corresponding card, in EXACTLY the same anime art style, ` +
-    `same face and proportions. The character should be large and centered, filling most of the cell. ` +
+    `In each cell, redraw ONLY the character demonstrating EXACTLY the same pose as in the corresponding card.\n` +
+    `CRITICAL — character fidelity: reproduce the EXACT face and art style of the FIRST reference sheet. Same large soft brown eyes, ` +
+    `same cute gentle facial features, same head-to-body proportions, same soft anime coloring. Do not restyle her.\n` +
+    `CRITICAL — clothing: white t-shirt with a small gray "ZN" logo, and SKIN-TIGHT pastel light-blue LEGGINGS exactly as in the reference sheet — ` +
+    `smooth thin stretchy fabric hugging the legs, NO button, NO zipper, NO fly, NO pockets, NO belt loops, NO denim texture (they must NOT look like jeans or trousers), plus white socks.\n` +
+    `The character should be large and centered, filling most of the cell. ` +
     `Keep any prop that the pose needs (chair, wall, towel) in the same simple style as the cards.\n` +
     `ABSOLUTELY NO text, NO numbers, NO badges, NO titles, NO arrows, NO labels, NO watermarks anywhere in the image.`;
   form.append('prompt', prompt);
