@@ -1,0 +1,35 @@
+# 記事掲載用「文字なし・キャラだけ」イラストの一括生成（カード形式からの置き換え用・一時ワークフロー）。
+# 結果は pose-sheet-test ブランチ（デプロイ無効）に置く。取り込み完了後に削除してよい。
+name: pose-illu-gen
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: 8バッチ（32ポーズ）を生成
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: node scripts/gen-pose-illustrations.mjs --out out
+      - name: 結果をpose-sheet-testブランチへ
+        run: |
+          mkdir pub && cp out/*.png pub/
+          printf '%s' '{"git":{"deploymentEnabled":{"pose-sheet-test":false}}}' > pub/vercel.json
+          cd pub
+          git init -b pose-sheet-test
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "pose illustrations (no-text) [skip ci]"
+          git push -f "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}" pose-sheet-test
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
