@@ -3,9 +3,12 @@
  * ライブラリの「説明カード」画像から、記事掲載用の「文字なし・キャラだけ」イラストを再生成する。
  * カード4枚を参照画像として渡し、同キャラ・同ポーズ・同画風の2x2グリッド（1024px→512pxセル）を作らせる。
  *
- * 使い方: node scripts/gen-pose-illustrations.mjs --out <出力ディレクトリ>
+ * 使い方: node scripts/gen-pose-illustrations.mjs --out <出力ディレクトリ> [--batches 2,4]
  *   public/images/stretch-poses/pose-01..32.webp を4枚ずつバッチ処理し、
  *   <out>/illu-batch-01.png（ポーズ1〜4）... illu-batch-08.png（ポーズ29〜32）を出力する。
+ *   --batches でバッチ番号を絞って再生成できる。
+ *   ※ 参照カードは初回生成前のカード形式である必要がある。差し替え後に再実行する場合は
+ *     git show で当時のカード（コミット 0373451 時点）を復元してから使うこと。
  */
 import { writeFile, readFile } from 'node:fs/promises';
 import { mkdirSync } from 'node:fs';
@@ -25,7 +28,16 @@ if (poses.length !== 32) { console.error(`マニフェストから32件読めま
 
 const POS = ['top-left', 'top-right', 'bottom-left', 'bottom-right'];
 
+// 初回生成でポーズがずれたコマへの強制指定（英語で姿勢を明示する）
+const HINTS = {
+  'pose-08': 'She is STANDING upright on one leg, bending the other knee behind her and holding that ankle with her hand to stretch the front of the thigh. NOT kneeling.',
+  'pose-14': 'She is SITTING upright, both arms extended straight forward at shoulder height, hands clasped, rounding her upper back to spread the shoulder blades apart. NOT a child pose, NOT bending to the floor.',
+  'pose-15': 'She is SITTING on the floor with one leg extended forward, pulling the toes of that foot up toward her shin with her hand to stretch the calf and ankle.',
+};
+
+const only = get('--batches') ? get('--batches').split(',').map(Number) : null;
 for (let b = 0; b < poses.length / 4; b++) {
+  if (only && !only.includes(b + 1)) continue;
   const batch = poses.slice(b * 4, b * 4 + 4);
   const form = new FormData();
   form.append('model', 'gpt-image-2');
@@ -37,7 +49,7 @@ for (let b = 0; b < poses.length / 4; b++) {
     `Attached are 4 reference cards (in order: card1..card4) from a Japanese stretch-exercise guide, all featuring the SAME original character ` +
     `(young Japanese woman, long wavy brown hair, white t-shirt with a small "ZN" logo, light blue leggings, white socks).\n` +
     `Create ONE image: a 2x2 grid on a plain very light warm-gray background (#f2f0ee), divided into 4 equal square cells with no visible grid lines or borders.\n` +
-    batch.map((p, i) => `- ${POS[i]} cell = the pose from card${i + 1} (${p.desc})`).join('\n') + '\n' +
+    batch.map((p, i) => `- ${POS[i]} cell = the pose from card${i + 1} (${p.desc})${HINTS[p.id] ? ` — IMPORTANT: ${HINTS[p.id]}` : ''}`).join('\n') + '\n' +
     `In each cell, redraw ONLY the character demonstrating EXACTLY the same pose as in the corresponding card, in EXACTLY the same anime art style, ` +
     `same face and proportions. The character should be large and centered, filling most of the cell. ` +
     `Keep any prop that the pose needs (chair, wall, towel) in the same simple style as the cards.\n` +

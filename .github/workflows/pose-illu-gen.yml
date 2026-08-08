@@ -3,6 +3,15 @@
 name: pose-illu-gen
 on:
   workflow_dispatch:
+    inputs:
+      batches:
+        description: '再生成するバッチ番号（カンマ区切り、空なら全8バッチ）'
+        required: false
+        default: ''
+      cards_ref:
+        description: '参照カード画像を復元するコミット（カード形式時点のもの）'
+        required: false
+        default: '273371b'
 
 permissions:
   contents: write
@@ -13,13 +22,22 @@ jobs:
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: 8バッチ（32ポーズ）を生成
+      - name: 参照カードを復元
+        run: git checkout "${{ github.event.inputs.cards_ref || '273371b' }}" -- public/images/stretch-poses
+      - name: 生成
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        run: node scripts/gen-pose-illustrations.mjs --out out
+        run: |
+          if [ -n "${{ github.event.inputs.batches }}" ]; then
+            node scripts/gen-pose-illustrations.mjs --out out --batches "${{ github.event.inputs.batches }}"
+          else
+            node scripts/gen-pose-illustrations.mjs --out out
+          fi
       - name: 結果をpose-sheet-testブランチへ
         run: |
           mkdir pub && cp out/*.png pub/
