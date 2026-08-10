@@ -36,7 +36,7 @@
 - [x] pc-kubikori-reset ｜ authority ｜ パソコン 首こり 1時間ごと リセット ｜ セルフケア ｜ /symptoms/kubi-ganseihiro
 
 ### 姿勢・猫背
-- [ ] nekoze-makigata ｜ authority ｜ 猫背 巻き肩 ストレッチ 改善 ｜ セルフケア ｜ /symptoms/shisei
+- [x] nekoze-makigata ｜ authority ｜ 猫背 巻き肩 ストレッチ 改善 ｜ セルフケア ｜ /symptoms/shisei
 - [ ] sorikoshi-check ｜ authority ｜ 反り腰 セルフチェック ストレッチ ｜ セルフケア ｜ /symptoms/shisei, /symptoms/youtsu
 - [ ] shisei-taikan ｜ authority ｜ 良い姿勢 体幹 保ち方 ｜ 解説 ｜ /symptoms/shisei
 
