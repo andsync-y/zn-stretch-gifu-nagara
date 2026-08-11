@@ -1507,3 +1507,9 @@ Git履歴が「何を変更したか」、このファイルが「なぜ変更�
 - Act: SymptomLayoutに「セルフケアのヒント」ブロックを追加。columns.tsのrelatedSymptomsを逆引きし、全7症状ページから該当コラムへ最大4件の内部リンクを自動表示（今後の新記事も自動で載る）
 - 検証: astro build 成功、katakori/sportsページでブロック出力確認
 - 継続課題: クエリ単位のPDCA（順位・表示回数・CTR）はSearch Console接続待ち（Windsorにデータソース追加が必要）
+
+## 2026-08-11 (Claude Code) GBP運用の仕組み化（オーナー承認「やる」）
+- docs/gbp-ops.md 新設：コラム公開連動の自動投稿（事前承認済み）、口コミ返信は下書き→承認制、写真・営業時間の運用ルール
+- Windsorの google_my_business アクション確認済み（create_local_post / reply_to_review / upload_media 等）
+- データリレーに gmb_reviews を追加（接続まではok:falseで流れる設計。接続後にフィールド名を実データで検証する）
+- 残作業: オーナーがWindsorでGBPアカウントを接続したら、最新コラムで初回投稿を実行して文面を見せる

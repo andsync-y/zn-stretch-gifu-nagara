@@ -21,6 +21,8 @@ const QUERIES = [
   { name: 'google_budget_7d', connector: 'google_ads', params: { date_preset: 'last_7d', fields: 'date,campaign,campaign_budget,search_impression_share,search_budget_lost_impression_share,search_rank_lost_impression_share' } },
   { name: 'facebook_budget', connector: 'facebook', params: { date_preset: 'last_3d', fields: 'date,campaign,adset_name,daily_budget,budget_remaining,spend' } },
   { name: 'google_search_terms_7d', connector: 'google_ads', params: { date_preset: 'last_7d', fields: 'date,search_term,clicks,conversions' } },
+  // Googleビジネスプロフィール（接続されるまでは失敗するが、リレーは失敗を許容する設計）
+  { name: 'gmb_reviews', connector: 'google_my_business', params: { date_preset: 'last_28d', fields: 'date,review_id,reviewer_display_name,star_rating,comment,review_reply_comment' } },
   // Search Console（クエリ単位。※このコネクタはページ単位の内訳が取れない＝サイト合計になる点に注意）
   { name: 'gsc_queries_28d', connector: 'searchconsole', params: { date_preset: 'last_28d', fields: 'query,branded_vs_nonbranded,clicks,impressions,ctr,position' } },
   { name: 'gsc_queries_prev28d', connector: 'searchconsole', params: { date_from: daysAgo(56), date_to: daysAgo(29), fields: 'query,clicks,impressions,position' } },
