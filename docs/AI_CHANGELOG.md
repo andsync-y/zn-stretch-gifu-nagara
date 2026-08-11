@@ -1450,3 +1450,40 @@ Git履歴が「何を変更したか」、このファイルが「なぜ変更�
 - 切り出しを4等分から scripts/slice-illu-grid.mjs（前景の連結成分検出→象限ごとにbbox切り出し→隣コマ画素の背景色マスク→512x512パディング）に変更。人物がセル境界をまたいでも頭・手足が切れない
 - pose-05はキャット&カウの2フェーズを1枚に収録（動きが伝わるため採用）
 - 検証: lint-column PASS、astro build 成功
+
+## 2026-08-10 — Claude Code
+
+- 担当：GitHub Actions（Claude）
+- ブランチ：`claude/column-auto`
+- 関連PR：なし
+- 変更内容：
+  - コラム新規記事「猫背・巻き肩をゆるめるストレッチ｜胸と肩甲骨からのセルフケア5選」（slug: nekoze-makigata）を追加。`docs/column-backlog.md` の authority 型・未対応リスト先頭（姿勢・猫背カテゴリ）から選定。
+  - 胸を開く（壁）・肩甲骨引き寄せ・キャット&カウ・スレッド・ザ・ニードル・ばんざいの5種を `src/data/stretchPoses.ts` の既存ポーズ（pose-22/17/05/12/16）から選び、記事内の挿絵として使用（重複なし）。
+  - アイキャッチはAI生成（`node scripts/fetch-column-image.mjs --slug nekoze-makigata --source ai`）。「明るいオフィスでデスクから立ち上がり肩を軽く回す男性」の日常シーンで生成し、`public/images/column/nekoze-makigata.webp` に保存。imageCredit は「※画像はイメージです」。
+  - FAQ5問、独自メソッド「体感軸調整法」への言及、`/symptoms/shisei` への内部リンク（related含む）を追加。
+  - `src/data/columns.ts` の `COLUMNS` 配列先頭に新記事のメタデータ（selfCareは記事本文の手順・秒数・回数と一致）を追加。
+  - `docs/column-backlog.md` の該当行を `- [x]` に更新。
+- 主な変更ファイル：
+  - `src/pages/column/nekoze-makigata.astro`（新規）
+  - `src/data/columns.ts`
+  - `docs/column-backlog.md`
+  - `public/images/column/nekoze-makigata.webp`（新規）
+- 判断・注意点：
+  - ポーズ未収載の動きはなし（今回はライブラリ内の5ポーズで手順を構成できた）。
+  - 薬機法NG表現（治る・改善します・解消・矯正・効く等）は使用せず、「軽くしやすい」「近づけていける」等の言い換えで統一。
+- 確認結果：`node scripts/lint-column.mjs src/pages/column/nekoze-makigata.astro` → 品質GATE PASS（1ファイル）。`npm run build` 成功（27ページ生成、既存26→27）。
+- 未対応・次の作業：なし。本番ブランチへのマージはユーザー確認後にワークフロー側で実施。
+
+## 2026-08-10 — Claude Code
+
+- 担当：GitHub Actions（Claude）
+- ブランチ：`claude/column-auto`
+- 関連PR：なし
+- 変更内容：
+  - 新規記事「猫背・巻き肩をゆるめるストレッチ5選」（nekoze-makigata.astro）のレビュー。機械lintはPASSだったが、FAQ Q3の設問文「姿勢改善の筋トレも必要ですか？」が薬機法NG表現「改善」を含んでいた（正規表現は「改善します/しました/されます/できます」のみを検出するため「改善の」はすり抜けていた）ため、「姿勢を意識しやすくする筋トレも必要ですか？」に修正。回答本文・他の見出し・本文・FAQ・figcaptionにNG表現・過度な断定・セルフケアの安全性上の問題は見つからず。
+- 主な変更ファイル：
+  - `src/pages/column/nekoze-makigata.astro`
+- 判断・注意点：
+  - 他の公開済みコラムには「改善」の使用例がないことを確認し、表記統一の観点でも修正が妥当と判断。
+- 確認結果：`node scripts/lint-column.mjs src/pages/column/nekoze-makigata.astro` → 品質GATE PASS。`npm run build` 成功（27ページ生成）。
+- 未対応・次の作業：なし。
