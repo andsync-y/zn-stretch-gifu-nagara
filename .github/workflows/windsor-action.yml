@@ -1,0 +1,49 @@
+# Windsor REST APIで書き込みアクションを実行する汎用ワークフロー。
+# MCPコネクタが不安定なときのバックアップ経路。
+# dry_run=true ならアクション一覧の取得のみ（読み取り）。実行結果は windsor-data ブランチではなくログに出す。
+name: windsor-action
+on:
+  workflow_dispatch:
+    inputs:
+      connector:
+        description: 'コネクタ（例: google_my_business）'
+        required: true
+      action:
+        description: 'アクションID（例: create_local_post）。dry_run時は不要'
+        required: false
+        default: ''
+      params_json:
+        description: 'アクションのパラメータ（JSON文字列）'
+        required: false
+        default: '{}'
+      dry_run:
+        description: 'true=アクション一覧の取得のみ'
+        required: false
+        default: 'true'
+
+permissions:
+  contents: read
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: 実行
+        env:
+          WINDSOR_API_KEY: ${{ secrets.WINDSOR_API_KEY }}
+          CONNECTOR: ${{ github.event.inputs.connector }}
+          ACTION: ${{ github.event.inputs.action }}
+          PARAMS_JSON: ${{ github.event.inputs.params_json }}
+          DRY_RUN: ${{ github.event.inputs.dry_run }}
+        run: |
+          set -euo pipefail
+          if [ "$DRY_RUN" = "true" ]; then
+            echo "== GET actions list for $CONNECTOR =="
+            curl -sS "https://connectors.windsor.ai/${CONNECTOR}/actions?api_key=${WINDSOR_API_KEY}" | head -c 20000
+          else
+            echo "== POST $ACTION on $CONNECTOR =="
+            curl -sS -X POST "https://connectors.windsor.ai/${CONNECTOR}/actions/${ACTION}?api_key=${WINDSOR_API_KEY}" \
+              -H "Content-Type: application/json" \
+              -d "$PARAMS_JSON" | head -c 20000
+          fi
