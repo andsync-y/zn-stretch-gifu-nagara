@@ -45,4 +45,5 @@ Windsor（onboard.windsor.ai）→ Data Sources → Google Business Profile を�
   `scripts/windsor-mcp-call.mjs` が https://mcp.windsor.ai/ にBearer（WINDSOR_API_KEY）で直接接続し
   execute_action を呼ぶ。コネクタ不調時はこちらを使う
 - GBPアカウントID：`locations/3707203216578503879`（全力ストレッチ岐阜長良店）
-- 投稿画像はJPG/PNG限定のため、コラムのWebP画像は /images/gbp/<slug>.png に変換して使う
+- 投稿画像はJPG/PNG限定。**サムネは実写ではなくキャラクター（ZNちゃん）の代表ポーズイラスト**を使う（オーナー指示 2026-08-12）。
+  記事の代表ポーズを1200x900のライトグレー（#f2f0ee）キャンバスに配置し /images/gbp/<slug>-2.png 等で公開してから photo_url に指定する
