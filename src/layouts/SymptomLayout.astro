@@ -6,6 +6,7 @@ import PriceRows from '../components/PriceRows.astro';
 import ReserveCTA from '../components/ReserveCTA.astro';
 import SymptomCycleFigure from '../components/SymptomCycleFigure.astro';
 import { SITE, PHOTOS, REVIEWS } from '../consts';
+import { COLUMNS } from '../data/columns';
 
 export interface QA { q: string; a: string; }
 export interface Part { title: string; desc: string; }
@@ -233,6 +234,25 @@ const breadcrumbSchema = {
 
   <!-- FAQ -->
   <FAQ items={faqs} />
+
+  <!-- 関連コラム（このお悩みに紐づく記事へ内部リンク） -->
+  {COLUMNS.filter((c) => c.relatedSymptoms?.includes(slug)).length > 0 && (
+    <section class="border-t border-ink/15 px-5 py-20 sm:px-10 sm:py-24">
+      <div class="mx-auto max-w-content">
+        <p class="en-label mb-8">Column</p>
+        <h2 class="jp-title mb-14">セルフケアのヒント。</h2>
+        <div class="rule-top">
+          {COLUMNS.filter((c) => c.relatedSymptoms?.includes(slug)).slice(0, 4).map((c) => (
+            <a href={`/column/${c.slug}`} class="group grid grid-cols-[1fr_32px] items-baseline gap-4 border-b border-line px-2 py-6 no-underline">
+              <span class="text-[16px] font-bold leading-[1.7] sm:text-[17px]">{c.heading}</span>
+              <span class="text-right text-lg font-bold transition group-hover:text-amber-700" aria-hidden="true">↗</span>
+            </a>
+          ))}
+        </div>
+        <p class="mt-10"><a href="/column" class="text-[15px] font-bold hover:text-amber-700">コラム一覧へ →</a></p>
+      </div>
+    </section>
+  )}
 
   <!-- 関連リンク -->
   <section class="border-t border-ink/15 bg-paper2 px-5 py-24 sm:px-10 sm:py-32">
