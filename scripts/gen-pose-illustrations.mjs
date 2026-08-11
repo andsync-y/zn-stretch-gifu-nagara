@@ -30,6 +30,7 @@ const POS = ['top-left', 'top-right', 'bottom-left', 'bottom-right'];
 
 // 初回生成でポーズがずれたコマへの強制指定（英語で姿勢を明示する）
 const HINTS = {
+  'pose-12': 'Thread-the-needle pose: she is on all fours, and ONE ARM IS THREADED UNDER HER CHEST to the opposite side, palm facing up, sliding along the floor — that shoulder and her ear rest near the floor while her hips stay high over her knees. The twist of the upper back must be clearly visible. NOT simply lying face down on a forearm.',
   'pose-08': 'She is STANDING upright on one leg, bending the other knee behind her and holding that ankle with her hand to stretch the front of the thigh. NOT kneeling.',
   'pose-14': 'She is SITTING upright, both arms extended straight forward at shoulder height, hands clasped, rounding her upper back to spread the shoulder blades apart. NOT a child pose, NOT bending to the floor.',
   'pose-15': 'She is SITTING on the floor with one leg extended forward, pulling the toes of that foot up toward her shin with her hand to stretch the calf and ankle.',
