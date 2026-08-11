@@ -15,7 +15,8 @@ const TOOL = get('--tool');
 const ARGS = JSON.parse(get('--args') || '{}');
 if (!TOOL) { console.error('--tool が必要です'); process.exit(1); }
 
-const url = `https://mcp.windsor.ai/?api_key=${encodeURIComponent(KEY)}`;
+// APIキー認証は /mcp パス（ルートはOAuthクライアント用で401になる）
+const url = `${process.env.WINDSOR_MCP_URL || 'https://mcp.windsor.ai/mcp'}?api_key=${encodeURIComponent(KEY)}`;
 const H = { 'Content-Type': 'application/json', Accept: 'application/json, text/event-stream' };
 let sid = null;
 
