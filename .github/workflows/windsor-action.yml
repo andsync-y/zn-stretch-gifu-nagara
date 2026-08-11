@@ -29,6 +29,10 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
       - name: 実行
         env:
           WINDSOR_API_KEY: ${{ secrets.WINDSOR_API_KEY }}
@@ -38,7 +42,10 @@ jobs:
           DRY_RUN: ${{ github.event.inputs.dry_run }}
         run: |
           set -euo pipefail
-          if [ "$DRY_RUN" = "docs" ]; then
+          if [ "$DRY_RUN" = "mcp" ]; then
+            # ACTION=MCPツール名, PARAMS_JSON=そのtoolのarguments
+            node scripts/windsor-mcp-call.mjs --tool "$ACTION" --args "$PARAMS_JSON"
+          elif [ "$DRY_RUN" = "docs" ]; then
             echo "== fetch llms-full.txt and grep execute endpoint =="
             curl -sS "https://mcp.windsor.ai/llms-full.txt" | grep -i -B3 -A12 "execute" | head -c 15000 || true
             echo "== try OPTIONS/other hints =="
