@@ -10,6 +10,8 @@ import { writeFile, mkdir } from 'node:fs/promises';
 const KEY = process.env.WINDSOR_API_KEY;
 if (!KEY) { console.error('WINDSOR_API_KEY がありません'); process.exit(1); }
 
+const daysAgo = (n) => new Date(Date.now() - n * 86400000).toISOString().slice(0, 10);
+
 const QUERIES = [
   { name: 'facebook_yesterday', connector: 'facebook', params: { date_preset: 'last_1d', fields: 'date,campaign,adset_name,ad_name,ad_id,effective_status,spend,impressions,clicks' } },
   { name: 'facebook_7d', connector: 'facebook', params: { date_preset: 'last_7d', fields: 'date,ad_name,ad_id,spend,clicks' } },
@@ -19,6 +21,9 @@ const QUERIES = [
   { name: 'google_budget_7d', connector: 'google_ads', params: { date_preset: 'last_7d', fields: 'date,campaign,campaign_budget,search_impression_share,search_budget_lost_impression_share,search_rank_lost_impression_share' } },
   { name: 'facebook_budget', connector: 'facebook', params: { date_preset: 'last_3d', fields: 'date,campaign,adset_name,daily_budget,budget_remaining,spend' } },
   { name: 'google_search_terms_7d', connector: 'google_ads', params: { date_preset: 'last_7d', fields: 'date,search_term,clicks,conversions' } },
+  // Search Console（クエリ単位。※このコネクタはページ単位の内訳が取れない＝サイト合計になる点に注意）
+  { name: 'gsc_queries_28d', connector: 'searchconsole', params: { date_preset: 'last_28d', fields: 'query,branded_vs_nonbranded,clicks,impressions,ctr,position' } },
+  { name: 'gsc_queries_prev28d', connector: 'searchconsole', params: { date_from: daysAgo(56), date_to: daysAgo(29), fields: 'query,clicks,impressions,position' } },
   { name: 'ga4_events_7d', connector: 'googleanalytics4', params: { date_preset: 'last_7d', fields: 'date,event_name,event_count,session_source_medium' } },
   { name: 'ga4_pages_7d', connector: 'googleanalytics4', params: { date_preset: 'last_7d', fields: 'date,page_path,session_source_medium,sessions' } },
   // 月次の媒体別コンバージョン（サロン側の来店経路との突き合わせ用）

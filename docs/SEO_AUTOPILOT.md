@@ -243,3 +243,11 @@ action=merge の場合:
 4. 動画の主張で正しい部分: **「書いて終わり」と「測って書き直す」の差は本物。**
    本設計の価値の8割はPhase 2〜4（GSC→分析→リライト）にある。
 ```
+
+## 運用ステータス追記（2026-08-11）
+
+- **Search Console接続済み**：Windsorのスラッグは `searchconsole`（google_search_console等ではない）。プロパティ https://zn-stretch-gifu.com/
+- **コネクタの制約**：ページ単位（page/pagepath）の内訳が取れず、サイト合計に丸められる。クエリ単位（query×clicks/impressions/ctr/position）は正常。ページ別の深掘りが必要な場合はGSC管理画面を直接見る
+- データリレーに `gsc_queries_28d` / `gsc_queries_prev28d` を追加済み。週次レポートはこの2つを比較して
+  WINNER（順位上昇・クリック増）/ OPPORTUNITY（表示多いのにCTR低い）/ UNDERPERFORMER（順位下落）を分類し、リライト候補を提示する
+- リライト基準：公開8週間経過して表示回数が伸びない記事はタイトル・見出しを見直す
