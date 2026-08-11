@@ -1513,3 +1513,9 @@ Git履歴が「何を変更したか」、このファイルが「なぜ変更�
 - Windsorの google_my_business アクション確認済み（create_local_post / reply_to_review / upload_media 等）
 - データリレーに gmb_reviews を追加（接続まではok:falseで流れる設計。接続後にフィールド名を実データで検証する）
 - 残作業: オーナーがWindsorでGBPアカウントを接続したら、最新コラムで初回投稿を実行して文面を見せる
+
+## 2026-08-11 (Claude Code) GBP初回投稿を実行（猫背・巻き肩コラム連動）
+- claude.aiのWindsorコネクタが不調のため、mcp.windsor.ai へ直接接続するMCPクライアント（scripts/windsor-mcp-call.mjs＋windsor-action.ymlのmcpモード）を構築して実行
+- 認証はWINDSOR_API_KEYのBearerヘッダー（ルートパス。/mcpは404、api_keyクエリのみは401）
+- 投稿成功：localPosts/269705244588041121（文面はオーナー承認済み、写真＋LEARN_MOREボタン付き）
+- 以後の月水金コラム連動投稿はこの経路で自動実行可能

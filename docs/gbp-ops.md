@@ -37,3 +37,12 @@ GBPの活動量（投稿・返信・写真）はローカル順位と地図枠�
 
 Windsor（onboard.windsor.ai）→ Data Sources → Google Business Profile を追加し、
 店舗のGoogleアカウントでOAuth→ロケーション「全力ストレッチ岐阜長良店」を選択。
+
+## 実行経路（2026-08-11確立）
+
+- 第一経路：claude.aiのWindsorコネクタ（execute_action）
+- **バックアップ経路（検証済み）**：GitHub Actions「windsor-action」の `dry_run=mcp` モード。
+  `scripts/windsor-mcp-call.mjs` が https://mcp.windsor.ai/ にBearer（WINDSOR_API_KEY）で直接接続し
+  execute_action を呼ぶ。コネクタ不調時はこちらを使う
+- GBPアカウントID：`locations/3707203216578503879`（全力ストレッチ岐阜長良店）
+- 投稿画像はJPG/PNG限定のため、コラムのWebP画像は /images/gbp/<slug>.png に変換して使う
