@@ -17,7 +17,7 @@ on:
         required: false
         default: '{}'
       dry_run:
-        description: 'true=アクション一覧の取得のみ'
+        description: 'true=アクション一覧の取得のみ / docs=実行エンドポイントのドキュメント調査'
         required: false
         default: 'true'
 
@@ -38,7 +38,12 @@ jobs:
           DRY_RUN: ${{ github.event.inputs.dry_run }}
         run: |
           set -euo pipefail
-          if [ "$DRY_RUN" = "true" ]; then
+          if [ "$DRY_RUN" = "docs" ]; then
+            echo "== fetch llms-full.txt and grep execute endpoint =="
+            curl -sS "https://mcp.windsor.ai/llms-full.txt" | grep -i -B3 -A12 "execute" | head -c 15000 || true
+            echo "== try OPTIONS/other hints =="
+            curl -sS -o /dev/null -w "POST /actions/execute -> %{http_code}\n" -X POST "https://connectors.windsor.ai/google_my_business/actions/execute?api_key=${WINDSOR_API_KEY}" -H "Content-Type: application/json" -d '{}' || true
+          elif [ "$DRY_RUN" = "true" ]; then
             echo "== GET actions list for $CONNECTOR =="
             curl -sS "https://connectors.windsor.ai/${CONNECTOR}/actions?api_key=${WINDSOR_API_KEY}" | head -c 20000
           else
