@@ -23,8 +23,8 @@ const prompt =
   `POSE (follow this description precisely — it overrides anything in the reference sheet):\n${POSE}\n` +
   `CRITICAL — character fidelity: reproduce the EXACT face and art style of the reference sheet. Same large soft brown eyes, ` +
   `same cute gentle facial features, same proportions, same soft anime coloring.\n` +
-  `CRITICAL — clothing: white t-shirt with a small gray "ZN" logo, SKIN-TIGHT pastel light-blue leggings (smooth thin stretchy fabric, ` +
-  `NO button, NO zipper, NO pockets, NO denim texture), white socks.\n` +
+  `Clothing: the same outfit as in the reference sheet — white t-shirt with a small gray "ZN" logo, plain pastel light-blue yoga leggings ` +
+  `(simple athletic wear with no buttons, zippers or pockets), white socks.\n` +
   `ABSOLUTELY NO text, NO numbers, NO badges, NO arrows, NO labels anywhere in the image.`;
 
 for (let i = 0; i < N; i++) {
