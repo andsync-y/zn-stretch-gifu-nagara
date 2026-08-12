@@ -1523,3 +1523,23 @@ Git履歴が「何を変更したか」、このファイルが「なぜ変更�
 ## 2026-08-12 (Claude Code) GBP投稿のサムネをキャラクターイラストに差し替え（オーナー指示）
 - pose-22（壁で胸を開く）を1200x900キャンバスに配置したPNGを作成し、update_local_postで投稿の写真を差し替え（fields: media、成功）
 - 以後のコラム連動投稿は記事の代表ポーズのイラストをサムネに使う（gbp-ops.mdに明記）
+
+## 2026-08-12 — GitHub Actions（Claude）
+
+- ブランチ：`claude/column-auto`
+- 関連PR：なし
+- 変更内容：
+  - コラムバックログ（`docs/column-backlog.md`）の `authority` 型から最上位の未対応「sorikoshi-check（反り腰 セルフチェック ストレッチ）」を選び、新規コラム記事を1本作成。
+  - 反り腰（骨盤前傾・腰椎過前弯）が起こる仕組み、壁を使ったセルフチェックの方法、太もも前面・お尻・腰まわりをゆるめるセルフストレッチ4選、頻度の目安を解説。既存3記事（肩こり／腰の朝の重さ／ゴルフ）とは検索意図が異なり重複なし。
+  - アイキャッチ画像はAI生成（`scripts/fetch-column-image.mjs --source ai`）。明るいオフィスで席を立ち腰まわりを伸ばす日本人男性のイメージ。
+- 主な変更ファイル：
+  - `src/pages/column/sorikoshi-check.astro`（新規）
+  - `public/images/column/sorikoshi-check.webp`（新規）
+  - `src/data/columns.ts`（COLUMNS配列の先頭に追加）
+  - `docs/column-backlog.md`（該当行を `- [x]` に更新）
+- 判断・注意点：
+  - faqプロップに5問、独自メソッド「体感軸調整法」への言及、`/symptoms/shisei` `/symptoms/youtsu` への内部リンクを含めた。
+  - ストレッチ手順は `src/data/stretchPoses.ts` の既存ポーズ（pose-08／pose-07／pose-09／pose-30）のみで構成できたため、ポーズ未収載の動きはなし。
+  - 薬機法・景表法に抵触する断定表現（治る・治療・解消・矯正等）は使用していないことを確認済み。
+- 確認結果：`node scripts/lint-column.mjs src/pages/column/sorikoshi-check.astro` → 品質GATE PASS（1ファイル）。`npm run build` 成功（27→28ページ）。
+- 未対応・次の作業：ユーザーによるレビュー後、本番ブランチ `claude/zenkara-gifu-nagara-seo-ukz0er` へのマージ（本記録の時点では未マージ）。
