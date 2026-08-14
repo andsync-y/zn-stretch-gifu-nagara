@@ -1547,3 +1547,24 @@ Git履歴が「何を変更したか」、このファイルが「なぜ変更�
 ## 2026-08-13 (Claude Code) デイリー監視＋コラム連動GBP投稿（初の全自動サイクル）
 - 広告: Meta ¥4,303（予算内に回帰・両広告ACTIVE）、Google 8/11 ¥6,162・CV3・CPA¥2,054（¥2,500基準内）。自動アクションなし
 - 反り腰コラム（sorikoshi-check、品質GATE通過・自動公開済み）に連動してGBP投稿を実行（localPosts/2945416202792278027、pose-08サムネ・LEARN_MORE→記事）
+
+## 2026-08-14 — GitHub Actions（Claude）
+
+- 担当：GitHub Actions（Claude）
+- ブランチ：`claude/column-auto`
+- 関連PR：なし
+- 変更内容：
+  - コラムバックログ（`docs/column-backlog.md`）の `authority` 型から最上位の未対応「shisei-taikan（良い姿勢 体幹 保ち方）」を選び、新規コラム記事を1本作成。
+  - 良い姿勢が体幹の働きで保たれる仕組み、壁を使ったアライメントチェックの方法、ドローイン呼吸・胸開き・キャット&カウ・肩甲骨寄せのセルフケア5選、頻度の目安を解説。既存記事（肩こり／腰の朝の重さ／ゴルフ／猫背・巻き肩ほか）とは「体幹で姿勢を保つ考え方」という検索意図が異なり重複なし。
+  - アイキャッチ画像はAI生成（`scripts/fetch-column-image.mjs --source ai`）。明るいオフィスで席を立ち姿勢よく体を伸ばす日本人男性のイメージ。
+- 主な変更ファイル：
+  - `src/pages/column/shisei-taikan.astro`（新規）
+  - `public/images/column/shisei-taikan.webp`（新規）
+  - `src/data/columns.ts`（COLUMNS配列の先頭に追加）
+  - `docs/column-backlog.md`（該当行を `- [x]` に更新）
+- 判断・注意点：
+  - faqプロップに5問、独自メソッド「体感軸調整法」への言及、`/symptoms/shisei` `/symptoms/katakori` への内部リンクを含めた。
+  - ストレッチ手順は `src/data/stretchPoses.ts` の既存ポーズ（pose-30／pose-22／pose-05／pose-31）のみで構成できたため、ポーズ未収載の動きはなし。アライメントチェック（壁での姿勢確認）は動作というより計測なので挿絵なしとした。
+  - 薬機法・景表法に抵触する断定表現（治る・治療・解消・矯正等）は使用していないことを確認済み。
+- 確認結果：`node scripts/lint-column.mjs src/pages/column/shisei-taikan.astro` → 品質GATE PASS（1ファイル）。`npm run build` 成功（28→29ページ）。
+- 未対応・次の作業：ユーザーによるレビュー後、本番ブランチ `claude/zenkara-gifu-nagara-seo-ukz0er` へのマージ（本記録の時点では未マージ）。

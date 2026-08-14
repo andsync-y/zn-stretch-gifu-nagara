@@ -38,7 +38,7 @@
 ### 姿勢・猫背
 - [x] nekoze-makigata ｜ authority ｜ 猫背 巻き肩 ストレッチ 改善 ｜ セルフケア ｜ /symptoms/shisei
 - [x] sorikoshi-check ｜ authority ｜ 反り腰 セルフチェック ストレッチ ｜ セルフケア ｜ /symptoms/shisei, /symptoms/youtsu
-- [ ] shisei-taikan ｜ authority ｜ 良い姿勢 体幹 保ち方 ｜ 解説 ｜ /symptoms/shisei
+- [x] shisei-taikan ｜ authority ｜ 良い姿勢 体幹 保ち方 ｜ 解説 ｜ /symptoms/shisei
 
 ### 自律神経・疲れ・睡眠
 - [ ] neruma-shinkokyu ｜ authority ｜ 寝る前 ストレッチ 睡眠の質 ｜ セルフケア ｜ /symptoms/jiritsu
