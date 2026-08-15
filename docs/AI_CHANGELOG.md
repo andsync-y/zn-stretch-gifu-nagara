@@ -1568,3 +1568,8 @@ Git履歴が「何を変更したか」、このファイルが「なぜ変更�
   - 薬機法・景表法に抵触する断定表現（治る・治療・解消・矯正等）は使用していないことを確認済み。
 - 確認結果：`node scripts/lint-column.mjs src/pages/column/shisei-taikan.astro` → 品質GATE PASS（1ファイル）。`npm run build` 成功（28→29ページ）。
 - 未対応・次の作業：ユーザーによるレビュー後、本番ブランチ `claude/zenkara-gifu-nagara-seo-ukz0er` へのマージ（本記録の時点では未マージ）。
+
+## 2026-08-15 (Claude Code) デイリー監視＋姿勢コラムのGBP連動投稿
+- 広告: Meta 8/14 計¥5,547（予算内・両広告ACTIVE、B偏重は継続観察）、Google 8/13 ¥6,122・CV5・CPA¥1,224と改善。自動アクションなし
+- 姿勢コラム（shisei-taikan）連動のGBP投稿を実行（localPosts/1348532552575817884、pose-31サムネ）
+- Google広告のリンク先/lp切替はオーナー作業待ち（GA4上まだgoogle/cpc→/lp着地なし。「代行して」の返答があればAPIで代行）
