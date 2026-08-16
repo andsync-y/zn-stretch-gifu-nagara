@@ -1,13 +1,29 @@
 {
-  "_comment": "店舗システムのページ構造定義。configuredがfalseの間は探索モード（discovery）で動き、ページ構造のみをkpi-dataブランチに書き出す。探索結果を見てClaudeがこのファイルを設定したらconfigured: trueにする。",
-  "configured": false,
+  "_comment": "店舗システムのページ構造定義。ダッシュボードはSPAのため、clicksで「今月→日別」に切り替えてから、日別テーブルの前週（月〜日）の行を集計する。前週が月をまたぐ場合はprevPeriodClick（先月）ビューも自動で取り込む。successCheckはログイン成功後のみ現れるログアウトボタン（モーダル内のpassword欄による誤検知対策）。",
+  "configured": true,
   "login": {
     "url": "https://system.zn-stretch.com/",
     "userField": "",
     "passField": "",
     "submitButton": "",
-    "successCheck": ""
+    "successCheck": "button:has-text(\"ログアウト\")"
   },
-  "pages": [],
-  "metrics": []
+  "pages": [
+    {
+      "name": "dashboard_daily",
+      "url": "https://system.zn-stretch.com/",
+      "waitMs": 3000,
+      "clicks": ["button:has-text(\"今月\")", "button:has-text(\"日別\")"],
+      "prevPeriodClick": "button:has-text(\"先月\")"
+    }
+  ],
+  "metrics": [
+    { "key": "sales_total", "label": "売上（週計）", "page": "dashboard_daily", "method": "table", "tableMatch": ["売上", "新規販売数", "総来店数"], "column": "売上", "agg": "sum" },
+    { "key": "total_visits", "label": "総来店数（週計）", "page": "dashboard_daily", "method": "table", "tableMatch": ["売上", "新規販売数", "総来店数"], "column": "総来店数", "agg": "sum" },
+    { "key": "new_visits", "label": "新規来店数（週計）", "page": "dashboard_daily", "method": "table", "tableMatch": ["売上", "新規販売数", "総来店数"], "column": "新規来店数", "agg": "sum" },
+    { "key": "new_ticket_sales", "label": "回数券新規販売本数（週計）", "page": "dashboard_daily", "method": "table", "tableMatch": ["売上", "新規販売数", "総来店数"], "column": "新規販売数", "agg": "sum" },
+    { "key": "renewal_ticket_sales", "label": "回数券更新本数（週計）", "page": "dashboard_daily", "method": "table", "tableMatch": ["売上", "新規販売数", "総来店数"], "column": "更新販売数", "agg": "sum" },
+    { "key": "next_reservations", "label": "次回予約数（週計）", "page": "dashboard_daily", "method": "table", "tableMatch": ["売上", "新規販売数", "総来店数"], "column": "次回予約数", "agg": "sum" },
+    { "key": "shimei_count", "label": "指名数（週計）", "page": "dashboard_daily", "method": "table", "tableMatch": ["売上", "新規販売数", "総来店数"], "column": "指名数", "agg": "sum" }
+  ]
 }

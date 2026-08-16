@@ -1573,3 +1573,17 @@ Git履歴が「何を変更したか」、このファイルが「なぜ変更�
 - 広告: Meta 8/14 計¥5,547（予算内・両広告ACTIVE、B偏重は継続観察）、Google 8/13 ¥6,122・CV5・CPA¥1,224と改善。自動アクションなし
 - 姿勢コラム（shisei-taikan）連動のGBP投稿を実行（localPosts/1348532552575817884、pose-31サムネ）
 - Google広告のリンク先/lp切替はオーナー作業待ち（GA4上まだgoogle/cpc→/lp着地なし。「代行して」の返答があればAPIで代行）
+
+## 2026-08-16 (Claude Code) KPIスクレイパーのparse設定（日別テーブル週次集計）
+- 初回discovery実行の結果を確認：ログインは実際には成功（ダッシュボード構造・KPIテーブル見出しを取得）。ただしログイン成功後のDOMにモーダルのpassword欄が残るため`login.success`が誤ってfalseになる問題を確認
+- `kpi-scraper/fetch.mjs` を拡張：
+  - SPAの表示切替ボタン対応（ページ定義の`clicks`で「今月→日別」等をクリック）
+  - `table`方式を追加：日別テーブルの行を前週（月〜日・JST）の日付で絞って集計（sum/avg）。行の日付は`YYYY-MM-DD`/`YYYY/M/D`/`M/D`/`M月D日`等を正規化、範囲外・「合計」行は除外
+  - 前週が月をまたぐ場合は`prevPeriodClick`（先月ビュー）も自動で取り込み、日付単位で重複排除してマージ
+  - discoveryモードで「今月/日別/先月」各ビューの構造とテーブル1列目の日付形式サンプル（日付として解釈できる値のみ）を記録するよう強化。顧客名などのセル値は引き続き出力しない
+  - ログイン成功判定に「ログアウトボタンの存在」を追加（successCheck未設定時の補助判定）
+- `kpi-scraper/selectors.json` を設定して`configured: true`に：
+  - `successCheck`: ログアウトボタン
+  - メトリクス7種（週計）：売上・総来店数・新規来店数・回数券新規販売本数・更新本数・次回予約数・指名数（日別KPIテーブルを`tableMatch: 売上/新規販売数/総来店数`で特定）
+- 確認結果：`node --check fetch.mjs` OK、selectors.json のJSONパースOK、日付正規化ロジックの単体検証OK（年またぎ週含む）
+- 未対応・次の作業：実サイトでの動作検証（discoveryで日別ビューの日付形式を確認→parseで`weekly_kpi.json`の数値妥当性を確認）。本コミット後にworkflow_dispatchで実行して検証する

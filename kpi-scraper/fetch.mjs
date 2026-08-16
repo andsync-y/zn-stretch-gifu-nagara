@@ -2,11 +2,17 @@
 //
 // 2つのモードがある：
 //   discovery: ログイン後のページ「構造」（URL・リンク・テーブル見出し・フォーム項目）だけを
-//              out/discovery.json に書き出す。顧客名などのセル値・生HTMLは一切保存しない。
+//              out/discovery.json に書き出す。顧客名などのセル値・生HTMLは一切保存しない
+//              （例外として、テーブル1列目の「日付として解釈できる値」のみ形式確認用に記録する）。
 //   parse:     selectors.json の定義に従って前週のKPIを抽出し out/weekly_kpi.json に書き出す。
 //
 // モードは KPI_MODE 環境変数で指定。未指定なら selectors.json の configured で自動判定。
 // 認証情報は環境変数 ZN_SYSTEM_USER / ZN_SYSTEM_PASS（GitHub Secrets）から受け取る。
+//
+// 対象システムはSPA（リンク遷移なし・ボタンで表示切替）のため、ページ定義に
+// clicks（表示切替ボタンのセレクタ列）を指定できる。KPIは日別テーブルの行を
+// 前週（月〜日）の日付で絞って集計する。セル値はメモリ内でのみ扱い、
+// 出力ファイルには集計後のKPI数値だけを書く。
 
 import { chromium } from 'playwright';
 import fs from 'node:fs';
@@ -22,7 +28,7 @@ const MODE = process.env.KPI_MODE || (selectors.configured ? 'parse' : 'discover
 
 fs.mkdirSync(OUT, { recursive: true });
 
-// JSTでの「前週月曜ぜ日曜」を計算する
+// JSTでの「前週月曜〜日曜」を計算する
 function lastWeekRangeJST() {
   const nowJst = new Date(Date.now() + 9 * 3600 * 1000);
   const dow = nowJst.getUTCDay(); // 0=日
@@ -35,6 +41,11 @@ function lastWeekRangeJST() {
   lastSunday.setUTCDate(thisMonday.getUTCDate() - 1);
   const fmt = (d) => d.toISOString().slice(0, 10);
   return { start: fmt(lastMonday), end: fmt(lastSunday) };
+}
+
+// JSTでの今日の年月（YYYY-MM）。前週が月をまたぐかの判定に使う
+function todayJstMonth() {
+  return new Date(Date.now() + 9 * 3600 * 1000).toISOString().slice(0, 7);
 }
 
 function writeJson(name, obj) {
@@ -86,14 +97,31 @@ async function login(page) {
     const ok = (await page.locator(conf.successCheck).count()) > 0;
     return { attempted: true, success: ok, url: page.url() };
   }
+  // 補助判定：ログアウトボタンがあれば成功とみなす（モーダル内のpassword欄による誤検知対策）
+  if ((await page.locator('button:has-text("ログアウト")').count()) > 0) {
+    return { attempted: true, success: true, url: page.url() };
+  }
   const stillHasPassword = (await page.locator('input[type="password"]').count()) > 0;
   return { attempted: true, success: !stillHasPassword, url: page.url() };
 }
 
-// ページの「構造」だけを抽出する（セル値・個人情報は取らない）
+// 表示切替ボタンなどのクリック操作。見つからないセレクタは黙ってスキップする
+async function doClicks(page, clicks) {
+  for (const sel of clicks || []) {
+    const btn = page.locator(sel).first();
+    if ((await btn.count()) > 0) {
+      await btn.click().catch(() => {});
+      await page.waitForTimeout(1500);
+    }
+  }
+}
+
+// ページの「構造」だけを抽出する（セル値・個人情報は取らない。
+// 例外：テーブル1列目の日付として解釈できる値のみ、日付形式の確認用に少数記録する）
 async function pageStructure(page) {
   return await page.evaluate(() => {
     const clip = (s, n = 60) => (s || '').replace(/\s+/g, ' ').trim().slice(0, n);
+    const dateLike = (s) => /\d{1,4}\s*[/\-年月.]\s*\d{1,2}/.test(s);
     const links = [...document.querySelectorAll('a[href]')]
       .map((a) => ({ text: clip(a.textContent), href: a.getAttribute('href') }))
       .filter((l) => l.text || l.href)
@@ -101,6 +129,10 @@ async function pageStructure(page) {
     const tables = [...document.querySelectorAll('table')].slice(0, 20).map((t) => ({
       headers: [...t.querySelectorAll('th')].map((th) => clip(th.textContent)).slice(0, 30),
       rowCount: t.querySelectorAll('tr').length,
+      firstColSample: [...t.querySelectorAll('tr')]
+        .map((tr) => clip((tr.querySelector('th, td') || {}).textContent || ''))
+        .filter((s) => dateLike(s))
+        .slice(0, 8),
     }));
     const forms = [...document.querySelectorAll('form')].slice(0, 10).map((f) => ({
       action: f.getAttribute('action'),
@@ -113,11 +145,55 @@ async function pageStructure(page) {
         placeholder: clip(i.getAttribute('placeholder') || ''),
       })).slice(0, 30),
     }));
+    const inputs = [...document.querySelectorAll('input, select')].map((i) => ({
+      tag: i.tagName.toLowerCase(),
+      type: i.getAttribute('type'),
+      name: i.getAttribute('name'),
+      id: i.getAttribute('id'),
+      placeholder: clip(i.getAttribute('placeholder') || ''),
+    })).slice(0, 40);
     const buttons = [...document.querySelectorAll('button, input[type="submit"]')]
       .map((b) => clip(b.textContent || b.value)).filter(Boolean).slice(0, 40);
     const headings = [...document.querySelectorAll('h1,h2,h3')].map((h) => clip(h.textContent)).slice(0, 30);
-    return { title: document.title, headings, links, tables, forms, buttons };
+    return { title: document.title, headings, links, tables, forms, inputs, buttons };
   });
+}
+
+// テーブルの中身（見出し＋セル文字列）をメモリ内に取り出す。
+// KPI集計にのみ使い、セル値そのものはファイルへ書き出さない。
+// ヘッダー行（tdを含まない行）は除外し、行内のth（日付列など）はtdと並べて扱う。
+async function collectTables(page) {
+  return await page.evaluate(() => {
+    const clip = (s, n = 60) => (s || '').replace(/\s+/g, ' ').trim().slice(0, n);
+    return [...document.querySelectorAll('table')].slice(0, 20).map((t) => ({
+      headers: [...t.querySelectorAll('th')].map((th) => clip(th.textContent)).slice(0, 30),
+      rows: [...t.querySelectorAll('tr')]
+        .filter((tr) => tr.querySelector('td'))
+        .map((tr) => [...tr.querySelectorAll('th, td')].map((c) => clip(c.textContent)).slice(0, 30))
+        .slice(0, 200),
+    }));
+  });
+}
+
+// 行の1列目を YYYY-MM-DD に正規化する。年なし表記（8/12・8月12日）は
+// 前週の範囲に収まる年を補完し、範囲外なら null を返す
+function parseRowDate(text, week) {
+  const s = String(text || '');
+  let m = s.match(/(\d{4})\s*[/\-年.]\s*(\d{1,2})\s*[/\-月.]\s*(\d{1,2})/);
+  if (m) return `${m[1]}-${m[2].padStart(2, '0')}-${m[3].padStart(2, '0')}`;
+  m = s.match(/(\d{1,2})\s*[/月.]\s*(\d{1,2})/);
+  if (m) {
+    for (const y of new Set([week.start.slice(0, 4), week.end.slice(0, 4)])) {
+      const d = `${y}-${m[1].padStart(2, '0')}-${m[2].padStart(2, '0')}`;
+      if (d >= week.start && d <= week.end) return d;
+    }
+  }
+  return null;
+}
+
+function toNumber(v) {
+  const num = Number(String(v).replace(/[,¥円%\s]/g, ''));
+  return Number.isFinite(num) ? num : null;
 }
 
 async function discovery(page, loginResult) {
@@ -125,13 +201,22 @@ async function discovery(page, loginResult) {
     fetched_at: new Date().toISOString(),
     mode: 'discovery',
     login: loginResult,
-    note: 'ページ構造のみ。セル値・顧客情報・生HTMLは含まない。',
+    note: 'ページ構造のみ。セル値・顧客情報・生HTMLは含まない（テーブル1列目の日付形式サンプルを除く）。',
     pages: [],
   };
 
   report.pages.push({ url: page.url(), ...(await pageStructure(page)) });
 
   if (loginResult.success) {
+    // SPAの表示切替ボタンを順に押し、各ビューの構造を記録する（日別の日付形式確認用）
+    for (const label of ['今月', '日別', '先月']) {
+      const btn = page.locator(`button:has-text("${label}")`).first();
+      if ((await btn.count()) === 0) continue;
+      await btn.click().catch(() => {});
+      await page.waitForTimeout(2000);
+      report.pages.push({ view: label, url: page.url(), ...(await pageStructure(page)) });
+    }
+
     // KPIに関係しそうなリンクを最大8ページまで辿って構造を記録する
     const KEYWORDS = /売上|来店|予約|集計|レポート|実績|分析|ダッシュボード|CSV|回数券|顧客|エクスポート|ダウンロード/;
     const base = new URL(page.url());
@@ -166,6 +251,7 @@ async function parse(page, loginResult) {
     login: loginResult,
     status: 'ok',
     metrics: {},
+    days_covered: {},
     missing: [],
   };
 
@@ -181,32 +267,77 @@ async function parse(page, loginResult) {
     pagesByName[p.name] = p;
   }
 
-  let currentPage = null;
+  // ページごとに一度だけ移動＋クリックし、テーブルはまとめてメモリに取り込む
+  const tableStore = {};
+  const opened = new Set();
+  async function openPage(pconf) {
+    const url = new URL(
+      pconf.url.replaceAll('{week_start}', week.start).replaceAll('{week_end}', week.end),
+      base
+    ).toString();
+    await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 30000 });
+    await page.waitForTimeout(pconf.waitMs || 2500);
+    await doClicks(page, pconf.clicks);
+    opened.add(pconf.name);
+  }
+  async function tablesFor(pconf) {
+    if (tableStore[pconf.name]) return tableStore[pconf.name];
+    await openPage(pconf);
+    let tables = await collectTables(page);
+    // 前週が月をまたぐ（週の開始月が今月と異なる）場合は「先月」ビューも取り込む
+    if (pconf.prevPeriodClick && week.start.slice(0, 7) !== todayJstMonth()) {
+      await doClicks(page, [pconf.prevPeriodClick]);
+      tables = tables.concat(await collectTables(page));
+    }
+    tableStore[pconf.name] = tables;
+    return tables;
+  }
+
   for (const m of selectors.metrics || []) {
     try {
       const pconf = pagesByName[m.page];
       if (!pconf) throw new Error(`page config not found: ${m.page}`);
-      const url = new URL(
-        pconf.url.replaceAll('{week_start}', week.start).replaceAll('{week_end}', week.end),
-        base
-      ).toString();
-      if (currentPage !== url) {
-        await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 30000 });
-        await page.waitForTimeout(pconf.waitMs || 2500);
-        currentPage = url;
+
+      if (m.method === 'table') {
+        // tableMatchの見出しをすべて含むテーブルから、前週の日付行を集計する
+        const tables = await tablesFor(pconf);
+        const matched = tables.filter((t) =>
+          (m.tableMatch || []).every((h) => t.headers.some((th) => th.includes(h)))
+        );
+        if (matched.length === 0) throw new Error(`table not found: ${(m.tableMatch || []).join(',')}`);
+        const byDate = new Map(); // 同じ日付はビュー間で重複し得るため先勝ちで1件だけ採用
+        for (const t of matched) {
+          const colIdx = t.headers.findIndex((h) => h.includes(m.column));
+          if (colIdx < 0) continue;
+          for (const row of t.rows) {
+            const d = parseRowDate(row[0], week);
+            if (!d || d < week.start || d > week.end || byDate.has(d)) continue;
+            const v = toNumber(row[colIdx]);
+            if (v != null) byDate.set(d, v);
+          }
+        }
+        if (byDate.size === 0) throw new Error('no rows in last-week range');
+        const values = [...byDate.values()];
+        const agg = m.agg || 'sum';
+        result.metrics[m.key] =
+          agg === 'avg'
+            ? Math.round((values.reduce((a, b) => a + b, 0) / values.length) * 100) / 100
+            : values.reduce((a, b) => a + b, 0);
+        result.days_covered[m.key] = byDate.size;
+      } else {
+        if (!opened.has(pconf.name)) await openPage(pconf);
+        let value = null;
+        if (m.method === 'css') {
+          value = await page.locator(m.selector).first().textContent({ timeout: 10000 });
+        } else if (m.method === 'regex') {
+          const body = await page.evaluate(() => document.body.innerText);
+          const match = body.match(new RegExp(m.pattern));
+          value = match ? match[1] : null;
+        }
+        if (value == null) throw new Error('no match');
+        const num = toNumber(value);
+        result.metrics[m.key] = num != null ? num : String(value).trim();
       }
-      let value = null;
-      if (m.method === 'css') {
-        const text = await page.locator(m.selector).first().textContent({ timeout: 10000 });
-        value = text;
-      } else if (m.method === 'regex') {
-        const body = await page.evaluate(() => document.body.innerText);
-        const match = body.match(new RegExp(m.pattern));
-        value = match ? match[1] : null;
-      }
-      if (value == null) throw new Error('no match');
-      const num = Number(String(value).replace(/[,¥円\s]/g, ''));
-      result.metrics[m.key] = Number.isFinite(num) ? num : String(value).trim();
     } catch (e) {
       result.missing.push({ key: m.key, error: String(e).slice(0, 200) });
     }
