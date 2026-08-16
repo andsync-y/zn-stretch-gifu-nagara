@@ -246,27 +246,27 @@ async function discovery(page, loginResult) {
       report.pages.push({ view: label, url: page.url(), ...(await pageStructure(page)) });
     }
 
-    // 業務ナビ（スタッフ・勤務時間）を開いて構造を記録する。顧客情報系のナビは開かない
-    for (const label of ['スタッフ', '勤務時間入力']) {
-      const candidates = [
-        `button:has-text("${label}")`,
-        `a:has-text("${label}")`,
-        `[role="tab"]:has-text("${label}")`,
-        `:is(h1,h2,h3):has-text("${label}")`,
-        `li:has-text("${label}")`,
-      ];
-      let clicked = null;
-      for (const s of candidates) {
-        const el = page.locator(s).first();
-        if ((await el.count()) > 0) {
-          await el.click().catch(() => {});
-          clicked = s;
-          break;
-        }
-      }
-      if (!clicked) continue;
+    // 業務ナビ（勤務時間・スタッフ）を開いて構造を記録する。顧客情報系のナビは開かない。
+    // ナビ項目はドロワーメニュー内で非表示の可能性があるため、
+    // まずヘッダーのメニューボタンを開き、それでも見えなければ強制クリックする
+    const menuBtn = page.locator('button:has-text("岐阜長良店 スタッフ")').first();
+    if ((await menuBtn.count()) > 0) {
+      await menuBtn.click({ timeout: 5000 }).catch(() => {});
+      await page.waitForTimeout(1200);
+      report.pages.push({ view: 'メニュー展開後', url: page.url(), ...(await pageStructure(page)) });
+    }
+    for (const label of ['勤務時間入力', 'スタッフ']) {
+      const el = page.locator(`:is(h1,h2,h3,a,button,li):has-text("${label}")`).last();
+      if ((await el.count()) === 0) continue;
+      let how = 'click';
+      await el.click({ timeout: 5000 }).catch(async () => {
+        how = 'force-click';
+        await el.click({ force: true, timeout: 3000 }).catch(() => {
+          how = 'failed';
+        });
+      });
       await page.waitForTimeout(2500);
-      report.pages.push({ nav: label, clickedVia: clicked, url: page.url(), ...(await pageStructure(page)) });
+      report.pages.push({ nav: label, clickedVia: how, url: page.url(), ...(await pageStructure(page)) });
     }
 
     // KPIに関係しそうなリンクを最大8ページまで辿って構造を記録する
