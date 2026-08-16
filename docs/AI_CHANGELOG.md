@@ -1594,3 +1594,12 @@ Git履歴が「何を変更したか」、このファイルが「なぜ変更�
   - `fetch.mjs`: ページ定義に`fills`（入力欄への記入、{week_start}/{week_end}置換）・`applyClick`・`waitAfterFillMs`を追加。`table_row`方式（集計行から列値を取得）を追加。検証用に`fills_applied`（実際に入力した値）と`period_labels`（テーブル1列目の期間ラベル）を`weekly_kpi.json`に出力
   - `selectors.json`: `dashboard_week`ページ（期間fills＋更新ボタン）とメトリクス10種（売上・総来店数・新規来店数・新規販売数/率・更新販売数/率・次回予約数/率・指名数）に更新
 - 確認結果：`node --check` OK、JSONパースOK。この後parseモードを実行して数値の妥当性を検証する
+
+## 2026-08-16 (Claude Code) KPIスクレイパーの実地検証完了（parse本稼働OK）
+- workflow_dispatchに`week_start`/`week_end`入力を追加（`KPI_WEEK_START`/`KPI_WEEK_END`環境変数→fetch.mjsで前週計算を上書き。過去週の取り直し・検証用）
+- 検証結果（3回のparse実行）：
+  - 前週8/3〜8/9：売上¥403,280・総来店31・新規来店18・新規販売4本（率22.2%）・更新2本・次回予約9件・指名12。レート整合性OK（22.2%=4÷18、29%=9÷31）
+  - 7月週7/6〜7/12を手動指定：売上¥734,950・新規27・販売11本と明確に変化し、期間ラベルも「2026年7月」に。#dashFromInput/#dashToInputの期間指定が確実に反映されることを確認
+  - 最後に週指定なしで再実行し、kpi-dataブランチを前週データに復元（1回目と同値＝再現性確認）
+- これで月曜7:00(JST)の週次自動取得は本稼働状態。月曜9:30の週次経営レビューは `git show origin/kpi-data:weekly_kpi.json` で前週KPIを読める
+- 未対応・次の作業：特になし（来週月曜の自動実行を通常監視でフォロー）
