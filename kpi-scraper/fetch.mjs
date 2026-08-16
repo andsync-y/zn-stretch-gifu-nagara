@@ -246,6 +246,29 @@ async function discovery(page, loginResult) {
       report.pages.push({ view: label, url: page.url(), ...(await pageStructure(page)) });
     }
 
+    // 業務ナビ（スタッフ・勤務時間）を開いて構造を記録する。顧客情報系のナビは開かない
+    for (const label of ['スタッフ', '勤務時間入力']) {
+      const candidates = [
+        `button:has-text("${label}")`,
+        `a:has-text("${label}")`,
+        `[role="tab"]:has-text("${label}")`,
+        `:is(h1,h2,h3):has-text("${label}")`,
+        `li:has-text("${label}")`,
+      ];
+      let clicked = null;
+      for (const s of candidates) {
+        const el = page.locator(s).first();
+        if ((await el.count()) > 0) {
+          await el.click().catch(() => {});
+          clicked = s;
+          break;
+        }
+      }
+      if (!clicked) continue;
+      await page.waitForTimeout(2500);
+      report.pages.push({ nav: label, clickedVia: clicked, url: page.url(), ...(await pageStructure(page)) });
+    }
+
     // KPIに関係しそうなリンクを最大8ページまで辿って構造を記録する
     const KEYWORDS = /売上|来店|予約|集計|レポート|実績|分析|ダッシュボード|CSV|回数券|顧客|エクスポート|ダウンロード/;
     const base = new URL(page.url());
