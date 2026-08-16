@@ -256,21 +256,20 @@ async function discovery(page, loginResult) {
       report.pages.push({ view: label, url: page.url(), ...(await pageStructure(page)) });
     }
 
-    // 業務ナビ（勤務時間・シフト・スタッフ）を開いて構造を記録する。顧客情報系のナビは開かない。
-    // ドロワー内の非表示要素でも反応するよう、DOM上のclick()を直接発火させる
-    for (const label of ['勤務時間入力', 'シフト', 'スタッフ']) {
+    // サイドバーの業務ナビ（a.nav-item）を開いて構造を記録する。
+    // 顧客情報系（顧客管理・来店記録・問い合わせ一覧）は開かない
+    for (const label of ['勤務時間', 'スタッフ管理', '日報', '店舗設定']) {
       const clicked = await page.evaluate((lbl) => {
-        const els = [...document.querySelectorAll('h1,h2,h3,h4,a,button,li,[role="button"],[role="tab"]')];
-        const hits = els.filter((e) => (e.textContent || '').includes(lbl));
-        if (hits.length === 0) return false;
-        // テキストが一致する最小（最も内側）の要素をクリックする
-        hits.sort((a, b) => (a.textContent || '').length - (b.textContent || '').length);
-        hits[0].click();
-        return (hits[0].textContent || '').trim().slice(0, 30);
+        const el = [...document.querySelectorAll('a.nav-item')].find(
+          (e) => (e.textContent || '').trim() === lbl
+        );
+        if (!el) return false;
+        el.click();
+        return true;
       }, label);
       if (!clicked) continue;
       await page.waitForTimeout(2500);
-      report.pages.push({ nav: label, clickedVia: `js-click: ${clicked}`, url: page.url(), ...(await pageStructure(page)) });
+      report.pages.push({ nav: label, clickedVia: 'nav-item', url: page.url(), ...(await pageStructure(page)) });
     }
 
     // KPIに関係しそうなリンクを最大8ページまで辿って構造を記録する
