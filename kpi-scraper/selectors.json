@@ -1,5 +1,5 @@
 {
-  "_comment": "店舗システムのページ構造定義。ダッシュボードはSPAのため、clicksで「今月→日別」に切り替えてから、日別テーブルの前週（月〜日）の行を集計する。前週が月をまたぐ場合はprevPeriodClick（先月）ビューも自動で取り込む。successCheckはログイン成功後のみ現れるログアウトボタン（モーダル内のpassword欄による誤検知対策）。",
+  "_comment": "店舗システムのページ構造定義。ダッシュボードはSPAで、#dashFromInput / #dashToInput（YYYY-MM-DD）に前週（月〜日）を入力して期間を反映させ、KPIテーブルの集計行（table_row）から週次値を取る。期間が正しく反映されたかは出力のfills_applied（入力した値）とperiod_labels（テーブル1列目のラベル）で確認できる。successCheckはログイン成功後のみ現れるログアウトボタン（モーダル内のpassword欄による誤検知対策）。",
   "configured": true,
   "login": {
     "url": "https://system.zn-stretch.com/",
@@ -10,20 +10,27 @@
   },
   "pages": [
     {
-      "name": "dashboard_daily",
+      "name": "dashboard_week",
       "url": "https://system.zn-stretch.com/",
       "waitMs": 3000,
-      "clicks": ["button:has-text(\"今月\")", "button:has-text(\"日別\")"],
-      "prevPeriodClick": "button:has-text(\"先月\")"
+      "fills": [
+        { "selector": "#dashFromInput", "value": "{week_start}" },
+        { "selector": "#dashToInput", "value": "{week_end}" }
+      ],
+      "applyClick": "button:has-text(\"更新\")",
+      "waitAfterFillMs": 3000
     }
   ],
   "metrics": [
-    { "key": "sales_total", "label": "売上（週計）", "page": "dashboard_daily", "method": "table", "tableMatch": ["売上", "新規販売数", "総来店数"], "column": "売上", "agg": "sum" },
-    { "key": "total_visits", "label": "総来店数（週計）", "page": "dashboard_daily", "method": "table", "tableMatch": ["売上", "新規販売数", "総来店数"], "column": "総来店数", "agg": "sum" },
-    { "key": "new_visits", "label": "新規来店数（週計）", "page": "dashboard_daily", "method": "table", "tableMatch": ["売上", "新規販売数", "総来店数"], "column": "新規来店数", "agg": "sum" },
-    { "key": "new_ticket_sales", "label": "回数券新規販売本数（週計）", "page": "dashboard_daily", "method": "table", "tableMatch": ["売上", "新規販売数", "総来店数"], "column": "新規販売数", "agg": "sum" },
-    { "key": "renewal_ticket_sales", "label": "回数券更新本数（週計）", "page": "dashboard_daily", "method": "table", "tableMatch": ["売上", "新規販売数", "総来店数"], "column": "更新販売数", "agg": "sum" },
-    { "key": "next_reservations", "label": "次回予約数（週計）", "page": "dashboard_daily", "method": "table", "tableMatch": ["売上", "新規販売数", "総来店数"], "column": "次回予約数", "agg": "sum" },
-    { "key": "shimei_count", "label": "指名数（週計）", "page": "dashboard_daily", "method": "table", "tableMatch": ["売上", "新規販売数", "総来店数"], "column": "指名数", "agg": "sum" }
+    { "key": "sales_total", "label": "売上（週計）", "page": "dashboard_week", "method": "table_row", "tableMatch": ["売上", "新規販売数", "総来店数"], "column": "売上" },
+    { "key": "total_visits", "label": "総来店数（週計）", "page": "dashboard_week", "method": "table_row", "tableMatch": ["売上", "新規販売数", "総来店数"], "column": "総来店数" },
+    { "key": "new_visits", "label": "新規来店数（週計）", "page": "dashboard_week", "method": "table_row", "tableMatch": ["売上", "新規販売数", "総来店数"], "column": "新規来店数" },
+    { "key": "new_ticket_sales", "label": "回数券新規販売本数（週計）", "page": "dashboard_week", "method": "table_row", "tableMatch": ["売上", "新規販売数", "総来店数"], "column": "新規販売数" },
+    { "key": "new_ticket_rate", "label": "新規販売率（週）", "page": "dashboard_week", "method": "table_row", "tableMatch": ["売上", "新規販売数", "総来店数"], "column": "新規販売率" },
+    { "key": "renewal_ticket_sales", "label": "回数券更新本数（週計）", "page": "dashboard_week", "method": "table_row", "tableMatch": ["売上", "新規販売数", "総来店数"], "column": "更新販売数" },
+    { "key": "renewal_ticket_rate", "label": "更新販売率（週）", "page": "dashboard_week", "method": "table_row", "tableMatch": ["売上", "新規販売数", "総来店数"], "column": "更新販売率" },
+    { "key": "next_reservations", "label": "次回予約数（週計）", "page": "dashboard_week", "method": "table_row", "tableMatch": ["売上", "新規販売数", "総来店数"], "column": "次回予約数" },
+    { "key": "next_reservation_rate", "label": "次回予約率（週）", "page": "dashboard_week", "method": "table_row", "tableMatch": ["売上", "新規販売数", "総来店数"], "column": "次回予約率" },
+    { "key": "shimei_count", "label": "指名数（週計）", "page": "dashboard_week", "method": "table_row", "tableMatch": ["売上", "新規販売数", "総来店数"], "column": "指名数" }
   ]
 }

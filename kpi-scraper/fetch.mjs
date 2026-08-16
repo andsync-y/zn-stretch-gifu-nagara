@@ -116,6 +116,29 @@ async function doClicks(page, clicks) {
   }
 }
 
+// 入力欄への記入（期間指定など）。valueの {week_start}/{week_end} は前週の日付に置換される。
+// 全fill後にEnterを押し、applyClickがあればそのボタンも押して反映させる。
+// 見つからないセレクタはfilledに記録されないため、呼び出し側で反映確認に使える
+async function doFills(page, pconf, week) {
+  const filled = {};
+  for (const f of pconf.fills || []) {
+    const input = page.locator(f.selector).first();
+    if ((await input.count()) === 0) continue;
+    const value = String(f.value)
+      .replaceAll('{week_start}', week.start)
+      .replaceAll('{week_end}', week.end);
+    await input.fill(value);
+    filled[f.selector] = value;
+  }
+  if ((pconf.fills || []).length > 0) {
+    const last = page.locator(pconf.fills[pconf.fills.length - 1].selector).first();
+    if ((await last.count()) > 0) await last.press('Enter').catch(() => {});
+    if (pconf.applyClick) await doClicks(page, [pconf.applyClick]);
+    await page.waitForTimeout(pconf.waitAfterFillMs || 2500);
+  }
+  return filled;
+}
+
 // ページの「構造」だけを抽出する（セル値・個人情報は取らない。
 // 例外：テーブル1列目の日付として解釈できる値のみ、日付形式の確認用に少数記録する）
 async function pageStructure(page) {
@@ -252,6 +275,8 @@ async function parse(page, loginResult) {
     status: 'ok',
     metrics: {},
     days_covered: {},
+    period_labels: {},
+    fills_applied: {},
     missing: [],
   };
 
@@ -278,6 +303,8 @@ async function parse(page, loginResult) {
     await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 30000 });
     await page.waitForTimeout(pconf.waitMs || 2500);
     await doClicks(page, pconf.clicks);
+    const filled = await doFills(page, pconf, week);
+    if (Object.keys(filled).length > 0) result.fills_applied[pconf.name] = filled;
     opened.add(pconf.name);
   }
   async function tablesFor(pconf) {
@@ -298,7 +325,23 @@ async function parse(page, loginResult) {
       const pconf = pagesByName[m.page];
       if (!pconf) throw new Error(`page config not found: ${m.page}`);
 
-      if (m.method === 'table') {
+      if (m.method === 'table_row') {
+        // 期間指定を反映したテーブルの集計行（先頭行）から値を取る。
+        // 1列目（期間ラベル）はperiod_labelsに記録し、前週が反映されたかの確認に使う
+        const tables = await tablesFor(pconf);
+        const table = tables.find((t) =>
+          (m.tableMatch || []).every((h) => t.headers.some((th) => th.includes(h)))
+        );
+        if (!table) throw new Error(`table not found: ${(m.tableMatch || []).join(',')}`);
+        const rows = table.rows.filter((r) => r.length > 1);
+        if (rows.length === 0) throw new Error('no data rows');
+        const row = m.row === 'last' ? rows[rows.length - 1] : rows[0];
+        const colIdx = table.headers.findIndex((h) => h.includes(m.column));
+        if (colIdx < 0) throw new Error(`column not found: ${m.column}`);
+        result.period_labels[m.page] = row[0];
+        const v = toNumber(row[colIdx]);
+        result.metrics[m.key] = v != null ? v : String(row[colIdx] ?? '').trim();
+      } else if (m.method === 'table') {
         // tableMatchの見出しをすべて含むテーブルから、前週の日付行を集計する
         const tables = await tablesFor(pconf);
         const matched = tables.filter((t) =>

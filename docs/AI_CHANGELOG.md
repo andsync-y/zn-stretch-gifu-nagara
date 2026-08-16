@@ -1587,3 +1587,10 @@ Git履歴が「何を変更したか」、このファイルが「なぜ変更�
   - メトリクス7種（週計）：売上・総来店数・新規来店数・回数券新規販売本数・更新本数・次回予約数・指名数（日別KPIテーブルを`tableMatch: 売上/新規販売数/総来店数`で特定）
 - 確認結果：`node --check fetch.mjs` OK、selectors.json のJSONパースOK、日付正規化ロジックの単体検証OK（年またぎ週含む）
 - 未対応・次の作業：実サイトでの動作検証（discoveryで日別ビューの日付形式を確認→parseで`weekly_kpi.json`の数値妥当性を確認）。本コミット後にworkflow_dispatchで実行して検証する
+
+## 2026-08-16 (Claude Code) KPIスクレイパーを期間指定方式に変更（discovery検証結果を反映）
+- 強化版discoveryを実行して確認：successCheck設定によりログイン判定が正しくtrueに。「日別」トグルはKPIテーブルには効かない（月別のまま）一方、ダッシュボードにカスタム期間入力欄 `#dashFromInput` / `#dashToInput`（YYYY-MM-DD）があることを発見
+- 方式変更：日別行の足し上げをやめ、期間入力欄に前週（月〜日）を直接入力してKPIテーブルの集計行から取得する方式に
+  - `fetch.mjs`: ページ定義に`fills`（入力欄への記入、{week_start}/{week_end}置換）・`applyClick`・`waitAfterFillMs`を追加。`table_row`方式（集計行から列値を取得）を追加。検証用に`fills_applied`（実際に入力した値）と`period_labels`（テーブル1列目の期間ラベル）を`weekly_kpi.json`に出力
+  - `selectors.json`: `dashboard_week`ページ（期間fills＋更新ボタン）とメトリクス10種（売上・総来店数・新規来店数・新規販売数/率・更新販売数/率・次回予約数/率・指名数）に更新
+- 確認結果：`node --check` OK、JSONパースOK。この後parseモードを実行して数値の妥当性を検証する
