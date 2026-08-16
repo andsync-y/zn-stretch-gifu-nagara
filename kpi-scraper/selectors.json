@@ -1,0 +1,13 @@
+{
+  "_comment": "店舗システムのページ構造定義。configuredがfalseの間は探索モード（discovery）で動き、ページ構造のみをkpi-dataブランチに書き出す。探索結果を見てClaudeがこのファイルを設定したらconfigured: trueにする。",
+  "configured": false,
+  "login": {
+    "url": "https://system.zn-stretch.com/",
+    "userField": "",
+    "passField": "",
+    "submitButton": "",
+    "successCheck": ""
+  },
+  "pages": [],
+  "metrics": []
+}

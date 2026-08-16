@@ -1,0 +1,9 @@
+{
+  "name": "zn-kpi-scraper",
+  "private": true,
+  "type": "module",
+  "description": "店舗システム(system.zn-stretch.com)から週次KPIを自動取得し、kpi-dataブランチに書き出す",
+  "dependencies": {
+    "playwright": "^1.46.0"
+  }
+}

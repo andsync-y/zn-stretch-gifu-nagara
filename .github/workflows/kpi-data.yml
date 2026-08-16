@@ -1,0 +1,59 @@
+name: 店舗KPIデータ取得（週次自動）
+
+# 店舗システム(system.zn-stretch.com)から前週のKPIを取得し、kpi-dataブランチにコミットする。
+# 月曜9:30の週次経営レビューRoutineはgit経由でこれを読む。
+# selectors.json が未設定（configured: false）の間は探索モードで動き、
+# ページ構造だけを書き出す（顧客情報・生HTMLは保存しない）。
+on:
+  schedule:
+    - cron: '0 22 * * 0' # JST 月曜7:00（週次経営レビューの2.5時間前）
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'モード（空=自動判定 / discovery / parse）'
+        required: false
+        default: ''
+
+permissions:
+  contents: write
+
+concurrency:
+  group: kpi-data
+  cancel-in-progress: false
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      ZN_SYSTEM_USER: ${{ secrets.ZN_SYSTEM_USER }}
+      ZN_SYSTEM_PASS: ${{ secrets.ZN_SYSTEM_PASS }}
+      KPI_MODE: ${{ github.event.inputs.mode }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: 依存関係とブラウザの準備
+        run: |
+          cd kpi-scraper
+          npm install --no-audit --no-fund
+          npx playwright install --with-deps chromium
+      - name: KPI取得
+        run: |
+          cd kpi-scraper
+          node fetch.mjs
+          mkdir -p ../out
+          cp -r out/* ../out/ 2>/dev/null || true
+      - name: kpi-dataブランチへ強制コミット（履歴は持たない・Vercelビルドはスキップ）
+        run: |
+          cd out
+          printf '{\n  "git": {\n    "deploymentEnabled": {\n      "kpi-data": false\n    }\n  }\n}\n' > vercel.json
+          git init -b kpi-data
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "kpi: $(date -u +%Y-%m-%dT%H:%M)Z [skip ci]"
+          git push --force "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" kpi-data
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
