@@ -13,6 +13,14 @@ on:
         description: 'モード（空=自動判定 / discovery / parse）'
         required: false
         default: ''
+      week_start:
+        description: '対象週の開始日 YYYY-MM-DD（空=前週月曜。過去週の取り直し・検証用）'
+        required: false
+        default: ''
+      week_end:
+        description: '対象週の終了日 YYYY-MM-DD（空=前週日曜）'
+        required: false
+        default: ''
 
 permissions:
   contents: write
@@ -29,6 +37,8 @@ jobs:
       ZN_SYSTEM_USER: ${{ secrets.ZN_SYSTEM_USER }}
       ZN_SYSTEM_PASS: ${{ secrets.ZN_SYSTEM_PASS }}
       KPI_MODE: ${{ github.event.inputs.mode }}
+      KPI_WEEK_START: ${{ github.event.inputs.week_start }}
+      KPI_WEEK_END: ${{ github.event.inputs.week_end }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

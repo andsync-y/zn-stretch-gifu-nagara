@@ -28,8 +28,14 @@ const MODE = process.env.KPI_MODE || (selectors.configured ? 'parse' : 'discover
 
 fs.mkdirSync(OUT, { recursive: true });
 
-// JSTでの「前週月曜〜日曜」を計算する
+// JSTでの「前週月曜〜日曜」を計算する。
+// KPI_WEEK_START / KPI_WEEK_END（YYYY-MM-DD）で任意の期間に上書きできる（過去週の取り直し・検証用）
 function lastWeekRangeJST() {
+  const ws = process.env.KPI_WEEK_START || '';
+  const we = process.env.KPI_WEEK_END || '';
+  if (/^\d{4}-\d{2}-\d{2}$/.test(ws) && /^\d{4}-\d{2}-\d{2}$/.test(we)) {
+    return { start: ws, end: we };
+  }
   const nowJst = new Date(Date.now() + 9 * 3600 * 1000);
   const dow = nowJst.getUTCDay(); // 0=日
   const daysSinceMonday = (dow + 6) % 7;
