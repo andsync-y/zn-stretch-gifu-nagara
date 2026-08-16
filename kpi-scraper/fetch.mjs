@@ -183,8 +183,18 @@ async function pageStructure(page) {
     })).slice(0, 40);
     const buttons = [...document.querySelectorAll('button, input[type="submit"]')]
       .map((b) => clip(b.textContent || b.value)).filter(Boolean).slice(0, 40);
+    // アイコンのみのボタン等も拾えるよう、クリック可能要素の属性一覧も記録する
+    const clickables = [...document.querySelectorAll('button, a, [role="button"], [onclick]')]
+      .map((el) => ({
+        tag: el.tagName.toLowerCase(),
+        id: el.getAttribute('id'),
+        cls: clip(el.getAttribute('class') || '', 60),
+        aria: el.getAttribute('aria-label'),
+        text: clip(el.textContent, 24),
+      }))
+      .slice(0, 80);
     const headings = [...document.querySelectorAll('h1,h2,h3')].map((h) => clip(h.textContent)).slice(0, 30);
-    return { title: document.title, headings, links, tables, forms, inputs, buttons };
+    return { title: document.title, headings, links, tables, forms, inputs, buttons, clickables };
   });
 }
 
@@ -246,27 +256,21 @@ async function discovery(page, loginResult) {
       report.pages.push({ view: label, url: page.url(), ...(await pageStructure(page)) });
     }
 
-    // 業務ナビ（勤務時間・スタッフ）を開いて構造を記録する。顧客情報系のナビは開かない。
-    // ナビ項目はドロワーメニュー内で非表示の可能性があるため、
-    // まずヘッダーのメニューボタンを開き、それでも見えなければ強制クリックする
-    const menuBtn = page.locator('button:has-text("岐阜長良店 スタッフ")').first();
-    if ((await menuBtn.count()) > 0) {
-      await menuBtn.click({ timeout: 5000 }).catch(() => {});
-      await page.waitForTimeout(1200);
-      report.pages.push({ view: 'メニュー展開後', url: page.url(), ...(await pageStructure(page)) });
-    }
-    for (const label of ['勤務時間入力', 'スタッフ']) {
-      const el = page.locator(`:is(h1,h2,h3,a,button,li):has-text("${label}")`).last();
-      if ((await el.count()) === 0) continue;
-      let how = 'click';
-      await el.click({ timeout: 5000 }).catch(async () => {
-        how = 'force-click';
-        await el.click({ force: true, timeout: 3000 }).catch(() => {
-          how = 'failed';
-        });
-      });
+    // 業務ナビ（勤務時間・シフト・スタッフ）を開いて構造を記録する。顧客情報系のナビは開かない。
+    // ドロワー内の非表示要素でも反応するよう、DOM上のclick()を直接発火させる
+    for (const label of ['勤務時間入力', 'シフト', 'スタッフ']) {
+      const clicked = await page.evaluate((lbl) => {
+        const els = [...document.querySelectorAll('h1,h2,h3,h4,a,button,li,[role="button"],[role="tab"]')];
+        const hits = els.filter((e) => (e.textContent || '').includes(lbl));
+        if (hits.length === 0) return false;
+        // テキストが一致する最小（最も内側）の要素をクリックする
+        hits.sort((a, b) => (a.textContent || '').length - (b.textContent || '').length);
+        hits[0].click();
+        return (hits[0].textContent || '').trim().slice(0, 30);
+      }, label);
+      if (!clicked) continue;
       await page.waitForTimeout(2500);
-      report.pages.push({ nav: label, clickedVia: how, url: page.url(), ...(await pageStructure(page)) });
+      report.pages.push({ nav: label, clickedVia: `js-click: ${clicked}`, url: page.url(), ...(await pageStructure(page)) });
     }
 
     // KPIに関係しそうなリンクを最大8ページまで辿って構造を記録する
