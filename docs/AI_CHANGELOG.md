@@ -1577,3 +1577,32 @@ Git履歴が「何を変更したか」、このファイルが「なぜ変更�
 ## 2026-08-16 (Claude Code) Google広告のリンク先を/lpに切替（オーナー承認「代行して」）
 - 実績ある見出し15本・説明文4本をそのまま流用し final_url=/lp の新RSA（821199375965）を作成→有効化、旧広告（816701342091）を停止
 - 文言を変えずURLだけ変えることでLP効果を分離測定する。審査完了後に配信開始、以後のCV率変化をデイリー監視で追跡
+## 2026-08-16 (Claude Code) KPIスクレイパーのparse設定（日別テーブル週次集計）
+- 初回discovery実行の結果を確認：ログインは実際には成功（ダッシュボード構造・KPIテーブル見出しを取得）。ただしログイン成功後のDOMにモーダルのpassword欄が残るため`login.success`が誤ってfalseになる問題を確認
+- `kpi-scraper/fetch.mjs` を拡張：
+  - SPAの表示切替ボタン対応（ページ定義の`clicks`で「今月→日別」等をクリック）
+  - `table`方式を追加：日別テーブルの行を前週（月〜日・JST）の日付で絞って集計（sum/avg）。行の日付は`YYYY-MM-DD`/`YYYY/M/D`/`M/D`/`M月D日`等を正規化、範囲外・「合計」行は除外
+  - 前週が月をまたぐ場合は`prevPeriodClick`（先月ビュー）も自動で取り込み、日付単位で重複排除してマージ
+  - discoveryモードで「今月/日別/先月」各ビューの構造とテーブル1列目の日付形式サンプル（日付として解釈できる値のみ）を記録するよう強化。顧客名などのセル値は引き続き出力しない
+  - ログイン成功判定に「ログアウトボタンの存在」を追加（successCheck未設定時の補助判定）
+- `kpi-scraper/selectors.json` を設定して`configured: true`に：
+  - `successCheck`: ログアウトボタン
+  - メトリクス7種（週計）：売上・総来店数・新規来店数・回数券新規販売本数・更新本数・次回予約数・指名数（日別KPIテーブルを`tableMatch: 売上/新規販売数/総来店数`で特定）
+- 確認結果：`node --check fetch.mjs` OK、selectors.json のJSONパースOK、日付正規化ロジックの単体検証OK（年またぎ週含む）
+- 未対応・次の作業：実サイトでの動作検証（discoveryで日別ビューの日付形式を確認→parseで`weekly_kpi.json`の数値妥当性を確認）。本コミット後にworkflow_dispatchで実行して検証する
+
+## 2026-08-16 (Claude Code) KPIスクレイパーを期間指定方式に変更（discovery検証結果を反映）
+- 強化版discoveryを実行して確認：successCheck設定によりログイン判定が正しくtrueに。「日別」トグルはKPIテーブルには効かない（月別のまま）一方、ダッシュボードにカスタム期間入力欄 `#dashFromInput` / `#dashToInput`（YYYY-MM-DD）があることを発見
+- 方式変更：日別行の足し上げをやめ、期間入力欄に前週（月〜日）を直接入力してKPIテーブルの集計行から取得する方式に
+  - `fetch.mjs`: ページ定義に`fills`（入力欄への記入、{week_start}/{week_end}置換）・`applyClick`・`waitAfterFillMs`を追加。`table_row`方式（集計行から列値を取得）を追加。検証用に`fills_applied`（実際に入力した値）と`period_labels`（テーブル1列目の期間ラベル）を`weekly_kpi.json`に出力
+  - `selectors.json`: `dashboard_week`ページ（期間fills＋更新ボタン）とメトリクス10種（売上・総来店数・新規来店数・新規販売数/率・更新販売数/率・次回予約数/率・指名数）に更新
+- 確認結果：`node --check` OK、JSONパースOK。この後parseモードを実行して数値の妥当性を検証する
+
+## 2026-08-16 (Claude Code) KPIスクレイパーの実地検証完了（parse本稼働OK）
+- workflow_dispatchに`week_start`/`week_end`入力を追加（`KPI_WEEK_START`/`KPI_WEEK_END`環境変数→fetch.mjsで前週計算を上書き。過去週の取り直し・検証用）
+- 検証結果（3回のparse実行）：
+  - 前週8/3〜8/9：売上¥403,280・総来店31・新規来店18・新規販売4本（率22.2%）・更新2本・次回予約9件・指名12。レート整合性OK（22.2%=4÷18、29%=9÷31）
+  - 7月週7/6〜7/12を手動指定：売上¥734,950・新規27・販売11本と明確に変化し、期間ラベルも「2026年7月」に。#dashFromInput/#dashToInputの期間指定が確実に反映されることを確認
+  - 最後に週指定なしで再実行し、kpi-dataブランチを前週データに復元（1回目と同値＝再現性確認）
+- これで月曜7:00(JST)の週次自動取得は本稼働状態。月曜9:30の週次経営レビューは `git show origin/kpi-data:weekly_kpi.json` で前週KPIを読める
+- 未対応・次の作業：特になし（来週月曜の自動実行を通常監視でフォロー）
