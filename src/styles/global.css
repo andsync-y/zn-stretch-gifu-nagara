@@ -105,6 +105,18 @@
     padding: 1.25rem 2.75rem;
     box-shadow: 6px 6px 0 rgba(255,255,255,0.18);
   }
+  /* LINE予約のCTA。アンバー（HPB）と同格に並べるため寸法・字送りを揃える */
+  .btn-line-pill {
+    @apply inline-flex items-center justify-center rounded-none text-white font-black transition;
+    background: #06C755;
+    font-size: 14px;
+    letter-spacing: 0.12em;
+    padding: 1.25rem 2.75rem;
+    box-shadow: 6px 6px 0 rgba(255,255,255,0.18);
+  }
+  .btn-line-pill:hover {
+    background: #05a948;
+  }
   .btn-ink-pill {
     @apply inline-flex items-center justify-center rounded-none bg-ink text-white font-black transition;
     font-size: 13px;
