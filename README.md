@@ -50,6 +50,21 @@ docs/                 # 運用ドキュメント（下記）
 - `yakkihou-ng-ok.md` … 薬機法・景表法のNG→OK言い換え表
 - `gbp-checklist.md` … Googleビジネスプロフィール最適化＋口コミ導線＋サイテーション手順
 - `morning-todo.md` … 「朝、オーナーがやること」チェックリスト
+- `capi-offline-events.md` … Meta広告CAPIへの回数券成約（オフラインCV）送信の仕様と運用手順
+
+## GitHub Actions のワークフローとSecrets
+
+| ワークフロー | 実行 | 内容 | 必要なSecrets |
+|---|---|---|---|
+| `kpi-data.yml` | 毎週月曜7:00 JST | 店舗システムから前週KPIを取得し `kpi-data` ブランチへ | `ZN_SYSTEM_USER` / `ZN_SYSTEM_PASS` |
+| `windsor-data.yml` | 毎朝 | 広告・GA4データをWindsor経由で取得 | `WINDSOR_API_KEY` |
+| `column-auto.yml` | 定期 | コラム自動生成 | `ANTHROPIC_API_KEY` / `OPENAI_API_KEY` / `PEXELS_API_KEY` |
+| `capi-upload.yml` | 毎月3日10:00 JST | 回数券成約をMeta広告CAPIへオフラインCVとして送信し、`capi-state` ブランチへ記録 | `GDRIVE_SA_KEY` / `META_DATASET_ID` / `META_CAPI_ACCESS_TOKEN` |
+
+`capi-upload.yml` の初回は手動実行の **dry_run（既定true）** から始める。詳細と
+オーナー側の手動セットアップ手順は [`docs/capi-offline-events.md`](docs/capi-offline-events.md) を参照。
+
+認証情報はGitHub Secretsのみに置き、コード・ログ・ブランチには書かない。
 
 ## Vercel デプロイ手順（本番ドメイン：zn-stretch-gifu.com）
 

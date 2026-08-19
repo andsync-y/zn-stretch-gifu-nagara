@@ -1,0 +1,89 @@
+name: Meta CAPIオフラインイベント送信（月次）
+
+# Google Driveの電話ハッシュマスタから回数券成約を読み、Meta広告のConversions APIへ
+# オフラインコンバージョン（Purchase）として送る。
+# 送信済みevent_idと実行レポートは capi-state ブランチへ通常コミットで積む
+# （kpi-dataブランチは週次ジョブが毎回force pushで作り直すため、状態を置くと消える）。
+# 既存の日次・週次スクレイピングには一切触れない。
+on:
+  schedule:
+    - cron: '0 1 3 * *' # JST 毎月3日 10:00
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: '送信せず件数とpayload概要をログに出すだけ'
+        type: boolean
+        required: false
+        default: true
+      test_event_code:
+        description: 'テストイベントコード（指定時はテスト送信。イベントマネージャの「テストイベント」タブで確認用）'
+        required: false
+        default: ''
+
+permissions:
+  contents: write
+
+concurrency:
+  group: capi-upload
+  cancel-in-progress: false
+
+env:
+  # scheduleで起動したときは inputs が空になるため、その場合は本送信（dry_run=false）
+  IS_DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || false }}
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      # 送信済み管理（capi-sent.json）と過去レポートを読むため、capi-stateブランチを
+      # 作業ディレクトリへ浅くクローンする。初回はブランチが無いので空から始める。
+      - name: capi-stateブランチの準備
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          REMOTE="https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          if git ls-remote --exit-code --heads "$REMOTE" capi-state >/dev/null 2>&1; then
+            git clone --branch capi-state --single-branch --depth=1 "$REMOTE" capi-state
+            echo "capi-state ブランチを取得しました"
+          else
+            mkdir -p capi-state
+            git -C capi-state init -b capi-state -q
+            git -C capi-state remote add origin "$REMOTE"
+            echo "capi-state ブランチは未作成です（初回実行）"
+          fi
+
+      - name: CAPI送信
+        env:
+          GDRIVE_SA_KEY: ${{ secrets.GDRIVE_SA_KEY }}
+          META_DATASET_ID: ${{ secrets.META_DATASET_ID }}
+          META_CAPI_ACCESS_TOKEN: ${{ secrets.META_CAPI_ACCESS_TOKEN }}
+          CAPI_DRY_RUN: ${{ env.IS_DRY_RUN }}
+          CAPI_TEST_EVENT_CODE: ${{ inputs.test_event_code }}
+          CAPI_STATE_DIR: capi-state
+        run: node scripts/capi-upload.mjs
+
+      - name: capi-stateブランチへコミット
+        if: ${{ env.IS_DRY_RUN != 'true' }}
+        run: |
+          set -euo pipefail
+          cd capi-state
+          # Vercelがこのブランチをビルドしないようにする（kpi-dataと同じ扱い）
+          printf '{\n  "git": {\n    "deploymentEnabled": {\n      "capi-state": false\n    }\n  }\n}\n' > vercel.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git rev-parse --verify HEAD >/dev/null 2>&1 && git diff --cached --quiet; then
+            echo "変更なし（コミットしません）"
+          else
+            # 履歴を保持したまま積み上げる（送信済み管理を消さないため force push はしない）
+            git commit -q -m "capi: $(date -u +%Y-%m-%dT%H:%M)Z [skip ci]"
+            git push origin capi-state
+          fi

@@ -1648,3 +1648,22 @@ Git履歴が「何を変更したか」、このファイルが「なぜ変更�
 - anthropic-probe.yml（最小のmessages呼び出し）で原因確定：HTTP 400「Your credit balance is too low to access the Anthropic API」
 - オーナーへ通知済み（クレジット購入依頼）。補充後のリカバリ手順はタスク#8に記録（8/17・8/19分の2本を再生成→GBP連動投稿→probe削除）
 - 影響範囲はコラム生成のみ。広告監視・GBP投稿・データリレーは別経路（Windsor/OpenAI）のため正常稼働中
+
+## 2026-08-19 (Claude Code) Meta広告CAPIオフラインイベント送信を実装（回数券成約→Purchase）
+- 目的：回数券の成約実績をMetaに「オフラインコンバージョン」として送り、配信最適化を「体験に来る客」から「回数券を買う客」へ寄せる
+- **調査で判明した2つの問題**（実装前にオーナー確認を取り、方針を決定）：
+  1. **顧客別の成約データが存在しない**。`kpi-data` の `weekly_kpi.json` は週次集計値のみ（`new_ticket_sales: 8` のような本数と週合計売上）で、誰がいつ幾らで買ったかの1件ごとのレコードが無く、当初設計の「氏名で突合」が成立しない
+     → オーナー判断で**成約日・金額を電話ハッシュマスタ側に持たせる**方式に変更（Cowork月次タスク側の対応が必要。それが入るまでは0件送信で正常終了する設計）。突合が不要になったため氏名を一切扱わない実装にした
+  2. **`kpi-data` ブランチは毎週消える**。`kpi-data.yml` が `git init` + `git push --force` で作り直すため、当初仕様どおり `capi-sent.json` を置くと週次ジョブで消えて翌月に二重送信する
+     → オーナー判断で**専用の `capi-state` ブランチ**を新設し、こちらは履歴を保持したまま通常コミットで積む方式に変更
+- 新規 `scripts/capi-upload.mjs`（**依存パッケージなし**。Node 22標準のfetch/cryptoのみ。Google認証はサービスアカウントのJWT BearerグラントをOAuth2エンドポイントへ直接投げる方式にし、Actionsの実行時間を最小化）
+  - Drive（フォルダID `1Gsa1G7n4OHTNRcz8QW6GxSp-T52v4H3p`）から `phone-master_YYYY-MM.json` を全件取得・マージ。同一 `(日付,金額,商品名)` の成約は1件に畳む
+  - 62日以内（Meta仕様）の成約のみ抽出。未来日付・金額なし（Purchaseは `value` 必須）・不正ハッシュ・送信済みは除外
+  - `event_id` = `{成約日YYYYMMDD}_{phone_hash先頭16文字}`。同一顧客・同一日はevent_idが衝突するため金額を合算して1イベントにする
+  - `POST https://graph.facebook.com/v26.0/{META_DATASET_ID}/events`（v26.0は2026-07-29リリースの最新版。`META_GRAPH_VERSION` で差し替え可）。500件ずつバッチ送信
+  - `event_time` は成約日の**JST正午**（日付しか無いため、どのTZで解釈しても同じ日になる時刻を採用）
+- 新規 `.github/workflows/capi-upload.yml`（毎月3日10:00 JST ＋ workflow_dispatch。入力 `dry_run`（既定true）と `test_event_code`）
+- 個人情報：生の電話番号・メールは一切扱わない（入力時点でSHA256済み）。突合が不要になったため**氏名もレポートに出さず件数と理由のみ**。dry_runのpayloadサンプルもハッシュを伏せ字にした。`capi-sent.json` は400日より古いevent_idを自動削除
+- 確認結果：Drive/Meta双方のHTTPをスタブして `capi-upload.mjs` を実走行し、①dry_run（何も書かない）②本送信③再実行で二重送信ゼロ ④`test_event_code` 指定時はbodyにコードが載り `capi-sent.json` を更新しない（本送信で再送可能）⑤重複マージ・同日合算・62日超/未来日/金額なし/不正ハッシュの除外 ⑥Google認証失敗・Drive 404・Meta 400・状態ファイル破損のいずれでも exit 1 ⑦ワークフローのgit処理をローカルのベアリポジトリで3回実行し、履歴保持・過去レポート保持・無変更時のコミットスキップ を確認。`npm run build` 成功（29ページ・既存サイトへの影響なし）
+- 既存の日次スクレイピング・週次処理には一切変更を加えていない（push起動のワークフローが無いことも確認済み）
+- **未対応・次の作業（オーナー作業）**：Metaデータセット作成→`META_DATASET_ID`／CAPIトークン発行→`META_CAPI_ACCESS_TOKEN`／GCPサービスアカウント作成・Drive API有効化→`GDRIVE_SA_KEY`／Driveフォルダ「32_顧客電話_マスタ」をSAメールへ閲覧者で共有／**Cowork月次タスクを `purchases`（成約日・金額）付きの出力へ更新**。チェックリストは `docs/capi-offline-events.md` に記載。本番反映は未確認（Secrets未設定のため未実行）
