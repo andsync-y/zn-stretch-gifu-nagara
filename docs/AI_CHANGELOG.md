@@ -1642,3 +1642,9 @@ Git履歴が「何を変更したか」、このファイルが「なぜ変更�
 - 差し戻し方法：`remove_negative_keywords`（level='campaign', campaign_id='24029290016', criterion_ids=[...]）。criterion_id は get_data の campaign_criterion_keyword_text / criterion_id で取得する
 - 未対応・次の作業：来週の週次レビューで検索語レポートを再確認し、除外の効き（無駄クリック消滅）と取りこぼし（意図せぬCV減）を検証
 
+
+## 2026-08-19 (Claude Code) コラム自動生成の停止を検知・原因特定（Anthropic APIクレジット不足）
+- 8/17のcolumn-auto失敗＋8/19の未実行を検知。手動再実行でも即死（0.5秒・$0）を再現
+- anthropic-probe.yml（最小のmessages呼び出し）で原因確定：HTTP 400「Your credit balance is too low to access the Anthropic API」
+- オーナーへ通知済み（クレジット購入依頼）。補充後のリカバリ手順はタスク#8に記録（8/17・8/19分の2本を再生成→GBP連動投稿→probe削除）
+- 影響範囲はコラム生成のみ。広告監視・GBP投稿・データリレーは別経路（Windsor/OpenAI）のため正常稼働中
