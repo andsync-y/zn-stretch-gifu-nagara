@@ -31,6 +31,14 @@ export interface Props {
   imageCredit?: string;
   /** アイキャッチの切り取り位置（CSSのobject-position）。縦長写真を横帯に収める際の調整用 */
   imagePosition?: string;
+  /**
+   * 監修者名。既定はトレーナーチーム名義。
+   * 特定トレーナーの実名を出す場合は、実際にその人が内容を確認したときだけ指定すること
+   * （実態のない監修者名はE-E-A-T上も逆効果になる）。
+   */
+  author?: string;
+  /** 監修者のプロフィールページ。実名指定時に個人ページがあれば差し替える */
+  authorUrl?: string;
 }
 
 const {
@@ -39,9 +47,13 @@ const {
   imageAlt,
   imageCredit,
   imagePosition = 'center 45%',
+  author = '全力ストレッチ岐阜長良店 体感軸調整トレーナーチーム',
+  authorUrl = '/staff',
 } = Astro.props;
 const pagePath = `/column/${slug}`;
 const eyecatchAlt = imageAlt ?? `${heading}｜岐阜市長良のパーソナルストレッチ専門店`;
+// 既定はチーム名義なのでOrganization、実名を指定したらPersonとして出す
+const isNamedAuthor = author !== '全力ストレッチ岐阜長良店 体感軸調整トレーナーチーム';
 
 const articleSchema = {
   '@context': 'https://schema.org',
@@ -53,10 +65,15 @@ const articleSchema = {
   dateModified: dateModified ?? datePublished,
   inLanguage: 'ja',
   author: {
-    '@type': 'Organization',
-    name: '全力ストレッチ岐阜長良店',
-    url: new URL('/staff', Astro.site).href,
+    '@type': isNamedAuthor ? 'Person' : 'Organization',
+    name: author,
+    url: new URL(authorUrl, Astro.site).href,
+    ...(isNamedAuthor
+      ? { jobTitle: '体感軸調整トレーナー', worksFor: { '@id': new URL('/#localbusiness', Astro.site).href } }
+      : {}),
   },
+  // 記事が拠って立つ独自メソッド。AI・検索エンジンに専門性の裏付けを示す
+  about: { '@id': new URL('/method#service', Astro.site).href },
   publisher: { '@id': new URL('/#localbusiness', Astro.site).href },
   mainEntityOfPage: new URL(pagePath, Astro.site).href,
 };
@@ -86,7 +103,7 @@ const breadcrumbSchema = {
     <div class="mb-10 sm:mb-14"><Breadcrumbs items={[{ label: 'トップ', href: '/' }, { label: 'コラム', href: '/column' }, { label: heading }]} /></div>
     <p class="en-label mb-8">Column</p>
     <h1 class="mb-6 max-w-[980px] text-[28px] font-black leading-[1.5] sm:text-[44px]">{heading}</h1>
-    <p class="mb-8 text-[12px] tracking-[0.08em] text-muted sm:mb-10">公開日：{datePublished}／執筆・監修：全力ストレッチ岐阜長良店 体感軸調整トレーナーチーム</p>
+    <p class="mb-8 text-[12px] tracking-[0.08em] text-muted sm:mb-10">公開日：{datePublished}{dateModified && dateModified !== datePublished ? `／更新日：${dateModified}` : ''}／執筆・監修：<a href={authorUrl} class="underline underline-offset-4">{author}</a></p>
 
     <figure class="mb-12 sm:mb-16">
       <img
@@ -109,7 +126,8 @@ const breadcrumbSchema = {
     </div>
 
     <p class="rule-top mt-16 max-w-[820px] pt-5 text-[13px] leading-[1.9] text-muted">
-      監修：<a href="/staff" class="font-bold underline underline-offset-4">全力ストレッチ岐阜長良店 体感軸調整トレーナーチーム</a>（ZST協会認定／岐阜市長良・個室のパーソナルストレッチ専門店）<br />
+      監修：<a href={authorUrl} class="font-bold underline underline-offset-4">{author}</a>（ZST協会認定／岐阜市長良・個室のパーソナルストレッチ専門店）<br />
+      当店は独自メソッド<a href="/method" class="font-bold underline underline-offset-4">「体感軸調整法」</a>にもとづき、もむのではなく伸ばすアプローチを行っています。<br />
       ※本記事は一般的なセルフケアの情報であり、効果には個人差があります。強い痛みやしびれがある場合は医療機関にご相談ください。
     </p>
 
@@ -142,7 +160,7 @@ const breadcrumbSchema = {
     )}
   </article>
 
-  <ReserveCTA title="セルフケアで追いつかない張りは、プロにおまかせください。" />
+  <ReserveCTA title="セルフケアで追いつかない張りは、プロにおまかせください。" source={`column:${slug}`} />
 </Base>
 
 <style is:global>

@@ -1,0 +1,181 @@
+---
+// 独自メソッド「体感軸調整法」の解説ページ。
+// 全コラムの監修表記から内部リンクされる、E-E-A-T／LLMOの受け皿。
+// AI検索（ChatGPT/Gemini等）が「このメソッドは何か」「もみほぐしと何が違うか」を
+// 引用しやすいよう、結論先出し＋定義＋比較表＋FAQPageの構成にしている。
+import Base from '../layouts/Base.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import ReserveCTA from '../components/ReserveCTA.astro';
+import { SITE, BRAND } from '../consts';
+
+const title = '体感軸調整法とは｜もみほぐし・整体との違い｜全力ストレッチ岐阜長良店';
+const description =
+  '全力ストレッチの独自メソッド「体感軸調整法」とは何か、もみほぐしや整体・ストレッチ専門店との考え方の違い、施術の3本柱と当日の流れを、岐阜市長良の全力ストレッチ岐阜長良店が解説します。';
+
+const faq = [
+  {
+    q: '体感軸調整法とは何ですか？',
+    a: '元格闘家のオーナーが考案し、ZST協会が認定している全力ストレッチの独自メソッドです。こっているところだけをもむのではなく、骨盤・肩甲骨といった体の軸を支える部分から順に筋肉を伸ばし、体全体のバランスを整えていく考え方にもとづいています。',
+  },
+  {
+    q: 'もみほぐしやマッサージとは何が違うのですか？',
+    a: 'もみほぐしは筋肉を「押す・もむ」ことで表面の張り感にアプローチします。体感軸調整法は「伸ばす」ことが中心で、関節の動く範囲や体の軸のバランスまで含めて見ていく点が異なります。どちらが優れているというものではなく、目的が異なります。',
+  },
+  {
+    q: '整体やカイロプラクティックとは違いますか？',
+    a: '骨格を鳴らして矯正するような施術は行いません。トレーナーが体を支えながら筋肉を伸ばしていく、ストレッチを主体とした施術です。医療行為ではなく、コンディショニングを目的としています。',
+  },
+  {
+    q: '自分でやるストレッチとどう違うのですか？',
+    a: 'セルフストレッチは気づいた部分をこまめにゆるめるのに向いています。一方で、自分では伸ばしにくい深部の筋肉や、どこが動いていないかというクセは、ご自身では把握しにくいものです。トレーナーが第三者の視点で状態を確認しながら伸ばす点が主な違いです。',
+  },
+  {
+    q: '体が硬くても受けられますか？',
+    a: '硬い方こそ対象です。可動域は人それぞれ違うため、その日の状態にあわせて伸ばす範囲を調整します。痛みを我慢していただく必要はありませんので、強さはその都度お伝えください。',
+  },
+  {
+    q: '何回くらい通えばよいですか？',
+    a: '体の状態や目的によって異なるため一律の回数はありません。初回のカウンセリングで現在の状態をお伝えしたうえで、通う間隔の目安をご相談しています。',
+  },
+];
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faq.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+
+// メソッドそのものをサービスとして定義し、AI・検索エンジンが実体を掴めるようにする
+const serviceSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  '@id': new URL('/method#service', Astro.site).href,
+  name: '体感軸調整法（パーソナルストレッチ）',
+  serviceType: 'パーソナルストレッチ',
+  description:
+    'こっている部分だけをもむのではなく、骨盤・肩甲骨など体の軸を支える部分から順に筋肉を伸ばし、体全体のバランスを整えていく全力ストレッチの独自メソッド。',
+  provider: { '@id': new URL('/#localbusiness', Astro.site).href },
+  areaServed: { '@type': 'City', name: '岐阜県岐阜市' },
+  url: new URL('/method', Astro.site).href,
+};
+
+const breadcrumb = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'トップ', item: Astro.site!.href },
+    { '@type': 'ListItem', position: 2, name: '体感軸調整法とは', item: new URL('/method', Astro.site).href },
+  ],
+};
+
+// 「◯◯との違い」比較表。AIが引用しやすいよう、断定を避けつつ観点を揃えて並べる
+const comparison = [
+  { axis: '主なアプローチ', ours: '関節を動かしながら筋肉を伸ばす', momi: '筋肉を押す・もむ', seitai: '骨格や関節の位置に働きかける' },
+  { axis: '見る範囲', ours: 'つらい部位＋体の軸を支える部分', momi: 'つらい部位が中心', seitai: '骨格全体' },
+  { axis: '受け手の姿勢', ours: 'トレーナーが支え、力を抜いて預ける', momi: 'うつ伏せ・座位で受ける', seitai: '施術者に合わせて動かされる' },
+  { axis: '着替え', ours: '動きやすいウェアを無料貸出', momi: '着衣のまま／専用着', seitai: '着衣のまま／専用着' },
+];
+---
+
+<Base title={title} description={description} path="/method" jsonld={[serviceSchema, faqSchema, breadcrumb]}>
+  <section class="subpage-hero section-grid mx-auto max-w-content border-b border-ink/20 px-5 pb-24 pt-16 sm:px-10 sm:pb-32 sm:pt-[120px]">
+    <div class="mb-10 sm:mb-14">
+      <Breadcrumbs items={[{ label: 'トップ', href: '/' }, { label: '体感軸調整法とは' }]} />
+    </div>
+    <p class="display-title mb-6">METHOD</p>
+    <h1 class="mb-4 text-[26px] font-black sm:text-[36px]">
+      もむのではなく、伸ばす。<span class="sr-only">｜全力ストレッチの独自メソッド「体感軸調整法」とは</span>
+    </h1>
+
+    <p class="mb-12 max-w-[820px] text-[15px] leading-[2.1] text-sub sm:mb-14 sm:text-[17px]">
+      <strong class="text-ink">体感軸調整法とは、元格闘家のオーナーが考案し、ZST協会が認定している独自のストレッチメソッドです。</strong>
+      こっているところだけをもむのではなく、骨盤・肩甲骨といった<strong class="text-ink">体の軸を支える部分から順に筋肉を伸ばし</strong>、体全体のバランスを整えていきます。
+      {BRAND.storeCount}で提供されているメソッドを、岐阜市長良の当店でも認定研修を受けたトレーナーがマンツーマンで行っています。
+    </p>
+
+    <h2 class="jp-title mb-8 mt-4 text-[22px] font-black sm:text-[28px]">施術の3本柱</h2>
+    <div class="mb-16 grid gap-8 sm:mb-20 sm:grid-cols-3">
+      {BRAND.pillars.map((p) => (
+        <div class="rule-top pt-5">
+          <p class="mb-3 font-[Archivo_Black] text-[13px] tracking-[0.14em] text-amber-800">{p.no}</p>
+          <h3 class="mb-3 text-[17px] font-black leading-[1.6]">{p.title}</h3>
+          <p class="text-[14px] leading-[2] text-sub">{p.body}</p>
+        </div>
+      ))}
+    </div>
+
+    <h2 class="jp-title mb-4 text-[22px] font-black sm:text-[28px]">もみほぐし・整体との違い</h2>
+    <p class="mb-8 max-w-[820px] text-[15px] leading-[2.1] text-sub">
+      どれが優れているというものではなく、目的とアプローチが異なります。「押してほぐしたい」のか「動く範囲を広げたい」のかで選び分けてください。
+    </p>
+    <div class="mb-16 overflow-x-auto sm:mb-20">
+      <table class="w-full min-w-[640px] border-collapse text-left text-[14px] leading-[1.9]">
+        <thead>
+          <tr class="border-b border-ink">
+            <th class="py-3 pr-4 font-black">観点</th>
+            <th class="py-3 pr-4 font-black">体感軸調整法（当店）</th>
+            <th class="py-3 pr-4 font-black">もみほぐし・マッサージ</th>
+            <th class="py-3 font-black">整体・カイロ</th>
+          </tr>
+        </thead>
+        <tbody>
+          {comparison.map((r) => (
+            <tr class="border-b border-line">
+              <td class="py-4 pr-4 font-bold">{r.axis}</td>
+              <td class="py-4 pr-4 text-sub">{r.ours}</td>
+              <td class="py-4 pr-4 text-sub">{r.momi}</td>
+              <td class="py-4 text-sub">{r.seitai}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <p class="mb-16 max-w-[820px] text-[13px] leading-[1.9] text-faint sm:mb-20">
+      ※当店の施術は医療行為ではありません。強い痛みやしびれがある場合は、まず医療機関にご相談ください。
+    </p>
+
+    <h2 class="jp-title mb-8 text-[22px] font-black sm:text-[28px]">担当するトレーナーについて</h2>
+    <p class="mb-16 max-w-[820px] text-[15px] leading-[2.1] text-sub sm:mb-20">
+      施術を担当するのは、ZST協会認定の研修を受けた<a href="/staff" class="font-bold underline underline-offset-4">体感軸調整トレーナー</a>です。
+      カウンセリングから施術まで、完全個室で同じトレーナーが最後まで担当します。
+      当サイトのコラムも、このトレーナーチームが内容を確認したうえで公開しています。
+    </p>
+
+    <h2 class="jp-title mb-8 text-[22px] font-black sm:text-[28px]">よくある質問</h2>
+    <div class="mb-16 max-w-[820px] rule-top">
+      {faq.map((f) => (
+        <div class="border-b border-line py-6">
+          <p class="mb-2 text-[16px] font-black leading-[1.6] sm:text-[18px]">Q. {f.q}</p>
+          <p class="text-[14px] leading-[2] text-sub sm:text-[15px]">A. {f.a}</p>
+        </div>
+      ))}
+    </div>
+
+    <div class="max-w-[820px]">
+      <h2 class="jp-title mb-6 text-[19px] font-black">関連ページ</h2>
+      <div class="rule-top">
+        {[
+          { label: 'お悩み別のアプローチを見る', href: '/symptoms' },
+          { label: '料金・メニューを見る', href: '/menu' },
+          { label: 'トレーナー紹介', href: '/staff' },
+          { label: 'ご予約について（初回の流れ）', href: '/reserve' },
+        ].map((r) => (
+          <a href={r.href} class="group flex items-baseline justify-between gap-4 border-b border-line px-2 py-5 no-underline">
+            <span class="text-[15px] font-bold sm:text-[17px]">{r.label}</span>
+            <span class="text-lg font-bold transition group-hover:text-amber-700" aria-hidden="true">↗</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <ReserveCTA
+    title="「もむ」では届かなかった張りに。"
+    sub={`初回限定75%OFFでご案内／完全個室・マンツーマン／${SITE.hours}`}
+    source="method"
+  />
+</Base>

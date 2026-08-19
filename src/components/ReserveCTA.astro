@@ -4,14 +4,21 @@ export interface Props {
   title?: string;
   sub?: string;
   large?: boolean;
+  /**
+   * CTAの設置場所を示すラベル。GA4の cta_source パラメータと
+   * Metaピクセルの source として送られ、「どのページのどのCTAから
+   * 予約クリックされたか」を内訳で見るために使う（Base.astroの委譲計測が拾う）。
+   */
+  source?: string;
 }
 const {
   title = 'まずは、初回限定75%OFFでお試し。',
   sub = '初回限定75%OFFでご案内／個室・マンツーマン',
   large = false,
+  source = 'reserve-panel',
 } = Astro.props;
 ---
-<section class:list={['reserve-panel', { 'is-large': large }]} id="reserve">
+<section class:list={['reserve-panel', { 'is-large': large }]} id="reserve" data-cta-source={source}>
   <div class="reserve-grid">
     <div class="reserve-copy">
       <p><span>08</span> RESERVATION</p>

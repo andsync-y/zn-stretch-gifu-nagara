@@ -11,6 +11,7 @@ const nav = [
 
 /* モバイルメニューでnavに続けて表示する追加リンク（navと重複するページは載せない） */
 const menuLinks = [
+  { label: '体感軸調整法とは', href: '/method' },
   { label: 'お客様の声', href: '/voice' },
   { label: 'アクセス・店舗案内', href: '/access' },
   { label: 'ご予約について', href: '/reserve' },
@@ -18,7 +19,7 @@ const menuLinks = [
   { label: '採用情報', href: '/recruit' },
 ];
 ---
-<header class="site-header">
+<header class="site-header" data-cta-source="header">
   <div class="header-inner">
     <a href="/" class="brand" aria-label={`${SITE.brand} トップへ`}>
       <img src="/images/logo.png" alt="全力ストレッチ PHYSICAL CONDITIONING SALON" width="1200" height="307" />
@@ -68,7 +69,7 @@ const menuLinks = [
         </div>
       </nav>
 
-      <a href={SITE.urls.reserve} target="_blank" rel="noopener" class="mobile-reserve">WEB予約はこちら <span aria-hidden="true">↗</span></a>
+      <a href={SITE.urls.reserve} target="_blank" rel="noopener" class="mobile-reserve" data-cta-source="header-drawer">WEB予約はこちら <span aria-hidden="true">↗</span></a>
     </div>
   </div>
 

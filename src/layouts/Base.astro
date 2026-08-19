@@ -126,10 +126,14 @@ const schemas = [localBusiness, ...jsonld];
           else if (href.indexOf('lin.ee') !== -1) name = 'click_line';
           else if (href.indexOf('tel:') === 0) name = 'click_tel';
           if (name) {
+            // CTAの設置場所（ReserveCTA等が data-cta-source で申告する）。
+            // どのコラム・どのCTA位置から予約クリックされたかを内訳で見るために送る
+            var srcEl = a.closest ? a.closest('[data-cta-source]') : null;
             gtag('event', name, {
               link_url: href,
               link_text: (a.textContent || '').trim().slice(0, 40),
               page_path: location.pathname,
+              cta_source: (srcEl && srcEl.getAttribute('data-cta-source')) || 'inline',
             });
           }
         },
@@ -149,7 +153,7 @@ const schemas = [localBusiness, ...jsonld];
 
     <!-- モバイル固定CTA（電話・WEB予約）。SPのみ表示。GA4のclick_tel/click_reserveは委譲で自動計測 -->
     {!minimal && (
-      <nav class="mobile-cta" aria-label="電話・WEB予約">
+      <nav class="mobile-cta" aria-label="電話・WEB予約" data-cta-source="sticky-mobile">
         <a href={`tel:${SITE.telLink}`} class="mobile-cta-tel">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.2.2 2.4.6 3.6.1.4 0 .8-.3 1l-2.2 2.2z"/></svg>
           電話する
@@ -167,9 +171,16 @@ const schemas = [localBusiness, ...jsonld];
       Metaピクセル：CV系CTAのクリック計測（サイト全体で1回）。
       既存GA4と同じくhref委譲で全CTAを自動計測。data-fb-eventが付いていればそれを優先。
       preventDefaultはせず外部遷移はそのまま通す（fbqはビーコン送信のためクリック時発火で概ね記録される）。
-        HPB予約/クーポン → Schedule（HPB予約クリック）
-        LINE            → Lead（LINE登録）
-        電話(tel:)      → Contact（電話タップ）
+
+      イベント設計：意味に合う標準イベントに加え、**CV系CTAは必ず Lead も送る**。
+      HPB予約はサンクスページにピクセルを置けない（外部ドメイン）ため、
+      サイト側で取れる最も購入に近いシグナルが「予約クリック」になる。これを
+      Schedule だけに入れると Lead が LINE 分しか溜まらず、キャンペーン目的を
+      トラフィック→リード最適化へ引き上げられない。両方送れば Schedule/Contact の
+      内訳レポートを保ったまま Lead を集約できる（content_name で内訳を判別可能）。
+        HPB予約/クーポン → Schedule ＋ Lead
+        LINE            → Lead
+        電話(tel:)      → Contact ＋ Lead
     -->
     <script is:inline>
       document.addEventListener(
@@ -180,14 +191,35 @@ const schemas = [localBusiness, ...jsonld];
           if (!el) return;
           var ev = el.getAttribute('data-fb-event');
           var label = el.getAttribute('data-fb-label');
+
+          // categoryはdata-fb-eventの有無に関わらずhrefから判定する。
+          // /lp のCTAはdata-fb-eventを明示しているため、ここをif(!ev)の中に入れると
+          // 最重要ページである広告LPでLeadの併送が漏れる
+          var href = (el.getAttribute('href') || '').toLowerCase();
+          var category = '';
+          if (href.indexOf('lin.ee') !== -1 || href.indexOf('line.me') !== -1) category = 'line';
+          else if (href.indexOf('hotpepper.jp') !== -1) category = 'reserve';
+          else if (href.indexOf('tel:') === 0) category = 'tel';
+
           if (!ev) {
-            var href = (el.getAttribute('href') || '').toLowerCase();
-            if (href.indexOf('lin.ee') !== -1 || href.indexOf('line.me') !== -1) { ev = 'Lead'; label = label || 'LINE登録'; }
-            else if (href.indexOf('hotpepper.jp') !== -1) { ev = 'Schedule'; label = label || 'HPB予約クリック'; }
-            else if (href.indexOf('tel:') === 0) { ev = 'Contact'; label = label || '電話タップ'; }
+            if (category === 'line') { ev = 'Lead'; label = label || 'LINE登録'; }
+            else if (category === 'reserve') { ev = 'Schedule'; label = label || 'HPB予約クリック'; }
+            else if (category === 'tel') { ev = 'Contact'; label = label || '電話タップ'; }
           }
           if (!ev) return;
-          window.fbq('track', ev, { content_name: label || ev });
+
+          // CTAの設置場所（ReserveCTA等が data-cta-source で申告する）。
+          // 未申告時の値と名前はGA4側（cta_source）と揃えて、両者のレポートを突き合わせられるようにする
+          var srcEl = el.closest ? el.closest('[data-cta-source]') : null;
+          var payload = {
+            content_name: label || ev,
+            content_category: category || undefined,
+            cta_source: (srcEl && srcEl.getAttribute('data-cta-source')) || 'inline',
+            page_path: location.pathname,
+          };
+          window.fbq('track', ev, payload);
+          // 予約クリック・電話タップもリードとして集約する（LINEは上で既にLead）
+          if (ev !== 'Lead' && category) window.fbq('track', 'Lead', payload);
         },
         { capture: true, passive: true }
       );

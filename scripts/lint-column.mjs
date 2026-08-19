@@ -12,8 +12,9 @@
 import { readFile, readdir, access } from 'node:fs/promises';
 import { join, basename } from 'node:path';
 
-// FAQ必須化（2026-07-29〜）より前に公開されたレガシー記事
-const LEGACY_NO_FAQ = new Set(['katakori-desk-stretch', 'youtsu-morning-stretch', 'golf-stretch-routine']);
+// レガシー3本（katakori-desk-stretch / youtsu-morning-stretch / golf-stretch-routine）にも
+// 2026-08-19にFAQと体感軸調整法への言及を追加したため、免除リストは廃止した。
+// 以降はすべての記事が同じ基準で判定される。
 
 // 薬機法・景表法NG（文脈を問わず出たら落とす断定・保証系）
 const NG_PATTERNS = [
@@ -100,18 +101,19 @@ for (const file of files) {
     if (!(await pageExists(m[1]))) fail(file, `内部リンク先が存在しない: ${m[1]}`);
   }
 
-  // 5) FAQ（レガシー3本を除き3問以上）
-  if (!LEGACY_NO_FAQ.has(slug)) {
-    const faqCount = (src.match(/\{\s*q:/g) || []).length;
-    if (faqCount < 3) fail(file, `FAQが${faqCount}問（3問以上必要）`);
-  }
+  // 5) FAQ（3問以上）
+  const faqCount = (src.match(/\{\s*q:/g) || []).length;
+  if (faqCount < 3) fail(file, `FAQが${faqCount}問（3問以上必要）`);
 
   // 6) columns.ts に登録されているか
   if (!slugs.includes(slug)) fail(file, 'src/data/columns.ts に未登録');
 
-  // 7) 体感軸調整法への言及（E-E-A-T・独自性）
-  if (!LEGACY_NO_FAQ.has(slug) && !src.includes('体感軸調整法')) {
+  // 7) 体感軸調整法への言及と、解説ページ /method への内部リンク（E-E-A-T・独自性）
+  //    AI検索・検索エンジンに専門性の裏付けを示す導線なので、機械的に必須化する
+  if (!src.includes('体感軸調整法')) {
     fail(file, '「体感軸調整法」への言及がない');
+  } else if (!src.includes('href="/method"')) {
+    fail(file, '「体感軸調整法」の初出に解説ページ /method へのリンクがない');
   }
 }
 

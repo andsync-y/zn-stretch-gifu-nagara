@@ -156,7 +156,7 @@ const faqSchema = {
       <!-- 予約導線：WEB予約(HPB)とLINE予約を同格に並べる。
            HPBは外部サイトへ遷移するため離脱が起きやすい。自社で完結するLINEを
            同じ大きさ・同じ高さで並べ、どちらを選ぶかは利用者に委ねる。電話は補助。 -->
-      <div class="flex flex-col gap-3">
+      <div class="flex flex-col gap-3" data-cta-source="lp-fv">
         <div class="grid grid-cols-2 gap-3">
           <a href={SITE.urls.reserve} target="_blank" rel="noopener" data-fb-event="Schedule" data-fb-label="HPB予約クリック" class="btn-amber-pill !px-3 !py-4 text-center !text-[14px] leading-[1.4] shadow-[0_4px_20px_rgba(0,0,0,0.3)]">空き状況を見て<br />WEB予約</a>
           <a href={SITE.urls.line} target="_blank" rel="noopener" data-fb-event="Lead" data-fb-label="LINE予約・相談" class="btn-line-pill !px-3 !py-4 text-center !text-[14px] leading-[1.4] shadow-[0_4px_20px_rgba(0,0,0,0.3)]">LINEで<br />予約・相談</a>
@@ -254,7 +254,7 @@ const faqSchema = {
       ))}
     </div>
     <p class="mt-4 text-[11px] leading-[1.9] text-muted">{PRICING.caption}</p>
-    <div class="mt-6 grid grid-cols-2 gap-3">
+    <div class="mt-6 grid grid-cols-2 gap-3" data-cta-source="lp-pricing">
       <a href={SITE.urls.coupon} target="_blank" rel="noopener" data-fb-event="Schedule" data-fb-label="HPB予約クリック" class="btn-ink-pill !px-3 text-center leading-[1.4]">初回価格で<br />WEB予約</a>
       <a href={SITE.urls.line} target="_blank" rel="noopener" data-fb-event="Lead" data-fb-label="LINE予約・相談" class="btn-line-pill !px-3 !py-[1.1rem] !text-[13px] text-center leading-[1.4] shadow-[6px_6px_0_#92745e]">LINEで<br />予約・相談</a>
     </div>
@@ -310,7 +310,7 @@ const faqSchema = {
   <section class="bg-ink px-5 pb-28 pt-12 text-center text-paper">
     <p class="mb-2 text-[12px] font-bold tracking-[0.2em] text-amber-200">初回限定 最大75%OFF</p>
     <h2 class="mb-6 text-[24px] font-black leading-[1.5]">その肩と腰に向き合うなら、<br />今日がいちばん早い日です。</h2>
-    <div class="mx-auto flex flex-col gap-3">
+    <div class="mx-auto flex flex-col gap-3" data-cta-source="lp-closing">
       <div class="grid grid-cols-2 gap-3">
         <a href={SITE.urls.reserve} target="_blank" rel="noopener" data-fb-event="Schedule" data-fb-label="HPB予約クリック" class="btn-amber-pill !px-3 !py-4 !text-[14px] leading-[1.4]">空き状況を見て<br />WEB予約</a>
         <a href={SITE.urls.line} target="_blank" rel="noopener" data-fb-event="Lead" data-fb-label="LINE予約・相談" class="btn-line-pill !px-3 !py-4 !text-[14px] leading-[1.4]">LINEで<br />予約・相談</a>
@@ -323,7 +323,7 @@ const faqSchema = {
   </div><!-- /コンテンツ列 -->
 
   <!-- ▍LP専用スティッキーCTA（LINE入り3択・コンテンツ列と同幅で中央固定） -->
-  <nav class="fixed bottom-0 left-1/2 z-50 grid w-full max-w-[430px] -translate-x-1/2 grid-cols-[1fr_1fr_0.62fr] border-t border-ink/20 bg-white shadow-[0_-4px_16px_rgba(0,0,0,0.08)]" aria-label="予約・相談">
+  <nav class="fixed bottom-0 left-1/2 z-50 grid w-full max-w-[430px] -translate-x-1/2 grid-cols-[1fr_1fr_0.62fr] border-t border-ink/20 bg-white shadow-[0_-4px_16px_rgba(0,0,0,0.08)]" aria-label="予約・相談" data-cta-source="lp-sticky">
     <a href={SITE.urls.line} target="_blank" rel="noopener" data-fb-event="Lead" data-fb-label="LINE予約・相談" class="bg-[#06C755] py-3.5 text-center text-[13px] font-black text-white">LINEで予約</a>
     <a href={SITE.urls.reserve} target="_blank" rel="noopener" data-fb-event="Schedule" data-fb-label="HPB予約クリック" class="bg-ink py-3.5 text-center text-[13px] font-black text-paper">WEB予約</a>
     <a href={`tel:${SITE.telLink}`} data-fb-event="Contact" data-fb-label="電話タップ" class="bg-white py-3.5 text-center text-[12px] font-black text-ink">電話</a>
