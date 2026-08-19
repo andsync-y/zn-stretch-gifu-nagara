@@ -11,25 +11,12 @@
  */
 import { readFile, readdir, access } from 'node:fs/promises';
 import { join, basename } from 'node:path';
+import { NG_PATTERNS } from './yakkihou-ng.mjs';
 
 // レガシー3本（katakori-desk-stretch / youtsu-morning-stretch / golf-stretch-routine）にも
 // 2026-08-19にFAQと体感軸調整法への言及を追加したため、免除リストは廃止した。
 // 以降はすべての記事が同じ基準で判定される。
 
-// 薬機法・景表法NG（文脈を問わず出たら落とす断定・保証系）
-const NG_PATTERNS = [
-  /治る|治り(ます|やすい)|治療/,
-  /効果があ(る|り)/,
-  /改善(します|しました|されます|できます)/,
-  /解消/,
-  /矯正/,
-  /効く|効きます/,
-  /完治|即効/,
-  /No\.?1|ナンバーワン/,
-  /絶対(に)?(良く|治|改善|安全)/,
-  /必ず(良く|治|改善|効)/,
-  /根本(から)?改善/,
-];
 // altテキストで自店写真と誤認させる表現（AI/フリー画像に自店の説明を書かない）
 const NG_ALT = /当店|自店|全力ストレッチ.{0,10}(施術|トレーナー|スタッフ)/;
 
