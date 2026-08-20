@@ -1,0 +1,37 @@
+name: 店舗システム 顧客まわり構造調査（手動・調査用）
+
+# 店舗システムの顧客画面に「顧客ID・電話番号・回数券残・最終来店日」があるかを確認するための
+# 一回限りの調査ワークフロー。2026-08-20 オーナー判断で顧客情報ページを開くことを承認済み。
+#
+# 結果はActionsの実行サマリーにだけ出す。**どのブランチにも一切書き込まない**
+# （kpi-dataブランチを触らないので、週次KPIジョブに影響しない）。
+# レポートには氏名・電話番号・セルの値を含まない（列の見出しと値の種類のみ）。
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: 依存関係とブラウザの準備
+        run: |
+          cd kpi-scraper
+          npm install --no-audit --no-fund
+          npx playwright install --with-deps chromium
+      - name: 構造調査
+        env:
+          ZN_SYSTEM_USER: ${{ secrets.ZN_SYSTEM_USER }}
+          ZN_SYSTEM_PASS: ${{ secrets.ZN_SYSTEM_PASS }}
+        run: |
+          cd kpi-scraper
+          node discover-customers.mjs
+      # 生成物はアップロードしない。実行サマリーだけで完結させる
+      # （customer-discovery.json にも値は入らないが、置き場所を増やさない方針）
