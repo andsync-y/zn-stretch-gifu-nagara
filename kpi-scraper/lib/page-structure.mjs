@@ -8,6 +8,31 @@
  * Playwrightの page.evaluate() に渡す前提のため、外側のスコープを参照しない
  * 自己完結した関数にしてある（そのままテストからも呼べる）。
  */
+/**
+ * 画面の操作部品（入力欄・セレクト・ボタン）の一覧だけを取り出す。
+ * name/id/placeholder といった「部品の名前」しか返さないので、
+ * 入力済みの値（顧客名・電話番号など）は外に出ない。
+ * 日付フィルタのセレクタを特定するために使う。
+ */
+export function extractControls() {
+  const clip = (s, n = 40) => (s || '').replace(/\s+/g, ' ').trim().slice(0, n);
+  return {
+    inputs: [...document.querySelectorAll('input, select, textarea')].slice(0, 60).map((i) => ({
+      tag: i.tagName.toLowerCase(),
+      type: i.getAttribute('type'),
+      name: i.getAttribute('name'),
+      id: i.getAttribute('id'),
+      placeholder: clip(i.getAttribute('placeholder') || ''),
+      // select は選択肢の「数」だけ（中身は顧客名の可能性があるので出さない）
+      optionCount: i.tagName === 'SELECT' ? i.options.length : undefined,
+    })),
+    buttons: [...document.querySelectorAll('button, a[download], input[type="submit"]')]
+      .slice(0, 60)
+      .map((b) => ({ tag: b.tagName.toLowerCase(), text: clip(b.textContent || b.value, 24), id: b.getAttribute('id') }))
+      .filter((b) => b.text || b.id),
+  };
+}
+
 export function extractStructure() {
   const clip = (s, n = 50) => (s || '').replace(/\s+/g, ' ').trim().slice(0, n);
 
