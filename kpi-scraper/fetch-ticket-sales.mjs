@@ -228,12 +228,22 @@ try {
     }
     const range = await readAppliedRange();
     if (!range) throw new Error(`期間プリセット「${preset}」を押したが、適用中の期間を画面から読み取れない`);
-    applied.push(range);
     const { rows, encoding } = await downloadCsv();
     encodingSeen = encoding;
     const { purchases, stats } = extractTicketPurchases(rows);
     all.push(...purchases);
-    say(`- 「${preset}」= ${range.from}〜${range.to} / 来店 ${stats.rows}行 → 回数券 ${stats.ticket_rows}行 → 有効 ${purchases.length}件`);
+
+    // 画面のラベルが「今年」でも、CSVが期間の全部を返しているとは限らない
+    // （件数の上限や画面のページングで切られる可能性がある）。
+    // そこで、覆えたかの判定には**画面のラベルではなくCSVの中身の日付範囲**を使う。
+    const iDate = (rows[0] || []).findIndex((h) => String(h).trim() === '来店日');
+    const dates = rows.slice(1).map((r) => String(r[iDate] ?? '').trim()).filter(Boolean).sort();
+    const csvRange = dates.length ? { from: dates[0], to: dates[dates.length - 1] } : null;
+    if (csvRange) applied.push(csvRange);
+    say(
+      `- 「${preset}」画面の期間 ${range.from}〜${range.to} → CSVの実データ ${csvRange ? `${csvRange.from}〜${csvRange.to}` : '(空)'} / ` +
+        `来店 ${stats.rows}行 → 回数券 ${stats.ticket_rows}行 → 有効 ${purchases.length}件`
+    );
     if (stats.skip_no_customer_id || stats.skip_no_date || stats.skip_no_value) {
       say(`  - 除外: 顧客IDなし ${stats.skip_no_customer_id} / 日付不正 ${stats.skip_no_date} / 金額なし ${stats.skip_no_value}`);
     }
@@ -244,7 +254,9 @@ try {
   const gap = uncoveredRange(applied, SINCE, TODAY);
   if (gap) {
     throw new Error(
-      `期間 ${SINCE}〜${TODAY} を覆えていない（不足: ${gap.from}〜${gap.to} / 適用できた期間: ${applied.map((r) => `${r.from}〜${r.to}`).join(', ') || 'なし'}）`
+      `期間 ${SINCE}〜${TODAY} を覆えていない（不足: ${gap.from}〜${gap.to} / ` +
+        `CSVに入っていた期間: ${applied.map((r) => `${r.from}〜${r.to}`).join(', ') || 'なし'}）。` +
+        `CSVの件数上限や画面のページングで切られている可能性がある`
     );
   }
 
