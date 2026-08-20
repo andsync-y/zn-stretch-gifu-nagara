@@ -45,11 +45,12 @@ const TEST_EVENT_CODE = (process.env.CAPI_TEST_EVENT_CODE || '').trim();
 const STATE_DIR = process.env.CAPI_STATE_DIR || 'capi-state';
 const TICKET_FILE = (process.env.TICKET_PURCHASES_FILE || '').trim();
 
-// Meta仕様: オフラインイベント（action_source: physical_store）は62日以内なら送信できる。
-// ただし**データセット側で「過去のコンバージョンのアップロード」を有効にしていない場合は7日**で
-// 弾かれる（2026-08-20に実際に subcode 2804003 で全件拒否された）。
-// 設定が入るまでの回避策として、環境変数で窓を狭められるようにしてある。
-const MAX_AGE_DAYS = Number(process.env.CAPI_MAX_AGE_DAYS || 62);
+// 送信できるのは**7日以内**の成約だけ。
+// 各所の資料には「オフラインは62日」とあるが、2026-08-20にこのデータセットで実測したところ
+// 62日でも upload_tag 付きでも subcode 2804003（イベントタイムスタンプが古すぎます）で
+// **バッチ全件が拒否**され、7日では受理された。オフラインイベントセット廃止（2025-05）後の
+// 実際の挙動と思われる。窓が広がったら環境変数で戻せるようにしてある。
+const MAX_AGE_DAYS = Number(process.env.CAPI_MAX_AGE_DAYS || 7);
 // 一括アップロードの目印。CAPI_UPLOAD_TAG='' にすれば付けない
 const UPLOAD_TAG = process.env.CAPI_UPLOAD_TAG ?? 'zn_ticket_monthly';
 // 1リクエストあたりのイベント数（Metaの上限は1000。余裕を持たせる）
@@ -295,9 +296,8 @@ async function postEvents(events, meta) {
   if (!res.ok) {
     // タイムスタンプが古すぎる場合、Metaは**バッチ全件**を拒否する。原因が分かりにくいので補足を足す
     const hint = text.includes('2804003')
-      ? '\n  → イベントが古すぎると判定されています。オフラインの62日窓を使うには、' +
-        'イベントマネージャのデータセット設定で「過去のコンバージョンのアップロード」を有効にしてください。' +
-        `有効にできない場合は、実行を週次にして CAPI_MAX_AGE_DAYS=7 で回してください（現在の設定: ${MAX_AGE_DAYS}日）。`
+      ? `\n  → イベントが古すぎると判定されています（現在の設定: ${MAX_AGE_DAYS}日）。` +
+        'このデータセットの実測上限は7日です。CAPI_MAX_AGE_DAYS=7 に戻してください。'
       : '';
     // レスポンスにアクセストークンは含まれないが、念のため長さを制限して出す
     fail(`Meta CAPI 送信に失敗 (batch ${meta.index}/${meta.total} / HTTP ${res.status}): ${text.slice(0, 800)}${hint}`);

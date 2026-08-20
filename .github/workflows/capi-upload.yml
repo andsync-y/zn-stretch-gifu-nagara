@@ -1,4 +1,4 @@
-name: Meta CAPIオフラインイベント送信（月次）
+name: Meta CAPIオフラインイベント送信（週2回）
 
 # 店舗システムの来店記録から回数券成約を自動取得し、Google Driveの電話帳（顧客ID → ハッシュ）と
 # 突合して、Meta広告のConversions APIへオフラインコンバージョン（Purchase）として送る。
@@ -7,9 +7,13 @@ name: Meta CAPIオフラインイベント送信（月次）
 # 送信済みevent_idと実行レポートは capi-state ブランチへ通常コミットで積む
 # （kpi-dataブランチは週次ジョブが毎回force pushで作り直すため、状態を置くと消える）。
 # 既存の日次・週次スクレイピングには一切触れない。
+# 2026-08-20実測: このデータセットは7日より古いイベントを受け付けない（subcode 2804003）。
+# 7日窓なので月次では取りこぼす。週2回にして、1回失敗しても次で拾えるようにしてある
+# （送信済みは capi-sent.json で管理しているので、重なって送っても二重送信にならない）。
 on:
   schedule:
-    - cron: '0 1 3 * *' # JST 毎月3日 10:00
+    - cron: '0 1 * * 1' # JST 毎週月曜 10:00
+    - cron: '0 1 * * 4' # JST 毎週木曜 10:00
   workflow_dispatch:
     inputs:
       dry_run:
@@ -22,9 +26,9 @@ on:
         required: false
         default: ''
       max_age_days:
-        description: '何日前までの成約を送るか。古いイベントが拒否される場合は 7 にする'
+        description: '何日前までの成約を送るか。7が実測上限（62にすると全件拒否される）'
         required: false
-        default: '62'
+        default: '7'
       upload_tag:
         description: '一括アップロードの目印。空にすると付けずに送る（切り分け用）'
         required: false
@@ -101,7 +105,7 @@ jobs:
           CAPI_TEST_EVENT_CODE: ${{ inputs.test_event_code }}
           CAPI_STATE_DIR: capi-state
           TICKET_PURCHASES_FILE: ${{ github.workspace }}/out/ticket-purchases.json
-          CAPI_MAX_AGE_DAYS: ${{ inputs.max_age_days || '62' }}
+          CAPI_MAX_AGE_DAYS: ${{ inputs.max_age_days || '7' }}
           CAPI_UPLOAD_TAG: ${{ inputs.upload_tag == null && 'zn_ticket_monthly' || inputs.upload_tag }}
         run: node scripts/capi-upload.mjs
 
