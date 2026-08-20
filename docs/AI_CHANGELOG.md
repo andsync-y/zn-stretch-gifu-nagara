@@ -1924,3 +1924,24 @@ Git履歴が「何を変更したか」、このファイルが「なぜ変更�
 - 未対応・次の作業：
   1. オーナーがイベントマネージャのデータセット設定で過去アップロードを有効化 → テスト送信を再実行
   2. 有効にできない場合は `max_age_days=7` ＋ 週次実行へ切り替え（過去44件のまとめ送信は諦める）
+
+## 2026-08-20 09:10 JST — GitHub Actions（Claude）
+
+- ブランチ：`claude/column-auto`
+- 関連PR：なし
+- 変更内容：
+  - コラム新規記事「疲れが抜けない原因と自律神経ストレッチ｜寝ても回復しない方へ」を1本追加（`authority`枠）。
+  - `docs/column-backlog.md` の `tsukare-nukenai` を `- [x]` に更新。
+  - アイキャッチ画像をAI生成（`--source ai`）で調達。
+- 主な変更ファイル：
+  - `src/pages/column/tsukare-nukenai.astro`（新規）
+  - `public/images/column/tsukare-nukenai.webp`（新規）
+  - `src/data/columns.ts`（COLUMNS配列の先頭に追加）
+  - `docs/column-backlog.md`
+- 判断・注意点：
+  - 既存記事（肩こり・腰・ゴルフ）およびneruma-shinkokyu（睡眠特化）と検索意図が重ならないよう、
+    「疲れが抜けない・自律神経」という悩み特化の切り口にした。
+  - ストレッチ手順3つはすべて `src/data/stretchPoses.ts` 既存ポーズ（pose-30, pose-22, pose-09）から選び、
+    新規イラスト生成は行っていない。ポーズ未収載の動きはなし。
+- 確認結果：`npm run build` 成功（31→32ページ）。
+- 未対応・次の作業：レビュー後、本番ブランチ `claude/zenkara-gifu-nagara-seo-ukz0er` へのマージはユーザー判断待ち。
