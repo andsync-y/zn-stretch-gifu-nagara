@@ -22,9 +22,13 @@ on:
         required: false
         default: ''
       max_age_days:
-        description: '何日前までの成約を送るか。データセットで「過去のコンバージョンのアップロード」が未設定なら 7 にする'
+        description: '何日前までの成約を送るか。古いイベントが拒否される場合は 7 にする'
         required: false
         default: '62'
+      upload_tag:
+        description: '一括アップロードの目印。空にすると付けずに送る（切り分け用）'
+        required: false
+        default: 'zn_ticket_monthly'
 
 permissions:
   contents: write
@@ -98,6 +102,7 @@ jobs:
           CAPI_STATE_DIR: capi-state
           TICKET_PURCHASES_FILE: ${{ github.workspace }}/out/ticket-purchases.json
           CAPI_MAX_AGE_DAYS: ${{ inputs.max_age_days || '62' }}
+          CAPI_UPLOAD_TAG: ${{ inputs.upload_tag == null && 'zn_ticket_monthly' || inputs.upload_tag }}
         run: node scripts/capi-upload.mjs
 
       # 顧客IDを含むので、実行が終わったら残さない（アーティファクトにも上げない）

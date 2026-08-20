@@ -50,6 +50,8 @@ const TICKET_FILE = (process.env.TICKET_PURCHASES_FILE || '').trim();
 // 弾かれる（2026-08-20に実際に subcode 2804003 で全件拒否された）。
 // 設定が入るまでの回避策として、環境変数で窓を狭められるようにしてある。
 const MAX_AGE_DAYS = Number(process.env.CAPI_MAX_AGE_DAYS || 62);
+// 一括アップロードの目印。CAPI_UPLOAD_TAG='' にすれば付けない
+const UPLOAD_TAG = process.env.CAPI_UPLOAD_TAG ?? 'zn_ticket_monthly';
 // 1リクエストあたりのイベント数（Metaの上限は1000。余裕を持たせる）
 const BATCH_SIZE = 500;
 // capi-sent.json の肥大化防止。これより古いevent_idは62日窓の外なので捨てる
@@ -279,6 +281,9 @@ function pruneSent(ids) {
 async function postEvents(events, meta) {
   const url = `https://graph.facebook.com/${GRAPH_VERSION}/${DATASET_ID}/events`;
   const body = { data: events, access_token: ACCESS_TOKEN };
+  // 旧オフラインAPIの「一括アップロードの目印」。データセット統合後も、これを付けると
+  // オフラインの一括投入として扱われる可能性があるため付けている（空文字なら付けない）。
+  if (UPLOAD_TAG) body.upload_tag = UPLOAD_TAG;
   if (TEST_EVENT_CODE) body.test_event_code = TEST_EVENT_CODE;
 
   const res = await fetch(url, {
@@ -298,6 +303,7 @@ async function postEvents(events, meta) {
     fail(`Meta CAPI 送信に失敗 (batch ${meta.index}/${meta.total} / HTTP ${res.status}): ${text.slice(0, 800)}${hint}`);
   }
   console.log(`  batch ${meta.index}/${meta.total}: ${events.length}件 送信OK ${text.slice(0, 300)}`);
+  
   return text;
 }
 
