@@ -192,20 +192,30 @@ Coworkの定期タスク **「顧客電話帳の更新（スクショ→顧客ID
    ```
 
 2. ターミナルで変換する。**Node.jsのインストールは不要**（macOSに最初から入っている
-   `shasum` を使う版を用意してある）。ターミナル.app に次をそのまま貼り付ける。
+   `shasum` を使う）。
+
+   まず、変換したいCSVをターミナルに教える。`CSV=` と入力してから、**Finderからその
+   CSVファイルをターミナルの窓へドラッグ&ドロップ**して Enter。パスが自動で入る。
 
    ```bash
-   CSV=$(ls -t ~/Downloads/*.csv ~/Desktop/*.csv 2>/dev/null | head -1); echo "使うファイル: $CSV"
+   CSV=      ← ここまで打って、CSVファイルをドラッグ&ドロップしてEnter
    ```
 
-   出たファイル名が合っていたら、続けて貼り付ける。
+   ```bash
+   echo "使うファイル: $CSV"   # 意図したファイルか確認
+   ```
+
+   > `ls ~/Downloads/*.csv` のようにワイルドカードを使うと、zshは該当ファイルが無いときに
+   > コマンド全体を止めてしまう（`zsh: no matches found`）。ドラッグ&ドロップが確実。
+
+   確認できたら、次をそのまま貼り付ける。
 
    ```bash
    OUT="$(dirname "$CSV")/phone-book.json"; TMP=$(mktemp)
    tr -d '\r' < "$CSV" | while IFS=, read -r id tel rest; do
-     id=$(printf '%s' "$id" | tr -d '"' | tr -d ' ')
-     tel=$(printf '%s' "$tel" | tr -d '"' | tr -cd '0-9')
-     case "$id" in ''|*[!0-9]*) continue ;; esac
+     id=$(printf '%s' "$id" | tr -cd '0-9')
+     tel=$(printf '%s' "$tel" | tr -cd '0-9')
+     [ -n "$id" ] || continue
      case "$tel" in 0*) tel="81${tel#0}" ;; 81*) ;; *) echo "スキップ: $id" >&2; continue ;; esac
      case "${#tel}" in 11|12) ;; *) echo "スキップ(桁数): $id" >&2; continue ;; esac
      printf '    { "customer_id": "%s", "phone_hash": "%s" }\n' "$id" \
@@ -215,11 +225,11 @@ Coworkの定期タスク **「顧客電話帳の更新（スクショ→顧客ID
    echo "登録 $(wc -l < "$TMP" | tr -d ' ') 件 → $OUT"; rm -f "$TMP"; open "$(dirname "$OUT")"
    ```
 
-   最後にFinderが開くので、そこにある `phone-book.json` をDriveへ上げる。
+   最後にFinderが開く。「登録 ◯件」が入力した人数と合っているかだけ確認する。
 
-   > リポジトリを手元に持っていてNode.jsも入っているなら、同じことが1行でできる：
-   > `node scripts/make-phone-book.mjs 入力.csv [既存のphone-book.json]`
-   > （2つめの引数を渡すと既存を消さずに**追記**する。シェル版 `scripts/make-phone-book.sh` も同じ）
+   > リポジトリを手元に持っているなら同じことが1行でできる：
+   > `bash scripts/make-phone-book.sh 入力.csv`（Node.js不要）
+   > `node scripts/make-phone-book.mjs 入力.csv [既存のphone-book.json]`（2つめの引数で**追記**）
 
 3. できた `phone-book.json` をDrive「32_顧客電話_マスタ」へアップロードする
 4. **入力に使ったCSVは削除する**

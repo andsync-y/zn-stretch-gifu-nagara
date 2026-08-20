@@ -24,7 +24,8 @@ trap 'rm -f "$TMP" "$TMP.n"' EXIT
 # 1行ずつ正規化してハッシュ化する。
 # 電話番号は数字だけ残し、先頭の0を81に置き換える（090-1234-5678 → 819012345678）
 tr -d '\r' < "$CSV" | while IFS=, read -r id tel rest; do
-  id=$(printf '%s' "$id" | tr -d '"' | tr -d ' ')
+  # 顧客IDは数字だけ。これでBOM・引用符・空白・見出し行（「顧客ID」→空になる）をまとめて処理できる
+  id=$(printf '%s' "$id" | tr -cd '0-9')
   tel=$(printf '%s' "$tel" | tr -d '"' | tr -cd '0-9')
   # 見出し行・空行・顧客IDが数字でない行は黙って飛ばす
   case "$id" in ''|*[!0-9]*) continue ;; esac
