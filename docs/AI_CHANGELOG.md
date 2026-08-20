@@ -1945,3 +1945,13 @@ Git履歴が「何を変更したか」、このファイルが「なぜ変更�
     新規イラスト生成は行っていない。ポーズ未収載の動きはなし。
 - 確認結果：`npm run build` 成功（31→32ページ）。
 - 未対応・次の作業：レビュー後、本番ブランチ `claude/zenkara-gifu-nagara-seo-ukz0er` へのマージはユーザー判断待ち。
+
+## 2026-08-20 (Claude Code) Anthropicクレジット復旧を確認し、未実行コラム2本をリカバリ
+- オーナーのクレジット補充後、死活確認ワークフロー（anthropic-probe）で HTTP 200 の正常応答を確認し、column-auto を2回、約3時間空けて手動起動した
+- 1本目：「寝る前ストレッチ｜睡眠の質が気になる方への深呼吸セルフケア3選」（/column/neruma-shinkokyu、8/17未実行分の代替）。品質GATE 13ファイルPASS
+- 2本目：「疲れが抜けない原因と自律神経ストレッチ｜寝ても回復しない方へ」（/column/tsukare-nukenai、8/19未実行分の代替）。品質GATE 14ファイルPASS
+- GBP連動投稿も両記事で実行（承認済みルール・キャラクターのポーズイラストをサムネイルに使用）：
+  - 寝る前コラム＝pose-30（深呼吸）、localPosts/6533095557755524816（claude.aiのWindsorコネクタ経由）
+  - 疲労コラム＝pose-09（膝抱え込み）、localPosts/1825796106174613858（コネクタ切断のためwindsor-actionバックアップ経路経由）
+- 役目を終えた `.github/workflows/anthropic-probe.yml` を削除。8/21（金）以降は通常の月水金cronが動く
+- 確認結果：両記事とも公開コミット済み・品質GATE PASS・GBP投稿はいずれも state PROCESSING で受理
