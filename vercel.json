@@ -1,0 +1,7 @@
+{
+  "git": {
+    "deploymentEnabled": {
+      "capi-state": false
+    }
+  }
+}
