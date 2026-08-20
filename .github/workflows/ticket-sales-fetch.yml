@@ -1,14 +1,21 @@
-name: 来店記録CSVの構造確認（手動・調査用）
+name: 来店記録CSVの取得確認（手動・調査用）
 
-# 店舗システムの「来店記録」からCSVをダウンロードし、中身の“形”だけを報告する。
-# 月次のCAPI送信（capi-upload.yml）が「列がない」等で落ちたときに、
-# 画面のどこが変わったのかを推測せず確かめるための調査用。
+# 店舗システムの「来店記録」からCSVをダウンロードして確かめる。Metaへは送らない。
+#   inspect … 列名・文字コード・値の分布だけを報告する。画面が変わったときの原因究明用。
+#   export  … 月次CAPI送信と同じ抽出を実際に走らせ、件数・金額だけを報告する。
+#             期間プリセットが効いているかを、本送信の前に確かめるために使う。
 #
 # ⚠️ CSVには顧客名が含まれるが、ダウンロード先はこの実行環境（毎回破棄）のみ。
 #    リポジトリにもDriveにも保存せず、実行サマリーにも顧客名・顧客IDの値は出さない。
 #    どのブランチにも書き込まないので、週次KPIジョブには影響しない。
 on:
   workflow_dispatch:
+    inputs:
+      mode:
+        description: 'inspect=CSVの形を報告 / export=月次と同じ抽出を試して件数だけ報告'
+        type: choice
+        options: [inspect, export]
+        default: inspect
 
 permissions:
   contents: read
@@ -29,11 +36,16 @@ jobs:
           npx playwright install --with-deps chromium
       - name: 来店記録CSVの解析テスト
         run: node --test kpi-scraper/test/visit-csv.test.mjs
-      - name: CSV取得と形の確認
+      - name: CSV取得と確認
         env:
           ZN_SYSTEM_USER: ${{ secrets.ZN_SYSTEM_USER }}
           ZN_SYSTEM_PASS: ${{ secrets.ZN_SYSTEM_PASS }}
-          MODE: inspect
+          MODE: ${{ inputs.mode }}
         run: |
           cd kpi-scraper
           node fetch-ticket-sales.mjs
+
+      # exportモードは顧客IDを含むJSONを書くので、必ず消してから終わる
+      - name: 中間ファイルの削除
+        if: always()
+        run: rm -rf kpi-scraper/out

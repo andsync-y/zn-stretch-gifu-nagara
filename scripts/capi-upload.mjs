@@ -324,10 +324,12 @@ if (masterFiles.length === 0 && bookFiles.length === 0) {
   );
 }
 if (ticketPurchases.length > 0 && bookFiles.length === 0) {
-  fail(
+  const msg =
     `来店記録から成約を ${ticketPurchases.length}件 取れましたが、Driveに電話帳 phone-book.json がありません。` +
-      `顧客IDと電話番号を突合できないため送信を中止します（docs/capi-offline-events.md 参照）`
-  );
+    `顧客IDと電話番号を突合できません（docs/capi-offline-events.md 参照）`;
+  // dry_runは「電話帳を用意する前に、取得までが動くか確かめる」ためにも使うので落とさない
+  if (!DRY_RUN) fail(`${msg}。送信を中止します`);
+  console.log(`警告: ${msg}。dry_run のため続行します（突合0件になります）`);
 }
 
 // --- マスタをマージ。同一phone_hashは成約を合算し、同一の成約（日付・金額・商品名）は1件に畳む
