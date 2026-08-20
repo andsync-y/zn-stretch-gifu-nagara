@@ -100,9 +100,10 @@ const breadcrumbSchema = {
 ---
 <Base title={title} description={description} path={pagePath} ogImage={image} jsonld={[articleSchema, breadcrumbSchema, ...(faqSchema ? [faqSchema] : [])]}>
   <article class="section-grid mx-auto max-w-content border-b border-ink/20 px-5 pb-24 pt-16 sm:px-10 sm:pb-32 sm:pt-[120px]">
+    <div class="mx-auto w-full max-w-[980px]">
     <div class="mb-10 sm:mb-14"><Breadcrumbs items={[{ label: 'トップ', href: '/' }, { label: 'コラム', href: '/column' }, { label: heading }]} /></div>
     <p class="en-label mb-8">Column</p>
-    <h1 class="mb-6 max-w-[980px] text-[28px] font-black leading-[1.5] sm:text-[44px]">{heading}</h1>
+    <h1 class="mb-6 text-[28px] font-black leading-[1.5] sm:text-[44px]">{heading}</h1>
     <p class="mb-8 text-[12px] tracking-[0.08em] text-muted sm:mb-10">公開日：{datePublished}{dateModified && dateModified !== datePublished ? `／更新日：${dateModified}` : ''}／執筆・監修：<a href={authorUrl} class="underline underline-offset-4">{author}</a></p>
 
     <figure class="mb-12 sm:mb-16">
@@ -113,26 +114,26 @@ const breadcrumbSchema = {
         height="620"
         fetchpriority="high"
         decoding="async"
-        class="h-[220px] w-full max-w-[980px] object-cover sm:h-[380px]"
+        class="h-[220px] w-full object-cover sm:h-[380px]"
         style={`object-position:${imagePosition}`}
       />
       {imageCredit && (
-        <figcaption class="mt-2 max-w-[980px] text-[11px] leading-[1.8] text-faint">{imageCredit}</figcaption>
+        <figcaption class="mt-2 text-[11px] leading-[1.8] text-faint">{imageCredit}</figcaption>
       )}
     </figure>
 
-    <div class="column-body max-w-[820px]">
+    <div class="column-body mx-auto max-w-[820px]">
       <slot />
     </div>
 
-    <p class="rule-top mt-16 max-w-[820px] pt-5 text-[13px] leading-[1.9] text-muted">
+    <p class="rule-top mx-auto mt-16 max-w-[820px] pt-5 text-[13px] leading-[1.9] text-muted">
       監修：<a href={authorUrl} class="font-bold underline underline-offset-4">{author}</a>（ZST協会認定／岐阜市長良・個室のパーソナルストレッチ専門店）<br />
       当店は独自メソッド<a href="/method" class="font-bold underline underline-offset-4">「体感軸調整法」</a>にもとづき、もむのではなく伸ばすアプローチを行っています。<br />
       ※本記事は一般的なセルフケアの情報であり、効果には個人差があります。強い痛みやしびれがある場合は医療機関にご相談ください。
     </p>
 
     {faq.length > 0 && (
-      <div class="mt-16 max-w-[820px]">
+      <div class="mx-auto mt-16 max-w-[820px]">
         <h2 class="mb-6 text-[22px] font-black sm:text-[26px]">よくある質問</h2>
         <div class="rule-top">
           {faq.map((f) => (
@@ -146,7 +147,7 @@ const breadcrumbSchema = {
     )}
 
     {related.length > 0 && (
-      <div class="mt-14 max-w-[820px]">
+      <div class="mx-auto mt-14 max-w-[820px]">
         <h2 class="mb-6 text-[19px] font-black">あわせて読みたい・関連ページ</h2>
         <div class="rule-top">
           {related.map((r) => (
@@ -158,6 +159,7 @@ const breadcrumbSchema = {
         </div>
       </div>
     )}
+    </div>
   </article>
 
   <ReserveCTA title="セルフケアで追いつかない張りは、プロにおまかせください。" source={`column:${slug}`} />
