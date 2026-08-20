@@ -1693,3 +1693,14 @@ Git履歴が「何を変更したか」、このファイルが「なぜ変更�
 - Cowork月次タスクへ渡す指示文を、コピペできるブロックとして用意（purchases形式・推測で埋めない旨・生電話番号は出力しない旨を明記）
 - dry_run → test_event_code → 本送信の3段階と、各段階でログのどこを見るかを記載。エラーメッセージ別の原因対処表も追加（実装した `fail()` の文言と対応させた）
 - 未対応・次の作業：オーナーによる実作業。Secrets 3件の登録とCowork側の出力更新が済めば送信が始まる
+
+## 2026-08-20 (Claude Code) 施策A〜Jをデフォルトブランチへマージ・本番反映を確認
+- `claude/new-session-prk4n9` の4コミット（施策A / B・E / C・F・G・H・I・J / セットアップ手順書）を、デフォルトブランチ `claude/zenkara-gifu-nagara-seo-ukz0er` へ**早送りマージ**（オーナー指示「直接マージする」）。デフォルトブランチ側に先行コミットは無く、上書き・消失はゼロ
+- マージが必要だった理由：GitHub Actionsは**デフォルトブランチにあるワークフローしか一覧に出さず手動実行もできない**（workflow_dispatchの仕様）。`capi-upload.yml` が作業ブランチにしか無かったため、Secretsを揃えてもActions画面に出てこなかった
+- マージ後の検証：`npm run build` 成功（30ページ）／品質GATE 12ファイルPASS／全11ワークフローのYAML検証OK
+- **本番反映を確認**：Vercelのデプロイ一覧で `b7ece59` が **Production / Ready**（14秒）。`/method` ほかサイト側の変更が公開された
+- **施策AのSecrets 3件をオーナーが設定完了**（`META_DATASET_ID` / `META_CAPI_ACCESS_TOKEN` / `GDRIVE_SA_KEY`）。GCPプロジェクト `zn-stretch-kpi`、サービスアカウント `kpi-drive-reader`、Drive「32_顧客電話_マスタ」へ閲覧者で共有済み（権限をAPIで確認）
+  - `META_DATASET_ID` は既存のウェブピクセル `zngifunagara`（PageView 4,438件・接続先 zn-stretch-gifu.com）を採用。もう一方の候補 `zenryoku-sns-automation` はSNS自動運用システム用のアプリ用データセットでイベント未受信のため不採用
+  - **副次的な確認**：このピクセルが実際にイベントを受信していたため、前回「本番サイトへ到達できず未確認」としていた Vercel の `PUBLIC_META_PIXEL_ID` の設定が**正しく動作していることを確認できた**
+- **dry_run 実行結果：Drive接続は成功**。`phone-master_YYYY-MM.json がありません` で終了（＝認証・API・共有はすべて通過し、ファイルが未生成なだけ）。設計どおりの挙動
+- 未対応・次の作業：①Cowork月次タスクを `purchases`（成約日・金額）付き出力へ更新（これが入るまで送信は0件）②サービスアカウント鍵のローテーション（セットアップ中にスクリーンショットへ写ったため。新旧の順序に注意：新鍵を登録→dry_run確認→旧鍵を削除）③`click_line` のGoogle広告インポート（施策C）④GA4カスタムディメンション `cta_source` の登録
