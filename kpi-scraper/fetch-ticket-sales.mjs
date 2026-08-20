@@ -130,22 +130,49 @@ async function applyExplicitRange(from, to) {
     if (!f || !t) return false;
     const set = (el, v) => {
       // 値を直接代入しても枠組みによっては拾われないので、ネイティブのsetterを使って
-      // input/change を発火させる
+      // input/change/blur を発火させる
       const desc = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el), 'value');
       if (desc && desc.set) desc.set.call(el, v);
       else el.value = v;
-      el.dispatchEvent(new Event('input', { bubbles: true }));
-      el.dispatchEvent(new Event('change', { bubbles: true }));
+      for (const type of ['input', 'change', 'blur']) el.dispatchEvent(new Event(type, { bubbles: true }));
     };
     set(f, from);
     set(t, to);
     return true;
   }, { from, to });
-  if (!filled) return false;
-  await page.waitForTimeout(2500);
-  const applied = await readAppliedRange();
-  // 入力しただけで反映されない作りかもしれないので、画面の表示で必ず確かめる
-  return !!applied && applied.from === from && applied.to === to;
+  if (!filled) return { ok: false, reason: '#vfFromInput / #vfToInput が見つからない' };
+
+  await page.waitForTimeout(1200);
+  // 入力しただけでは反映されない作りの場合に備えて、Enterと「適用」系のボタンも試す
+  if ((await readAppliedRange())?.from !== from) {
+    await page.locator('#vfToInput').press('Enter').catch(() => {});
+    await page.waitForTimeout(1200);
+  }
+  if ((await readAppliedRange())?.from !== from) {
+    await page.evaluate(() => {
+      const words = ['適用', 'OK', '検索', '絞り込み', '絞込', '反映', '更新'];
+      const b = [...document.querySelectorAll('button')].find(
+        (e) => e.offsetParent !== null && words.includes((e.textContent || '').replace(/\s+/g, ' ').trim())
+      );
+      if (b) b.click();
+    });
+    await page.waitForTimeout(2500);
+  }
+
+  const shown = await readAppliedRange();
+  if (shown && shown.from === from && shown.to === to) return { ok: true };
+
+  // 何が起きたか分かるように、画面の表示と入力欄の中身を持ち帰る（顧客の値は読まない）
+  const values = await page.evaluate(() => ({
+    from: document.querySelector('#vfFromInput')?.value ?? '(なし)',
+    to: document.querySelector('#vfToInput')?.value ?? '(なし)',
+  }));
+  return {
+    ok: false,
+    reason:
+      `画面の期間表示は ${shown ? `${shown.from}〜${shown.to}` : '(読めない)'} のまま` +
+      `（入力欄の中身は ${values.from}〜${values.to}）`,
+  };
 }
 
 /** 画面の表にデータ行が何行あるか。CSVが出ないときの原因切り分けに使う（値は読まない） */
@@ -273,10 +300,9 @@ try {
   // 返さなかった。CSVには件数の上限があり、**古い行から落ちる**。
   // 1回に取る期間を短くして上限に当たらないようにし、当たった場合は静かに欠けさせず失敗させる。
   for (const chunk of chunkRange(SINCE, TODAY, CHUNK_DAYS)) {
-    if (!(await applyExplicitRange(chunk.from, chunk.to))) {
-      throw new Error(
-        `期間 ${chunk.from}〜${chunk.to} を画面に反映できない（#vfFromInput / #vfToInput の作りが変わった可能性）`
-      );
+    const setRange = await applyExplicitRange(chunk.from, chunk.to);
+    if (!setRange.ok) {
+      throw new Error(`期間 ${chunk.from}〜${chunk.to} を画面に反映できない: ${setRange.reason}`);
     }
     const got = await downloadCsv();
     if (!got) {
