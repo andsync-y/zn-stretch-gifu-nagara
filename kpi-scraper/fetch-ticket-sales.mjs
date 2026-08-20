@@ -33,7 +33,7 @@ import {
   locateColumns,
   uncoveredRange,
   firstOfLastMonth,
-  excludeFromAdSignal,
+  markAdSignal,
 } from './lib/visit-csv.mjs';
 
 const BASE = process.env.ZN_BASE_URL || 'https://system.zn-stretch.com/';
@@ -347,23 +347,27 @@ try {
     );
   }
 
-  // 全CSVを読み終えてから、紹介客と広告開始前の成約をまとめて除く。
-  // 来店経路は再来店の行では空のことがあるので、顧客単位で判定している
+  // 全CSVを読み終えてから、紹介客と広告開始前の成約に印を付ける。
+  // ここでは捨てない。オーナーが「この紹介客は入れたい」と判断して電話帳に登録した場合は
+  // 送りたいので、最終判断は電話帳を持っている送信側（capi-upload.mjs）に任せる
   const inWindow = dedupePurchases(all).filter((p) => p.date >= SINCE && p.date <= TODAY);
-  const { kept: purchases, excluded } = excludeFromAdSignal(inWindow, referralCustomers, {
+  const { marked: purchases, counts } = markAdSignal(inWindow, referralCustomers, {
     onOrBefore: REFERRAL_ERA_END,
   });
-  const total = purchases.reduce((s, p) => s + p.value, 0);
-  const customers = new Set(purchases.map((p) => p.customer_id)).size;
-  const oldest = purchases.length ? purchases[0].date : '(なし)';
+  const adSignal = purchases.filter((p) => p.ad_signal);
+  const total = adSignal.reduce((s, p) => s + p.value, 0);
+  const customers = new Set(adSignal.map((p) => p.customer_id)).size;
+  const oldest = adSignal.length ? adSignal[0].date : '(なし)';
 
   say('');
-  say('### 広告の学習信号から除いたもの');
+  say('### 紹介・広告開始前の印付け');
   say('');
   say(`- 回数券を買った行の来店経路: ${Object.entries(routeTally).map(([k, n]) => `${k}=${n}`).join(' / ') || '(なし)'}`);
-  say(`- 紹介と分かっている顧客: **${referralCustomers.size}人**（うち今回の期間で成約 ${excluded.referral_customers.size}人）`);
-  say(`- 除外: 紹介客の成約 **${excluded.referral}件** / ${REFERRAL_ERA_END}以前の成約 **${excluded.before_ads}件**`);
-  say(`- 残った成約: ${inWindow.length}件 → **${purchases.length}件**`);
+  say(`- 紹介と分かっている顧客: **${referralCustomers.size}人**`);
+  say(`- 広告の学習信号にする成約: **${counts.ad}件** / 紹介 ${counts.referral}件 / ${REFERRAL_ERA_END}以前 ${counts.before_ads}件`);
+  say('');
+  say('> 紹介・広告開始前の分も出力には残してあります。電話帳に登録されている顧客だけ、');
+  say('> 送信側が「オーナーが意図して入れた人」とみなして送ります。');
 
   fs.mkdirSync(path.dirname(OUT_FILE), { recursive: true });
   fs.writeFileSync(
@@ -373,11 +377,12 @@ try {
         // 顧客名は含めない（この上の extractTicketPurchases が返さない）
         note:
           '回数券の成約のみ。顧客名・電話番号は含まない。指名チケットは別列なので含まれない。' +
-          `紹介客と${REFERRAL_ERA_END}以前の成約は、広告の学習信号にしないため除いてある。`,
+          `紹介客と${REFERRAL_ERA_END}以前の成約は ad_signal:false で印を付けてある（捨ててはいない）。`,
         generated_at: new Date(NOW_MS).toISOString(),
         period: { from: SINCE, to: TODAY },
         source_encoding: encodingSeen,
         count: purchases.length,
+        ad_signal_count: counts.ad,
         purchases,
       },
       null,
@@ -388,7 +393,8 @@ try {
   say('');
   say(`### 抽出結果`);
   say('');
-  say(`- 回数券の成約: **${purchases.length}件 / ${customers}人 / ${total.toLocaleString()}円**`);
+  say(`- 広告の学習信号にする成約: **${adSignal.length}件 / ${customers}人 / ${total.toLocaleString()}円**`);
+  say(`- 出力に含めた成約（印付きを含む）: ${purchases.length}件`);
   say(`- 完全に取れている期間: **${GUARANTEED_FROM}〜${TODAY}**（それ以前は「今年」で取れた分だけ／最古の成約 ${oldest}）`);
   say(`- 出力: \`${OUT_FILE}\`（顧客名・電話番号は含まない）`);
 } catch (e) {

@@ -17,7 +17,7 @@ import {
   dedupePurchases,
   uncoveredRange,
   firstOfLastMonth,
-  excludeFromAdSignal,
+  markAdSignal,
 } from '../lib/visit-csv.mjs';
 
 const HEADER =
@@ -146,10 +146,17 @@ test('紹介客は顧客単位で判定する（再来店の行で経路が空�
   // 経路の分布は「回数券を買った行」だけを数える
   assert.deepEqual(routeCounts, { '(空)': 1, 'ホットペッパー': 1 });
 
-  const { kept, excluded } = excludeFromAdSignal(purchases, referralCustomers, { onOrBefore: '2026-06-19' });
-  assert.deepEqual(kept.map((p) => p.customer_id), ['10000002']);
-  assert.equal(excluded.referral, 1);
-  assert.equal(excluded.before_ads, 0);
+  const { marked, counts } = markAdSignal(purchases, referralCustomers, { onOrBefore: '2026-06-19' });
+  // 捨てずに印を付ける（オーナーが電話帳に入れたら送れるようにするため）
+  assert.equal(marked.length, 2);
+  assert.deepEqual(
+    marked.map((p) => [p.customer_id, p.ad_signal, p.exclude_reason ?? null]),
+    [
+      ['10000001', false, 'referral'],
+      ['10000002', true, null],
+    ]
+  );
+  assert.deepEqual(counts, { ad: 1, referral: 1, before_ads: 0 });
 });
 
 test('表記ゆれの「ご紹介」「友人紹介」も紹介として扱う', () => {
@@ -161,14 +168,15 @@ test('表記ゆれの「ご紹介」「友人紹介」も紹介として扱う',
   assert.equal(referralCustomers.size, 2);
 });
 
-test('広告開始前（6/19以前）の成約は経路によらず除く', () => {
+test('広告開始前（6/19以前）の成約は経路によらず印が付く', () => {
   const purchases = [
     { customer_id: '10000005', date: '2026-06-19', value: 110000, content_name: '5回券(90分)' },
     { customer_id: '10000006', date: '2026-06-20', value: 110000, content_name: '5回券(90分)' },
   ];
-  const { kept, excluded } = excludeFromAdSignal(purchases, new Set(), { onOrBefore: '2026-06-19' });
-  assert.deepEqual(kept.map((p) => p.date), ['2026-06-20']);
-  assert.equal(excluded.before_ads, 1);
+  const { marked, counts } = markAdSignal(purchases, new Set(), { onOrBefore: '2026-06-19' });
+  assert.deepEqual(marked.map((p) => p.ad_signal), [false, true]);
+  assert.equal(marked[0].exclude_reason, 'before_ads');
+  assert.deepEqual(counts, { ad: 1, referral: 0, before_ads: 1 });
 });
 
 test('来店経路の列が無ければ推測せず落ちる', () => {

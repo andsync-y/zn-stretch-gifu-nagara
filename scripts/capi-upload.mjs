@@ -350,6 +350,8 @@ const stats = {
   ticket_matched: 0,
   ticket_unmatched: 0,
   ticket_invalid: 0,
+  ticket_opt_in: 0,
+  ticket_excluded: 0,
   phone_book_entries: 0,
   phone_book_invalid: 0,
 };
@@ -374,6 +376,18 @@ if (ticketPurchases.length > 0) {
       continue;
     }
     const hash = phoneBook.get(cid);
+
+    // 紹介・広告開始前として印が付いた成約は、既定では送らない。
+    // ただしオーナーが電話帳に登録した顧客は「意図して入れた人」なので送る。
+    // 登録していない場合は、登録を促す一覧にも載せない（紹介客を集めさせないため）
+    if (p.ad_signal === false) {
+      if (!hash) {
+        stats.ticket_excluded++;
+        continue;
+      }
+      stats.ticket_opt_in++;
+    }
+
     if (!hash) {
       // 電話番号をまだ登録していない顧客。件数だけ数え、IDは実行ログにのみ出す
       stats.ticket_unmatched++;
@@ -478,6 +492,10 @@ console.log(
   `来店記録の成約: ${stats.ticket_purchases}件 → 電話帳と突合できた ${stats.ticket_matched}件 / ` +
     `未登録 ${stats.ticket_unmatched}件（${unmatchedIds.size}人）/ 形式不正 ${stats.ticket_invalid}件`
 );
+console.log(
+  `紹介・広告開始前として印が付いた成約: 電話帳にあるので送る ${stats.ticket_opt_in}件 / ` +
+    `電話帳に無いので送らない ${stats.ticket_excluded}件`
+);
 console.log(`マスタ件数: ${stats.master_records} / 有効ハッシュなし: ${stats.invalid_hash} / 成約情報なし: ${stats.no_purchase}`);
 console.log(`成約レコード（重複除去後）: ${[...byHash.values()].reduce((n, b) => n + b.size, 0)}`);
 console.log(`除外 — 日付なし:${stats.skip_no_date} 金額なし:${stats.skip_no_value} 62日超:${stats.skip_too_old} 未来日:${stats.skip_future} 送信済み:${stats.skip_already_sent}`);
@@ -570,6 +588,8 @@ const report = `# Meta CAPI オフラインイベント送信レポート ${REPO
 | 電話帳の登録数（顧客ID → ハッシュ） | ${stats.phone_book_entries} |
 | 電話帳と突合できた成約 | ${stats.ticket_matched} |
 | 電話番号が未登録で送れなかった成約 | ${stats.ticket_unmatched}（${unmatchedIds.size}人） |
+| 紹介・広告開始前だが電話帳にあるので送った成約 | ${stats.ticket_opt_in} |
+| 紹介・広告開始前で電話帳にも無いため送らなかった成約 | ${stats.ticket_excluded} |
 | 形式不正でスキップ | ${stats.ticket_invalid} |
 
 > 未登録の顧客IDは実行ログにのみ出しています（このレポートには残しません）。

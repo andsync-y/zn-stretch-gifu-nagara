@@ -134,26 +134,25 @@ export function extractTicketPurchases(rows) {
 }
 
 /**
- * 広告の学習信号に混ぜてはいけない成約を除く。
+ * 広告の学習信号にそのまま混ぜてよいかを、成約ごとに印付けする。
  *
- *  - 紹介客: 広告経由ではないので、送るとMetaが広告と関係のない層を学習してしまう
+ *  - 紹介客: 広告経由ではないので、既定では送らない
  *  - onOrBefore 以前の成約: この日までの来店はすべて紹介によるもの（オーナー確認・2026-08-20）
  *
- * 除外した理由と件数を返し、呼び出し側が必ず報告できるようにする（黙って減らさない）。
+ * ここでは**捨てずに印を付けるだけ**にしてある。オーナーが「この紹介客は入れたい」と判断して
+ * 電話帳に登録した場合は送りたいため、最終判断は電話帳を持っている送信側（capi-upload.mjs）に委ねる。
+ * 判断材料を落とさないことが目的なので、ここで削除する実装に戻さないこと。
  */
-export function excludeFromAdSignal(purchases, referralCustomers, { onOrBefore } = {}) {
-  const kept = [];
-  const excluded = { referral: 0, referral_customers: new Set(), before_ads: 0 };
-  for (const p of purchases) {
-    if (onOrBefore && p.date <= onOrBefore) { excluded.before_ads++; continue; }
-    if (referralCustomers.has(p.customer_id)) {
-      excluded.referral++;
-      excluded.referral_customers.add(p.customer_id);
-      continue;
-    }
-    kept.push(p);
-  }
-  return { kept, excluded };
+export function markAdSignal(purchases, referralCustomers, { onOrBefore } = {}) {
+  const counts = { ad: 0, referral: 0, before_ads: 0 };
+  const marked = purchases.map((p) => {
+    let reason = null;
+    if (onOrBefore && p.date <= onOrBefore) reason = 'before_ads';
+    else if (referralCustomers.has(p.customer_id)) reason = 'referral';
+    counts[reason ?? 'ad']++;
+    return reason ? { ...p, ad_signal: false, exclude_reason: reason } : { ...p, ad_signal: true };
+  });
+  return { marked, counts };
 }
 
 /**
