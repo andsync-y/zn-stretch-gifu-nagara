@@ -29,6 +29,11 @@ Thumbs.db
 out/
 kpi-scraper/out/
 
+# 電話帳づくりの入出力（生の電話番号・ハッシュを絶対にコミットしない）
+phone-book.json
+phone-*.csv
+phone-*.tsv
+
 # コラム品質GATEの一時ファイル（ワークフロー実行中のみ存在）
 lint-result.txt
 lint-final.txt

@@ -319,9 +319,10 @@ console.log(`Drive: phone-book ${bookFiles.length}件 (${bookFiles.map((f) => f.
 // --- 来店記録から取った成約（顧客ID単位）を読む
 const ticketPurchases = readTicketPurchases();
 if (masterFiles.length === 0 && bookFiles.length === 0) {
-  fail(
-    `フォルダ ${FOLDER_ID} に phone-master_YYYY-MM.json も phone-book.json もありません（SAへの共有設定を確認）`
-  );
+  const msg = `フォルダ ${FOLDER_ID} に phone-master_YYYY-MM.json も phone-book.json もありません（SAへの共有設定を確認）`;
+  // 電話帳を作る前でも「どの顧客IDの電話番号が要るか」を知りたいので、dry_runでは続行する
+  if (!DRY_RUN) fail(msg);
+  console.log(`警告: ${msg}。dry_run のため続行します`);
 }
 if (ticketPurchases.length > 0 && bookFiles.length === 0) {
   const msg =
