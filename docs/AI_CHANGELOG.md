@@ -1725,3 +1725,41 @@ Git履歴が「何を変更したか」、このファイルが「なぜ変更�
 - 修正：記事コンテンツ全体を `mx-auto w-full max-w-[980px]` のラッパーで包み、本文系の `max-w-[820px]` ブロックにも `mx-auto` を追加。h1・画像・figcaption の個別 `max-w-[980px]` はラッパーに集約して削除
 - 確認結果：`npm run build` 成功（30ページ）。ローカル配信＋Chromiumで 1920×1080 のスクリーンショットを撮り、見出し・本文・ストレッチ挿絵が画面中央に配置されることを確認。モバイル390pxは修正前後でスクリーンショットがバイト単位で同一（レイアウト影響なし）
 - 対象は全コラム記事（ColumnLayout使用の12記事すべてに適用）
+
+## 2026-08-20 (Claude Code) コラム新規記事「寝る前ストレッチで睡眠の質を高める」を追加
+
+- ブランチ：`claude/column-auto`
+- 関連PR：なし（ワークフロー側でコミット・プッシュ）
+- 変更内容：
+  - `docs/column-backlog.md` の `authority` 枠から未対応の最上位1件 `neruma-shinkokyu`（寝る前 ストレッチ 睡眠の質）を選び、コラム記事を1本新規作成。
+  - 深呼吸ストレッチ・胸を開くストレッチ・お尻/股関節のストレッチの3種目を、`src/data/stretchPoses.ts` の既存ポーズ（pose-30/06/09）で構成し、いずれも記事の手順と矛盾しないことを確認。
+  - FAQ5問、`/method`（体感軸調整法）・`/symptoms/jiritsu` への内部リンクを設置。既存3記事（肩こり／腰／ゴルフ）や他の`jiritsu`関連記事と検索意図が重複しないことを確認。
+  - アイキャッチは `scripts/fetch-column-image.mjs --source ai` で生成（日中の明るいリビングでくつろぐシーン。施術シーンは含めない）。
+- 主な変更ファイル：
+  - `src/pages/column/neruma-shinkokyu.astro`（新規）
+  - `src/data/columns.ts`（COLUMNS配列の先頭に追加）
+  - `public/images/column/neruma-shinkokyu.webp`（新規・AI生成）
+  - `docs/column-backlog.md`（該当行を`- [x]`に更新）
+- 判断・注意点：
+  - ポーズ未収載の動きはなし（既存32ポーズ内で本文の手順を構成できたため、ライブラリ拡張の連絡は不要）。
+  - 薬機法・景表法上のNG表現（治る・改善します等）は使用せず、「〜と考えられています」「〜を目指します」等の言い換えを使用。
+- 確認結果：
+  - `npm run build` 成功（30→31ページ）。
+  - `node scripts/lint-column.mjs` 品質GATE PASS（13ファイル）。
+- 未対応・次の作業：なし。
+
+## 2026-08-20 (Claude Code) コラム新規記事「寝る前ストレッチ」の薬機法レビュー・修正
+
+- 対象：直前にコミットされた `src/pages/column/neruma-shinkokyu.astro`（未コミット差分）のレビュー。
+- 指摘・修正：
+  - `lint-column.mjs`（NG_PATTERNS）はPASSだったが、title／heading／description／リード文の「睡眠の質を高める」が機械チェックをすり抜ける効能断定表現だった（`docs/yakkihou-ng-ok.md` の「睡眠が改善する／不眠が治る」NGと同種の直接的な効果主張）。他の全コラム記事のタイトルが「〜対策」「〜な方へ」等、効果を断定しない書き方で統一されている中で本記事のみ逸脱していたため、「睡眠の質が気になる方への深呼吸セルフケア3選」という悩み訴求型の言い回しに修正。
+  - 上記に合わせて `src/data/columns.ts` の `heading`／`desc` も同じ言い回しに統一。
+  - 本文中の該当箇所（「深呼吸とセルフストレッチ3つをご紹介します」の前振り）も「睡眠の質を高めることを目指せる」→「体をゆるめて呼吸を深くすることを目指せる」に修正。
+  - それ以外（体感軸調整法への言及、figcaption「イラストはイメージです」、セルフケア手順の安全性、リード文の検索意図対応）は問題なし。
+- 主な変更ファイル：
+  - `src/pages/column/neruma-shinkokyu.astro`
+  - `src/data/columns.ts`
+- 確認結果：
+  - `node scripts/lint-column.mjs src/pages/column/neruma-shinkokyu.astro` 品質GATE PASS。
+  - `npm run build` 成功（31ページ）。
+- 未対応・次の作業：なし。
