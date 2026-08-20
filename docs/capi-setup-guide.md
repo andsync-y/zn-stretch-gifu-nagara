@@ -191,17 +191,35 @@ Coworkの定期タスク **「顧客電話帳の更新（スクショ→顧客ID
    10000002,09087654321
    ```
 
-2. リポジトリを手元に置いて、次を実行する
+2. ターミナルで変換する。**Node.jsのインストールは不要**（macOSに最初から入っている
+   `shasum` を使う版を用意してある）。ターミナル.app に次をそのまま貼り付ける。
 
    ```bash
-   node scripts/make-phone-book.mjs phone-input.csv
+   CSV=$(ls -t ~/Downloads/*.csv ~/Desktop/*.csv 2>/dev/null | head -1); echo "使うファイル: $CSV"
    ```
 
-   すでに `phone-book.json` がある場合は、2つめの引数に渡すと**追記**になる（既存は消えない）。
+   出たファイル名が合っていたら、続けて貼り付ける。
 
    ```bash
-   node scripts/make-phone-book.mjs phone-input.csv phone-book.json
+   OUT="$(dirname "$CSV")/phone-book.json"; TMP=$(mktemp)
+   tr -d '\r' < "$CSV" | while IFS=, read -r id tel rest; do
+     id=$(printf '%s' "$id" | tr -d '"' | tr -d ' ')
+     tel=$(printf '%s' "$tel" | tr -d '"' | tr -cd '0-9')
+     case "$id" in ''|*[!0-9]*) continue ;; esac
+     case "$tel" in 0*) tel="81${tel#0}" ;; 81*) ;; *) echo "スキップ: $id" >&2; continue ;; esac
+     case "${#tel}" in 11|12) ;; *) echo "スキップ(桁数): $id" >&2; continue ;; esac
+     printf '    { "customer_id": "%s", "phone_hash": "%s" }\n' "$id" \
+       "$(printf '%s' "$tel" | shasum -a 256 | cut -d' ' -f1)" >> "$TMP"
+   done
+   { printf '{\n  "records": [\n'; sed '$!s/$/,/' "$TMP"; printf '  ]\n}\n'; } > "$OUT"
+   echo "登録 $(wc -l < "$TMP" | tr -d ' ') 件 → $OUT"; rm -f "$TMP"; open "$(dirname "$OUT")"
    ```
+
+   最後にFinderが開くので、そこにある `phone-book.json` をDriveへ上げる。
+
+   > リポジトリを手元に持っていてNode.jsも入っているなら、同じことが1行でできる：
+   > `node scripts/make-phone-book.mjs 入力.csv [既存のphone-book.json]`
+   > （2つめの引数を渡すと既存を消さずに**追記**する。シェル版 `scripts/make-phone-book.sh` も同じ）
 
 3. できた `phone-book.json` をDrive「32_顧客電話_マスタ」へアップロードする
 4. **入力に使ったCSVは削除する**
