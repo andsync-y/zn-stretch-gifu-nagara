@@ -73,6 +73,74 @@ export function extractStructure() {
     .map((el) => clip(el.textContent, 30))
     .filter((t) => /CSV|ダウンロード|エクスポート|出力|印刷/i.test(t));
 
+  // ページのどこかに電話番号らしき文字列があるかを探す。
+  // 見つけても**番号は返さず**、「どのラベルの近くにあったか」だけを返す。
+  // 一覧に無くても詳細やモーダルにあるかもしれないので、DOM全体を舐める。
+  // ラベルとして採用してよいのは「値に見えないテキスト」だけ。
+  // 表の中では隣のセル＝別の顧客データなので、ラベルに使うと値が漏れる。
+  const safeLabel = (raw) => {
+    const t = clip(raw, 24);
+    if (!t) return '';
+    const k = kind(t);
+    const risky = ['電話番号', '電話番号(国際)', 'メール', '日本語(氏名の可能性)', 'カタカナ(フリガナ)', '日付', '金額'];
+    return risky.includes(k) ? '' : t;
+  };
+
+  const phoneRe = /(^|[^\d-])0\d{1,4}-?\d{1,4}-?\d{3,4}([^\d-]|$)/;
+  const phoneHits = [];
+  for (const el of document.querySelectorAll('*')) {
+    if (el.children.length > 0) continue; // 末端要素だけ見る（親で二重に数えない）
+    const t = (el.textContent || '').replace(/\s+/g, ' ').trim();
+    if (!t || t.length > 40 || !phoneRe.test(t)) continue;
+
+    // 表の中なら「列見出し」をラベルにする。見出しは構造上ラベルなので値ではない。
+    // 隣のセルや親の前の行（＝別の顧客の行）は絶対に使わない（値が漏れる）
+    let label = '';
+    const td = el.closest('td');
+    if (td) {
+      const tr = td.parentElement;
+      const table = el.closest('table');
+      const idx = [...tr.children].indexOf(td);
+      const ths = table ? [...table.querySelectorAll('thead th, tr:first-child th')] : [];
+      label = clip(ths[idx] ? ths[idx].textContent : '', 24);
+    } else {
+      // 表の外は「直前の兄弟が末端要素かつ短い」ときだけラベルとみなす。
+      // さらに safeLabel で「値に見えるもの」を弾く二重の防御をかける
+      const prev = el.previousElementSibling;
+      if (prev && prev.children.length === 0) {
+        const t2 = (prev.textContent || '').replace(/\s+/g, ' ').trim();
+        if (t2.length <= 12) label = safeLabel(t2);
+      }
+    }
+
+    phoneHits.push({
+      tag: el.tagName.toLowerCase(),
+      label: label || '(ラベル不明)',
+      cls: clip(el.getAttribute('class') || '', 30),
+      inTable: !!td,
+      inModal: !!el.closest('[role="dialog"], .modal, dialog'),
+    });
+    if (phoneHits.length >= 12) break;
+  }
+
+  // div主体のレイアウトでも「ラベル→値」を拾えるように、
+  // 電話・氏名・回数券などのキーワードを含む要素の“次の要素”の種類を見る
+  const KEY = /電話|TEL|携帯|メール|回数券|残|最終来店|前回来店|来店日|購入|チケット|氏名|お名前|フリガナ/;
+  const labeled = [];
+  for (const el of document.querySelectorAll('div, span, p, dt, label')) {
+    // 末端要素だけをラベル候補にする。親要素を拾うと textContent に
+    // 値（氏名など）が混ざり、ラベル文字列として値が漏れてしまう
+    if (el.children.length > 0) continue;
+    // 表の中は columns 側で扱う（見出し同士のペアを拾って無意味な行が出るのを防ぐ）
+    if (el.closest('table')) continue;
+    const t = (el.textContent || '').replace(/\s+/g, ' ').trim();
+    if (!t || t.length > 12 || !KEY.test(t)) continue;
+    const next = el.nextElementSibling;
+    if (!next) continue;
+    labeled.push({ label: clip(t, 16), kind: kind(next.textContent) });
+    if (labeled.length >= 30) break;
+  }
+
   return {
     title: document.title,
     url: location.href,
@@ -82,6 +150,8 @@ export function extractStructure() {
     exportish: [...new Set(exportish)],
     tables,
     fields: fields.slice(0, 40),
+    labeled,
+    phoneHits,
     hasPagination: /次へ|前へ|ページ|»|›/.test(document.body.innerText.slice(0, 20000)),
   };
 }

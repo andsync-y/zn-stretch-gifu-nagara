@@ -86,38 +86,45 @@ try {
   console.log('顧客まわりのナビ候補:', navLabels.join(' / ') || '(なし)');
 
   for (const label of navLabels.slice(0, MAX_PAGES)) {
+    // SPAなので、前の画面の状態に引きずられないよう毎回トップに戻ってからナビを押す
+    await page.goto(BASE, { waitUntil: 'domcontentloaded', timeout: 45000 }).catch(() => {});
+    await page.waitForTimeout(2500);
+
     const clicked = await page.evaluate((lbl) => {
-      const el = [...document.querySelectorAll('a.nav-item, nav a, aside a')].find(
-        (e) => (e.textContent || '').replace(/\s+/g, ' ').trim() === lbl
-      );
+      const cands = [...document.querySelectorAll('a.nav-item, nav a, aside a, a, button')];
+      const el = cands.find((e) => (e.textContent || '').replace(/\s+/g, ' ').trim() === lbl);
       if (!el) return false;
       el.click();
       return true;
     }, label);
-    if (!clicked) continue;
-    await page.waitForTimeout(3000);
+    if (!clicked) {
+      report.pages.push({ via: `nav:${label}`, skipped: 'ナビ要素が見つからなかった' });
+      console.log(`  [${label}] スキップ（要素が見つからない）`);
+      continue;
+    }
+    await page.waitForTimeout(3500);
     const info = await inspect(page);
     report.pages.push({ via: `nav:${label}`, ...info });
-    console.log(`  [${label}] 表${info.tables.length}件 / エクスポート系ボタン: ${info.exportish.join(',') || 'なし'}`);
+    console.log(`  [${label}] 表${info.tables.length}件 / 電話らしき箇所 ${info.phoneHits.length}件 / エクスポート: ${info.exportish.join(',') || 'なし'}`);
 
-    // 一覧なら1行目を開いて詳細画面の項目も見る（電話番号がどこにあるか確認するため）
-    const opened = await page
-      .evaluate(() => {
-        const row = document.querySelector('tbody tr');
-        if (!row) return false;
-        const link = row.querySelector('a, button');
-        (link || row).click();
-        return true;
-      })
-      .catch(() => false);
-    if (opened) {
-      await page.waitForTimeout(2500);
-      const detail = await inspect(page);
-      report.pages.push({ via: `nav:${label} → 1件目の詳細`, ...detail });
-      console.log(`    詳細画面: 項目${detail.fields.length}件`);
-      await page.goBack().catch(() => {});
-      await page.waitForTimeout(1500);
-    }
+    // 一覧の1行目から詳細を開く。行末のボタン/リンクを優先し、ダメなら行そのものをクリック
+    const openResult = await page.evaluate(() => {
+      const row = document.querySelector('tbody tr') || document.querySelectorAll('table tr')[1];
+      if (!row) return 'no-row';
+      const cells = [...row.querySelectorAll('td')];
+      const last = cells[cells.length - 1];
+      const target =
+        (last && last.querySelector('a, button, [role="button"]')) ||
+        row.querySelector('a, button, [role="button"]') ||
+        last ||
+        row;
+      target.click();
+      return 'clicked:' + target.tagName.toLowerCase();
+    });
+    await page.waitForTimeout(3000);
+    const detail = await inspect(page);
+    report.pages.push({ via: `nav:${label} → 1件目の詳細（${openResult}）`, ...detail });
+    console.log(`    詳細（${openResult}）: 項目${detail.fields.length + detail.labeled.length}件 / 電話らしき箇所 ${detail.phoneHits.length}件`);
   }
 } catch (e) {
   report.error = String(e).slice(0, 400);
@@ -152,13 +159,25 @@ for (const p of report.pages) {
     md.push('|---|---|---|');
     for (const c of t.columns) md.push(`| ${c.index} | ${c.header} | ${c.kind} |`);
   }
-  if (p.fields?.length) {
+  if (p.skipped) md.push(`- スキップ: ${p.skipped}`);
+  const allFields = [...(p.fields || []), ...(p.labeled || [])];
+  if (allFields.length) {
     md.push('');
-    md.push('### 詳細項目（ラベル → 値の種類）');
+    md.push('### 項目（ラベル → 値の種類）');
     md.push('');
     md.push('| ラベル | 値の種類 |');
     md.push('|---|---|');
-    for (const f of p.fields) md.push(`| ${f.label} | ${f.kind} |`);
+    for (const f of allFields) md.push(`| ${f.label} | ${f.kind} |`);
+  }
+  md.push('');
+  if (p.phoneHits?.length) {
+    md.push(`### ☎ 電話番号らしき箇所（${p.phoneHits.length}件・番号自体は出しません）`);
+    md.push('');
+    md.push('| 近くのラベル | タグ | class | 表の中 | モーダル内 |');
+    md.push('|---|---|---|---|---|');
+    for (const h of p.phoneHits) md.push(`| ${h.label} | ${h.tag} | ${h.cls} | ${h.inTable ? 'はい' : 'いいえ'} | ${h.inModal ? 'はい' : 'いいえ'} |`);
+  } else if (!p.skipped) {
+    md.push('### ☎ 電話番号らしき箇所: **なし**');
   }
   md.push('');
 }
