@@ -81,29 +81,46 @@ export function locateColumns(header) {
   return {
     date: find(/^来店日$/, '来店日'),
     customerId: find(/^顧客ID$/, '顧客ID'),
+    route: find(/^来店経路$/, '来店経路'),
     ticket: find(/^回数券購入$/, '回数券購入'),
     ticketSales: find(/^回数券売上$/, '回数券売上'),
   };
 }
 
+/** 来店経路が「紹介」かどうかの判定。表記ゆれ（ご紹介・友人紹介 等）を拾うため部分一致にする */
+export const REFERRAL_PATTERN = /紹介/;
+
 /**
  * 来店記録CSVの行配列（1行目=ヘッダ）から回数券の成約を取り出す。
  * 戻り値の purchases に顧客名は含まれない。
+ *
+ * 紹介客の除外はここでは行わない。`来店経路` は再来店の行では空のことがあり、
+ * 成約した行だけを見ると紹介客を取りこぼすため、**顧客単位**で判定する必要がある。
+ * そのための材料として referralCustomers（どれか1行でも紹介だった顧客IDの集合）を返し、
+ * 複数のCSVを読み終えてから excludeFromAdSignal() でまとめて除外する。
  */
 export function extractTicketPurchases(rows) {
   const header = rows[0] || [];
   const col = locateColumns(header);
   const stats = { rows: 0, ticket_rows: 0, skip_no_customer_id: 0, skip_no_date: 0, skip_no_value: 0 };
   const purchases = [];
+  const referralCustomers = new Set();
+  // 来店経路の値の分布。カテゴリ名だけなので個人情報ではない（判定が効いているかの確認用）
+  const routeCounts = {};
 
   for (const r of rows.slice(1)) {
     stats.rows++;
+    const customerId = String(r[col.customerId] ?? '').trim();
+    const route = String(r[col.route] ?? '').trim();
+    // 成約した行に限らず、全ての来店行から紹介客を拾う
+    if (customerId && REFERRAL_PATTERN.test(route)) referralCustomers.add(customerId);
+
     const item = String(r[col.ticket] ?? '').trim();
     if (!item) continue; // 回数券を買っていない来店
     stats.ticket_rows++;
+    routeCounts[route || '(空)'] = (routeCounts[route || '(空)'] || 0) + 1;
 
     const date = normalizeDate(r[col.date]);
-    const customerId = String(r[col.customerId] ?? '').trim();
     const value = normalizeValue(r[col.ticketSales]);
 
     if (!customerId) { stats.skip_no_customer_id++; continue; }
@@ -113,7 +130,30 @@ export function extractTicketPurchases(rows) {
 
     purchases.push({ customer_id: customerId, date, value, content_name: item });
   }
-  return { purchases, stats };
+  return { purchases, stats, referralCustomers, routeCounts };
+}
+
+/**
+ * 広告の学習信号に混ぜてはいけない成約を除く。
+ *
+ *  - 紹介客: 広告経由ではないので、送るとMetaが広告と関係のない層を学習してしまう
+ *  - onOrBefore 以前の成約: この日までの来店はすべて紹介によるもの（オーナー確認・2026-08-20）
+ *
+ * 除外した理由と件数を返し、呼び出し側が必ず報告できるようにする（黙って減らさない）。
+ */
+export function excludeFromAdSignal(purchases, referralCustomers, { onOrBefore } = {}) {
+  const kept = [];
+  const excluded = { referral: 0, referral_customers: new Set(), before_ads: 0 };
+  for (const p of purchases) {
+    if (onOrBefore && p.date <= onOrBefore) { excluded.before_ads++; continue; }
+    if (referralCustomers.has(p.customer_id)) {
+      excluded.referral++;
+      excluded.referral_customers.add(p.customer_id);
+      continue;
+    }
+    kept.push(p);
+  }
+  return { kept, excluded };
 }
 
 /**

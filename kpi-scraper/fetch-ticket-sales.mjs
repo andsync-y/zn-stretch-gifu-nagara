@@ -33,6 +33,7 @@ import {
   locateColumns,
   uncoveredRange,
   firstOfLastMonth,
+  excludeFromAdSignal,
 } from './lib/visit-csv.mjs';
 
 const BASE = process.env.ZN_BASE_URL || 'https://system.zn-stretch.com/';
@@ -46,6 +47,9 @@ const DAYS = Number(process.env.DAYS || 70);
 // 「画面の開始日よりCSVが後ろから始まる」ときに、件数上限か単に来店が無いだけかを分ける目安。
 // 2026-08-20の実測では上限に当たったCSVが347行だった
 const TRUNCATION_HINT = Number(process.env.TRUNCATION_HINT || 300);
+// この日までの来店はすべて紹介によるもの（オーナー確認・2026-08-20）。
+// 広告の学習信号に紹介客を混ぜると、広告と関係のない層をMetaが学習してしまうため除く。
+const REFERRAL_ERA_END = process.env.REFERRAL_ERA_END || '2026-06-19';
 const OUT_FILE = process.env.OUT_FILE || 'out/ticket-purchases.json';
 
 const selectors = JSON.parse(fs.readFileSync(new URL('./selectors.json', import.meta.url), 'utf8'));
@@ -273,6 +277,8 @@ try {
   say(`- 必ず覆う期間: **${GUARANTEED_FROM} 〜 ${TODAY}**（Metaへ送るのは直近${DAYS}日ぶん）`);
   const applied = [];
   const all = [];
+  const referralCustomers = new Set();
+  const routeTally = {}; // 回数券を買った行の「来店経路」の分布（カテゴリ名のみ）
   let encodingSeen = '';
 
   await openRangePanel();
@@ -293,9 +299,11 @@ try {
     }
     const { rows, encoding } = got;
     encodingSeen = encoding;
-    const { purchases, stats } = extractTicketPurchases(rows);
+    const { purchases, stats, referralCustomers: refs, routeCounts } = extractTicketPurchases(rows);
     const csvRange = csvDateRange(rows);
     all.push(...purchases);
+    for (const id of refs) referralCustomers.add(id);
+    for (const [k, n] of Object.entries(routeCounts)) routeTally[k] = (routeTally[k] || 0) + n;
 
     // 件数上限に当たると古い行から落ちる。「画面の開始日よりCSVが後ろから始まる」かつ
     // 「行数が多い」ときは上限に当たったとみなす。
@@ -339,10 +347,23 @@ try {
     );
   }
 
-  const purchases = dedupePurchases(all).filter((p) => p.date >= SINCE && p.date <= TODAY);
+  // 全CSVを読み終えてから、紹介客と広告開始前の成約をまとめて除く。
+  // 来店経路は再来店の行では空のことがあるので、顧客単位で判定している
+  const inWindow = dedupePurchases(all).filter((p) => p.date >= SINCE && p.date <= TODAY);
+  const { kept: purchases, excluded } = excludeFromAdSignal(inWindow, referralCustomers, {
+    onOrBefore: REFERRAL_ERA_END,
+  });
   const total = purchases.reduce((s, p) => s + p.value, 0);
   const customers = new Set(purchases.map((p) => p.customer_id)).size;
   const oldest = purchases.length ? purchases[0].date : '(なし)';
+
+  say('');
+  say('### 広告の学習信号から除いたもの');
+  say('');
+  say(`- 回数券を買った行の来店経路: ${Object.entries(routeTally).map(([k, n]) => `${k}=${n}`).join(' / ') || '(なし)'}`);
+  say(`- 紹介と分かっている顧客: **${referralCustomers.size}人**（うち今回の期間で成約 ${excluded.referral_customers.size}人）`);
+  say(`- 除外: 紹介客の成約 **${excluded.referral}件** / ${REFERRAL_ERA_END}以前の成約 **${excluded.before_ads}件**`);
+  say(`- 残った成約: ${inWindow.length}件 → **${purchases.length}件**`);
 
   fs.mkdirSync(path.dirname(OUT_FILE), { recursive: true });
   fs.writeFileSync(
@@ -350,7 +371,9 @@ try {
     JSON.stringify(
       {
         // 顧客名は含めない（この上の extractTicketPurchases が返さない）
-        note: '回数券の成約のみ。顧客名・電話番号は含まない。指名チケットは別列なので含まれない。',
+        note:
+          '回数券の成約のみ。顧客名・電話番号は含まない。指名チケットは別列なので含まれない。' +
+          `紹介客と${REFERRAL_ERA_END}以前の成約は、広告の学習信号にしないため除いてある。`,
         generated_at: new Date(NOW_MS).toISOString(),
         period: { from: SINCE, to: TODAY },
         source_encoding: encodingSeen,

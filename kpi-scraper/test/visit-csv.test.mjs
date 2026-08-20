@@ -17,6 +17,7 @@ import {
   dedupePurchases,
   uncoveredRange,
   firstOfLastMonth,
+  excludeFromAdSignal,
 } from '../lib/visit-csv.mjs';
 
 const HEADER =
@@ -27,7 +28,7 @@ const row = (o = {}) =>
     o.date ?? '2026-08-12',
     o.name ?? 'テスト太郎',
     o.cid ?? '10000001',
-    '男性', '40代', 'スタッフA', '再来', 'HP', o.shimei ?? '', '90分', '', '有',
+    '男性', '40代', 'スタッフA', '再来', o.route ?? 'ホットペッパー', o.shimei ?? '', '90分', '', '有',
     o.ticket ?? '', o.shimeiTicket ?? '', '',
     o.shijutsu ?? '0',
     o.ticketSales ?? '0',
@@ -128,6 +129,53 @@ test('同じ成約を重複して読んでも1件に畳む', () => {
   assert.equal(dedupePurchases([p, { ...p }, other]).length, 2);
   // 日付順に並ぶ
   assert.equal(dedupePurchases([p, other])[0].date, '2026-08-10');
+});
+
+test('紹介客は顧客単位で判定する（再来店の行で経路が空でも取りこぼさない）', () => {
+  const rows = csv(
+    // 初回は紹介。この行では回数券を買っていない
+    row({ cid: '10000001', route: '紹介', ticket: '', date: '2026-07-01' }),
+    // 再来店で購入。経路は空だが、同じ顧客なので紹介として扱う
+    row({ cid: '10000001', route: '', ticket: '5回券(90分)', ticketSales: '110000', date: '2026-08-05' }),
+    // 広告経由の顧客は残る
+    row({ cid: '10000002', route: 'ホットペッパー', ticket: '3回券(60分)', ticketSales: '49500', date: '2026-08-06' })
+  );
+  const { purchases, referralCustomers, routeCounts } = extractTicketPurchases(rows);
+  assert.equal(purchases.length, 2);
+  assert.deepEqual([...referralCustomers], ['10000001']);
+  // 経路の分布は「回数券を買った行」だけを数える
+  assert.deepEqual(routeCounts, { '(空)': 1, 'ホットペッパー': 1 });
+
+  const { kept, excluded } = excludeFromAdSignal(purchases, referralCustomers, { onOrBefore: '2026-06-19' });
+  assert.deepEqual(kept.map((p) => p.customer_id), ['10000002']);
+  assert.equal(excluded.referral, 1);
+  assert.equal(excluded.before_ads, 0);
+});
+
+test('表記ゆれの「ご紹介」「友人紹介」も紹介として扱う', () => {
+  const rows = csv(
+    row({ cid: '10000003', route: 'ご紹介', ticket: '5回券(90分)', ticketSales: '110000' }),
+    row({ cid: '10000004', route: '友人紹介', ticket: '5回券(90分)', ticketSales: '110000' })
+  );
+  const { referralCustomers } = extractTicketPurchases(rows);
+  assert.equal(referralCustomers.size, 2);
+});
+
+test('広告開始前（6/19以前）の成約は経路によらず除く', () => {
+  const purchases = [
+    { customer_id: '10000005', date: '2026-06-19', value: 110000, content_name: '5回券(90分)' },
+    { customer_id: '10000006', date: '2026-06-20', value: 110000, content_name: '5回券(90分)' },
+  ];
+  const { kept, excluded } = excludeFromAdSignal(purchases, new Set(), { onOrBefore: '2026-06-19' });
+  assert.deepEqual(kept.map((p) => p.date), ['2026-06-20']);
+  assert.equal(excluded.before_ads, 1);
+});
+
+test('来店経路の列が無ければ推測せず落ちる', () => {
+  assert.throws(
+    () => locateColumns(['来店日', '顧客ID', '回数券購入', '回数券売上']),
+    /来店経路/
+  );
 });
 
 test('取得できた期間で直近70日を覆えたかを判定する', () => {
