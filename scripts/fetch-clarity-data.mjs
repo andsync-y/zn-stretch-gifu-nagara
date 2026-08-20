@@ -117,7 +117,11 @@ async function main() {
 
   const days = mergeDays(previous.days, snapshot, { today: TODAY, maxAgeDays: 8 });
   const out = {
-    note: 'Microsoft Clarity Data Export API のレスポンスを日次スナップショットとして保持する。指標名・構造はAPIが返すものをそのまま使う（無い指標は作らない）。',
+    note:
+      'Microsoft Clarity Data Export API のレスポンスを日次スナップショットとして保持する。' +
+      '読み方: (1) まず no_data を見る。true のときは数字を一切書かず「Clarityにまだ行動データがありません」とだけ書く（推測で数字を作らない）。' +
+      '(2) false のときは days の最新要素の overall.data / by_page_device.data を読み、実際に返っている指標だけを引用する（無い指標は作らない）。' +
+      '(3) days は取得日ごとのスナップショットで、各要素は num_of_days 日ぶんの集計。日別推移として語らないこと。',
     fetched_at: new Date().toISOString(),
     // ファイル全体としてデータが1日分も無い状態か。週次レビューはここを見て引用の可否を決める。
     no_data: days.every((d) => d.no_data !== false),
