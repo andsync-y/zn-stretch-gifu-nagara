@@ -1,7 +1,9 @@
 name: Meta CAPIオフラインイベント送信（月次）
 
-# Google Driveの電話ハッシュマスタから回数券成約を読み、Meta広告のConversions APIへ
-# オフラインコンバージョン（Purchase）として送る。
+# 店舗システムの来店記録から回数券成約を自動取得し、Google Driveの電話帳（顧客ID → ハッシュ）と
+# 突合して、Meta広告のConversions APIへオフラインコンバージョン（Purchase）として送る。
+# 来店記録CSVには顧客名が含まれるが、この実行環境（毎回破棄）の中だけで処理し、
+# リポジトリにもDriveにも保存しない。
 # 送信済みevent_idと実行レポートは capi-state ブランチへ通常コミットで積む
 # （kpi-dataブランチは週次ジョブが毎回force pushで作り直すため、状態を置くと消える）。
 # 既存の日次・週次スクレイピングには一切触れない。
@@ -34,13 +36,35 @@ env:
 jobs:
   upload:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+
+      - name: 依存関係とブラウザの準備
+        run: |
+          cd kpi-scraper
+          npm install --no-audit --no-fund
+          npx playwright install --with-deps chromium
+
+      # 抽出ロジックを実データに当てる前に、ダミーCSVでの単体テストを通す
+      - name: 来店記録CSVの解析テスト
+        run: node --test kpi-scraper/test/visit-csv.test.mjs
+
+      # 来店記録から回数券の成約（顧客ID・成約日・金額）だけを取り出す。
+      # 出力JSONに顧客名・電話番号は含まれない。
+      - name: 来店記録から回数券成約を取得
+        env:
+          ZN_SYSTEM_USER: ${{ secrets.ZN_SYSTEM_USER }}
+          ZN_SYSTEM_PASS: ${{ secrets.ZN_SYSTEM_PASS }}
+          MODE: export
+          OUT_FILE: ${{ github.workspace }}/out/ticket-purchases.json
+        run: |
+          cd kpi-scraper
+          node fetch-ticket-sales.mjs
 
       # 送信済み管理（capi-sent.json）と過去レポートを読むため、capi-stateブランチを
       # 作業ディレクトリへ浅くクローンする。初回はブランチが無いので空から始める。
@@ -68,7 +92,13 @@ jobs:
           CAPI_DRY_RUN: ${{ env.IS_DRY_RUN }}
           CAPI_TEST_EVENT_CODE: ${{ inputs.test_event_code }}
           CAPI_STATE_DIR: capi-state
+          TICKET_PURCHASES_FILE: ${{ github.workspace }}/out/ticket-purchases.json
         run: node scripts/capi-upload.mjs
+
+      # 顧客IDを含むので、実行が終わったら残さない（アーティファクトにも上げない）
+      - name: 中間ファイルの削除
+        if: always()
+        run: rm -rf "${{ github.workspace }}/out"
 
       - name: capi-stateブランチへコミット
         if: ${{ env.IS_DRY_RUN != 'true' }}

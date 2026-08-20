@@ -2,10 +2,16 @@
 /**
  * Meta広告 Conversions API（CAPI）へ回数券成約をオフラインイベントとして送信する（月次）。
  *
- * 入力: Google Driveフォルダ「32_顧客電話_マスタ」内の phone-master_YYYY-MM.json（複数月をマージ）。
- *       別システム（Cowork月次タスク）がサロンボードのスクショから生成する。
- *       このスクリプトは生の電話番号・メールアドレスを一切扱わない（SHA256ハッシュ済みのみ）。
- *       フォーマットの契約は docs/capi-offline-events.md を参照。
+ * 入力は2系統ある。どちらも生の電話番号・メールアドレスを扱わない（SHA256ハッシュ済みのみ）。
+ *   (1) 店舗システムの来店記録から自動取得した回数券成約（顧客ID・成約日・金額）
+ *       … kpi-scraper/fetch-ticket-sales.mjs が出力するJSON。TICKET_PURCHASES_FILE で渡す。
+ *       これを Driveの「電話帳」phone-book.json（顧客ID → phone_hash）と突合する。
+ *   (2) Driveフォルダ「32_顧客電話_マスタ」内の phone-master_YYYY-MM.json（複数月をマージ）
+ *       … Cowork月次タスクがサロンボードのスクショから生成する従来の経路。
+ * フォーマットの契約は docs/capi-offline-events.md を参照。
+ *
+ * (1)を主経路にすることで、成約の把握が自動になり、オーナーの手作業は
+ * 「まだ電話帳に無い顧客IDの分だけ、電話番号を1回登録する」だけになる。
  *
  * 出力: 送信済みevent_id一覧（capi-sent.json）と実行レポート（capi-report_YYYY-MM.md）を
  *       CAPI_STATE_DIR（既定 ./capi-state）へ書く。ワークフロー側がcapi-stateブランチへコミットする。
@@ -17,6 +23,7 @@
  * 環境変数:
  *   GDRIVE_SA_KEY              (必須) サービスアカウントのキーJSON文字列
  *   GDRIVE_PHONE_MASTER_FOLDER_ID (任意) マスタ置き場のフォルダID
+ *   TICKET_PURCHASES_FILE      (任意) 来店記録から抽出した成約JSONのパス。無ければ(2)だけで動く
  *   META_DATASET_ID            (dry_run以外で必須) イベントマネージャのデータセットID
  *   META_CAPI_ACCESS_TOKEN     (dry_run以外で必須) CAPIアクセストークン
  *   META_GRAPH_VERSION         (任意) 既定 v26.0
@@ -36,6 +43,7 @@ const GRAPH_VERSION = process.env.META_GRAPH_VERSION || 'v26.0';
 const DRY_RUN = String(process.env.CAPI_DRY_RUN || '').toLowerCase() === 'true';
 const TEST_EVENT_CODE = (process.env.CAPI_TEST_EVENT_CODE || '').trim();
 const STATE_DIR = process.env.CAPI_STATE_DIR || 'capi-state';
+const TICKET_FILE = (process.env.TICKET_PURCHASES_FILE || '').trim();
 
 // Meta仕様: オフラインイベントはコンバージョン発生から62日以内のものだけ送信できる
 const MAX_AGE_DAYS = 62;
@@ -117,7 +125,12 @@ async function listMasterFiles(token) {
     pageToken = json.nextPageToken || '';
   } while (pageToken);
 
-  return files.filter((f) => /^phone-master_\d{4}-\d{2}\.json$/.test(f.name)).sort((a, b) => a.name.localeCompare(b.name));
+  return {
+    masters: files.filter((f) => /^phone-master_\d{4}-\d{2}\.json$/.test(f.name)).sort((a, b) => a.name.localeCompare(b.name)),
+    // 電話帳（顧客ID → phone_hash）。1ファイルに積み上げる想定だが、
+    // phone-book_2026-08.json のように分割されていても読めるようにしておく
+    books: files.filter((f) => /^phone-book(_[\w-]+)?\.json$/.test(f.name)).sort((a, b) => a.name.localeCompare(b.name)),
+  };
 }
 
 async function downloadJson(token, file) {
@@ -188,6 +201,53 @@ function extractPurchases(rec) {
   return out;
 }
 
+/** 顧客IDの正規化。前後の空白を落とすだけ（形は店舗システム任せなので桁数を仮定しない） */
+function normalizeCustomerId(raw) {
+  const s = String(raw ?? '').trim();
+  return s || null;
+}
+
+/**
+ * 来店記録から抽出した成約JSONを読む（kpi-scraper/fetch-ticket-sales.mjs の出力）。
+ * ファイル指定が無ければ空配列を返す（従来のphone-master経路だけで動く）。
+ */
+function readTicketPurchases() {
+  if (!TICKET_FILE) return [];
+  if (!fs.existsSync(TICKET_FILE)) fail(`TICKET_PURCHASES_FILE が見つかりません: ${TICKET_FILE}`);
+  let json;
+  try {
+    json = JSON.parse(fs.readFileSync(TICKET_FILE, 'utf8'));
+  } catch (e) {
+    fail(`${TICKET_FILE} がJSONとして解析できません: ${String(e).slice(0, 200)}`);
+  }
+  const list = Array.isArray(json) ? json : Array.isArray(json.purchases) ? json.purchases : null;
+  if (!list) fail(`${TICKET_FILE} の形式が想定外です（配列、または purchases 配列を期待）`);
+  return list;
+}
+
+/**
+ * 電話帳（顧客ID → phone_hash）を読む。
+ * 氏名は突合に使わないので、入っていても無視する（読み込まない）。
+ */
+function buildPhoneBook(files) {
+  const map = new Map();
+  let invalid = 0;
+  for (const { name, json } of files) {
+    const records = Array.isArray(json) ? json : Array.isArray(json.records) ? json.records : null;
+    if (!records) fail(`${name} の形式が想定外です（配列、または records 配列を期待）`);
+    for (const rec of records) {
+      const cid = normalizeCustomerId(rec.customer_id ?? rec.customerId ?? rec.id);
+      const hash = normalizeHash(rec.phone_hash);
+      if (!cid || !hash) {
+        invalid++;
+        continue;
+      }
+      map.set(cid, hash);
+    }
+  }
+  return { map, invalid };
+}
+
 // ------------------------------------------------------------------ 状態ファイル
 
 function readSentState() {
@@ -252,9 +312,23 @@ console.log(`mode: ${DRY_RUN ? 'dry_run（送信しない）' : TEST_EVENT_CODE 
 console.log(`graph: ${GRAPH_VERSION} / today(JST): ${TODAY_JST}`);
 
 const gToken = await getGoogleAccessToken(sa);
-const masterFiles = await listMasterFiles(gToken);
-console.log(`Drive: phone-master ファイル ${masterFiles.length}件 (${masterFiles.map((f) => f.name).join(', ') || 'なし'})`);
-if (masterFiles.length === 0) fail(`フォルダ ${FOLDER_ID} に phone-master_YYYY-MM.json がありません（SAへの共有設定を確認）`);
+const { masters: masterFiles, books: bookFiles } = await listMasterFiles(gToken);
+console.log(`Drive: phone-master ${masterFiles.length}件 (${masterFiles.map((f) => f.name).join(', ') || 'なし'})`);
+console.log(`Drive: phone-book ${bookFiles.length}件 (${bookFiles.map((f) => f.name).join(', ') || 'なし'})`);
+
+// --- 来店記録から取った成約（顧客ID単位）を読む
+const ticketPurchases = readTicketPurchases();
+if (masterFiles.length === 0 && bookFiles.length === 0) {
+  fail(
+    `フォルダ ${FOLDER_ID} に phone-master_YYYY-MM.json も phone-book.json もありません（SAへの共有設定を確認）`
+  );
+}
+if (ticketPurchases.length > 0 && bookFiles.length === 0) {
+  fail(
+    `来店記録から成約を ${ticketPurchases.length}件 取れましたが、Driveに電話帳 phone-book.json がありません。` +
+      `顧客IDと電話番号を突合できないため送信を中止します（docs/capi-offline-events.md 参照）`
+  );
+}
 
 // --- マスタをマージ。同一phone_hashは成約を合算し、同一の成約（日付・金額・商品名）は1件に畳む
 const byHash = new Map(); // phone_hash -> Map<dedupKey, purchase>
@@ -269,8 +343,48 @@ const stats = {
   skip_future: 0,
   merged_same_day: 0,
   skip_already_sent: 0,
+  ticket_purchases: 0,
+  ticket_matched: 0,
+  ticket_unmatched: 0,
+  ticket_invalid: 0,
+  phone_book_entries: 0,
+  phone_book_invalid: 0,
 };
 
+// --- (1) 来店記録の成約 × 電話帳（顧客ID → phone_hash）
+const unmatchedIds = new Set();
+if (ticketPurchases.length > 0) {
+  const books = [];
+  for (const f of bookFiles) books.push({ name: f.name, json: await downloadJson(gToken, f) });
+  const { map: phoneBook, invalid } = buildPhoneBook(books);
+  stats.phone_book_entries = phoneBook.size;
+  stats.phone_book_invalid = invalid;
+  console.log(`電話帳: ${phoneBook.size}件（顧客ID → phone_hash）/ 不正レコード ${invalid}件`);
+
+  for (const p of ticketPurchases) {
+    stats.ticket_purchases++;
+    const cid = normalizeCustomerId(p.customer_id ?? p.customerId);
+    const date = normalizeDate(p.date);
+    const value = normalizeValue(p.value);
+    if (!cid || !date || value == null) {
+      stats.ticket_invalid++;
+      continue;
+    }
+    const hash = phoneBook.get(cid);
+    if (!hash) {
+      // 電話番号をまだ登録していない顧客。件数だけ数え、IDは実行ログにのみ出す
+      stats.ticket_unmatched++;
+      unmatchedIds.add(cid);
+      continue;
+    }
+    stats.ticket_matched++;
+    if (!byHash.has(hash)) byHash.set(hash, new Map());
+    const content = String(p.content_name ?? '回数券').trim() || '回数券';
+    byHash.get(hash).set(`${date}|${value}|${content}`, { date, value, content_name: content });
+  }
+}
+
+// --- (2) 従来のphone-master経路（成約情報を電話マスタ側に持たせる形式）
 for (const file of masterFiles) {
   const json = await downloadJson(gToken, file);
   const records = Array.isArray(json) ? json : Array.isArray(json.records) ? json.records : null;
@@ -357,11 +471,42 @@ const events = [...eventsById.values()].sort((a, b) => a.event_time - b.event_ti
 const totalValue = events.reduce((sum, e) => sum + e.custom_data.value, 0);
 
 console.log('--- 集計 ---');
+console.log(
+  `来店記録の成約: ${stats.ticket_purchases}件 → 電話帳と突合できた ${stats.ticket_matched}件 / ` +
+    `未登録 ${stats.ticket_unmatched}件（${unmatchedIds.size}人）/ 形式不正 ${stats.ticket_invalid}件`
+);
 console.log(`マスタ件数: ${stats.master_records} / 有効ハッシュなし: ${stats.invalid_hash} / 成約情報なし: ${stats.no_purchase}`);
 console.log(`成約レコード（重複除去後）: ${[...byHash.values()].reduce((n, b) => n + b.size, 0)}`);
 console.log(`除外 — 日付なし:${stats.skip_no_date} 金額なし:${stats.skip_no_value} 62日超:${stats.skip_too_old} 未来日:${stats.skip_future} 送信済み:${stats.skip_already_sent}`);
 console.log(`同日合算: ${stats.merged_same_day}`);
 console.log(`送信対象イベント: ${events.length}件 / 合計 ${totalValue.toLocaleString('ja-JP')} 円`);
+
+// --- 電話番号が未登録の顧客IDを、実行サマリーにだけ出す。
+// オーナーはこのIDを店舗システムで引けるので、氏名も電話番号も出さずに次の作業を指示できる。
+// capi-state ブランチに残る capi-report_*.md には書かない（永続化を最小にするため）。
+if (unmatchedIds.size > 0) {
+  const ids = [...unmatchedIds].sort();
+  console.log(`電話番号が未登録の顧客ID（${ids.length}人）: ${ids.join(', ')}`);
+  if (process.env.GITHUB_STEP_SUMMARY) {
+    fs.appendFileSync(
+      process.env.GITHUB_STEP_SUMMARY,
+      [
+        '## 📞 電話番号の登録が必要な顧客',
+        '',
+        `回数券を買ったが電話帳に無い顧客が **${ids.length}人** います。`,
+        'この顧客IDを店舗システムで開いて氏名を確認し、サロンボードの顧客情報から',
+        '電話番号のスクショを撮ってDrive「31_顧客電話_取込」へ入れてください（1顧客につき1回だけ）。',
+        '',
+        '```',
+        ids.join('\n'),
+        '```',
+        '',
+        '> 氏名・電話番号はこのサマリーにもリポジトリにも出していません。',
+        '',
+      ].join('\n')
+    );
+  }
+}
 
 // --- 送信
 let sendResult;
@@ -414,7 +559,19 @@ const report = `# Meta CAPI オフラインイベント送信レポート ${REPO
 - Graph APIバージョン: ${GRAPH_VERSION}
 - 対象期間: ${minDate} 〜 ${TODAY_JST}（Meta仕様により成約から${MAX_AGE_DAYS}日以内のみ）
 
-## 入力
+## 入力①：来店記録（店舗システムから自動取得）
+
+| 項目 | 件数 |
+|---|---|
+| 回数券の成約 | ${stats.ticket_purchases} |
+| 電話帳の登録数（顧客ID → ハッシュ） | ${stats.phone_book_entries} |
+| 電話帳と突合できた成約 | ${stats.ticket_matched} |
+| 電話番号が未登録で送れなかった成約 | ${stats.ticket_unmatched}（${unmatchedIds.size}人） |
+| 形式不正でスキップ | ${stats.ticket_invalid} |
+
+> 未登録の顧客IDは実行ログにのみ出しています（このレポートには残しません）。
+
+## 入力②：電話マスタ（スクショ経由）
 
 | 項目 | 件数 |
 |---|---|

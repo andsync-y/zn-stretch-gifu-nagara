@@ -1763,3 +1763,40 @@ Git履歴が「何を変更したか」、このファイルが「なぜ変更�
   - `node scripts/lint-column.mjs src/pages/column/neruma-shinkokyu.astro` 品質GATE PASS。
   - `npm run build` 成功（31ページ）。
 - 未対応・次の作業：なし。
+
+## 2026-08-20 (Claude Code) 施策A：回数券成約を店舗システムから自動取得し、CAPI送信を電話帳方式へ
+
+- 背景：オーナーから「回数券を買った顧客の電話番号を1人ずつサロンボードで開いてスクショするのが重い」との指摘。
+  店舗システム側に顧客IDが自動採番されていること、来店記録にCSVダウンロードがあることを確認し、
+  「成約は自動取得・電話番号だけ1顧客1回だけ手動」という形へ設計変更した（オーナー承認済み）。
+- 実物での確認（Actions run 32340645122）：来店記録CSVは19列・UTF-8。
+  `回数券購入` に商品名（`5回券(90分)` 等）、金額は `回数券売上` 列。`指名チケット`／`指名売上` は別列。
+  2026-08-01〜08-20 の20日間で回数券17件・976,250円。サロンボードCSVの月20〜24件と整合。
+- 主な変更ファイル：
+  - `kpi-scraper/lib/visit-csv.mjs`（新規）来店記録CSVの文字コード判定・パース・回数券成約の抽出・期間カバレッジ判定。
+    戻り値に顧客名を含めない設計にし、その点をテストで固定した。
+  - `kpi-scraper/test/visit-csv.test.mjs`（新規）ダミーCSVでの単体テスト12件。
+  - `kpi-scraper/fetch-ticket-sales.mjs` に `export` モードを追加（既定）。
+    期間プリセット（今年→前年）を当て、画面に出た適用期間を読んで直近70日を覆えたか検証する。
+    覆えない場合は数字を作らずジョブを失敗させる。従来の観測用は `MODE=inspect` に退避。
+  - `scripts/capi-upload.mjs` に入力経路を追加。Driveの電話帳 `phone-book.json`（顧客ID → phone_hash）と
+    突合してPurchaseを組み立てる。従来の `phone-master_YYYY-MM.json` 経路は後方互換で残置。
+    突合できなかった顧客IDは実行サマリーにのみ出し、`capi-state` ブランチのレポートには件数だけ残す。
+  - `.github/workflows/capi-upload.yml`：CSV取得ステップと単体テストを前段に追加。中間ファイルは `always()` で削除。
+  - `.github/workflows/ticket-sales-fetch.yml`：`MODE=inspect` の調査用に位置づけを変更。
+  - `.gitignore`：`out/` と `kpi-scraper/out/` を追加（顧客IDを含むためコミット禁止）。
+  - `docs/capi-offline-events.md`：パイプライン全体像・`phone-book.json` の仕様・個人情報の扱いを更新。
+- 判断・注意点：
+  - 抽出条件は「`回数券購入` 列が空でない」のみ。指名回数券は別列なので、文字列マッチによる除外が不要になり、
+    サロンボードCSVで問題になった混入が構造的に起きなくなった。
+  - 来店記録CSVには顧客名が含まれるが、Actionsの実行環境内でのみ扱い、リポジトリ・Drive・出力JSONに残さない。
+  - 未突合の顧客IDはオーナーが店舗システムで引ける識別子。氏名・電話番号を出さずに次の作業を指示できる。
+  - オーナーの手作業は「未登録の顧客だけ、生涯1回」に減る。
+- 確認結果：
+  - `node --test kpi-scraper/test/visit-csv.test.mjs` 12件PASS。
+  - `npm run build` 成功（31ページ）。
+  - 実データでのCSV構造確認まで完了。**CAPI本送信のdry_run実行は未実施**（電話帳 `phone-book.json` が未作成のため）。
+- 未対応・次の作業：
+  - Cowork月次タスクを `phone-book.json` 追記方式へ更新（オーナー作業）。
+  - サービスアカウントキーのローテーション（スクショで露出したもの）。
+  - 電話帳を用意したうえで dry_run → test_event_code → 本送信の順に確認。

@@ -25,6 +25,10 @@ Thumbs.db
 .vscode/
 .idea/
 
+# スクレイパーの出力（顧客IDを含むため絶対にコミットしない）
+out/
+kpi-scraper/out/
+
 # コラム品質GATEの一時ファイル（ワークフロー実行中のみ存在）
 lint-result.txt
 lint-final.txt
