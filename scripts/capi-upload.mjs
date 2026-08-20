@@ -45,8 +45,11 @@ const TEST_EVENT_CODE = (process.env.CAPI_TEST_EVENT_CODE || '').trim();
 const STATE_DIR = process.env.CAPI_STATE_DIR || 'capi-state';
 const TICKET_FILE = (process.env.TICKET_PURCHASES_FILE || '').trim();
 
-// Meta仕様: オフラインイベントはコンバージョン発生から62日以内のものだけ送信できる
-const MAX_AGE_DAYS = 62;
+// Meta仕様: オフラインイベント（action_source: physical_store）は62日以内なら送信できる。
+// ただし**データセット側で「過去のコンバージョンのアップロード」を有効にしていない場合は7日**で
+// 弾かれる（2026-08-20に実際に subcode 2804003 で全件拒否された）。
+// 設定が入るまでの回避策として、環境変数で窓を狭められるようにしてある。
+const MAX_AGE_DAYS = Number(process.env.CAPI_MAX_AGE_DAYS || 62);
 // 1リクエストあたりのイベント数（Metaの上限は1000。余裕を持たせる）
 const BATCH_SIZE = 500;
 // capi-sent.json の肥大化防止。これより古いevent_idは62日窓の外なので捨てる
@@ -285,8 +288,14 @@ async function postEvents(events, meta) {
   });
   const text = await res.text();
   if (!res.ok) {
+    // タイムスタンプが古すぎる場合、Metaは**バッチ全件**を拒否する。原因が分かりにくいので補足を足す
+    const hint = text.includes('2804003')
+      ? '\n  → イベントが古すぎると判定されています。オフラインの62日窓を使うには、' +
+        'イベントマネージャのデータセット設定で「過去のコンバージョンのアップロード」を有効にしてください。' +
+        `有効にできない場合は、実行を週次にして CAPI_MAX_AGE_DAYS=7 で回してください（現在の設定: ${MAX_AGE_DAYS}日）。`
+      : '';
     // レスポンスにアクセストークンは含まれないが、念のため長さを制限して出す
-    fail(`Meta CAPI 送信に失敗 (batch ${meta.index}/${meta.total} / HTTP ${res.status}): ${text.slice(0, 800)}`);
+    fail(`Meta CAPI 送信に失敗 (batch ${meta.index}/${meta.total} / HTTP ${res.status}): ${text.slice(0, 800)}${hint}`);
   }
   console.log(`  batch ${meta.index}/${meta.total}: ${events.length}件 送信OK ${text.slice(0, 300)}`);
   return text;
@@ -470,10 +479,13 @@ for (const [hash, bucket] of byHash) {
       continue;
     }
 
+    // 日付しか分からないため、どのタイムゾーンで見ても同じ日になるJST正午を採用する。
+    // ただし当日の成約は、正午前に実行すると未来の時刻になってMetaに弾かれるので、
+    // 実行時刻を上限にする（月次ジョブはJST 10:00に走る）
+    const noonJst = Math.floor(new Date(`${p.date}T12:00:00+09:00`).getTime() / 1000);
     eventsById.set(eventId, {
       event_name: 'Purchase',
-      // 日付しか分からないため、どのタイムゾーンで見ても同じ日になるJST正午を採用する
-      event_time: Math.floor(new Date(`${p.date}T12:00:00+09:00`).getTime() / 1000),
+      event_time: Math.min(noonJst, Math.floor(NOW_MS / 1000)),
       action_source: 'physical_store',
       event_id: eventId,
       user_data: { ph: [hash] },
