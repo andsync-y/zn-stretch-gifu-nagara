@@ -32,6 +32,7 @@ import {
   dedupePurchases,
   locateColumns,
   uncoveredRange,
+  chunkRange,
 } from './lib/visit-csv.mjs';
 
 const BASE = process.env.ZN_BASE_URL || 'https://system.zn-stretch.com/';
@@ -42,6 +43,12 @@ const DL_LABEL = process.env.ZN_DOWNLOAD_LABEL || 'CSVダウンロード';
 const MODE = (process.env.MODE || 'export').toLowerCase();
 // Metaのオフラインイベントは成約から62日以内のみ受け付ける。取りこぼさないよう少し広めに取る
 const DAYS = Number(process.env.DAYS || 70);
+// CSVは1回のダウンロードで返せる件数に上限があり、超えると**古い行から落ちる**
+// （2026-08-20の実測：年初からを指定しても347行・66日分しか返らなかった）。
+// 1回の期間を短くして上限に当たらないようにする。来店は1日5件前後なので21日で約110行。
+const CHUNK_DAYS = Number(process.env.CHUNK_DAYS || 21);
+// 「指定した開始日より後ろからしか入っていない」ときに、上限切れか単に来店が無いだけかを分ける目安
+const TRUNCATION_HINT = Number(process.env.TRUNCATION_HINT || 250);
 const OUT_FILE = process.env.OUT_FILE || 'out/ticket-purchases.json';
 
 const selectors = JSON.parse(fs.readFileSync(new URL('./selectors.json', import.meta.url), 'utf8'));
@@ -92,58 +99,94 @@ function readAppliedRange() {
   });
 }
 
-/** ラベル完全一致のボタン/リンクが「押せる状態か」を見る。押しはしない */
-function presetVisible(label) {
-  return page.evaluate((lbl) => {
-    const b = [...document.querySelectorAll('button, a')].find(
-      (e) => (e.textContent || '').replace(/\s+/g, ' ').trim() === lbl
-    );
-    return !!b && b.offsetParent !== null;
-  }, label);
+/** 期間指定のドロップダウンを開く（日付ラベルのボタンがトグルになっている） */
+async function openRangePanel() {
+  await page.evaluate(() => {
+    const b = [...document.querySelectorAll('button')].find((e) => /\d{4}-\d{2}-\d{2}/.test(e.textContent || ''));
+    if (b) b.click();
+  });
+  await page.waitForTimeout(800);
+}
+
+/** 時間切れを必ず作る。download.path() はタイムアウトを持たないため、これで包む */
+function withTimeout(promise, ms, what) {
+  let timer;
+  return Promise.race([
+    promise.finally(() => clearTimeout(timer)),
+    new Promise((_, reject) => {
+      timer = setTimeout(() => reject(new Error(`${what}が${ms / 1000}秒で終わらない`)), ms);
+    }),
+  ]);
 }
 
 /**
- * 期間プリセット（今月・今年・前年 …）を押す。押せたらtrue。
- * プリセットは日付ラベルのボタンで開くドロップダウンの中にある。
- * このボタンは開閉のトグルなので、「押したら閉じた」場合に備えて2回まで試す。
+ * 期間の開始・終了を直接入力する。プリセットより狙った範囲を正確に取れるうえ、
+ * CSVも小さくなるので、まずこちらを試す。
  */
-async function clickPreset(label) {
-  for (let attempt = 0; attempt < 2; attempt++) {
-    if (!(await presetVisible(label))) {
-      await page.evaluate(() => {
-        const b = [...document.querySelectorAll('button')].find((e) => /\d{4}-\d{2}-\d{2}/.test(e.textContent || ''));
-        if (b) b.click();
-      });
-      await page.waitForTimeout(800);
-    }
-    if (!(await presetVisible(label))) continue;
-    await page.evaluate((lbl) => {
-      const b = [...document.querySelectorAll('button, a')].find(
-        (e) => (e.textContent || '').replace(/\s+/g, ' ').trim() === lbl
-      );
-      b.click();
-    }, label);
-    await page.waitForTimeout(2500);
+async function applyExplicitRange(from, to) {
+  const filled = await page.evaluate(({ from, to }) => {
+    const f = document.querySelector('#vfFromInput');
+    const t = document.querySelector('#vfToInput');
+    if (!f || !t) return false;
+    const set = (el, v) => {
+      // 値を直接代入しても枠組みによっては拾われないので、ネイティブのsetterを使って
+      // input/change を発火させる
+      const desc = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el), 'value');
+      if (desc && desc.set) desc.set.call(el, v);
+      else el.value = v;
+      el.dispatchEvent(new Event('input', { bubbles: true }));
+      el.dispatchEvent(new Event('change', { bubbles: true }));
+    };
+    set(f, from);
+    set(t, to);
     return true;
-  }
-  return false;
+  }, { from, to });
+  if (!filled) return false;
+  await page.waitForTimeout(2500);
+  const applied = await readAppliedRange();
+  // 入力しただけで反映されない作りかもしれないので、画面の表示で必ず確かめる
+  return !!applied && applied.from === from && applied.to === to;
 }
 
-/** CSVダウンロードボタンを押して中身を返す */
+/** 画面の表にデータ行が何行あるか。CSVが出ないときの原因切り分けに使う（値は読まない） */
+function visibleRowCount() {
+  return page.evaluate(() => document.querySelectorAll('tbody tr').length);
+}
+
+/**
+ * CSVダウンロードボタンを押して中身を返す。
+ * 来店が1件も無い期間はCSVが出ないので、その場合だけ null を返す。
+ * それ以外の理由で出てこないときは、原因が分かるように例外にする。
+ */
 async function downloadCsv() {
-  const [download] = await Promise.all([
-    page.waitForEvent('download', { timeout: 30000 }),
-    page.evaluate((lbl) => {
-      const el = [...document.querySelectorAll('button, a')].find((e) =>
-        (e.textContent || '').replace(/\s+/g, ' ').trim().includes(lbl)
-      );
-      if (!el) throw new Error('CSVダウンロードのボタンが見つからない');
-      el.click();
-    }, DL_LABEL),
-  ]);
-  const buf = fs.readFileSync(await download.path());
+  let download;
+  try {
+    [download] = await Promise.all([
+      page.waitForEvent('download', { timeout: 45000 }),
+      page.evaluate((lbl) => {
+        const el = [...document.querySelectorAll('button, a')].find((e) =>
+          (e.textContent || '').replace(/\s+/g, ' ').trim().includes(lbl)
+        );
+        if (!el) throw new Error('CSVダウンロードのボタンが見つからない');
+        el.click();
+      }, DL_LABEL),
+    ]);
+  } catch (e) {
+    if (String(e).includes('Timeout') && (await visibleRowCount()) === 0) return null;
+    throw e;
+  }
+  const filePath = await withTimeout(download.path(), 120000, 'CSVの保存');
+  const buf = fs.readFileSync(filePath);
   const { text, encoding } = decodeCsv(buf);
   return { rows: parseCsv(text), encoding, bytes: buf.length, filename: download.suggestedFilename() };
+}
+
+/** CSVの「来店日」列から、実際に入っていた期間を求める */
+function csvDateRange(rows) {
+  const i = (rows[0] || []).findIndex((h) => String(h).trim() === '来店日');
+  if (i < 0) return null;
+  const dates = rows.slice(1).map((r) => String(r[i] ?? '').trim()).filter(Boolean).sort();
+  return dates.length ? { from: dates[0], to: dates[dates.length - 1] } : null;
 }
 
 // ---------------------------------------------------------------- main
@@ -182,7 +225,9 @@ try {
     say('');
     say(`ボタン: ${controls.buttons.map((b) => b.text).filter(Boolean).join(' / ')}`);
 
-    const { rows, encoding, bytes, filename } = await downloadCsv();
+    const got = await downloadCsv();
+    if (!got) throw new Error('CSVが出てこない（この期間に来店記録が1件も無い可能性）');
+    const { rows, encoding, bytes, filename } = got;
     const header = rows[0] || [];
     say('');
     say('### CSV');
@@ -214,35 +259,51 @@ try {
     finish(0);
   }
 
-  // --- export モード：直近 DAYS 日をカバーする期間プリセットを当てて、CSVを集める
+  // --- export モード：直近 DAYS 日を分割して指定し、CSVを集める
   say(`- 対象期間: **${SINCE} 〜 ${TODAY}**（直近${DAYS}日）`);
   const applied = [];
   const all = [];
   let encodingSeen = '';
 
-  for (const preset of ['今年', '前年']) {
-    if (!uncoveredRange(applied, SINCE, TODAY)) break; // すでに足りている
-    if (!(await clickPreset(preset))) {
-      say(`- 期間プリセット「${preset}」が見つからないので飛ばす`);
+  // 期間の入力欄はドロップダウンの中にあるので、まず開く
+  await openRangePanel();
+
+  // 期間を分割して取る。
+  // 2026-08-20の実測では、画面で 2026-01-01〜08-20 を指定してもCSVは347行・06-16以降しか
+  // 返さなかった。CSVには件数の上限があり、**古い行から落ちる**。
+  // 1回に取る期間を短くして上限に当たらないようにし、当たった場合は静かに欠けさせず失敗させる。
+  for (const chunk of chunkRange(SINCE, TODAY, CHUNK_DAYS)) {
+    if (!(await applyExplicitRange(chunk.from, chunk.to))) {
+      throw new Error(
+        `期間 ${chunk.from}〜${chunk.to} を画面に反映できない（#vfFromInput / #vfToInput の作りが変わった可能性）`
+      );
+    }
+    const got = await downloadCsv();
+    if (!got) {
+      // 来店が1件も無い期間はCSVが出ない。空として扱い、期間は取得済みとする
+      say(`- ${chunk.from}〜${chunk.to}：来店なし`);
+      applied.push(chunk);
       continue;
     }
-    const range = await readAppliedRange();
-    if (!range) throw new Error(`期間プリセット「${preset}」を押したが、適用中の期間を画面から読み取れない`);
-    const { rows, encoding } = await downloadCsv();
+    const { rows, encoding } = got;
     encodingSeen = encoding;
     const { purchases, stats } = extractTicketPurchases(rows);
-    all.push(...purchases);
+    const csvRange = csvDateRange(rows);
 
-    // 画面のラベルが「今年」でも、CSVが期間の全部を返しているとは限らない
-    // （件数の上限や画面のページングで切られる可能性がある）。
-    // そこで、覆えたかの判定には**画面のラベルではなくCSVの中身の日付範囲**を使う。
-    const iDate = (rows[0] || []).findIndex((h) => String(h).trim() === '来店日');
-    const dates = rows.slice(1).map((r) => String(r[iDate] ?? '').trim()).filter(Boolean).sort();
-    const csvRange = dates.length ? { from: dates[0], to: dates[dates.length - 1] } : null;
-    if (csvRange) applied.push(csvRange);
+    // 上限に当たると古い行から落ちる。「指定した開始日より後ろからしか入っていない」かつ
+    // 「行数が多い」ときは、取りこぼしを疑って止める（数字を作らない）
+    if (csvRange && csvRange.from > chunk.from && stats.rows >= TRUNCATION_HINT) {
+      throw new Error(
+        `${chunk.from}〜${chunk.to} を要求したのにCSVは ${csvRange.from} 以降しか入っていない（${stats.rows}行）。` +
+          `CSVの件数上限に当たっている。環境変数 CHUNK_DAYS を今の${CHUNK_DAYS}日より小さくする必要がある`
+      );
+    }
+
+    all.push(...purchases);
+    applied.push(chunk);
     say(
-      `- 「${preset}」画面の期間 ${range.from}〜${range.to} → CSVの実データ ${csvRange ? `${csvRange.from}〜${csvRange.to}` : '(空)'} / ` +
-        `来店 ${stats.rows}行 → 回数券 ${stats.ticket_rows}行 → 有効 ${purchases.length}件`
+      `- ${chunk.from}〜${chunk.to}：来店 ${stats.rows}行（実データ ${csvRange ? `${csvRange.from}〜${csvRange.to}` : '空'}）` +
+        ` → 回数券 ${stats.ticket_rows}行 → 有効 ${purchases.length}件`
     );
     if (stats.skip_no_customer_id || stats.skip_no_date || stats.skip_no_value) {
       say(`  - 除外: 顧客IDなし ${stats.skip_no_customer_id} / 日付不正 ${stats.skip_no_date} / 金額なし ${stats.skip_no_value}`);
@@ -255,8 +316,7 @@ try {
   if (gap) {
     throw new Error(
       `期間 ${SINCE}〜${TODAY} を覆えていない（不足: ${gap.from}〜${gap.to} / ` +
-        `CSVに入っていた期間: ${applied.map((r) => `${r.from}〜${r.to}`).join(', ') || 'なし'}）。` +
-        `CSVの件数上限や画面のページングで切られている可能性がある`
+        `取得できた期間: ${applied.map((r) => `${r.from}〜${r.to}`).join(', ') || 'なし'}）`
     );
   }
 

@@ -135,6 +135,23 @@ export function uncoveredRange(applied, from, to) {
   return cursor <= to ? { from: cursor, to } : null;
 }
 
+/**
+ * [from, to] を days 日ずつの連続した区間に切る（重なりなし・隙間なし）。
+ * 来店記録CSVには件数の上限があり、長い期間を一度に指定すると古い行から落ちるため、
+ * 短い期間に分けて取りに行くのに使う。
+ */
+export function chunkRange(from, to, days) {
+  const day = 86400000;
+  const t = (d) => new Date(`${d}T00:00:00Z`).getTime();
+  const iso = (ms) => new Date(ms).toISOString().slice(0, 10);
+  const end = t(to);
+  const chunks = [];
+  for (let start = t(from); start <= end; start += days * day) {
+    chunks.push({ from: iso(start), to: iso(Math.min(start + (days - 1) * day, end)) });
+  }
+  return chunks;
+}
+
 /** 同一の成約（顧客ID・日付・金額・商品名が同じ）を1件に畳む。複数回ダウンロードした分の重複対策 */
 export function dedupePurchases(list) {
   const byKey = new Map();

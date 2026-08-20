@@ -16,6 +16,7 @@ import {
   extractTicketPurchases,
   dedupePurchases,
   uncoveredRange,
+  chunkRange,
 } from '../lib/visit-csv.mjs';
 
 const HEADER =
@@ -129,7 +130,7 @@ test('同じ成約を重複して読んでも1件に畳む', () => {
   assert.equal(dedupePurchases([p, other])[0].date, '2026-08-10');
 });
 
-test('期間プリセットで直近70日を覆えたかを判定する', () => {
+test('取得できた期間で直近70日を覆えたかを判定する', () => {
   // 何も適用していなければ全期間が不足
   assert.deepEqual(uncoveredRange([], '2026-06-11', '2026-08-20'), { from: '2026-06-11', to: '2026-08-20' });
 
@@ -154,6 +155,25 @@ test('期間プリセットで直近70日を覆えたかを判定する', () => 
     ),
     { from: '2026-08-01', to: '2026-08-20' }
   );
+});
+
+test('期間を分割しても隙間なく連続する', () => {
+  const chunks = chunkRange('2026-06-11', '2026-08-20', 21);
+  assert.equal(chunks[0].from, '2026-06-11');
+  assert.equal(chunks[chunks.length - 1].to, '2026-08-20');
+  // 隣どうしが1日でも空かないこと（空くと来店を取りこぼす）
+  for (let i = 1; i < chunks.length; i++) {
+    const next = new Date(new Date(`${chunks[i - 1].to}T00:00:00Z`).getTime() + 86400000)
+      .toISOString()
+      .slice(0, 10);
+    assert.equal(chunks[i].from, next);
+  }
+  // 分割した区間をつなげれば全期間を覆える
+  assert.equal(uncoveredRange(chunks, '2026-06-11', '2026-08-20'), null);
+  // 期間より分割幅が大きければ1つにまとまる
+  assert.deepEqual(chunkRange('2026-08-01', '2026-08-05', 21), [{ from: '2026-08-01', to: '2026-08-05' }]);
+  // 1日だけでも成り立つ
+  assert.deepEqual(chunkRange('2026-08-05', '2026-08-05', 21), [{ from: '2026-08-05', to: '2026-08-05' }]);
 });
 
 test('同じ顧客が同じ日に2枚買った場合は別レコードとして残す', () => {
