@@ -298,18 +298,23 @@ try {
     all.push(...purchases);
 
     // 件数上限に当たると古い行から落ちる。「画面の開始日よりCSVが後ろから始まる」かつ
-    // 「行数が多い」ときは取りこぼしを疑って止める（静かに数字を作らない）。
+    // 「行数が多い」ときは上限に当たったとみなす。
     // 単に月初に来店が無かっただけなら行数は少ないので、ここには引っかからない。
-    if (shown && csvRange && csvRange.from > shown.from && stats.rows >= TRUNCATION_HINT) {
+    const truncated = !!(shown && csvRange && csvRange.from > shown.from && stats.rows >= TRUNCATION_HINT);
+    if (truncated && required) {
+      // 必ず覆うべき期間が欠けている。静かに少ない数字を送らず止める
       throw new Error(
         `「${preset}」は ${shown.from} からのはずが、CSVは ${csvRange.from} 以降しか入っていない（${stats.rows}行）。` +
           `CSVの件数上限に当たっている`
       );
     }
-    // 覆えた期間として数えるのは、画面で選んだ期間が信用できるプリセットだけ。
-    // 「今年」は上限で古い行が落ちるので、実際に入っていた範囲だけを数える
-    if (required && shown) applied.push(shown);
+    // 覆えた期間として数えるのは、画面で選んだ期間が信用できるときだけ。
+    // 上限で古い行が落ちた「今年」は、実際に入っていた範囲だけを数える
+    if (required && !truncated && shown) applied.push(shown);
     else if (csvRange) applied.push(csvRange);
+    if (truncated) {
+      say(`  - 「${preset}」は件数上限で ${csvRange.from} より前が落ちている（取れた分だけ使う）`);
+    }
     say(
       `- 「${preset}」：画面 ${shown ? `${shown.from}〜${shown.to}` : '不明'} → ` +
         `CSVの実データ ${csvRange ? `${csvRange.from}〜${csvRange.to}` : '空'} / ` +
