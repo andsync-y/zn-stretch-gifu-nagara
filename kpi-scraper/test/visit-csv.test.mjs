@@ -16,7 +16,7 @@ import {
   extractTicketPurchases,
   dedupePurchases,
   uncoveredRange,
-  chunkRange,
+  firstOfLastMonth,
 } from '../lib/visit-csv.mjs';
 
 const HEADER =
@@ -157,23 +157,20 @@ test('取得できた期間で直近70日を覆えたかを判定する', () => 
   );
 });
 
-test('期間を分割しても隙間なく連続する', () => {
-  const chunks = chunkRange('2026-06-11', '2026-08-20', 21);
-  assert.equal(chunks[0].from, '2026-06-11');
-  assert.equal(chunks[chunks.length - 1].to, '2026-08-20');
-  // 隣どうしが1日でも空かないこと（空くと来店を取りこぼす）
-  for (let i = 1; i < chunks.length; i++) {
-    const next = new Date(new Date(`${chunks[i - 1].to}T00:00:00Z`).getTime() + 86400000)
-      .toISOString()
-      .slice(0, 10);
-    assert.equal(chunks[i].from, next);
-  }
-  // 分割した区間をつなげれば全期間を覆える
-  assert.equal(uncoveredRange(chunks, '2026-06-11', '2026-08-20'), null);
-  // 期間より分割幅が大きければ1つにまとまる
-  assert.deepEqual(chunkRange('2026-08-01', '2026-08-05', 21), [{ from: '2026-08-01', to: '2026-08-05' }]);
-  // 1日だけでも成り立つ
-  assert.deepEqual(chunkRange('2026-08-05', '2026-08-05', 21), [{ from: '2026-08-05', to: '2026-08-05' }]);
+test('「先月」と「今月」で覆える範囲を求める', () => {
+  assert.equal(firstOfLastMonth('2026-08-20'), '2026-07-01');
+  assert.equal(firstOfLastMonth('2026-08-01'), '2026-07-01');
+  // 年をまたぐとき
+  assert.equal(firstOfLastMonth('2027-01-03'), '2026-12-01');
+  // 先月＋今月の2区間で、その範囲を隙間なく覆えること
+  assert.equal(
+    uncoveredRange(
+      [{ from: '2026-07-01', to: '2026-07-31' }, { from: '2026-08-01', to: '2026-08-20' }],
+      firstOfLastMonth('2026-08-20'),
+      '2026-08-20'
+    ),
+    null
+  );
 });
 
 test('同じ顧客が同じ日に2枚買った場合は別レコードとして残す', () => {
