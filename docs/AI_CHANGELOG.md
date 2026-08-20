@@ -1957,3 +1957,33 @@ Git履歴が「何を変更したか」、このファイルが「なぜ変更�
     設定が見つかれば `max_age_days=62` に戻して過去分も送れる。
   - 初回時点で6/21〜8/13の約40件は送れない。カスタムオーディエンス経由での活用を提案済み。
 - 未対応・次の作業：本送信（オーナー確認待ち）。テストイベントタブを開いた状態での目視確認。
+## 2026-08-20 09:10 JST — GitHub Actions（Claude）
+
+- ブランチ：`claude/column-auto`
+- 関連PR：なし
+- 変更内容：
+  - コラム新規記事「疲れが抜けない原因と自律神経ストレッチ｜寝ても回復しない方へ」を1本追加（`authority`枠）。
+  - `docs/column-backlog.md` の `tsukare-nukenai` を `- [x]` に更新。
+  - アイキャッチ画像をAI生成（`--source ai`）で調達。
+- 主な変更ファイル：
+  - `src/pages/column/tsukare-nukenai.astro`（新規）
+  - `public/images/column/tsukare-nukenai.webp`（新規）
+  - `src/data/columns.ts`（COLUMNS配列の先頭に追加）
+  - `docs/column-backlog.md`
+- 判断・注意点：
+  - 既存記事（肩こり・腰・ゴルフ）およびneruma-shinkokyu（睡眠特化）と検索意図が重ならないよう、
+    「疲れが抜けない・自律神経」という悩み特化の切り口にした。
+  - ストレッチ手順3つはすべて `src/data/stretchPoses.ts` 既存ポーズ（pose-30, pose-22, pose-09）から選び、
+    新規イラスト生成は行っていない。ポーズ未収載の動きはなし。
+- 確認結果：`npm run build` 成功（31→32ページ）。
+- 未対応・次の作業：レビュー後、本番ブランチ `claude/zenkara-gifu-nagara-seo-ukz0er` へのマージはユーザー判断待ち。
+
+## 2026-08-20 (Claude Code) Anthropicクレジット復旧を確認し、未実行コラム2本をリカバリ
+- オーナーのクレジット補充後、死活確認ワークフロー（anthropic-probe）で HTTP 200 の正常応答を確認し、column-auto を2回、約3時間空けて手動起動した
+- 1本目：「寝る前ストレッチ｜睡眠の質が気になる方への深呼吸セルフケア3選」（/column/neruma-shinkokyu、8/17未実行分の代替）。品質GATE 13ファイルPASS
+- 2本目：「疲れが抜けない原因と自律神経ストレッチ｜寝ても回復しない方へ」（/column/tsukare-nukenai、8/19未実行分の代替）。品質GATE 14ファイルPASS
+- GBP連動投稿も両記事で実行（承認済みルール・キャラクターのポーズイラストをサムネイルに使用）：
+  - 寝る前コラム＝pose-30（深呼吸）、localPosts/6533095557755524816（claude.aiのWindsorコネクタ経由）
+  - 疲労コラム＝pose-09（膝抱え込み）、localPosts/1825796106174613858（コネクタ切断のためwindsor-actionバックアップ経路経由）
+- 役目を終えた `.github/workflows/anthropic-probe.yml` を削除。8/21（金）以降は通常の月水金cronが動く
+- 確認結果：両記事とも公開コミット済み・品質GATE PASS・GBP投稿はいずれも state PROCESSING で受理
