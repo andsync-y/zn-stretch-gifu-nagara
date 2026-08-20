@@ -516,7 +516,7 @@ console.log(
 );
 console.log(`マスタ件数: ${stats.master_records} / 有効ハッシュなし: ${stats.invalid_hash} / 成約情報なし: ${stats.no_purchase}`);
 console.log(`成約レコード（重複除去後）: ${[...byHash.values()].reduce((n, b) => n + b.size, 0)}`);
-console.log(`除外 — 日付なし:${stats.skip_no_date} 金額なし:${stats.skip_no_value} 62日超:${stats.skip_too_old} 未来日:${stats.skip_future} 送信済み:${stats.skip_already_sent}`);
+console.log(`除外 — 日付なし:${stats.skip_no_date} 金額なし:${stats.skip_no_value} ${MAX_AGE_DAYS}日超:${stats.skip_too_old} 未来日:${stats.skip_future} 送信済み:${stats.skip_already_sent}`);
 console.log(`同日合算: ${stats.merged_same_day}`);
 console.log(`送信対象イベント: ${events.length}件 / 合計 ${totalValue.toLocaleString('ja-JP')} 円`);
 
