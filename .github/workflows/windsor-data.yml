@@ -2,6 +2,7 @@ name: 広告データ取得（Windsor中継）
 
 # Windsor MCPコネクタの接続断対策：毎朝、REST APIから数字を取得して
 # windsor-dataブランチにコミットする。9時のデイリー監視Routineはgit経由で読む。
+# あわせてMicrosoft Clarityの行動データ（clarity_7d.json）も同じブランチへ置く。
 on:
   schedule:
     - cron: '0 23 * * *' # JST 8:00（監視Routineの1時間前）
@@ -21,7 +22,40 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+
+      # マージ・剪定ロジックを実データに当てる前に単体テストを通す
+      # （このブランチは毎回作り直すため、マージを間違えると過去分が静かに消える）
+      - name: Clarityマージ処理のテスト
+        run: node --test scripts/test/clarity-merge.test.mjs
+
+      # windsor-dataブランチは下のステップが毎回 git init + force push で作り直す。
+      # Clarityは日次スナップショットを積み上げる方式なので、
+      # 前回分をここで取り出しておかないと毎日1日分に戻ってしまう。
+      - name: 前回のclarity_7d.jsonを取り出す
+        run: |
+          mkdir -p prev
+          if git fetch --depth=1 origin windsor-data 2>/dev/null; then
+            # 一度テンポラリへ書いてから移す。リダイレクトを直接当てると、
+            # ファイルが無いときに0バイトのprevが残り「取得できた」と誤認する。
+            if git show FETCH_HEAD:clarity_7d.json > /tmp/clarity_prev.json 2>/dev/null; then
+              mv /tmp/clarity_prev.json prev/clarity_7d.json
+              echo "前回分を取得しました（$(wc -c < prev/clarity_7d.json) bytes）"
+            else
+              rm -f /tmp/clarity_prev.json
+              echo "windsor-dataブランチに clarity_7d.json はありません（初回）"
+            fi
+          else
+            echo "windsor-dataブランチがありません（初回）"
+          fi
+
       - run: node scripts/fetch-windsor-data.mjs
+
+      # Clarityの行動データ。取得できなくても異常終了しない設計
+      # （広告データの取得結果まで巻き添えでコミットされなくなるため）。
+      - name: Clarityの行動データを取得
+        env:
+          CLARITY_API_TOKEN: ${{ secrets.CLARITY_API_TOKEN }}
+        run: node scripts/fetch-clarity-data.mjs
       - name: windsor-dataブランチへ強制コミット（履歴は持たない・Vercelビルドはスキップ）
         run: |
           cd out

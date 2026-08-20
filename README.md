@@ -63,7 +63,7 @@ docs/                 # 運用ドキュメント（下記）
 | ワークフロー | 実行 | 内容 | 必要なSecrets |
 |---|---|---|---|
 | `kpi-data.yml` | 毎週月曜7:00 JST | 店舗システムから前週KPIを取得し `kpi-data` ブランチへ | `ZN_SYSTEM_USER` / `ZN_SYSTEM_PASS` |
-| `windsor-data.yml` | 毎朝 | 広告・GA4データをWindsor経由で取得 | `WINDSOR_API_KEY` |
+| `windsor-data.yml` | 毎朝 | 広告・GA4データをWindsor経由で取得＋Clarityの行動データを取得 | `WINDSOR_API_KEY` / `CLARITY_API_TOKEN` |
 | `column-auto.yml` | 定期 | コラム自動生成 | `ANTHROPIC_API_KEY` / `OPENAI_API_KEY` / `PEXELS_API_KEY` |
 | `capi-upload.yml` | 毎週月・木10:00 JST | 回数券成約をMeta広告CAPIへオフラインCVとして送信し、`capi-state` ブランチへ記録（Metaが7日より古いイベントを受け付けないため週2回） | `ZN_SYSTEM_USER` / `ZN_SYSTEM_PASS` / `GDRIVE_SA_KEY` / `META_DATASET_ID` / `META_CAPI_ACCESS_TOKEN` |
 | `gbp-draft.yml` | 毎週月曜8:00 JST | 直近コラムからGBP「最新情報」投稿ドラフトを生成（実行サマリーに出力） | なし |

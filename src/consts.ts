@@ -140,6 +140,9 @@ export const PAYMENTS = [
 // お客様の声（Googleマップに投稿された実際のクチコミ。本文は原文のまま・捏造禁止）
 // ※Googleマップ由来のためReview/AggregateRatingのschema化はしない（Googleのガイドライン上、
 //   構造化データにできるのは自サイトで直接収集したレビューのみ）
+// Googleマップのクチコミ。投稿者名は**イニシャルのみ**にすること（フルネームを貼らない）。
+// 描画側には data-clarity-mask="true" を付けてあるので、
+// 万一フルネームが入ってもClarityのセッション録画には残らない。
 export const REVIEWS = [
   { name: 'N さん', stars: 5, text: 'ストレッチで身体がほぐれて普段運動しないけど、運動したくなりました。' },
   { name: 'I さん', stars: 5, text: '普段ストレッチ出来ない箇所もしっかり伸ばせて気持ち良かったです。また利用したいです。' },
