@@ -138,6 +138,11 @@ Settings → Secrets and variables → Actions
 
 ## オーナー側の手動セットアップ・チェックリスト
 
+> 画面の操作単位まで落とした手順は **[`docs/capi-setup-guide.md`](capi-setup-guide.md)** を参照。
+> 所要40分。Metaはピクセルとデータセットが統合されたため、**既存のピクセルIDを
+> そのまま `META_DATASET_ID` に使える**（データセットの新規作成は不要）。
+
+
 - [ ] **Metaイベントマネージャ**（business.facebook.com/events_manager）でデータセットを作成
       → データセットIDを控える → Secretsの `META_DATASET_ID` へ
 - [ ] 同じデータセットの「設定」→「Conversions APIのアクセストークンを生成」

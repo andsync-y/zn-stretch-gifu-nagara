@@ -51,6 +51,7 @@ docs/                 # 運用ドキュメント（下記）
 - `gbp-checklist.md` … Googleビジネスプロフィール最適化＋口コミ導線＋サイテーション手順
 - `morning-todo.md` … 「朝、オーナーがやること」チェックリスト
 - `capi-offline-events.md` … Meta広告CAPIへの回数券成約（オフラインCV）送信の仕様と運用手順
+- `capi-setup-guide.md` … 施策Aのセットアップ手順書（Meta／GCP／GitHub Secretsの画面操作・所要40分）
 - `measurement-runbook.md` … GA4／Google広告／Metaの計測設定。現状の実測値と残作業
 - `growth-plays-g-h-i.md` … インスタントフォーム／クリエイティブ週次ローテ／LINEステップ配信の実行仕様
 - `churn-followup-j.md` … 離脱予兆リストの実現可否と選択肢（未実装・判断待ち）
