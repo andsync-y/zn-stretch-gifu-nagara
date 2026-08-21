@@ -23,7 +23,9 @@
  *    形が変わっても壊れず、中身は後から読み替えられる。
  */
 import { writeFile, mkdir, readFile } from 'node:fs/promises';
-import { jstDate, parsePrevious, mergeDays, metricNames, hasData, latestDataDate } from './lib/clarity-merge.mjs';
+import {
+  jstDate, parsePrevious, mergeDays, metricNames, hasData, latestDataDate, summarizeByPage, foldLegacyDay,
+} from './lib/clarity-merge.mjs';
 
 const TOKEN = process.env.CLARITY_API_TOKEN;
 const PREV_FILE = process.env.CLARITY_PREV_FILE || 'prev/clarity_7d.json';
@@ -75,6 +77,12 @@ async function callApi(label, params) {
 function buildSnapshot(overall, byPage) {
   const payloads = [overall.payload, byPage.payload].filter(Boolean);
   const noData = !payloads.some(hasData);
+
+  // ページ別はクエリ文字列ごとに行が分裂して返る（広告流入の fbclid で数百行になる）。
+  // 生のまま保存すると 2.5MB を超えて読み手が扱えず、fbclid という追跡識別子も残る。
+  // パス単位に畳んでから保存する。詳細は summarizeByPage のコメント。
+  const folded = byPage.ok ? summarizeByPage(byPage.payload) : null;
+
   return {
     date: TODAY,
     fetched_at: new Date().toISOString(),
@@ -84,7 +92,14 @@ function buildSnapshot(overall, byPage) {
     no_data: noData,
     metrics_available: [...new Set([...metricNames(overall.payload), ...metricNames(byPage.payload)])],
     overall: overall.ok ? { ok: true, data: overall.payload } : { ok: false, error: overall.error },
-    by_page_device: byPage.ok ? { ok: true, data: byPage.payload } : { ok: false, error: byPage.error },
+    by_page_device: byPage.ok
+      ? {
+          ok: true,
+          // 元の何行を何行に畳んだか。読み手が「取りこぼしでは」と疑わずに済むように残す。
+          folded: folded?.stats ?? null,
+          data: folded?.data ?? byPage.payload,
+        }
+      : { ok: false, error: byPage.error },
   };
 }
 
@@ -98,6 +113,8 @@ async function main() {
     console.log(`前回の clarity_7d.json はありません（${PREV_FILE}）。初回として続行します`);
   }
   const previous = parsePrevious(prevText);
+  // 集約導入前に保存された日は生の数百行を抱えている。剪定を待たずここで畳む。
+  previous.days = previous.days.map(foldLegacyDay);
 
   let snapshot = null;
   let runError = null;
@@ -121,7 +138,9 @@ async function main() {
       'Microsoft Clarity Data Export API のレスポンスを日次スナップショットとして保持する。' +
       '読み方: (1) まず no_data を見る。true のときは数字を一切書かず「Clarityにまだ行動データがありません」とだけ書く（推測で数字を作らない）。' +
       '(2) false のときは days の最新要素の overall.data / by_page_device.data を読み、実際に返っている指標だけを引用する（無い指標は作らない）。' +
-      '(3) days は取得日ごとのスナップショットで、各要素は num_of_days 日ぶんの集計。日別推移として語らないこと。',
+      '(3) days は取得日ごとのスナップショットで、各要素は num_of_days 日ぶんの集計。日別推移として語らないこと。' +
+      '(4) by_page_device.data の Url は**パスだけ**（クエリ文字列を除去してパス単位に集約済み）。' +
+      'rows_merged はその行が元の何行を畳んだかを示す。folded に集約前後の行数がある。',
     fetched_at: new Date().toISOString(),
     // ファイル全体としてデータが1日分も無い状態か。週次レビューはここを見て引用の可否を決める。
     no_data: days.every((d) => d.no_data !== false),

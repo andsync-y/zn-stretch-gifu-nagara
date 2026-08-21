@@ -58,6 +58,19 @@ docs/                 # 運用ドキュメント（下記）
 - `ads-ops-guardrails.md` … 広告運用のガードレール（予算・入札・自動停止の承認ルール）
 - `gbp-ops.md` … Googleビジネスプロフィールの運用ルール
 
+### AIスキル（`.claude/skills/`）
+
+定期タスク（Coworkのルーティン・GitHub Actions・対話セッション）が共通で参照する手順書。
+以前は同じルール（薬機法のNG語・Driveのフォルダ・KPIの定義）が各タスクのプロンプトに
+コピーされていて、片方だけ直すと静かにずれていた。ここを唯一の定義元にしている。
+
+- `zenryoku-yakkihou` … 薬機法・景表法のチェックと言い換え。判定は `node scripts/yakkihou-ng.mjs` で行う
+- `zenryoku-facts` … 店舗の確定数値・KPI定義・広告ガードレール・各種ID。**ここに無い数字は創作しない**
+- `zenryoku-drive-note` … 成果物をDrive 00_Inboxへ保存し通知するまでの作法
+- `zenryoku-data` … windsor-data／kpi-dataブランチのJSONとClarityの読み方
+
+ルールを変えるときは、各タスクのプロンプトではなくこのスキルを直す。
+
 ## GitHub Actions のワークフローとSecrets
 
 | ワークフロー | 実行 | 内容 | 必要なSecrets |
