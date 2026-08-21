@@ -2144,3 +2144,34 @@ Git履歴が「何を変更したか」、このファイルが「なぜ変更�
   - ポーズ未収載の動きはなし（既存ライブラリの3ポーズ〔pose-17, pose-22, pose-28〕のみで構成、記事内での重複使用なし）。
 - 確認結果：`npm run build` 成功。32ページ→33ページに増加し、`/column/stretch-momihogushi-chigai/index.html` の生成を確認。
 - 未対応・次の作業：本番ブランチへのレビュー・マージはユーザー判断待ち。
+
+## 2026-08-21 Claude Code（Clarity：本番稼働の確認と初回ベースライン）
+
+- 担当: Claude Code / PR #32 をマージ（`AI_CHANGELOG.md` の競合はコラムPR #33 と両方残す形で解決）
+- マージ後に windsor-data.yml を手動実行し、**`clarity_7d.json` に実データが入ることを確認**
+  （run 32438146512・`no_data: false`・16指標）。オーナーが `CLARITY_API_TOKEN` を登録済み。
+- 取得できた指標：`Traffic` / `EngagementTime` / `ScrollDepth` / `DeadClickCount` /
+  `RageClickCount` / `QuickbackClick` / `ScriptErrorCount` / `ErrorClickCount` /
+  `ExcessiveScroll` / `PopularPages` / `Browser` / `Device` / `OS` / `Country` /
+  `PageTitle` / `ReferrerUrl`。
+- 初回ベースライン（直近3日・538セッション／うちボット20）：
+
+  | 指標 | 値 |
+  |---|---|
+  | 平均スクロール到達率 | **28.76%** |
+  | 平均滞在 / アクティブ滞在 | 58秒 / **17秒** |
+  | ページ/セッション | 1.17 |
+  | デッドクリック | 5.39%（61回） |
+  | スクリプトエラー | **5.2%（28回）** |
+  | クイックバック | 1.49%（10回） |
+  | レイジクリック | 0.19%（1回） |
+
+  閲覧ページは `/lp` が 526/538 とほぼ全て（広告流入）。
+- **注目点**：広告で来た人の平均スクロール到達率が3割未満。LPの下部（料金・クロージング）まで
+  届いていない可能性が高い。次回の週次レビューで改善提案の根拠として使う。
+- **要調査**：`ScriptErrorCount` が5.2%。JSエラーが出ているページがある。
+- 既知の制約（不具合ではない）：トップページ `/` のヒーローは
+  `height:500vh` + `position:sticky` + `<canvas>` の連番スクラブ構成のため、
+  **Clarityの再生ではcanvasの中身が再現されず「固まって見える」**。
+  Clarityが記録するのはDOMの変化でありピクセルではないため。canvasを使っているのは
+  `src/pages/index.astro` のみで、**広告LP `/lp` とコラム・症状ページは正常に再生される**。
