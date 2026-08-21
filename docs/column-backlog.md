@@ -66,7 +66,7 @@
 - [ ] undousoku-5min ｜ authority ｜ 運動不足 解消 1日5分 ストレッチ ｜ 入門 ｜ /symptoms/sports, /symptoms/jiritsu
 
 ### 比較・選び方（`compare` 枠／金曜に消化）
-- [ ] stretch-momihogushi-chigai ｜ compare ｜ ストレッチ もみほぐし 違い ｜ 使い分け ｜ /method, /menu
+- [x] stretch-momihogushi-chigai ｜ compare ｜ ストレッチ もみほぐし 違い ｜ 使い分け ｜ /method, /menu
 - [ ] personal-stretch-towa ｜ compare ｜ パーソナルストレッチ とは 初めて ｜ 入門 ｜ /method, /reserve
 - [ ] stretch-seitai-erabikata ｜ compare ｜ ストレッチ専門店 整体 選び方 ｜ 使い分け ｜ /method, /symptoms
 - [ ] dynamic-static-chigai ｜ compare ｜ 動的ストレッチ 静的ストレッチ 違い 使い分け ｜ 解説 ｜ /symptoms/sports
