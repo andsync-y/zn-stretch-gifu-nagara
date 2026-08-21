@@ -2076,6 +2076,52 @@ Git履歴が「何を変更したか」、このファイルが「なぜ変更�
 - 遡及しないため、集計対象は2026-08-20以降。反映は24〜48時間後（2026-08-22頃から確認可能）。
 - docs/measurement-runbook.md の該当節を「未実施」→「登録済み」に更新。
 
+## 2026-08-20 Claude Code（Microsoft Clarity対応：行動データの自動取得）
+
+- 担当: Claude Code / ブランチ: claude/new-session-prk4n9（本番 claude/zenkara-gifu-nagara-seo-ukz0er から作成）
+- 着手前の調査で、**計測タグは既に実装済み**と判明（`src/components/Clarity.astro` を
+  `Base.astro` から読み込み・全32ページ・`t.async=1` の非同期）。重複実装はせず差分のみ対応した。
+- **個人情報のマスク**：サイトを調べたところ、訪問者の個人情報は表示されていなかった
+  （電話番号は店舗の公開番号／スタッフ氏名は意図的に公開／クチコミ投稿者名はイニシャルのみ／
+  入力フォームは存在せず予約は外部ドメイン）。マスクを闇雲に付けても効果が無いため、
+  **将来フルネームを貼られたときの保険として、クチコミ投稿者名の描画3箇所にのみ**
+  `data-clarity-mask="true"` を付与。本文には付けない（公開クチコミであり、
+  読まれているかを知りたいため）。`src/consts.ts` の `REVIEWS` に注意書きを併記。
+- **データ取得**：`scripts/fetch-clarity-data.mjs` を新規作成し、既存の
+  `windsor-data.yml`（毎朝JST8:00）にステップとして追加。`clarity_7d.json` を
+  `windsor-data` ブランチへ置く。既存の `fetch-windsor-data.mjs` には手を入れていない。
+- **windsor-dataブランチが毎回 `git init` + force push で作り直される**点への対処として、
+  ワークフローに「前回のclarity_7d.jsonを `origin/windsor-data` から取り出す」ステップを追加。
+  これが無いと毎日1日分に戻る（capi-state を kpi-data に置かなかったのと同じ理由）。
+- マージ・剪定は `scripts/lib/clarity-merge.mjs` の純粋関数に切り出し、
+  `scripts/test/clarity-merge.test.mjs`（13ケース）をワークフロー内で毎回実行する。
+  同日再実行は新しい方で置換／8日以上前は剪定／未来日付・壊れた日付は除外／
+  取得失敗時は前回分を消さない、を検証している。
+- **レート制限**：10リクエスト/日に対し、1実行あたり最大3リクエストに固定
+  （本番2＝全体サマリー＋URL×Device、リトライ1）。401/403/404は再試行しない。
+- **取得失敗でもワークフローを異常終了させない**設計にした。失敗させると同じジョブで
+  取得済みの広告データまでコミットされなくなるため。失敗は `_summary.json` の
+  `results.clarity_7d` と実行ログに残す。
+- **未確認**：この実行環境から `learn.microsoft.com` に到達できず（egress遮断）、
+  Clarity Data Export APIの仕様を公式ドキュメントで照合できていない。そのため
+  **レスポンスの形を仮定せず、返ってきたJSONをそのまま保存する**設計にしてある。
+  指標名を作らず、数字も加工していない。
+- 検証：`npm run build` 成功（32ページ）／既存テスト17件・新規テスト13件すべて成功／
+  ビルド出力で全32ページにタグとマスクが出ることを確認。
+- Routine「週次経営レビュー」の項目5に、clarity_7d.json の読み方を明記した。
+  `no_data: true` のときは**数字を一切書かず**「Clarityにまだ行動データがありません」と
+  1行だけ書く、`false` のときは**実際に返っている指標だけ**を引用する、
+  `days` は取得日ごとのスナップショットなので日別推移として語らない、の3点。
+  同じ読み方を clarity_7d.json の `note` フィールドにも埋め込み、
+  Routineを読まない別の経路から参照されても数字を作らないようにした。
+  あわせて項目7に「施策Jは打ち切り済み」を追記（churn_risk.json は当面生成されない）。
+- 検証（実機）：workflow_dispatch で1回実行し（run 32373995716・success）、
+  `windsor-data` ブランチに `clarity_7d.json` が生成されることを確認。
+  トークン未設定のため `no_data: true` の構造のみだが、**既存の広告データ19件は
+  `_summary.json` に無傷で残っており**（`facebook_7d` は `ok: true` / 14行）、
+  Clarity側の失敗が巻き添えを起こしていないことを確認した。
+- 未対応（オーナー作業）：Secrets `CLARITY_API_TOKEN` の登録。登録前は
+  `no_data: true` の構造だけが出力される。
 ## 2026-08-21 10:10 JST — Claude Code
 
 - ブランチ：`claude/column-auto`
