@@ -8,6 +8,21 @@ description: 全力ストレッチ岐阜長良店の計測データ（Meta広告
 データは**GitHubの専用ブランチ**に毎朝置かれる。API/MCPを直接叩くのは最後の手段。
 MCP接続が切れていても git は落ちないので、こちらを第一経路にしている。
 
+## 0. リポジトリが無いセッションのとき
+
+スケジュールタスクなど、リポジトリが用意されていない状態で動くことがある。
+`git` コマンドが `not a git repository` で失敗したら、まず作業用に取得する。
+
+```bash
+cd ~ && git clone --depth=1 --filter=blob:none --no-checkout \
+  https://github.com/andsync-y/zn-stretch-gifu-nagara data-repo
+cd data-repo
+```
+
+以降は同じ手順で `git fetch` / `git show` が使える。
+クローンできない場合は Windsor MCP へフォールバックし、
+**取得できなかったことをレポートに明記する**（黙って省略しない）。
+
 ## 1. まず鮮度を確認する
 
 ```bash
