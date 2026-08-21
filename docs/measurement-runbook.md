@@ -243,10 +243,35 @@ Metaピクセル・GA4と同じ場所に並べてあり、**全32ページに出
     { "date": "2026-08-20", "num_of_days": 3, "no_data": false,
       "metrics_available": ["Traffic", "ScrollDepth", ...],
       "overall": { "ok": true, "data": <APIレスポンスそのまま> },
-      "by_page_device": { "ok": true, "data": <APIレスポンスそのまま> } }
+      "by_page_device": { "ok": true,
+        "folded": { "rows_in": 4715, "rows_out": 142, "truncated": 0, "max_rows": 50 },
+        "data": <パス×デバイスに集約したもの> } }
   ]
 }
 ```
+
+#### ページ別は「パス単位」に集約してある（2026-08-21）
+
+ClarityのAPIは**URLをクエリ文字列ごと別ページとして**返す。広告流入には
+`?utm_...&fbclid=<300文字>` が付くため、同じ `/lp` が数百行に分裂する。
+実測で `by_page_device` は **2.19MB**（4,715行）あり、次の3つの問題が起きていた。
+
+1. 週次レビューがファイルを読み切れない（読めても文脈を食い潰す）
+2. ページ別の数字が意味をなさない（`/lp` の到達率が520行に散る）
+3. `fbclid` は個人を追跡できる識別子で、リポジトリに残すべきではない
+
+そのため保存前に**クエリ文字列を落としてパス×デバイスに畳む**
+（`summarizeByPage`）。**2.19MB → 21KB（99%減）**。
+
+- 件数系（`sessionsCount` `pagesViews` `subTotal` `totalSessionCount` 等）は**合計**
+- 率・平均系（`averageScrollDepth` `sessionsWithMetricPercentage` `totalTime` 等）は
+  **セッション数で加重平均**。`ScrollDepth` のように行が重みを持たない指標は
+  `Traffic` のセッション数を重みとして借りる
+- 各行の `rows_merged` が元の何行を畳んだかを示す
+- 指標ごとにセッション数の多い順で上位50行。切り捨てた分は `folded.truncated` に出る
+
+集約を入れる前に保存された日は、読み込み時に畳み直す（`foldLegacyDay`）。
+剪定で消えるのを8日待たずに軽くなる。二重集約はしない。
 
 **指標はAPIが返すものをそのまま入れる。無い指標は作らない。**
 2026-08-20時点でこの実行環境から `learn.microsoft.com` に到達できず、公式ドキュメントで
@@ -261,7 +286,8 @@ Metaピクセル・GA4と同じ場所に並べてあり、**全32ページに出
 そのためワークフローに「前回のclarity_7d.jsonを取り出す」ステップを置き、
 `origin/windsor-data` から `prev/clarity_7d.json` へ取り出してからスクリプトへ渡している。
 マージ・剪定は `scripts/lib/clarity-merge.mjs` の純粋関数で行い、
-`scripts/test/clarity-merge.test.mjs`（13ケース）がワークフロー内で毎回走る。
+`scripts/test/clarity-merge.test.mjs` がワークフロー内で毎回走る
+（`node --test "scripts/test/*.test.mjs"` で `scripts/test/` 配下すべてを実行）。
 
 | ルール | 内容 |
 |---|---|

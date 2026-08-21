@@ -8,6 +8,9 @@ import {
   metricNames,
   hasData,
   latestDataDate,
+  pagePath,
+  summarizeByPage,
+  foldLegacyDay,
 } from '../lib/clarity-merge.mjs';
 
 const snap = (date, extra = {}) => ({ date, no_data: false, ...extra });
@@ -95,4 +98,119 @@ test('latestDataDate: no_dataでない最新の日付を返す', () => {
   ];
   assert.equal(latestDataDate(days), '2026-08-19');
   assert.equal(latestDataDate([{ date: '2026-08-20', no_data: true }]), null);
+});
+
+/* ---------------- summarizeByPage（ページ別の集約） ---------------- */
+
+test('pagePath: クエリ文字列とハッシュを落とす', () => {
+  assert.equal(pagePath('https://zn-stretch-gifu.com/lp?utm_source=meta&fbclid=xxx'), '/lp');
+  assert.equal(pagePath('https://zn-stretch-gifu.com/lp'), '/lp');
+  assert.equal(pagePath('https://zn-stretch-gifu.com/'), '/');
+  assert.equal(pagePath('https://zn-stretch-gifu.com/column/'), '/column');
+  assert.equal(pagePath('/lp?a=1'), '/lp', 'URLとしてパースできなくてもクエリは落とす');
+  assert.equal(pagePath(undefined), '');
+});
+
+test('summarizeByPage: 件数は合計、率は加重平均', () => {
+  const payload = [
+    {
+      metricName: 'Traffic',
+      information: [
+        { Url: 'https://x.com/lp?a=1', Device: 'Mobile', totalSessionCount: '90', totalBotSessionCount: '1' },
+        { Url: 'https://x.com/lp?a=2', Device: 'Mobile', totalSessionCount: '10', totalBotSessionCount: '0' },
+      ],
+    },
+    {
+      metricName: 'ScrollDepth',
+      information: [
+        { Url: 'https://x.com/lp?a=1', Device: 'Mobile', averageScrollDepth: 20 },
+        { Url: 'https://x.com/lp?a=2', Device: 'Mobile', averageScrollDepth: 100 },
+      ],
+    },
+  ];
+  const { data, stats } = summarizeByPage(payload);
+  const traffic = data.find((m) => m.metricName === 'Traffic').information;
+  assert.equal(traffic.length, 1, '同じパスは1行に畳まれる');
+  assert.equal(traffic[0].Url, '/lp');
+  assert.equal(traffic[0].totalSessionCount, 100, '件数は合計');
+  assert.equal(traffic[0].rows_merged, 2);
+
+  const scroll = data.find((m) => m.metricName === 'ScrollDepth').information;
+  // 単純平均なら60。セッション数(90:10)で加重すると28。合計してしまえば120。
+  assert.equal(scroll[0].averageScrollDepth, 28, '重みを持たない指標もTrafficのセッション数で加重される');
+  assert.equal(stats.rows_in, 4);
+  assert.equal(stats.rows_out, 2);
+});
+
+test('summarizeByPage: デバイスが違えば別行のまま', () => {
+  const payload = [{
+    metricName: 'Traffic',
+    information: [
+      { Url: 'https://x.com/lp?a=1', Device: 'Mobile', totalSessionCount: '5' },
+      { Url: 'https://x.com/lp?a=1', Device: 'PC', totalSessionCount: '3' },
+    ],
+  }];
+  const rows = summarizeByPage(payload).data[0].information;
+  assert.equal(rows.length, 2);
+  assert.deepEqual(rows.map((r) => r.Device), ['Mobile', 'PC']);
+});
+
+test('summarizeByPage: セッション数の多い順に並び、上限を超えた分は truncated に出る', () => {
+  const information = Array.from({ length: 5 }, (_, i) => ({
+    Url: `https://x.com/p${i}`, Device: 'Mobile', totalSessionCount: String(i),
+  }));
+  const { data, stats } = summarizeByPage([{ metricName: 'Traffic', information }], { maxRows: 2 });
+  assert.deepEqual(data[0].information.map((r) => r.Url), ['/p4', '/p3']);
+  assert.equal(stats.truncated, 3);
+});
+
+test('summarizeByPage: 重みが無い指標だけのときは単純平均に落ちる', () => {
+  // Trafficが返っていないケース。0除算せず、値を捨てもしないこと。
+  const payload = [{
+    metricName: 'ScrollDepth',
+    information: [
+      { Url: 'https://x.com/lp?a=1', Device: 'Mobile', averageScrollDepth: 20 },
+      { Url: 'https://x.com/lp?a=2', Device: 'Mobile', averageScrollDepth: 40 },
+    ],
+  }];
+  assert.equal(summarizeByPage(payload).data[0].information[0].averageScrollDepth, 30);
+});
+
+test('summarizeByPage: 配列でなければ null（形が変わっても落ちない）', () => {
+  assert.equal(summarizeByPage(null), null);
+  assert.equal(summarizeByPage({ error: 'x' }), null);
+});
+
+test('summarizeByPage: information が配列でない指標はそのまま通す', () => {
+  const payload = [{ metricName: 'Weird', information: null }];
+  assert.deepEqual(summarizeByPage(payload).data, payload);
+});
+
+test('foldLegacyDay: 未集約の過去分を畳む', () => {
+  const day = {
+    date: '2026-08-20',
+    by_page_device: {
+      ok: true,
+      data: [{
+        metricName: 'Traffic',
+        information: [
+          { Url: 'https://x.com/lp?a=1', Device: 'Mobile', totalSessionCount: '5' },
+          { Url: 'https://x.com/lp?a=2', Device: 'Mobile', totalSessionCount: '5' },
+        ],
+      }],
+    },
+  };
+  const out = foldLegacyDay(day);
+  assert.equal(out.by_page_device.data[0].information.length, 1);
+  assert.equal(out.by_page_device.data[0].information[0].totalSessionCount, 10);
+  assert.equal(out.by_page_device.folded.refolded, true);
+  assert.equal(out.date, '2026-08-20', '他のフィールドは触らない');
+});
+
+test('foldLegacyDay: 集約済み・取得失敗・欠損はそのまま返す', () => {
+  const already = { by_page_device: { ok: true, folded: { rows_in: 2 }, data: [] } };
+  assert.equal(foldLegacyDay(already), already, '二重集約しない');
+  const failed = { by_page_device: { ok: false, error: 'HTTP 401' } };
+  assert.equal(foldLegacyDay(failed), failed);
+  assert.deepEqual(foldLegacyDay({ date: 'x' }), { date: 'x' });
 });

@@ -2,11 +2,17 @@ name: GBP投稿ドラフト生成（週次）
 
 # 直近のコラムから、Googleビジネスプロフィール「最新情報」投稿のドラフトを作る。
 # 生成はLLMを使わない決定的な処理なので、APIキーもクレジット残高も不要（0円・数秒）。
-# 結果はActionsの実行サマリーに出るので、オーナーはそこからコピペするだけでよい（1件3分）。
 # GBP APIの利用申請が通ったら、--json の出力をそのまま create_local_post に流して自動投稿にできる。
+#
+# ⚠️ 2026-08-21: 定期実行をやめて**手動実行のみ**にした。
+# 同じ「GBP投稿の下書きを作る」処理が、Coworkの定期タスク
+# 「GBP投稿下書き 週次」（毎週水曜9:00 JST）と二重に走っていたため。
+# Cowork側を残した理由は、出力先がオーナーの実際に見る場所だから：
+#   - Cowork版 → Google Driveの00_Inboxにノート保存 ＋ スマホへプッシュ通知
+#   - こちら   → 実行ログに出るだけ（Actionsを開かないと読めない）
+# こちらはクレジット不要で確実に動くので、Cowork側が止まったときの
+# 手動フォールバックとして残す。
 on:
-  schedule:
-    - cron: '0 23 * * 0' # JST 月曜8:00（週次経営レビューの前）
   workflow_dispatch:
     inputs:
       days:
@@ -33,7 +39,15 @@ jobs:
       - name: ドラフト生成
         run: |
           if [ -n "${{ inputs.latest }}" ]; then
-            node scripts/gbp-post-draft.mjs --latest "${{ inputs.latest }}"
+            node scripts/gbp-post-draft.mjs --latest "${{ inputs.latest }}" | tee /tmp/gbp-draft.txt
           else
-            node scripts/gbp-post-draft.mjs --days "${{ inputs.days || '7' }}"
+            node scripts/gbp-post-draft.mjs --days "${{ inputs.days || '7' }}" | tee /tmp/gbp-draft.txt
           fi
+          # 実行ログを開かなくても読めるように、実行サマリーへも出す
+          {
+            echo '## GBP投稿ドラフト'
+            echo ''
+            echo '```'
+            cat /tmp/gbp-draft.txt
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"

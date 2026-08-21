@@ -85,3 +85,147 @@ export function latestDataDate(days) {
   const withData = days.find((d) => d?.no_data === false);
   return withData ? withData.date : null;
 }
+
+/* ------------------- ページ別データの集約 ------------------- */
+
+/**
+ * Clarity の by_page_device は URL を**クエリ文字列ごと別ページとして**返す。
+ * 広告流入には `?utm_...&fbclid=<300文字>` が付くため、実際には同じ /lp が
+ * 数百行に分裂し、2026-08-21時点で clarity_7d.json は 2.5MB に膨らんでいた。
+ *
+ * 弊害は3つ:
+ *   1. 週次レビューがファイルを読み切れない（読めても文脈を食い潰す）
+ *   2. ページ別の数字が分裂して意味をなさない（/lp の到達率が520行に散る）
+ *   3. fbclid は個人を追跡できる識別子であり、リポジトリに残すべきではない
+ *
+ * そのため**クエリ文字列を捨ててパス単位に畳む**。指標の意味は変えない
+ * （合計する項目と加重平均する項目を分け、APIが返した数字だけを使う）。
+ */
+
+/** 合計してよい項目（件数系） */
+const COUNT_FIELDS = [
+  'sessionsCount', 'pagesViews', 'subTotal',
+  'totalSessionCount', 'totalBotSessionCount', 'distinctUserCount',
+];
+
+/** 合計してはいけない項目（率・平均系）。セッション数で加重平均する。 */
+const AVG_FIELDS = [
+  'sessionsWithMetricPercentage', 'sessionsWithoutMetricPercentage',
+  'pagesPerSessionPercentage', 'averageScrollDepth', 'totalTime', 'activeTime',
+];
+
+/** URLからパスだけを取り出す。パースできない値はクエリだけ落として返す。 */
+export function pagePath(url) {
+  if (typeof url !== 'string') return '';
+  try {
+    const p = new URL(url).pathname;
+    return p.length > 1 && p.endsWith('/') ? p.slice(0, -1) : p;
+  } catch {
+    return url.split('?')[0];
+  }
+}
+
+function num(v) {
+  const n = Number(v);
+  return Number.isFinite(n) ? n : 0;
+}
+
+/**
+ * by_page_device のペイロードをパス×デバイスに畳む。
+ *
+ * @param payload APIレスポンス（配列）。配列でなければ null を返す。
+ * @param maxRows 指標ごとに残す行数の上限（セッション数の多い順）
+ * @returns { data, stats } data は入力と同じ [{metricName, information}] の形
+ */
+export function summarizeByPage(payload, { maxRows = 50 } = {}) {
+  if (!Array.isArray(payload)) return null;
+
+  // ScrollDepth のように行が重みを持たない指標があるので、
+  // Traffic のセッション数を「その生URL×デバイスの重み」として先に集めておく。
+  const weights = new Map();
+  for (const m of payload) {
+    if (m?.metricName !== 'Traffic' || !Array.isArray(m.information)) continue;
+    for (const r of m.information) {
+      weights.set(`${r?.Url} ${r?.Device}`, num(r?.totalSessionCount));
+    }
+  }
+
+  let rowsIn = 0;
+  let rowsOut = 0;
+  let truncated = 0;
+
+  const data = [];
+  for (const m of payload) {
+    if (!m || !Array.isArray(m.information)) {
+      data.push(m);
+      continue;
+    }
+    const groups = new Map();
+    for (const r of m.information) {
+      rowsIn++;
+      const path = pagePath(r?.Url);
+      const device = r?.Device ?? '';
+      const key = `${path} ${device}`;
+      let g = groups.get(key);
+      if (!g) {
+        g = { Url: path, Device: device, rows_merged: 0, _w: 0, _avg: {}, out: {} };
+        groups.set(key, g);
+      }
+      g.rows_merged++;
+
+      // この行の重み。指標が重みを持たなければ Traffic 由来の重みを借りる。
+      const w = num(r?.sessionsCount) || num(r?.totalSessionCount) ||
+        weights.get(`${r?.Url} ${r?.Device}`) || 0;
+      g._w += w;
+
+      for (const f of COUNT_FIELDS) {
+        if (r?.[f] === undefined) continue;
+        g.out[f] = (g.out[f] ?? 0) + num(r[f]);
+      }
+      for (const f of AVG_FIELDS) {
+        if (r?.[f] === undefined) continue;
+        const a = (g._avg[f] ??= { weighted: 0, plain: 0, n: 0 });
+        a.weighted += num(r[f]) * w;
+        a.plain += num(r[f]);
+        a.n++;
+      }
+    }
+
+    const rows = [...groups.values()].map((g) => {
+      const row = { Url: g.Url, Device: g.Device, rows_merged: g.rows_merged, ...g.out };
+      for (const [f, a] of Object.entries(g._avg)) {
+        // 重みが全部0のとき（Trafficに出てこないURL）だけ単純平均に落とす
+        const v = g._w > 0 ? a.weighted / g._w : a.n > 0 ? a.plain / a.n : 0;
+        row[f] = Math.round(v * 100) / 100;
+      }
+      row._sessions = g._w;
+      return row;
+    });
+    rows.sort((a, b) => b._sessions - a._sessions);
+
+    if (rows.length > maxRows) truncated += rows.length - maxRows;
+    const kept = rows.slice(0, maxRows).map(({ _sessions, ...r }) => r);
+    rowsOut += kept.length;
+    data.push({ metricName: m.metricName, information: kept });
+  }
+
+  return { data, stats: { rows_in: rowsIn, rows_out: rowsOut, truncated, max_rows: maxRows } };
+}
+
+/**
+ * 前回分のスナップショットのうち、まだ畳まれていない（`folded` が無い）ものを畳む。
+ *
+ * 集約を導入する前に保存された日は生の数百行を抱えたままなので、
+ * 剪定で消えるのを待つと最大8日間ファイルが重いままになる。読み込み時に畳んでしまう。
+ * すでに畳んである日は触らない（二重集約すると rows_merged が実態とずれる）。
+ */
+export function foldLegacyDay(day) {
+  const bp = day?.by_page_device;
+  if (!bp || bp.ok !== true || bp.folded || !Array.isArray(bp.data)) return day;
+  const folded = summarizeByPage(bp.data);
+  if (!folded) return day;
+  return {
+    ...day,
+    by_page_device: { ok: true, folded: { ...folded.stats, refolded: true }, data: folded.data },
+  };
+}
