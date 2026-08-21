@@ -30,16 +30,24 @@ description: 全力ストレッチ岐阜長良店の公開文面を、薬機法�
 
 ### 2. スクリプトで検査する（目視で済ませない）
 
-```bash
-# ファイルを検査
-node scripts/yakkihou-ng.mjs src/pages/column/<slug>.astro
+判定スクリプトは2か所にある。**手元にある方を使う**。
 
+- リポジトリ内: `scripts/yakkihou-ng.mjs`
+- このスキルに同梱: `yakkihou-ng.mjs`（スキルのディレクトリ直下。リポジトリが無い環境用）
+
+```bash
 # 生成したばかりの本文を検査（保存前でもよい）
 printf '%s' "$本文" | node scripts/yakkihou-ng.mjs
+
+# ファイルを検査
+node scripts/yakkihou-ng.mjs src/pages/column/<slug>.astro
 
 # 機械可読な結果が欲しいとき
 node scripts/yakkihou-ng.mjs <file> --json
 ```
+
+リポジトリが無いセッション（スケジュールタスクなど）では、同梱版のパスに読み替える。
+どちらのファイルも中身は同じで、判定基準は1つしかない。
 
 NG表現が1つでもあれば**終了コード1**。0になるまで直す。
 
@@ -61,7 +69,8 @@ NG語が無くても、次に当たるものは書かない。
 ## NGパターンを追加・変更するとき
 
 `scripts/yakkihou-ng.mjs` の `NG_PATTERNS` と `NG_SUGGESTIONS` の両方に足し、
-`docs/yakkihou-ng-ok.md` の言い換え表も更新する。そのうえで:
+`docs/yakkihou-ng-ok.md` の言い換え表も更新する。
+**このスキルに同梱している `yakkihou-ng.mjs` も同時に差し替える**（放置すると判定がずれる）。そのうえで:
 
 ```bash
 node --test scripts/test/yakkihou-ng.test.mjs
