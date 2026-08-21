@@ -2075,3 +2075,26 @@ Git履歴が「何を変更したか」、このファイルが「なぜ変更�
   生んでいるかが見えるようになる。特に `column:<slug>` の内訳で記事別の貢献が分かる。
 - 遡及しないため、集計対象は2026-08-20以降。反映は24〜48時間後（2026-08-22頃から確認可能）。
 - docs/measurement-runbook.md の該当節を「未実施」→「登録済み」に更新。
+
+## 2026-08-21 10:10 JST — Claude Code
+
+- ブランチ：`claude/column-auto`
+- 関連PR：なし（コラム専用ブランチへのコミットのみ。マージはユーザーが実施）
+- 変更内容：
+  - `docs/column-backlog.md` の `compare` 枠から `stretch-momihogushi-chigai`（ストレッチ もみほぐし 違い）を選び、新規コラム記事を1本作成。
+  - 結論先出し（使い分けの1文）→ 比較表（ストレッチ／もみほぐしを5観点で比較）→ デスクワーク・ゴルフ向けの使い分け解説 → セルフストレッチ3種（壁で胸を開く／肩甲骨引き寄せ／立って体側伸ばし、いずれもポーズライブラリの既存イラストを使用）→ 独自メソッド「体感軸調整法」への言及（`/method` へ初出リンク）→ FAQ5問、の構成。
+  - `src/data/columns.ts` の `COLUMNS` 先頭に新記事のメタデータ（slug/heading/desc/date/tags/relatedSymptoms/selfCare）を追加。
+  - `docs/column-backlog.md` の該当行を `- [x]` に更新。
+  - アイキャッチは `scripts/fetch-column-image.mjs --source ai` でAI生成（明るいオフィスで席を立って伸びをする日本人男性）。`imageCredit` に「※画像はイメージです」を設定済み。
+- 主な変更ファイル：
+  - `src/pages/column/stretch-momihogushi-chigai.astro`（新規）
+  - `src/data/columns.ts`
+  - `docs/column-backlog.md`
+  - `public/images/column/stretch-momihogushi-chigai.webp`（新規・AI生成）
+- 判断・注意点：
+  - 比較表は `/method` ページと同じ「観点を縦・比較対象を横」のマークアップ（`overflow-x-auto` + `min-w-[640px]`）だが、`/method` の3列（当店／もみほぐし／整体）とは異なり本記事は2列（ストレッチ／もみほぐし）に絞り、記事間で内容が重複しないようにした。
+  - 「もみほぐしは効果がない」等の否定表現は使わず、「目的が異なる」「向き・不向きがある」という書き方に統一（景表法・比較広告の観点）。
+  - 薬機法の禁止表現（治る・治療・効果があります・改善します・解消・矯正・効く等）は不使用。
+  - ポーズ未収載の動きはなし（既存ライブラリの3ポーズ〔pose-17, pose-22, pose-28〕のみで構成、記事内での重複使用なし）。
+- 確認結果：`npm run build` 成功。32ページ→33ページに増加し、`/column/stretch-momihogushi-chigai/index.html` の生成を確認。
+- 未対応・次の作業：本番ブランチへのレビュー・マージはユーザー判断待ち。
