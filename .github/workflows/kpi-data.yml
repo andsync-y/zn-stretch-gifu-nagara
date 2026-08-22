@@ -21,6 +21,10 @@ on:
         description: '対象週の終了日 YYYY-MM-DD（空=前週日曜）'
         required: false
         default: ''
+      backfill_weeks:
+        description: '過去週を一括取得。月曜日をカンマ区切りで（例 2026-07-06,2026-07-13）。各週を weekly_kpi_<開始日>.json に保存'
+        required: false
+        default: ''
 
 permissions:
   contents: write
@@ -50,9 +54,25 @@ jobs:
           npm install --no-audit --no-fund
           npx playwright install --with-deps chromium
       - name: KPI取得
+        env:
+          BACKFILL: ${{ github.event.inputs.backfill_weeks }}
         run: |
           cd kpi-scraper
-          node fetch.mjs
+          if [ -n "$BACKFILL" ]; then
+            # 過去週の一括取得。各週を weekly_kpi_<開始日>.json として残す
+            IFS=',' read -ra WEEKS <<< "$BACKFILL"
+            for ws in "${WEEKS[@]}"; do
+              ws=$(echo "$ws" | tr -d ' ')
+              we=$(date -u -d "$ws +6 days" +%Y-%m-%d)
+              echo "== backfill $ws 〜 $we =="
+              KPI_WEEK_START="$ws" KPI_WEEK_END="$we" node fetch.mjs || echo "週 $ws は取得失敗（継続）"
+              [ -f out/weekly_kpi.json ] && cp out/weekly_kpi.json "out/weekly_kpi_${ws}.json"
+            done
+            # 直近週で weekly_kpi.json を上書きし直す（月曜レビューの参照先を壊さない）
+            KPI_WEEK_START="" KPI_WEEK_END="" node fetch.mjs || true
+          else
+            node fetch.mjs
+          fi
           mkdir -p ../out
           cp -r out/* ../out/ 2>/dev/null || true
       - name: kpi-dataブランチへ強制コミット（履歴は持たない・Vercelビルドはスキップ）
