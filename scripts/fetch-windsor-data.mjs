@@ -13,8 +13,8 @@ if (!KEY) { console.error('WINDSOR_API_KEY がありません'); process.exit(1)
 const daysAgo = (n) => new Date(Date.now() - n * 86400000).toISOString().slice(0, 10);
 
 const QUERIES = [
-  { name: 'facebook_yesterday', connector: 'facebook', params: { date_preset: 'last_1d', fields: 'date,campaign,adset_name,ad_name,ad_id,effective_status,spend,impressions,clicks' } },
-  { name: 'facebook_7d', connector: 'facebook', params: { date_preset: 'last_7d', fields: 'date,ad_name,ad_id,spend,clicks' } },
+  { name: 'facebook_yesterday', connector: 'facebook', params: { date_preset: 'last_1d', fields: 'date,campaign,adset_name,ad_name,ad_id,effective_status,spend,impressions,clicks,actions_landing_page_view,actions_offsite_conversion_fb_pixel_lead' } },
+  { name: 'facebook_7d', connector: 'facebook', params: { date_preset: 'last_7d', fields: 'date,ad_name,ad_id,spend,clicks,actions_landing_page_view,actions_offsite_conversion_fb_pixel_lead' } },
   { name: 'google_ads_yesterday', connector: 'google_ads', params: { date_preset: 'last_1d', fields: 'date,campaign,spend,clicks,conversions' } },
   { name: 'google_ads_7d', connector: 'google_ads', params: { date_preset: 'last_7d', fields: 'date,campaign,spend,clicks,conversions' } },
   // 予算が足りているか（=増額すべきか）の判定用。budget_lost_impression_shareが高ければ機会損失
@@ -32,7 +32,7 @@ const QUERIES = [
   { name: 'ga4_events_30d', connector: 'googleanalytics4', params: { date_preset: 'last_30d', fields: 'date,event_name,event_count,session_source_medium' } },
   { name: 'ga4_sessions_30d', connector: 'googleanalytics4', params: { date_preset: 'last_30d', fields: 'date,session_source_medium,sessions' } },
   { name: 'google_ads_30d', connector: 'google_ads', params: { date_preset: 'last_30d', fields: 'date,campaign,spend,clicks,conversions' } },
-  { name: 'facebook_30d', connector: 'facebook', params: { date_preset: 'last_30d', fields: 'date,ad_name,spend,clicks' } },
+  { name: 'facebook_30d', connector: 'facebook', params: { date_preset: 'last_30d', fields: 'date,ad_name,spend,clicks,actions_landing_page_view,actions_offsite_conversion_fb_pixel_lead' } },
   // 入札戦略の取得を試す（有効なフィールド名が不明なため複数パターンを個別に投げ、
   // 失敗時のエラーメッセージから正しい名前を特定する）
   { name: 'probe_bid_a', connector: 'google_ads', params: { date_preset: 'last_3d', fields: 'date,campaign,bidding_strategy_type' } },
