@@ -135,6 +135,40 @@ if (A.newc && B.newc && result.change.new_customers_pct < result.change.visits_p
   });
 }
 
+// Google表示シェアの内訳。予算とランクのどちらで機会を失っているかで打ち手が正反対になる。
+// 2026-08：予算不足0%・順位不足70%の日が続いていたのに、増額を検討しかけた。
+// 入力に google_impr_share_lost_budget / google_impr_share_lost_rank（0〜1の比率）があれば判定する。
+const isb = D.curr.google_impr_share_lost_budget, isr = D.curr.google_impr_share_lost_rank;
+if (typeof isb === 'number' && typeof isr === 'number') {
+  result.impression_share = { lost_to_budget_pct: isb * 100, lost_to_rank_pct: isr * 100 };
+  if (isr >= 0.4 && isb <= 0.15) {
+    result.flags.push({
+      level: 'critical', code: 'GOOGLE_LOSING_TO_RANK_NOT_BUDGET',
+      message: `Googleは順位不足で表示の${(isr * 100).toFixed(0)}%を失っている（予算不足は${(isb * 100).toFixed(0)}%）。**増額しても消化できない。** 広告ランク（品質スコア・入札額）の問題。直近のクリエイティブ差し替え・LP変更を変更ログで確認すること`,
+    });
+  } else if (isb >= 0.4) {
+    result.flags.push({
+      level: 'warn', code: 'GOOGLE_LOSING_TO_BUDGET',
+      message: `Googleは予算不足で表示の${(isb * 100).toFixed(0)}%を失っている。効率が基準内なら増額の余地がある`,
+    });
+  }
+}
+
+// 予算設定と実消化の乖離。意図しない予算変更を検知する。
+// 2026-08：日¥3,000のつもりが実際は¥6,000だったのに、2週間気づかなかった。
+for (const [name, budgetKey, spendKey] of [['Meta', 'meta_daily_budget', 'mSpend'], ['Google', 'google_daily_budget', 'gSpend']]) {
+  const budget = D.curr[budgetKey];
+  if (typeof budget !== 'number' || budget <= 0) continue;
+  const actual = name === 'Meta' ? B.mSpend : B.gSpend;
+  const gap = actual / budget;
+  if (gap >= 1.15 || gap <= 0.7) {
+    result.flags.push({
+      level: 'warn', code: `${name.toUpperCase()}_BUDGET_MISMATCH`,
+      message: `${name}の設定予算 ${yen(budget)}/日 に対し実消化 ${yen(actual)}/日（${(gap * 100).toFixed(0)}%）。設定と実態が乖離している`,
+    });
+  }
+}
+
 if (asJson) { console.log(JSON.stringify(result, null, 2)); process.exit(0); }
 
 const bar = '─'.repeat(64);

@@ -73,3 +73,37 @@ LPビュー単価 ¥41〜49 だった（2026-08-22）。
 
 **過去の誤り**：8/14にCPA基準だけで入札戦略の継続を判断。CPCが¥98→¥307に
 3倍化していたのを見逃した（2026-08-22にリバート）。
+
+---
+
+## Google 表示シェアの内訳（打ち手が正反対になる）
+
+| フィールド | 意味 | 高いときの打ち手 |
+|---|---|---|
+| `search_impression_share` | 出られたはずの検索のうち実際に出た割合 | — |
+| `search_budget_lost_impression_share` | **予算不足**で出られなかった割合 | 増額が効く |
+| `search_rank_lost_impression_share` | **広告ランク不足**で出られなかった割合 | **増額しても消化できない。** 品質スコア・入札額・LPの見直し |
+
+**2026-08の実測**：8/18〜8/20は予算不足0%・順位不足68〜76%。この状態で増額しても1円も使えない。
+8/16に/lp切替＋新RSAへ差し替えており、新しい広告は品質スコアの履歴が無いため広告ランクが下がる。時期が一致する。
+
+`period-compare.mjs` に検知を実装済み（`GOOGLE_LOSING_TO_RANK_NOT_BUDGET`）。
+
+## GBP（Googleビジネスプロフィール）の実績指標
+
+2026-08-23まで**一度も取得していなかった**。ローカル検索の効果はここでしか測れない。
+
+| フィールド | 意味 |
+|---|---|
+| `impressions` / `impressions_mobile_maps` / `impressions_mobile_search` | 地図・検索での露出 |
+| `website_clicks` / `call_clicks` / `direction_requests` | 露出後の行動 |
+| `search_keyword` / `search_keyword_value` | **どんな検索語で見つかっているか**（地図枠SEOの直接の材料） |
+| `review_id` / `review_star_rating` / `review_comment` / `review_reply_comment` / `review_reviewer` | 口コミと返信状況 |
+
+⚠️ 口コミのフィールド名を `reviewer_display_name` / `star_rating` / `comment` と誤っていたため、
+**リレーは長期間エラーで新着口コミを検知できていなかった**（2026-08-23に修正）。正しくは `review_` 接頭辞つき。
+
+## Meta 予算のフィールド
+
+`daily_budget` / `budget_remaining` は存在しない。正しくは **`adset_daily_budget` / `adset_budget_remaining`**
+（2026-08-23に修正）。これが取れていなかったため、「日¥3,000のつもりが実際¥6,000」を2週間検知できなかった。

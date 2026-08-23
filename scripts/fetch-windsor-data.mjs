@@ -19,10 +19,14 @@ const QUERIES = [
   { name: 'google_ads_7d', connector: 'google_ads', params: { date_preset: 'last_7d', fields: 'date,campaign,spend,clicks,conversions' } },
   // 予算が足りているか（=増額すべきか）の判定用。budget_lost_impression_shareが高ければ機会損失
   { name: 'google_budget_7d', connector: 'google_ads', params: { date_preset: 'last_7d', fields: 'date,campaign,campaign_budget,search_impression_share,search_budget_lost_impression_share,search_rank_lost_impression_share' } },
-  { name: 'facebook_budget', connector: 'facebook', params: { date_preset: 'last_3d', fields: 'date,campaign,adset_name,daily_budget,budget_remaining,spend' } },
+  { name: 'facebook_budget', connector: 'facebook', params: { date_preset: 'last_3d', fields: 'date,campaign,adset_name,adset_daily_budget,adset_budget_remaining,spend' } },
   { name: 'google_search_terms_7d', connector: 'google_ads', params: { date_preset: 'last_7d', fields: 'date,search_term,clicks,conversions' } },
   // Googleビジネスプロフィール（接続されるまでは失敗するが、リレーは失敗を許容する設計）
-  { name: 'gmb_reviews', connector: 'google_my_business', params: { date_preset: 'last_28d', fields: 'date,review_id,reviewer_display_name,star_rating,comment,review_reply_comment' } },
+  { name: 'gmb_reviews', connector: 'google_my_business', params: { date_preset: 'last_28d', fields: 'review_id,review_create_time,review_star_rating,review_comment,review_reply_comment,review_reviewer' } },
+  // GBPの実績。地図枠での露出と行動を測る。2026-08-23まで一度も取得していなかった
+  { name: 'gmb_insights_30d', connector: 'google_my_business', params: { date_preset: 'last_30d', fields: 'date,impressions,impressions_mobile_maps,impressions_mobile_search,website_clicks,call_clicks,direction_requests' } },
+  // GBPがどんな検索語で見つかっているか。地図枠のSEOに直結する
+  { name: 'gmb_keywords_30d', connector: 'google_my_business', params: { date_preset: 'last_30d', fields: 'search_keyword,search_keyword_value' } },
   // Search Console（クエリ単位。※このコネクタはページ単位の内訳が取れない＝サイト合計になる点に注意）
   { name: 'gsc_queries_28d', connector: 'searchconsole', params: { date_preset: 'last_28d', fields: 'query,branded_vs_nonbranded,clicks,impressions,ctr,position' } },
   { name: 'gsc_queries_prev28d', connector: 'searchconsole', params: { date_from: daysAgo(56), date_to: daysAgo(29), fields: 'query,clicks,impressions,position' } },
