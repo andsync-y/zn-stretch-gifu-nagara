@@ -1,0 +1,55 @@
+# 外部のAgent Skillを取得してリポジトリの .claude/skills/ に取り込む。
+# サンドボックスからは agent-skills.jp への通信が遮断されているため、
+# egressのあるActionsランナーを経由する。
+name: fetch-skill
+
+on:
+  workflow_dispatch:
+    inputs:
+      slug:
+        description: 'agent-skills.jp のスラッグ（例: paid-ads-a4cd2b）'
+        required: true
+      dir_name:
+        description: '保存先ディレクトリ名（例: paid-ads）。空ならslugをそのまま使う'
+        required: false
+        default: ''
+      commit:
+        description: 'true でリポジトリにコミットする。false ならログに出すだけ'
+        required: false
+        default: 'false'
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+      - name: 取得
+        env:
+          SLUG: ${{ github.event.inputs.slug }}
+          DIR: ${{ github.event.inputs.dir_name }}
+          DO_COMMIT: ${{ github.event.inputs.commit }}
+        run: |
+          set -euo pipefail
+          DIR="${DIR:-$SLUG}"
+          URL="https://agent-skills.jp/api/skill/${SLUG}/download"
+          echo "== GET $URL =="
+          curl -fsSL "$URL" -o /tmp/SKILL.md
+          echo "== 取得サイズ: $(wc -c < /tmp/SKILL.md) bytes / $(wc -l < /tmp/SKILL.md) 行 =="
+          echo "===== 本文ここから ====="
+          cat /tmp/SKILL.md
+          echo "===== 本文ここまで ====="
+          if [ "$DO_COMMIT" = "true" ]; then
+            mkdir -p ".claude/skills/${DIR}"
+            cp /tmp/SKILL.md ".claude/skills/${DIR}/SKILL.md"
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add ".claude/skills/${DIR}/SKILL.md"
+            git commit -m "chore: 外部スキル ${DIR} を取り込み（agent-skills.jp/${SLUG}）" || echo "変更なし"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          fi
