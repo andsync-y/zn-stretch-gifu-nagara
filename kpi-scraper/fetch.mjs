@@ -295,6 +295,66 @@ async function discovery(page, loginResult) {
   writeJson('discovery.json', report);
 }
 
+// 画面のカードとテーブルが同じ数字を指しているかを確かめるための検証モード。
+// 2026-08-24：同じ期間(7/27-8/08)で、画面のカードは「来店60名・新規36名・売上¥547,070」なのに
+// parse は「37・21・¥358,530」を返した。どちらを読んでいるのかを特定するために追加した。
+//
+// **数値と既知のラベルしか保存しない。** 顧客名・スタッフ名が混ざらないよう、
+// 数字を含まない文字列は捨てる（テーブルのセルも同じ扱い）。
+async function probe(page, loginResult) {
+  const week = lastWeekRangeJST();
+  const out = {
+    fetched_at: new Date().toISOString(),
+    mode: 'probe',
+    week_start: week.start,
+    week_end: week.end,
+    login: loginResult,
+    note: '数値とラベルのみ。氏名の混入を防ぐため、数字を含まない文字列は保存しない。',
+    fills_applied: {},
+    cards: [],
+    tables: [],
+  };
+  if (!loginResult.success) { out.status = 'login_failed'; writeJson('probe.json', out); return; }
+
+  const base = new URL(page.url());
+  const pconf = (selectors.pages || []).find((p) => p.name === 'dashboard_week');
+  const url = new URL(pconf.url, base).toString();
+  await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 30000 });
+  await page.waitForTimeout(pconf.waitMs || 3000);
+  out.fills_applied = await doFills(page, pconf, week);
+  await page.waitForTimeout(pconf.waitAfterFillMs || 3000);
+
+  const grabbed = await page.evaluate(() => {
+    const clip = (s, n = 120) => (s || '').replace(/\s+/g, ' ').trim().slice(0, n);
+    const hasNum = (s) => /\d/.test(s);
+    // カード：見出しらしいテキストと、その中の数値行だけを拾う
+    const LABELS = /売上|来店|新規|回数券|更新|指名|予約|販売|稼働|離客/;
+    const cards = [];
+    for (const el of document.querySelectorAll('div,section,article')) {
+      if (el.querySelector('div,section,article,table')) continue; // 最下層のみ
+      const t = clip(el.textContent);
+      if (!t || !hasNum(t)) continue;
+      const parent = clip((el.parentElement || {}).textContent || '', 200);
+      if (!LABELS.test(parent)) continue;
+      cards.push(t);
+    }
+    // テーブル：ヘッダーと、数字を含むセルだけ
+    const tables = [...document.querySelectorAll('table')].slice(0, 10).map((tb) => ({
+      headers: [...tb.querySelectorAll('th')].map((th) => clip(th.textContent, 30)),
+      rows: [...tb.querySelectorAll('tr')].slice(0, 40).map((tr) =>
+        [...tr.querySelectorAll('td,th')].map((td) => {
+          const v = clip(td.textContent, 30);
+          return hasNum(v) || /合計|集計|総計|平均/.test(v) ? v : '';
+        })
+      ),
+    }));
+    return { cards: [...new Set(cards)].slice(0, 60), tables };
+  });
+  out.cards = grabbed.cards;
+  out.tables = grabbed.tables;
+  writeJson('probe.json', out);
+}
+
 async function parse(page, loginResult) {
   const week = lastWeekRangeJST();
   const result = {
@@ -431,6 +491,8 @@ try {
   console.log('login:', JSON.stringify(loginResult));
   if (MODE === 'discovery') {
     await discovery(page, loginResult);
+  } else if (MODE === 'probe') {
+    await probe(page, loginResult);
   } else {
     await parse(page, loginResult);
   }
