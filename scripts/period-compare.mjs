@@ -18,6 +18,12 @@
  *   "curr": { ... 同じキー ... }
  * }
  * new_customers は任意（あれば新規への波及まで出す）。
+ *
+ * curr の任意キー:
+ *   google_impr_share_lost_budget / google_impr_share_lost_rank … 期間平均（0〜1）
+ *   google_impr_share_daily … 日次配列。**期間平均は連続した悪化を平すので、こちらを優先して渡すこと**
+ *     [{ "date": "2026-08-18", "lost_budget": 0, "lost_rank": 0.7315 }, ...]
+ *   meta_daily_budget / google_daily_budget … 設定予算。実消化との乖離を検知する
  */
 const argv = process.argv.slice(2);
 const get = (k) => { const i = argv.indexOf(k); return i >= 0 ? argv[i + 1] : null; };
@@ -138,6 +144,29 @@ if (A.newc && B.newc && result.change.new_customers_pct < result.change.visits_p
 // Google表示シェアの内訳。予算とランクのどちらで機会を失っているかで打ち手が正反対になる。
 // 2026-08：予算不足0%・順位不足70%の日が続いていたのに、増額を検討しかけた。
 // 入力に google_impr_share_lost_budget / google_impr_share_lost_rank（0〜1の比率）があれば判定する。
+//
+// ⚠️ 期間平均だけで判定すると取りこぼす。2026-08-24に実際に空振りした：
+//    8/18〜8/20 は順位不足68〜76%・予算不足0%（重症）だったが、
+//    7日平均にすると 順位46%・予算26% になり、どちらの閾値にも掛からなかった。
+//    そのため google_impr_share_daily（日次配列）があれば、まず日次で連続日数を見る。
+const dailyIS = D.curr.google_impr_share_daily;
+if (Array.isArray(dailyIS) && dailyIS.length) {
+  // 「順位不足で失っている」日：順位不足が予算不足より大きく、かつ順位不足40%以上
+  const isRankDay = (r) => r.lost_rank >= 0.4 && r.lost_rank > r.lost_budget;
+  let run = 0, maxRun = 0, runEnd = null;
+  for (const r of dailyIS) {
+    if (isRankDay(r)) { run += 1; if (run > maxRun) { maxRun = run; runEnd = r.date; } }
+    else run = 0;
+  }
+  result.impression_share_daily = { days: dailyIS.length, max_rank_limited_run: maxRun, run_ended: runEnd };
+  if (maxRun >= 3) {
+    result.flags.push({
+      level: 'critical', code: 'GOOGLE_RANK_LIMITED_STREAK',
+      message: `Googleが順位不足で表示を失う日が${maxRun}日連続（${runEnd}まで）。**この間は増額しても消化できない。** 期間平均では見えないので日次で確認すること。広告ランク（品質スコア・入札額）の問題であり、直近のクリエイティブ差し替え・LP変更を変更ログで確認する`,
+    });
+  }
+}
+
 const isb = D.curr.google_impr_share_lost_budget, isr = D.curr.google_impr_share_lost_rank;
 if (typeof isb === 'number' && typeof isr === 'number') {
   result.impression_share = { lost_to_budget_pct: isb * 100, lost_to_rank_pct: isr * 100 };

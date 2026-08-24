@@ -37,6 +37,9 @@ const QUERIES = [
   { name: 'ga4_sessions_30d', connector: 'googleanalytics4', params: { date_preset: 'last_30d', fields: 'date,session_source_medium,sessions' } },
   { name: 'google_ads_30d', connector: 'google_ads', params: { date_preset: 'last_30d', fields: 'date,campaign,spend,clicks,conversions' } },
   { name: 'facebook_30d', connector: 'facebook', params: { date_preset: 'last_30d', fields: 'date,ad_name,spend,clicks,actions_landing_page_view,actions_offsite_conversion_fb_pixel_lead' } },
+  // 広告疲労（フリークエンシー）。同じ人に何回届いているか。週3〜5回を超えたらクリエイティブの入れ替えを検討する。
+  // 2026-08-24まで未取得だった。疲労は数週間かけて進むので、日次ではなく14日窓で見る。
+  { name: 'facebook_frequency_14d', connector: 'facebook', params: { date_preset: 'last_14d', fields: 'date,adset_name,ad_name,reach,impressions,frequency,spend' } },
   // 入札戦略の取得を試す（有効なフィールド名が不明なため複数パターンを個別に投げ、
   // 失敗時のエラーメッセージから正しい名前を特定する）
   { name: 'probe_bid_a', connector: 'google_ads', params: { date_preset: 'last_3d', fields: 'date,campaign,bidding_strategy_type' } },
