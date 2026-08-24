@@ -452,6 +452,27 @@ async function parse(page, loginResult) {
           if (seen === 0) throw new Error(`no numeric values in column: ${m.column}`);
           result.metrics[m.key] = sum;
         }
+      } else if (m.method === 'table_rows') {
+        // テーブルを行の配列としてそのまま保存する。担当別・来店経路別のように
+        // 「合計では消えてしまうばらつき」を見るための取得。
+        // dropColumns に指定した列は保存しない（担当者名など個人が特定される列を落とす用）。
+        const tables = await tablesFor(pconf);
+        const table = tables.find((t) =>
+          (m.tableMatch || []).every((h) => t.headers.some((th) => th.includes(h)))
+        );
+        if (!table) throw new Error(`table not found: ${(m.tableMatch || []).join(',')}`);
+        const drop = new Set(
+          (m.dropColumns || []).map((c) => table.headers.findIndex((h) => h.includes(c))).filter((i) => i >= 0)
+        );
+        const headers = table.headers.filter((_, i) => !drop.has(i));
+        const rows = table.rows
+          .filter((r) => r.length > 1)
+          .map((r) => r.filter((_, i) => !drop.has(i)).map((v) => {
+            const n = toNumber(v);
+            return n != null ? n : String(v ?? '').trim();
+          }));
+        if (rows.length === 0) throw new Error('no data rows');
+        result.metrics[m.key] = { headers, rows };
       } else if (m.method === 'table') {
         // tableMatchの見出しをすべて含むテーブルから、前週の日付行を集計する
         const tables = await tablesFor(pconf);
