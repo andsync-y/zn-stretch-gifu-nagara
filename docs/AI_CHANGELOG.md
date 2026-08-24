@@ -2625,3 +2625,21 @@ Coworkの**スケジュールタスクにはリポジトリを紐付ける欄が
 - `paid-ads` の末尾に優先順位を追記：**この店の実測 > 汎用スキルの一般論**。
   metrics-definitions.md / ads-ops-guardrails.md / ops-change-log.md を先に読ませる
 - 未対応：既存顧客の除外設定（②）は要実行。フリークエンシーの取得もリレー未対応
+
+## 2026-08-24 — Claude Code
+
+- ブランチ：`claude/column-auto`
+- 関連PR：なし（コラム専用ブランチへのコミットのみ。マージはユーザーが実施）
+- 変更内容：
+  - `docs/column-backlog.md` の `authority` 枠から `asa-sukkiri`（朝 すっきり ストレッチ 目覚め）を選び、新規コラム記事を1本作成。
+  - 既存の `youtsu-morning-stretch`（腰の重さ・股関節）や `neruma-shinkokyu`（寝る前・睡眠の質）とは意図を分け、「朝起きた直後の体の重さ・すっきりしない感覚」に絞った。構成は、結論先出し→なぜ朝は体が重いか→布団の中でできる目覚めストレッチ2選（ばんざい伸び／深呼吸）→起き上がってからの3選（体側伸ばし／キャット&カウ／肩甲骨寄せ、いずれもポーズライブラリの既存イラストを使用）→朝日を浴びる習慣→独自メソッド「体感軸調整法」への言及（`/method` へ初出リンク）→FAQ5問。
+  - `src/data/columns.ts` の `COLUMNS` 先頭に新記事のメタデータ（slug/heading/desc/date/tags/relatedSymptoms/selfCare）を追加。
+  - `docs/column-backlog.md` の該当行を `- [x]` に更新。
+  - アイキャッチは `scripts/fetch-column-image.mjs --source ai` でAI生成（明るい寝室で朝、両手を上げて伸びをする日本人男性）。`imageCredit` に「※画像はイメージです」を設定済み。
+  - `scripts/yakkihou-ng.mjs` と `scripts/lint-column.mjs` を実行し、いずれもPASSを確認。
+- 主な変更ファイル：
+  - `src/pages/column/asa-sukkiri.astro`（新規）
+  - `src/data/columns.ts`
+  - `docs/column-backlog.md`
+  - `public/images/column/asa-sukkiri.webp`（新規・AI生成）
+- 検証：`npm run build` 成功（34ページ）。

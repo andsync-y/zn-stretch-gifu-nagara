@@ -49,7 +49,7 @@
 ### 自律神経・疲れ・睡眠
 - [x] neruma-shinkokyu ｜ authority ｜ 寝る前 ストレッチ 睡眠の質 ｜ セルフケア ｜ /symptoms/jiritsu
 - [x] tsukare-nukenai ｜ authority ｜ 疲れ 抜けない 自律神経 ストレッチ ｜ 悩み特化 ｜ /symptoms/jiritsu
-- [ ] asa-sukkiri ｜ authority ｜ 朝 すっきり ストレッチ 目覚め ｜ セルフケア ｜ /symptoms/jiritsu
+- [x] asa-sukkiri ｜ authority ｜ 朝 すっきり ストレッチ 目覚め ｜ セルフケア ｜ /symptoms/jiritsu
 
 ### 肩こり（既存と意図を分ける）
 - [ ] katakori-zutsu ｜ authority ｜ 肩こり 頭痛 ストレッチ ｜ 悩み特化 ｜ /symptoms/katakori, /symptoms/kubi-ganseihiro
