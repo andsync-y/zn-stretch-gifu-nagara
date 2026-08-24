@@ -412,14 +412,22 @@ async function parse(page, loginResult) {
     return tables;
   }
 
+  const deriveLater = [];
   for (const m of selectors.metrics || []) {
     try {
       const pconf = pagesByName[m.page];
       if (!pconf) throw new Error(`page config not found: ${m.page}`);
 
       if (m.method === 'table_row') {
-        // 期間指定を反映したテーブルの集計行（先頭行）から値を取る。
-        // 1列目（期間ラベル）はperiod_labelsに記録し、前週が反映されたかの確認に使う
+        // このテーブルは**年月ごとに1行**返る。期間が月をまたぐと複数行になるため、
+        // 実数（件数・金額）は**全行を合計**する。
+        //
+        // 2026-08-24までは先頭行だけを読んでいたため、月をまたぐ週で前月分が丸ごと落ちていた。
+        // 例：7/27〜8/08 は「2026年8月 来店37」と「2026年7月 来店23」の2行だが、
+        // 37しか読まず、画面のカード（来店60名）と食い違っていた。
+        //
+        // 率（新規販売率など）は行をまたいで足せないので、ここでは取らず、
+        // selectors.json の derive 定義から合計値どうしで後段で計算し直す。
         const tables = await tablesFor(pconf);
         const table = tables.find((t) =>
           (m.tableMatch || []).every((h) => t.headers.some((th) => th.includes(h)))
@@ -427,12 +435,23 @@ async function parse(page, loginResult) {
         if (!table) throw new Error(`table not found: ${(m.tableMatch || []).join(',')}`);
         const rows = table.rows.filter((r) => r.length > 1);
         if (rows.length === 0) throw new Error('no data rows');
-        const row = m.row === 'last' ? rows[rows.length - 1] : rows[0];
         const colIdx = table.headers.findIndex((h) => h.includes(m.column));
         if (colIdx < 0) throw new Error(`column not found: ${m.column}`);
-        result.period_labels[m.page] = row[0];
-        const v = toNumber(row[colIdx]);
-        result.metrics[m.key] = v != null ? v : String(row[colIdx] ?? '').trim();
+        result.period_labels[m.page] = rows.map((r) => r[0]).join(' + ');
+        result.rows_summed = rows.length;
+
+        if (m.derive) {
+          // 率は後段で計算する。ここでは何も入れない
+          deriveLater.push(m);
+        } else {
+          let sum = 0, seen = 0;
+          for (const r of rows) {
+            const v = toNumber(r[colIdx]);
+            if (v != null) { sum += v; seen += 1; }
+          }
+          if (seen === 0) throw new Error(`no numeric values in column: ${m.column}`);
+          result.metrics[m.key] = sum;
+        }
       } else if (m.method === 'table') {
         // tableMatchの見出しをすべて含むテーブルから、前週の日付行を集計する
         const tables = await tablesFor(pconf);
@@ -476,6 +495,16 @@ async function parse(page, loginResult) {
     } catch (e) {
       result.missing.push({ key: m.key, error: String(e).slice(0, 200) });
     }
+  }
+  // 率は合計値どうしで計算し直す。行をまたいだ率をそのまま足すと壊れるため。
+  for (const m of deriveLater) {
+    const [numKey, denKey] = m.derive;
+    const num = result.metrics[numKey], den = result.metrics[denKey];
+    if (typeof num !== 'number' || typeof den !== 'number') {
+      result.missing.push({ key: m.key, error: `derive元が数値でない (${numKey}=${num}, ${denKey}=${den})` });
+      continue;
+    }
+    result.metrics[m.key] = den === 0 ? null : Math.round((num / den) * 1000) / 10;
   }
   if (result.missing.length > 0) result.status = 'partial';
   writeJson('weekly_kpi.json', result);

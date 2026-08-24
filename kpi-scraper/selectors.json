@@ -26,11 +26,16 @@
     { "key": "total_visits", "label": "総来店数（週計）", "page": "dashboard_week", "method": "table_row", "tableMatch": ["売上", "新規販売数", "総来店数"], "column": "総来店数" },
     { "key": "new_visits", "label": "新規来店数（週計）", "page": "dashboard_week", "method": "table_row", "tableMatch": ["売上", "新規販売数", "総来店数"], "column": "新規来店数" },
     { "key": "new_ticket_sales", "label": "回数券新規販売本数（週計）", "page": "dashboard_week", "method": "table_row", "tableMatch": ["売上", "新規販売数", "総来店数"], "column": "新規販売数" },
-    { "key": "new_ticket_rate", "label": "新規販売率（週）", "page": "dashboard_week", "method": "table_row", "tableMatch": ["売上", "新規販売数", "総来店数"], "column": "新規販売率" },
     { "key": "renewal_ticket_sales", "label": "回数券更新本数（週計）", "page": "dashboard_week", "method": "table_row", "tableMatch": ["売上", "新規販売数", "総来店数"], "column": "更新販売数" },
-    { "key": "renewal_ticket_rate", "label": "更新販売率（週）", "page": "dashboard_week", "method": "table_row", "tableMatch": ["売上", "新規販売数", "総来店数"], "column": "更新販売率" },
     { "key": "next_reservations", "label": "次回予約数（週計）", "page": "dashboard_week", "method": "table_row", "tableMatch": ["売上", "新規販売数", "総来店数"], "column": "次回予約数" },
-    { "key": "next_reservation_rate", "label": "次回予約率（週）", "page": "dashboard_week", "method": "table_row", "tableMatch": ["売上", "新規販売数", "総来店数"], "column": "次回予約率" },
-    { "key": "shimei_count", "label": "指名数（週計）", "page": "dashboard_week", "method": "table_row", "tableMatch": ["売上", "新規販売数", "総来店数"], "column": "指名数" }
+    { "key": "shimei_count", "label": "指名数（週計）", "page": "dashboard_week", "method": "table_row", "tableMatch": ["売上", "新規販売数", "総来店数"], "column": "指名数" },
+
+    { "key": "new_churn", "label": "新規離客数（週計）", "page": "dashboard_week", "method": "table_row", "tableMatch": ["新規離客", "新規来店", "更新来店"], "column": "新規離客" },
+    { "key": "renewal_base", "label": "使い切り人数（週計・更新の母数）", "page": "dashboard_week", "method": "table_row", "tableMatch": ["新規離客", "新規来店", "更新来店"], "column": "更新来店" },
+
+    { "key": "new_ticket_rate", "label": "新規販売率（週）", "page": "dashboard_week", "method": "table_row", "tableMatch": ["売上", "新規販売数", "総来店数"], "column": "新規販売率", "derive": ["new_ticket_sales", "new_visits"] },
+    { "key": "renewal_ticket_rate", "label": "更新販売率（週）", "page": "dashboard_week", "method": "table_row", "tableMatch": ["売上", "新規販売数", "総来店数"], "column": "更新販売率", "derive": ["renewal_ticket_sales", "renewal_base"] },
+    { "key": "next_reservation_rate", "label": "次回予約率（週）", "page": "dashboard_week", "method": "table_row", "tableMatch": ["売上", "新規販売数", "総来店数"], "column": "次回予約率", "derive": ["next_reservations", "total_visits"] },
+    { "key": "new_churn_rate", "label": "新規離客率（週）", "page": "dashboard_week", "method": "table_row", "tableMatch": ["新規離客", "新規来店", "更新来店"], "column": "新規率", "derive": ["new_churn", "new_visits"] }
   ]
 }
