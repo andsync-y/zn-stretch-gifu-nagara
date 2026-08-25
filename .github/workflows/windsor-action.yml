@@ -42,7 +42,7 @@ jobs:
           DRY_RUN: ${{ github.event.inputs.dry_run }}
         run: |
           set -euo pipefail
-          mkdir -p ../out
+          mkdir -p out
           if [ "$DRY_RUN" = "mcp" ]; then
             # ACTION=MCPツール名, PARAMS_JSON=そのtoolのarguments
             # 結果は windsor-log ブランチにも残す（Actionsのログを引くのは高コストなため）
