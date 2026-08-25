@@ -96,6 +96,24 @@ description: 全力ストレッチ岐阜長良店（株式会社ANDSYNC）の確
 | 週次KPI入力シート | `1v1Hm2QiJVspCnT6rmUgkf30NreWs7zMQMVu2MTNMhaw` |
 | GBPロケーション | `locations/3707203216578503879` |
 | GitHubリポジトリ | `andsync-y/zn-stretch-gifu-nagara` |
+| Meta 広告アカウント | `1264372342523760` |
+| Meta Facebookページ（`create_ad` の `page_id`） | `1065899826606652` |
+| Meta 広告セット 男性35-60_岐阜15km_LPV | `120250497060260015` |
+| Meta キャンペーン（同上の親） | `120250497060270015` |
+| Google広告 アカウント | `600-036-3311` |
+| Google広告 キャンペーン 集客_検索_2026.07 | `24029290016` |
+| Drive 広告画像（本部素材の受け渡し） | `1r2bnJh-KGIf-cf7NPb2PWjFkd3UQ100j` |
+
+**Windsorの `execute_action` は `account` 必須。** 省略すると
+`account Missing required argument` で落ちる。逆に **`get_data` は `account` を受け付けない**
+（`unexpected_keyword_argument` になる）。
+Meta広告の配信中の広告:
+
+| 広告名 | ad_id | 備考 |
+|---|---|---|
+| A_kibun_video | `120250497060250015` | Lead単価¥270／LPV→Lead 14.4%。効率は最良だが予算配分は少ない |
+| B_golf_image | `120250497898920015` | Lead単価¥1,297／3.4%。LPV最適化のため予算の79%がここへ |
+| C_hq_75off_4900 | `120251076477150015` | 2026-08-25追加。本部バナー（75%OFF・4,900円） |
 
 ## やらないこと
 
