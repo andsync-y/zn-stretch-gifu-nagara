@@ -13,6 +13,10 @@ on:
         description: 'true=背景生成を飛ばして無地で組む（レイアウト確認用・APIを使わない）'
         required: false
         default: 'false'
+      bg_dir:
+        description: '背景に使う画像を置いたディレクトリ（例 assets/ad-bg）。指定するとAI生成せずこの画像を使う'
+        required: false
+        default: ''
 
 permissions:
   contents: write
@@ -37,11 +41,13 @@ jobs:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           ONLY: ${{ github.event.inputs.only }}
           SKIP_BG: ${{ github.event.inputs.skip_bg }}
+          BG_DIR: ${{ github.event.inputs.bg_dir }}
         run: |
           set -euo pipefail
           ARGS="--out out"
           [ -n "$ONLY" ] && ARGS="$ARGS --only $ONLY"
           [ "$SKIP_BG" = "true" ] && ARGS="$ARGS --skip-bg"
+          [ -n "$BG_DIR" ] && ARGS="$ARGS --bg-dir $BG_DIR"
           node scripts/gen-ad-creative.mjs $ARGS
           ls -la out
       - name: ad-creative ブランチへ置く

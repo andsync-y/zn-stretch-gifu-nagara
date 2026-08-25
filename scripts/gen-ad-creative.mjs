@@ -6,13 +6,19 @@
  *   1. **日本語の文字をAIに描かせない。** 価格表示は景表法がかかる。崩れた文字や誤った金額は事故になる。
  *      背景だけ gpt-image-1 で作り、**文字は SVG + sharp で正確に合成する。**
  *   2. **実在の店舗・スタッフの「写真」を生成しない。** 偽の店内写真になるため。
- *      すでにブランドで使っているフラットイラストの画風に限定する。
+ *      AIで作る場合はフラットイラストの画風に限定する。
+ *      ただし2026-08-25にオーナー判断で**AI生成のイラストは不採用**となり、
+ *      **本部支給の素材を背景に使う運用（--bg-dir）が既定**になった。
  *   3. 画像に焼く文字はすべて `scripts/ad-creatives.json` に置く。
  *      公開前に `node scripts/yakkihou-ng.mjs scripts/ad-creatives.json` を通すこと。
  *
  * 使い方:
  *   node scripts/gen-ad-creative.mjs --out out [--only E_desk] [--skip-bg]
  *   --skip-bg は背景生成を飛ばして無地で組む（レイアウト確認用・APIを消費しない）
+ *
+ *   --bg-dir <dir>  背景を**AIで作らず、用意した画像から使う**。
+ *                   <dir>/<id>.（jpg|jpeg|png|webp）を探す。本部支給の素材を使う場合はこれ。
+ *                   2026-08-25：AI生成のイラストはオーナー判断で不採用。本部素材を前提に切り替えた
  *
  * 出力: <out>/<id>.png（1080x1080・Metaフィード用）
  */
@@ -23,9 +29,10 @@ const get = (k) => { const i = argv.indexOf(k); return i >= 0 ? argv[i + 1] : nu
 const OUT = get('--out') || 'out';
 const ONLY = get('--only');
 const SKIP_BG = argv.includes('--skip-bg');
+const BG_DIR = get('--bg-dir');
 
 const KEY = process.env.OPENAI_API_KEY;
-if (!KEY && !SKIP_BG) { console.error('OPENAI_API_KEY がありません（--skip-bg なら不要）'); process.exit(1); }
+if (!KEY && !SKIP_BG && !BG_DIR) { console.error('OPENAI_API_KEY がありません（--skip-bg / --bg-dir なら不要）'); process.exit(1); }
 
 const spec = JSON.parse(await readFile('scripts/ad-creatives.json', 'utf8'));
 const { brand, common } = spec;
@@ -72,6 +79,19 @@ function overlaySvg(c) {
 }
 
 async function background(c) {
+  // 用意した画像（本部素材など）を使う。見つからなければ、黙って別の絵にせず落とす
+  if (BG_DIR) {
+    const { access } = await import('node:fs/promises');
+    for (const ext of ['jpg', 'jpeg', 'png', 'webp']) {
+      const p = `${BG_DIR}/${c.id}.${ext}`;
+      try {
+        await access(p);
+        console.log(`  背景: ${p}`);
+        return sharp(p).resize(S, S, { fit: 'cover' }).png().toBuffer();
+      } catch { /* 次の拡張子へ */ }
+    }
+    throw new Error(`背景画像が見つかりません: ${BG_DIR}/${c.id}.(jpg|jpeg|png|webp)`);
+  }
   if (SKIP_BG) {
     return sharp({ create: { width: S, height: S, channels: 3, background: brand.pale } }).png().toBuffer();
   }
