@@ -1,0 +1,58 @@
+# Meta広告バナーを生成し、ad-creative ブランチへ置く（レビュー用）。
+# ここでは公開しない。オーナーがデザインを見て承認してから Meta へ入稿する。
+name: gen-ad-creative
+
+on:
+  workflow_dispatch:
+    inputs:
+      only:
+        description: '1案だけ作る場合はID（E_desk / F_private / G_shoulder）。空なら全部'
+        required: false
+        default: ''
+      skip_bg:
+        description: 'true=背景生成を飛ばして無地で組む（レイアウト確認用・APIを使わない）'
+        required: false
+        default: 'false'
+
+permissions:
+  contents: write
+
+jobs:
+  gen:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: 日本語フォントを入れる
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq fonts-noto-cjk
+      - name: 依存関係
+        run: npm ci --no-audit --no-fund
+      - name: 薬機法チェック（画像に焼く文言）
+        run: node scripts/yakkihou-ng.mjs scripts/ad-creatives.json
+      - name: 生成
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          ONLY: ${{ github.event.inputs.only }}
+          SKIP_BG: ${{ github.event.inputs.skip_bg }}
+        run: |
+          set -euo pipefail
+          ARGS="--out out"
+          [ -n "$ONLY" ] && ARGS="$ARGS --only $ONLY"
+          [ "$SKIP_BG" = "true" ] && ARGS="$ARGS --skip-bg"
+          node scripts/gen-ad-creative.mjs $ARGS
+          ls -la out
+      - name: ad-creative ブランチへ置く
+        run: |
+          cd out
+          printf '{\n  "git": {\n    "deploymentEnabled": {\n      "ad-creative": false\n    }\n  }\n}\n' > vercel.json
+          git init -b ad-creative -q
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -q -m "ad: $(date -u +%Y-%m-%dT%H:%M)Z [skip ci]"
+          git push --force -q "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" ad-creative
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
