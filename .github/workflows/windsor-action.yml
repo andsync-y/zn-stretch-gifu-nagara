@@ -22,7 +22,7 @@ on:
         default: 'true'
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   run:
@@ -42,9 +42,11 @@ jobs:
           DRY_RUN: ${{ github.event.inputs.dry_run }}
         run: |
           set -euo pipefail
+          mkdir -p ../out
           if [ "$DRY_RUN" = "mcp" ]; then
             # ACTION=MCPツール名, PARAMS_JSON=そのtoolのarguments
-            node scripts/windsor-mcp-call.mjs --tool "$ACTION" --args "$PARAMS_JSON"
+            # 結果は windsor-log ブランチにも残す（Actionsのログを引くのは高コストなため）
+            node scripts/windsor-mcp-call.mjs --tool "$ACTION" --args "$PARAMS_JSON" 2>&1 | tee ../out/result.txt
           elif [ "$DRY_RUN" = "docs" ]; then
             echo "== fetch llms-full.txt and grep execute endpoint =="
             curl -sS "https://mcp.windsor.ai/llms-full.txt" | grep -i -B3 -A12 "execute" | head -c 15000 || true
@@ -59,3 +61,26 @@ jobs:
               -H "Content-Type: application/json" \
               -d "$PARAMS_JSON" | head -c 20000
           fi
+      - name: 結果を windsor-log ブランチへ残す
+        if: always()
+        run: |
+          set -eu
+          mkdir -p out
+          [ -f out/result.txt ] || echo "(結果ファイルなし)" > out/result.txt
+          {
+            echo "connector: ${{ github.event.inputs.connector }}"
+            echo "action:    ${{ github.event.inputs.action }}"
+            echo "dry_run:   ${{ github.event.inputs.dry_run }}"
+            echo "run:       ${{ github.run_id }}"
+            echo "---"
+          } > out/meta.txt
+          cd out
+          printf '{\n  "git": {\n    "deploymentEnabled": {\n      "windsor-log": false\n    }\n  }\n}\n' > vercel.json
+          git init -b windsor-log -q
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -q -m "windsor: $(date -u +%Y-%m-%dT%H:%M)Z [skip ci]"
+          git push --force -q "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" windsor-log
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
