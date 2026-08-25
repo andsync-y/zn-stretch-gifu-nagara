@@ -20,6 +20,10 @@ on:
         description: 'true=アクション一覧の取得のみ / docs=実行エンドポイントのドキュメント調査'
         required: false
         default: 'true'
+      max_len:
+        description: '結果の切り詰め幅（既定8000。スキーマ調査時は大きくする）'
+        required: false
+        default: '8000'
 
 permissions:
   contents: write
@@ -40,13 +44,14 @@ jobs:
           ACTION: ${{ github.event.inputs.action }}
           PARAMS_JSON: ${{ github.event.inputs.params_json }}
           DRY_RUN: ${{ github.event.inputs.dry_run }}
+          MAXLEN: ${{ github.event.inputs.max_len }}
         run: |
           set -euo pipefail
           mkdir -p out
           if [ "$DRY_RUN" = "mcp" ]; then
             # ACTION=MCPツール名, PARAMS_JSON=そのtoolのarguments
             # 結果は windsor-log ブランチにも残す（Actionsのログを引くのは高コストなため）
-            node scripts/windsor-mcp-call.mjs --tool "$ACTION" --args "$PARAMS_JSON" 2>&1 | tee out/result.txt
+            node scripts/windsor-mcp-call.mjs --tool "$ACTION" --args "$PARAMS_JSON" --max "${MAXLEN:-8000}" 2>&1 | tee out/result.txt
           elif [ "$DRY_RUN" = "docs" ]; then
             echo "== fetch llms-full.txt and grep execute endpoint =="
             curl -sS "https://mcp.windsor.ai/llms-full.txt" | grep -i -B3 -A12 "execute" | head -c 15000 || true
