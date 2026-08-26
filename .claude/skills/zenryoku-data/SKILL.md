@@ -36,7 +36,21 @@ GitHub Actions「広告データ取得（Windsor中継）」を `workflow_dispat
 
 `_summary.json` の `results.<名前>.ok` が `false` の項目は**取得できていない**。
 その項目の数字は書かない（「未取得」と明記する）。
-2026-08時点で `facebook_budget` と `gmb_reviews` は Windsor 側のフィールド不整合で常に失敗する。
+
+⚠️ **`ok` は「取得が成功したか」であって「データが最新か」ではない。**
+
+| 媒体 | 到着の遅れ | 意味 |
+|---|---|---|
+| **Google広告** | **2日** | 月曜朝に取れるのは**土曜まで**。「直近7日」を名乗ると1日足りない |
+| Meta広告 | 1日 | |
+| GA4 | 1日 | |
+
+`fetched_at` が今朝でも、Googleの中身は2日前までしかない。**手動で取り直しても縮まらない。**
+週次レポートでGoogleの週合計を出すときは、**何日分が入っているかを明記する**こと。
+変更の効果を検証する日を決めるときは、Googleなら2日足す。
+
+（`facebook_budget` と `gmb_reviews` は2026-08-23までフィールド名の誤りで失敗し続けていたが、
+**修正済みで現在は正常に取れている**。取れない前提で飛ばさないこと。）
 
 ## 2. ファイル一覧（windsor-data ブランチ）
 
@@ -46,19 +60,38 @@ git show FETCH_HEAD:facebook_7d.json
 
 | ファイル | 中身 |
 |---|---|
-| `facebook_yesterday` / `facebook_7d` / `facebook_30d` | Meta広告。spend・広告別・`effective_status`（審査落ち検知） |
+| `facebook_yesterday` / `facebook_7d` / `facebook_30d` | Meta広告。spend・広告別・LPビュー・ピクセルLead。**`clicks` は効率指標に使わない** |
+| `facebook_budget` | Metaの**設定予算**（`adset_daily_budget`）と残額。設定と実消化の乖離を見る |
+| `facebook_frequency_14d` | 広告疲労。`reach` / `impressions` / `frequency`。**日次を合算しないこと**（重複が排除されない） |
 | `google_ads_yesterday` / `google_ads_7d` / `google_ads_30d` | Google広告。spend・CPC・CV |
-| `google_budget_7d` | Google広告の予算 |
+| `google_budget_7d` | **表示シェアの内訳。** `search_budget_lost_impression_share`（予算不足→増額が効く）と `search_rank_lost_impression_share`（順位不足→**増額しても消化できない**）。打ち手が正反対になるので必ず両方見る |
 | `google_search_terms_7d` | 検索語句。無関係クエリを見て除外KWを足す |
 | `gsc_queries_28d` / `gsc_queries_prev28d` | Search Console。自然検索の順位・表示回数 |
-| `ga4_events_7d` / `ga4_events_30d` | GA4イベント。`click_reserve` / `click_line` / `click_tel` |
+| `gmb_insights_30d` | GBPの露出・サイトクリック・電話・**経路案内リクエスト**。ローカル検索の効果はここでしか測れない |
+| `gmb_keywords_30d` | GBPで**どんな検索語で見つかっているか**。地図枠SEOの直接の材料 |
+| `gmb_reviews` | 口コミと返信状況。**`review_reply_comment` が空＝未返信** |
+| `ga4_events_7d` / `ga4_events_30d` | GA4イベント。`click_reserve` / `click_line` / `click_tel`。**サイト全体（全流入）** |
 | `ga4_pages_7d` / `ga4_sessions_30d` | GA4のページ・セッション |
 | `clarity_7d` | Microsoft Clarity の行動データ（下記） |
 | `probe_bid_a/b/c` | 入札テストの記録 |
 
-**レポートで使われていないファイルがある**（`gsc_queries_28d`・`google_budget_7d`・
+**レポートで使われていないファイルがある**（`gsc_queries_28d`・`gmb_keywords_30d`・
 `ga4_sessions_30d` など）。取れているのに読まれていないだけなので、
 改善提案のネタが足りないときはここを見る。
+
+## 2-1. 数字を結論に使う前に
+
+**`docs/metrics-definitions.md` を必ず読む。** 同じ月に指標の取り違えを5件出している。
+特に間違えやすいのは次の3つ。
+
+| 落とし穴 | 正しい扱い |
+|---|---|
+| Meta の `clicks` | いいね・シェア・プロフィールクリックを含む。効率は `actions_landing_page_view` で出す |
+| Google の `conversions` | 入札の最適化対象であって**実来店ではない** |
+| GA4 の予約アクション | **全流入**。Meta広告の成果として扱わない（広告帰属分はMetaのピクセルLead） |
+
+**予約アクション → 実来店の実測換算率は 0.17〜0.19。** `zenryoku-facts` が長く「0.6〜0.7」と
+書いていたため、新規ペースを3.5倍に過大評価していた（2026-08-24 訂正済み）。
 
 ## 3. Clarity（clarity_7d.json）の読み方
 
@@ -104,6 +137,18 @@ git show FETCH_HEAD:weekly_kpi.json
 
 どこからも取れない項目は**推測で埋めず「未取得」**と書き、
 レポート末尾で1回だけ入力を依頼する。IDと指標の定義は `zenryoku-facts` を見る。
+
+## 5-1. 数字が動いたら、まず変更ログを見る
+
+**`docs/ops-change-log.md` を読む。** 広告・シフト・サイト・掲載媒体に手を入れた記録が
+日付つきで入っている。指標のジャンプや落ち込みは、たいていここに答えがある。
+
+**「（推測）」と書く前に必ず開くこと。** 2026-08-24の週次レポートは、Metaのリードが
+8/21から急増した理由を「計測が立ち上がったと見るのが自然（推測）」と書いたが、
+変更ログには **8/20にCTA計測の改修を本番反映** と記録されていた。推測する必要はなかった。
+
+計測の仕様が変わった日をまたぐ期間は、**前後の数字を同じ列に並べない**。
+並べるなら「この日から計測方法が変わった」と明記する。
 
 ## 6. 数字を出すときの原則
 

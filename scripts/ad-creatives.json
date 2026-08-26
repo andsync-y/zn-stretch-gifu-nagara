@@ -1,0 +1,43 @@
+{
+  "_comment": "Meta広告バナーの原稿。yakkihou-ng.mjs のチェック対象にもなるよう、画像に焼く文字はすべてここに書く。価格は必ず通常価格を併記する（景表法）。",
+  "brand": {
+    "navy": "#1B3A5C",
+    "blue": "#7A9BBF",
+    "pale": "#E8F0F7",
+    "accent": "#F5D97E",
+    "white": "#FFFFFF"
+  },
+  "common": {
+    "badge": "初回限定 75%OFF",
+    "priceBefore": "通常 19,800円",
+    "priceAfter": "90分 4,900円",
+    "priceNote": "税込",
+    "footer": "完全個室・完全予約制／岐阜市長良東2-37"
+  },
+  "concepts": [
+    {
+      "id": "E_desk",
+      "label": "デスクワーク（座りっぱなし）",
+      "hook": "夕方には、もう腰が重い。",
+      "sub": "デスクワークの毎日をおくる方へ",
+      "why": "主ターゲット（30〜60代男性ビジネスマン）の日常の悩みに直接あてる。現行A/Bはメカニズム説明が主で、この入口が無い",
+      "bgPrompt": "A simple flat Japanese-style illustration of a Japanese man in his 40s sitting at a desk in an office chair, seen from the side, one hand pressed against his lower back, tired posture. Clean uniform thin dark-navy outline, completely flat solid fills, NO gradients, NO shading. Palette limited to deep navy #1B3A5C, muted blue #7A9BBF, pale blue #E8F0F7 and plenty of white. Character occupies only the LOWER RIGHT third of the frame; the ENTIRE upper half and left side must be plain flat pale blue or white empty space with nothing in it. Calm, trustworthy, adult mood. Absolutely NO text, NO letters, NO numbers, NO watermark, NO logo, NO frame, NO border."
+    },
+    {
+      "id": "F_private",
+      "label": "完全個室（人目が気にならない）",
+      "hook": "人目を気にせず、90分。",
+      "sub": "完全個室のパーソナルストレッチ",
+      "why": "男性が整体・マッサージを避ける理由の上位が「人目」。看板経由の成約率33%が示すとおり、地域の男性は環境を重視している",
+      "bgPrompt": "A simple flat Japanese-style illustration of a calm private treatment room interior: one massage bed, a soft partition curtain, a small side table with a folded towel, warm indirect light. No people. Clean uniform thin dark-navy outline, completely flat solid fills, NO gradients, NO shading. Palette limited to deep navy #1B3A5C, muted blue #7A9BBF, pale blue #E8F0F7 and plenty of white. Furniture occupies only the LOWER RIGHT third of the frame; the ENTIRE upper half and left side must be plain flat pale blue or white empty space with nothing in it. Absolutely NO text, NO letters, NO numbers, NO watermark, NO logo, NO frame, NO border."
+    },
+    {
+      "id": "G_shoulder",
+      "label": "肩・腰の重さ（7月の構成を再現）",
+      "hook": "ほぐしても、また戻ってしまう。",
+      "sub": "肩と腰の重さでお悩みの方へ",
+      "why": "7月に最も新規を集めた構成（悩み先行＋割引率の明示）。当時の文面は禁止表現を含んでいたため、表現だけ差し替えた",
+      "bgPrompt": "A simple flat Japanese-style illustration of a Japanese man in his 40s standing, viewed from behind and slightly to the side, one hand on his shoulder, rolling it. Clean uniform thin dark-navy outline, completely flat solid fills, NO gradients, NO shading. Palette limited to deep navy #1B3A5C, muted blue #7A9BBF, pale blue #E8F0F7 and plenty of white. Figure occupies only the LOWER RIGHT third of the frame; the ENTIRE upper half and left side must be plain flat pale blue or white empty space with nothing in it. Calm, trustworthy, adult mood. Absolutely NO text, NO letters, NO numbers, NO watermark, NO logo, NO frame, NO border."
+    }
+  ]
+}
