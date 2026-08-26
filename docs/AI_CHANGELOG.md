@@ -2883,3 +2883,36 @@ Coworkの**スケジュールタスクにはリポジトリを紐付ける欄が
   google/cpc は5件しか付いていない。**「Google経由のCVがゼロになった」と読んではいけない**。
   8/26以降の再取得で確定する
 - 新規追加した `C_hq_75off_4900` はこのデータ取得（8/25 23:16 UTC）より後に有効化したため未計上
+
+## 2026-08-26 (GitHub Actions（Claude）) コラム新規公開（authority枠）：katakori-zutsu
+- `.github/workflows/column-auto.yml` の定期実行。ブランチ `claude/column-auto`
+- 枠は `authority`（水曜）。`docs/column-backlog.md` の未対応から
+  `katakori-zutsu ｜ 肩こり 頭痛 ストレッチ ｜ 悩み特化` を選定
+  （既存の `ganseihiro-kubikori` は眼精疲労×首こりで意図が異なるため重複なしと判断）
+- `src/pages/column/katakori-zutsu.astro` を新規作成。faq5問、`/method`（体感軸調整法）・
+  `/symptoms/katakori`・`/symptoms/kubi-ganseihiro` への内部リンクを含む
+- 「危険な頭痛とセルフケアで対応できる頭痛の見分け方」のセクションを追加し、
+  突然の激しい頭痛・しびれ等は医療機関へ誘導する注意喚起を明記（悩み特化型のため）
+- アイキャッチはAI生成（`node scripts/fetch-column-image.mjs --slug katakori-zutsu --source ai`）。
+  明るいオフィスで席を立ち肩・首を伸ばす場面。`imageCredit` に「※画像はイメージです」を設定
+- 挿絵は既存ライブラリから5点使用（pose-25 こめかみほぐし／pose-18 首の前倒し／
+  pose-19 首の回旋／pose-17 肩甲骨引き寄せ／pose-22 壁で胸を開く）。新規生成なし
+- `src/data/columns.ts` の先頭に追加（selfCareは本文の手順と一致）。
+  `docs/column-backlog.md` の該当行を `- [x]` に更新
+- `node scripts/yakkihou-ng.mjs`・`node scripts/lint-column.mjs`・`npm run build` いずれもPASS
+  （35ページビルド成功）
+
+## 2026-08-26 (Claude Code) コラム`katakori-zutsu`の薬機法レビュー・修正
+- 生成直後の `src/pages/column/katakori-zutsu.astro` をレビュー。
+  `node scripts/yakkihou-ng.mjs`・`node scripts/lint-column.mjs` は生成時点でPASSだったが、
+  スクリプトのNGパターンをすり抜ける**文脈的な効能断定**を目視で発見
+- ⚠️ `title`／`heading`（h1）／本文`h2`の3か所が「緊張型頭痛を**ゆるめる**」＝ストレッチが頭痛そのものを
+  直接ゆるめるという言い方になっていた。同記事のmeta descriptionは既に「後頭部・首すじ・肩甲骨をゆるめる」
+  （部位を対象）と安全な言い方をしており、この3か所だけ対象が症状（頭痛）にずれていた
+- 3か所とも「緊張型頭痛のときに首・後頭部をゆるめる」に修正。ゆるめる対象を症状ではなく部位に統一
+- 他項目は確認のみで修正なし：リード文は冒頭200字程度で「緊張型頭痛とは何か＋当店への相談例」に触れており
+  検索意図に対応／「岐阜市長良の専門店のトレーナーが解説」の立場と`/method`（体感軸調整法）への言及は一貫／
+  セルフケア手順はいずれも「強い痛みが出ているときは無理に行わない」旨の注記あり／
+  挿絵5点すべてに「イラストはイメージです」のfigcaptionあり
+- 修正後、`node scripts/yakkihou-ng.mjs`・`node scripts/lint-column.mjs`・`npm run build`
+  いずれもPASS（35ページビルド成功）

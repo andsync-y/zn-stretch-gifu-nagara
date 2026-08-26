@@ -52,7 +52,7 @@
 - [x] asa-sukkiri ｜ authority ｜ 朝 すっきり ストレッチ 目覚め ｜ セルフケア ｜ /symptoms/jiritsu
 
 ### 肩こり（既存と意図を分ける）
-- [ ] katakori-zutsu ｜ authority ｜ 肩こり 頭痛 ストレッチ ｜ 悩み特化 ｜ /symptoms/katakori, /symptoms/kubi-ganseihiro
+- [x] katakori-zutsu ｜ authority ｜ 肩こり 頭痛 ストレッチ ｜ 悩み特化 ｜ /symptoms/katakori, /symptoms/kubi-ganseihiro
 - [ ] kenkokotsu-hagashi-self ｜ authority ｜ 肩甲骨はがし セルフ 安全 ｜ やり方 ｜ /symptoms/katakori
 - [ ] shijukata-chuui ｜ authority ｜ 四十肩 五十肩 ストレッチ 注意点 ｜ 注意喚起 ｜ /symptoms/katakori
 
