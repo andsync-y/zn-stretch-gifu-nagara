@@ -2916,3 +2916,16 @@ Coworkの**スケジュールタスクにはリポジトリを紐付ける欄が
   挿絵5点すべてに「イラストはイメージです」のfigcaptionあり
 - 修正後、`node scripts/yakkihou-ng.mjs`・`node scripts/lint-column.mjs`・`npm run build`
   いずれもPASS（35ページビルド成功）
+## 2026-08-26 (Claude Code) Meta最適化対象の切替を試行 → ツール経由では不可と判明
+- オーナー承認「今すぐ切り替える」を受けて `update_adset` で
+  `optimization_goal: OFFSITE_CONVERSIONS` を実行 → **Metaが400で拒否。設定は変わっていない**
+  - `error_subcode 1815430`「広告セットの宣伝の対象物を選択してください」
+  - 原因：コンバージョン最適化には **`promoted_object`（ピクセルID＋イベント種別）が必須**だが、
+    Windsorの `update_adset` はこの引数を持たない（`additionalProperties: false`）
+  - **拒否理由はキャンペーン目的ではなく引数不足。** 目的（`OUTCOME_TRAFFIC` / `LINK_CLICKS`）が
+    ブロックしているかどうかは、この結果からは分からない
+- **代替案の比較**：
+  | A. オーナーが広告マネージャで手動設定 | **既存広告セットのまま**変えられる＝学習リセットは1回で済む。推奨 |
+  | B. `create_adset` で新規セット | `promoted_object` を渡せるので私が全部できるが、**学習がゼロから**。8/1の失敗と同じ構造。9月は回復月なので採らない |
+  | C. 現状維持＋Bを手動停止 | 学習リセットなし。ただしLPV最適化のままなので**次は単価の安いCへ偏るだけ**で構造は直らない |
+- 判明した制約は `zenryoku-facts` のID一覧の下へ追記（同じ失敗を繰り返さないため）

@@ -107,6 +107,13 @@ description: 全力ストレッチ岐阜長良店（株式会社ANDSYNC）の確
 **Windsorの `execute_action` は `account` 必須。** 省略すると
 `account Missing required argument` で落ちる。逆に **`get_data` は `account` を受け付けない**
 （`unexpected_keyword_argument` になる）。
+
+⚠️ **Metaの最適化対象は、既存の広告セットに対してはツールから変更できない**（2026-08-26 に確認）。
+コンバージョン最適化には `promoted_object`（ピクセルID＋イベント種別）が必須だが、
+Windsorの `update_adset` はこの引数を持たない。試すと
+`error_subcode 1815430`「広告セットの宣伝の対象物を選択してください」で400が返る（変更は適用されない）。
+`create_adset` は `promoted_object` を受け付けるが、**新規セットは学習がゼロに戻る**ため安易に使わない。
+現行キャンペーンは `OUTCOME_TRAFFIC` / `LINK_CLICKS`、広告セットは課金 `IMPRESSIONS`・`promoted_object` なし。
 Meta広告の配信中の広告:
 
 | 広告名 | ad_id | 備考 |
