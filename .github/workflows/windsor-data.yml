@@ -50,6 +50,19 @@ jobs:
 
       - run: node scripts/fetch-windsor-data.mjs
 
+      # GA4とSearch Consoleは公式APIから直接取る（2026-08-27に移行）。
+      # Windsorの料金はデータソース数で決まるため、この2つを外すと接続が5→3になりBasicに収まる。
+      # 必ず fetch-windsor-data.mjs の**後**に実行すること。
+      # 移行検証中はWindsor側が out/_windsor_*.json を書き、こちらが正の out/*.json を書く。
+      - name: GA4の実績を取得（公式API）
+        env:
+          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+        run: node scripts/fetch-ga4-data.mjs
+      - name: Search Consoleの実績を取得（公式API）
+        env:
+          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+        run: node scripts/fetch-gsc-data.mjs
+
       # Clarityの行動データ。取得できなくても異常終了しない設計
       # （広告データの取得結果まで巻き添えでコミットされなくなるため）。
       - name: Clarityの行動データを取得

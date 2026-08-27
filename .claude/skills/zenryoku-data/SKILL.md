@@ -66,7 +66,7 @@ git show FETCH_HEAD:facebook_7d.json
 | `google_ads_yesterday` / `google_ads_7d` / `google_ads_30d` | Google広告。spend・CPC・CV |
 | `google_budget_7d` | **表示シェアの内訳。** `search_budget_lost_impression_share`（予算不足→増額が効く）と `search_rank_lost_impression_share`（順位不足→**増額しても消化できない**）。打ち手が正反対になるので必ず両方見る |
 | `google_search_terms_7d` | 検索語句。無関係クエリを見て除外KWを足す |
-| `gsc_queries_28d` / `gsc_queries_prev28d` | Search Console。自然検索の順位・表示回数 |
+| `gsc_queries_28d` / `gsc_queries_prev28d` | Search Console。自然検索の順位・表示回数。**`branded_vs_nonbranded` は2026-08-27以降だけ信用できる**（Windsor時代は全件 `nonbranded` を返していた） |
 | `gmb_insights_30d` | GBPの露出・サイトクリック・電話・**経路案内リクエスト**。ローカル検索の効果はここでしか測れない |
 | `gmb_keywords_30d` | GBPで**どんな検索語で見つかっているか**。地図枠SEOの直接の材料 |
 | `gmb_reviews` | 口コミと返信状況。**`review_reply_comment` が空＝未返信** |
@@ -78,6 +78,19 @@ git show FETCH_HEAD:facebook_7d.json
 **レポートで使われていないファイルがある**（`gsc_queries_28d`・`gmb_keywords_30d`・
 `ga4_sessions_30d` など）。取れているのに読まれていないだけなので、
 改善提案のネタが足りないときはここを見る。
+
+### 取得元（2026-08-27に一部を移行）
+
+| 取得元 | ファイル |
+|---|---|
+| Windsor | `facebook_*` / `google_ads_*` / `google_budget_7d` / `google_search_terms_7d` / `gmb_*` / `probe_bid_*` |
+| **GA4 公式API** | `ga4_events_7d` / `ga4_pages_7d` / `ga4_events_30d` / `ga4_sessions_30d` |
+| **Search Console 公式API** | `gsc_queries_28d` / `gsc_queries_prev28d` |
+| Clarity 公式API | `clarity_7d` |
+
+Windsorの料金がデータソース数で決まるため、GA4とSearch Consoleを公式API（無料）へ移した。
+移行検証中は**Windsor側の同じ数字が `_windsor_<name>.json` に併記される**ので、
+食い違ったら両方を見て原因を切り分ける。手順は `docs/google-api-setup.md`。
 
 ## 2-1. 数字を結論に使う前に
 

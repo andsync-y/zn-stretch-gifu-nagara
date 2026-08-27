@@ -2970,3 +2970,24 @@ Coworkの**スケジュールタスクにはリポジトリを紐付ける欄が
 - **8/26のGA4はまた未確定**（予約アクション20件のうち19件が「(not set)」等）。CPA判定は保留
 - Google：消化 ¥5,250/予算¥4,800（109%）、CPC ¥138、順位不足 78.2%→76.9%→**73.8%** と改善傾向。
   自動リバート基準（¥2,500超×3日）には未達
+
+## 2026-08-27 (Claude Code) GA4とSearch Consoleを公式APIへ移行（Windsorを月$118→$23へ）
+- **きっかけ**：Windsorのトライアル終了。料金は**データソース数だけ**で決まる（Basic 3 / Standard 7、月$23 / $118）
+- **調べて分かったこと**：BasicとStandardの他の差（destination tasks 5→無制限、同期頻度 Daily→Daily/hourly）は
+  **BigQuery等への定期書き出し機能にしか効かず、当店は使っていない**。実質「データソース枠2つ」に月$95払う形だった
+- 接続は6件だが**必要なのは5件**。Microsoft Clarityは公式APIから直接取っており**Windsor経由では未使用**だった
+- **GA4とSearch Consoleを公式API（無料）へ移せば 5→3 でBasicに収まる**。年間およそ11〜14万円（新規9〜10人分の広告費）
+- 新規: `scripts/fetch-ga4-data.mjs` / `scripts/fetch-gsc-data.mjs` / `scripts/lib/google-auth.mjs` / `scripts/lib/branded.mjs`
+  - **依存パッケージを増やさない方針。** `googleapis` は入れず、サービスアカウントのJWT署名を `node:crypto` で自前実装
+    （このリポジトリの依存は astro / tailwind / sharp だけ。データ取得のために数十MB持ち込むとサイトのビルドまで遅くなる）
+  - 出力は**Windsor時代とキー名・型・小数桁を完全に揃えた**ので、読む側のコードは一切変えていない
+  - GA4は `YYYYMMDD` で返すため `YYYY-MM-DD` へ変換。ページングも実装
+  - **取得失敗で異常終了しない**（広告データのコミットを巻き添えにしないため）。失敗は `_summary.json` に残る
+- 🔴 **移行ついでにWindsorの不具合を1件発見・修正した。**
+  `branded_vs_nonbranded` が**全148件で `nonbranded`** を返していた。「全力ストレッチ」という
+  完全な指名検索まで非指名扱いで、**指標として機能していなかった**。判定を `lib/branded.mjs` に自前実装しテストを追加
+  （指名/非指名はSEO評価の軸そのもの。指名が伸びても新規開拓にはならないため、ここが壊れていると判断を誤る）
+- **移行検証の作り**：Windsor側は `out/_windsor_<name>.json` へ、公式API側が正の `out/<name>.json` へ書く。
+  数日並走させて突き合わせてから、Windsorの接続を切る。**接続を切って初めて費用が下がる**
+- テスト14件を追加（JWT署名の検証、Secretsに1行で貼られた `\n` の復元、日付変換、指名判定）。41件すべて通過
+- 手順書: `docs/google-api-setup.md`（オーナー作業は15〜20分）
