@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { generateKeyPairSync, createVerify } from 'node:crypto';
-import { readServiceAccount, buildAssertion, ga4DateToIso } from '../lib/google-auth.mjs';
+import { readServiceAccount, buildAssertion, ga4DateToIso, pickAuthMode, stsAudience } from '../lib/google-auth.mjs';
 
 const { privateKey, publicKey } = generateKeyPairSync('rsa', { modulusLength: 2048 });
 const PEM = privateKey.export({ type: 'pkcs8', format: 'pem' });
@@ -74,4 +74,44 @@ test('GA4の YYYYMMDD を Windsor と同じ YYYY-MM-DD に直す', () => {
   assert.equal(ga4DateToIso('20260825'), '2026-08-25');
   assert.equal(ga4DateToIso('2026-08-25'), '2026-08-25'); // 二重変換しない
   assert.equal(ga4DateToIso('(other)'), '(other)'); // 日付以外はそのまま
+});
+
+// --- 認証方式の選択（2026-08-27に Workload Identity 連携を追加） ---
+
+test('WIFの設定があればwifを選ぶ', () => {
+  assert.equal(
+    pickAuthMode({
+      GCP_WORKLOAD_IDENTITY_PROVIDER: 'projects/1/locations/global/workloadIdentityPools/p/providers/v',
+      GCP_SERVICE_ACCOUNT_EMAIL: 'ga4-reader@x.iam.gserviceaccount.com',
+      ACTIONS_ID_TOKEN_REQUEST_URL: 'https://example/token?x=1',
+      ACTIONS_ID_TOKEN_REQUEST_TOKEN: 'tok',
+    }),
+    'wif',
+  );
+});
+
+test('WIFの設定があるのにOIDCが無ければ、原因が分かるエラーを出す', () => {
+  assert.throws(
+    () =>
+      pickAuthMode({
+        GCP_WORKLOAD_IDENTITY_PROVIDER: 'projects/1/locations/global/workloadIdentityPools/p/providers/v',
+        GCP_SERVICE_ACCOUNT_EMAIL: 'ga4-reader@x.iam.gserviceaccount.com',
+      }),
+    /id-token: write/,
+  );
+});
+
+test('WIFが無ければ鍵方式にフォールバックする', () => {
+  assert.equal(pickAuthMode({ GOOGLE_SERVICE_ACCOUNT_JSON: '{}' }), 'key');
+});
+
+test('どちらも無ければ両方の名前を挙げて落とす', () => {
+  assert.throws(() => pickAuthMode({}), /GCP_WORKLOAD_IDENTITY_PROVIDER.*GOOGLE_SERVICE_ACCOUNT_JSON/s);
+});
+
+test('STSのaudienceは // 付きのリソース名', () => {
+  const p = 'projects/663123106918/locations/global/workloadIdentityPools/github/providers/zn-stretch';
+  assert.equal(stsAudience(p), `//iam.googleapis.com/${p}`);
+  // 先頭に / を付けて貼られても二重にしない
+  assert.equal(stsAudience(`/${p}`), `//iam.googleapis.com/${p}`);
 });

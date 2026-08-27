@@ -2991,3 +2991,21 @@ Coworkの**スケジュールタスクにはリポジトリを紐付ける欄が
   数日並走させて突き合わせてから、Windsorの接続を切る。**接続を切って初めて費用が下がる**
 - テスト14件を追加（JWT署名の検証、Secretsに1行で貼られた `\n` の復元、日付変換、指名判定）。41件すべて通過
 - 手順書: `docs/google-api-setup.md`（オーナー作業は15〜20分）
+
+## 2026-08-27 (Claude Code) サービスアカウントキーが組織ポリシーで禁止 → Workload Identity 連携へ
+- `ga4-reader` に鍵を発行しようとして **`iam.managed.disableServiceAccountKeyCreation`** でブロック。
+  Googleの「デフォルトで保護」により andsync.jp の組織へ自動適用されたもの
+- **選択肢は2つあった**：
+  | 組織ポリシーの例外を作る | 2分で済むが、**組織全体のセキュリティ設定を緩める**ことになる |
+  | **Workload Identity 連携** | 設定は10分ほど増えるが、**鍵ファイルそのものが存在しない**。採用 |
+- **鍵を作らないほうが安全**なので後者にした。GitHub Secretsに恒久的な認証情報を置かずに済み、
+  漏洩・失効管理・ローテーションの問題が最初から発生しない。Googleの推奨もこちら
+- `scripts/lib/google-auth.mjs` に3段階の交換を実装（依存パッケージは増やさない方針を維持）：
+  1. GitHub ActionsのOIDCトークンを取得
+  2. Google STS で連携トークンへ交換
+  3. `iamcredentials` でサービスアカウントを借用し、目的のスコープのトークンを発行
+- **鍵方式も残した**（`pickAuthMode` が環境変数を見て自動で選ぶ）。ローカル実行や、
+  組織ポリシーが変わった場合の逃げ道として
+- ワークフローに `permissions: id-token: write` を追加。認証情報はSecretsではなく
+  **Variables**（`GCP_WORKLOAD_IDENTITY_PROVIDER` / `GCP_SERVICE_ACCOUNT_EMAIL`）。秘密情報ではないため
+- テストを5件追加（方式の選択、OIDC欠落時のエラー文言、STS audienceの組み立て）。46件すべて通過

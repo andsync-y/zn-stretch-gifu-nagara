@@ -22,6 +22,85 @@ BasicとStandardの他の違い（destination tasks 5→無制限、同期頻度
 
 ## 手順
 
+## ⚠️ サービスアカウントキーは使えない（2026-08-27に判明）
+
+`andsync.jp` の組織ポリシー **`iam.managed.disableServiceAccountKeyCreation`** が
+鍵の発行をブロックしている（Googleの「デフォルトで保護」により自動適用されたもの）。
+
+そこで **Workload Identity 連携**（GitHubのOIDCトークンをGoogleのトークンへ交換する方式）へ切り替えた。
+**鍵ファイルが存在しない**ので、GitHub Secretsに恒久的な認証情報を置かずに済む。
+組織のセキュリティ設定を緩める必要もない。
+
+以下は現在の手順。鍵方式の記述は、組織ポリシーが変わった場合の逃げ道として末尾に残してある。
+
+## 現行の設定（Workload Identity 連携）
+
+前提:
+- プロジェクト `zenryoku-analytics`（プロジェクト番号 **663123106918**）
+- サービスアカウント **`ga4-reader@zenryoku-analytics.iam.gserviceaccount.com`**（既存）
+- Google Analytics Data API と Google Search Console API は有効化済み
+
+### A. IAM Service Account Credentials API を有効化
+
+[有効化する](https://console.cloud.google.com/apis/library/iamcredentials.googleapis.com?project=zenryoku-analytics)
+
+サービスアカウントを「借用」してトークンを発行するために必要。
+
+### B. Workload Identity プールとプロバイダを作る
+
+「IAMと管理」→「**Workload Identity 連携**」→「プールを作成」
+
+1. **プール**: 名前 `github` / ID `github`
+2. **プロバイダを追加**:
+   - プロバイダの選択: **OpenID Connect (OIDC)**
+   - プロバイダ名 / ID: `zn-stretch`
+   - 発行元(Issuer) URL: `https://token.actions.githubusercontent.com`
+   - オーディエンス: **「デフォルトのオーディエンス」のまま**
+3. **属性のマッピング**:
+   | Google | OIDC |
+   |---|---|
+   | `google.subject` | `assertion.sub` |
+   | `attribute.repository` | `assertion.repository` |
+   | `attribute.repository_owner` | `assertion.repository_owner` |
+4. **属性の条件**（必須。これが無いと他人のリポジトリからも入れてしまう）:
+   ```
+   assertion.repository_owner == 'andsync-y'
+   ```
+
+### C. サービスアカウントに借用を許可
+
+`ga4-reader` を開く →「**権限**」タブ →「アクセスを許可」
+
+- プリンシパル:
+  ```
+  principalSet://iam.googleapis.com/projects/663123106918/locations/global/workloadIdentityPools/github/attribute.repository/andsync-y/zn-stretch-gifu-nagara
+  ```
+- ロール: **Workload Identity ユーザー**（`roles/iam.workloadIdentityUser`）
+
+### D. GA4 と Search Console に閲覧権限を渡す
+
+`ga4-reader@zenryoku-analytics.iam.gserviceaccount.com` を、
+
+- **GA4**: 管理 →「プロパティのアクセス管理」→ 役割「**閲覧者**」
+  （名前からして既に入っている可能性が高い。入っていれば何もしない）
+- **Search Console**: 設定 →「ユーザーと権限」→ 権限「**制限付き**」
+
+### E. GitHubに登録（Secretsではなく Variables）
+
+秘密情報ではないため **Variables** に入れる。
+[Variables の画面](https://github.com/andsync-y/zn-stretch-gifu-nagara/settings/variables/actions)
+
+| Name | Value |
+|---|---|
+| `GCP_WORKLOAD_IDENTITY_PROVIDER` | `projects/663123106918/locations/global/workloadIdentityPools/github/providers/zn-stretch` |
+| `GCP_SERVICE_ACCOUNT_EMAIL` | `ga4-reader@zenryoku-analytics.iam.gserviceaccount.com` |
+
+ワークフロー側には `permissions: id-token: write` を追加済み。
+
+---
+
+## （参考）鍵方式 — 組織ポリシーが変わった場合のみ
+
 ### 1. Google Cloudでサービスアカウントを作る
 
 1. https://console.cloud.google.com/ を開く（GA4・Search Consoleと同じGoogleアカウントで）

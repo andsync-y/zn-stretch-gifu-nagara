@@ -10,6 +10,10 @@ on:
 
 permissions:
   contents: write
+  # GA4 / Search Console の認証に使う。Workload Identity 連携で
+  # GitHubのOIDCトークンをGoogleのトークンへ交換するため、これが無いと取得できない。
+  # （andsync.jp の組織ポリシーでサービスアカウントキーの発行が禁止されており、鍵方式が使えない）
+  id-token: write
 
 jobs:
   fetch:
@@ -56,10 +60,14 @@ jobs:
       # 移行検証中はWindsor側が out/_windsor_*.json を書き、こちらが正の out/*.json を書く。
       - name: GA4の実績を取得（公式API）
         env:
+          GCP_WORKLOAD_IDENTITY_PROVIDER: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          GCP_SERVICE_ACCOUNT_EMAIL: ${{ vars.GCP_SERVICE_ACCOUNT_EMAIL }}
           GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
         run: node scripts/fetch-ga4-data.mjs
       - name: Search Consoleの実績を取得（公式API）
         env:
+          GCP_WORKLOAD_IDENTITY_PROVIDER: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          GCP_SERVICE_ACCOUNT_EMAIL: ${{ vars.GCP_SERVICE_ACCOUNT_EMAIL }}
           GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
         run: node scripts/fetch-gsc-data.mjs
 
