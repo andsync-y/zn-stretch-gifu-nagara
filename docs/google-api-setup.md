@@ -154,11 +154,13 @@ gsc_queries_prev28d: NNN行
 **いきなりWindsorのGA4/GSC接続を切らない。** 数字が合うことを確かめてからにする。
 
 1. ✅ 公式API版のスクリプトを実装（`fetch-ga4-data.mjs` / `fetch-gsc-data.mjs`）
-2. ⬜ 上の設定を済ませる（オーナー作業）
-3. ⬜ **2〜3日、両方を並走させる。** Windsor側は `out/_windsor_*.json` に、公式API側は
-   正となる `out/*.json` に書かれるので、同じ日の数字を突き合わせられる
-4. ⬜ 一致を確認したら `fetch-windsor-data.mjs` の `compare: true` の6行を削除
-5. ⬜ **Windsor側で GA4・Search Console・Microsoft Clarity の接続を切る**（6件 → 3件）
+2. ✅ Workload Identity 連携の設定（初回で認証成功）
+3. ✅ **突き合わせ完了。1,743行すべて一致**（値ちがい0・片側だけの行0）
+   | ga4_events_7d 261 | ga4_pages_7d 89 | ga4_events_30d 1,045 |
+   | ga4_sessions_30d 156 | gsc_queries_28d 148 | gsc_queries_prev28d 44 |
+   30日窓・28日窓も一致したので、期間の端（タイムゾーン起因のズレ）の扱いも同じと確認できた
+4. ✅ 突き合わせ用コードを削除
+5. ✅ Windsor側で GA4・Search Console・Microsoft Clarity の接続を解除（6件 → 3件）
 6. ⬜ **Basicへ変更**
 
 **5番を実行して初めて費用が下がる。** 接続したままプランだけ落とすことはできない。
