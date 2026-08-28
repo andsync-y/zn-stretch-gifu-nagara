@@ -3149,3 +3149,21 @@ Coworkの**スケジュールタスクにはリポジトリを紐付ける欄が
   拡張が来店に繋がるかは未検証のため、判定は店舗実測の新規総数のみで行う
 - 監視の変更点：**Metaの日次消化はCBOの仕様で最大¥12,600/日まで振れる**（週¥50,400が上限）。
   デイリー監視の総額チェックは日次でなく週ペースで判定する
+
+## 2026-08-28 (Claude Code) コラム新規1本追加（パーソナルストレッチとは／compare型）
+- ブランチ：`claude/column-auto`
+- 関連PR：なし（コラム専用ブランチへのコミットのみ。マージはユーザーが実施）
+- 変更内容：
+  - `docs/column-backlog.md` の `compare` 枠から未対応の最上位「personal-stretch-towa（パーソナルストレッチ とは 初めて）」を選び、新規コラム記事を1本作成。
+  - 結論先出し（パーソナルストレッチとセルフストレッチは目的で使い分けるという1文）→ 比較表（誰が行うか／アプローチできる範囲／その日の体調への調整／服装・準備／続けやすさ・頻度の5観点）→ 初めての方向けの当日の流れ（独自メソッド「体感軸調整法」への初出リンクを含む）→ 自宅でできるセルフストレッチ3種（首の横伸ばし／胸を開く／腰まわりのリラックス、いずれも`stretchPoses.ts`既存ポーズ pose-01/06/09 を使用）→ 使い分けの結論、の構成。既存の比較記事「stretch-momihogushi-chigai」（ストレッチ vs もみほぐし）とは対象が異なり重複なし。
+  - FAQ5問（「結局どちらを選べばいいですか？」を含む）、`/method`・`/menu`・`/reserve` への内部リンクを設置。
+  - `src/data/columns.ts` の `COLUMNS` 先頭に新記事のメタデータ（slug/heading/desc/date/tags/relatedSymptoms/selfCare）を追加。
+  - `docs/column-backlog.md` の該当行を `- [x]` に更新。
+  - アイキャッチは `scripts/fetch-column-image.mjs --source ai` でAI生成（明るいリビングで朝、腕を伸ばす日本人男性）。`imageCredit` に「※画像はイメージです」を設定済み。
+- 主な変更ファイル：
+  - `src/pages/column/personal-stretch-towa.astro`（新規）
+  - `public/images/column/personal-stretch-towa.webp`（新規）
+  - `src/data/columns.ts`
+  - `docs/column-backlog.md`
+- 確認結果：`node scripts/yakkihou-ng.mjs` と `node scripts/lint-column.mjs src/pages/column/personal-stretch-towa.astro` いずれもPASS。`npm run build` 成功（36ページ生成）。
+- 未対応・次の作業：なし。
