@@ -5,7 +5,11 @@ name: 広告データ取得（Windsor中継）
 # あわせてMicrosoft Clarityの行動データ（clarity_7d.json）も同じブランチへ置く。
 on:
   schedule:
-    - cron: '0 23 * * *' # JST 8:00（監視Routineの1時間前）
+    # JST 5:17。監視Routine（JST 9:00）の3時間40分前に置いている。
+    # 以前は 0 23（JST 8:00）だったが、GitHubのスケジュール実行は混雑時に数時間ずれる。
+    # 実際 8/26分は5時間遅れて 8/27 04:08 に走り、8/27分は監視の時刻までに走らなかった。
+    # 毎時0分は混みやすいので分もずらしてある。
+    - cron: '17 20 * * *'
   workflow_dispatch:
 
 permissions:
