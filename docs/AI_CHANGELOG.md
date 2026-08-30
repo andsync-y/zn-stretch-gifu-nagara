@@ -3200,3 +3200,9 @@ Coworkの**スケジュールタスクにはリポジトリを紐付ける欄が
 - `astro.config.mjs` の sitemap に `serialize` を追加し、ルート以外の末尾スラッシュを除去。
   canonical（`Base.astro` が末尾スラッシュを落とす）と全URLが一致するようにした
 - 既存の `/lp` 除外 filter は維持。ビルドで全36ページのURL一致と lp 不在を確認
+
+## 2026-08-30 (Claude Code) SEO修正② sitemapに記事のlastmodを出す
+- 新規 `scripts/lib/column-dates.mjs`：記事の `datePublished` / `dateModified` 属性リテラルを
+  ファイルから抽出（**記事ファイル側は一切変更しない**設計）。抽出漏れに気づけるよう実ファイル検査のテスト3件を追加
+- `astro.config.mjs` の serialize で `/column/<slug>` に `lastmod` を付与（更新日、無ければ公開日）。
+  固定ページには付けない（実更新日を持たないため）。全18記事に付与されたことをビルドで確認
