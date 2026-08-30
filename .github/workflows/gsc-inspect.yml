@@ -3,6 +3,11 @@
 name: gsc-inspect
 on:
   workflow_dispatch:
+    inputs:
+      url_form:
+        description: 'slash=末尾スラッシュ付きで検査（既定はcanonical形）'
+        required: false
+        default: ''
 
 permissions:
   contents: write
@@ -21,6 +26,7 @@ jobs:
         env:
           GCP_WORKLOAD_IDENTITY_PROVIDER: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
           GCP_SERVICE_ACCOUNT_EMAIL: ${{ vars.GCP_SERVICE_ACCOUNT_EMAIL }}
+          URL_FORM: ${{ github.event.inputs.url_form }}
         run: node scripts/gsc-inspect.mjs
       - name: レポートを windsor-log ブランチへ
         if: always()

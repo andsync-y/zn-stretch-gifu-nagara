@@ -22,6 +22,9 @@ import { writeFile, mkdir } from 'node:fs/promises';
 import { getAccessToken } from './lib/google-auth.mjs';
 
 const SITE = process.env.GSC_SITE_URL || 'https://zn-stretch-gifu.com/';
+// URL_FORM=slash でスラッシュ付き形を検査する（sitemapが送っていた形。canonical形とどちらを
+// Googleが知っているか切り分けるため。2026-08-30の初回検査でcanonical形は全て unknown だった）
+const SLASH = process.env.URL_FORM === 'slash';
 const ORIGIN = SITE.replace(/\/$/, '');
 const SCOPE = 'https://www.googleapis.com/auth/webmasters';
 
@@ -67,7 +70,7 @@ async function resubmitSitemap() {
 
 const rows = [];
 for (const path of routes()) {
-  const url = path === '/' ? `${ORIGIN}/` : `${ORIGIN}${path}`;
+  const url = path === '/' ? `${ORIGIN}/` : `${ORIGIN}${path}${SLASH ? '/' : ''}`;
   try {
     const r = await inspect(url);
     rows.push({
