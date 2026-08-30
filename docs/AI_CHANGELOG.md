@@ -3208,3 +3208,10 @@ Coworkの**スケジュールタスクにはリポジトリを紐付ける欄が
 - 両URL形とも200直接配信（リダイレクト無し）を確認 → **PR #38 の前提は維持**
 - 「登録リクエスト」に公式APIは無い（Indexing APIは求人・ライブ配信専用）。手動リクエストの優先10件を提示
 - sitemap再送信APIは403：ga4-readerがGSC「制限付き」のため。「フル」へ上げれば自動化できる
+
+## 2026-08-30 (Claude Code) PR #38/#39 マージ＋sitemap自動再送信を導入
+- SEO① URL正規化・② lastmod をマージ（AI_CHANGELOGの追記衝突はunionマージで解消してから）
+- 新規 `gsc-sitemap-ping.yml`＋`scripts/gsc-submit-sitemap.mjs`：`src/pages/**` の変更が
+  本番ブランチへ入るたびGSCへsitemapを再送信（フル権限化により可能になった）。
+  コラム自動生成→マージ→デプロイ→**再送信まで全自動**になり、新規ページの発見を受け身にしない
+- オーナー対応済み：ga4-readerフル権限化・優先10URLの手動インデックス登録リクエスト

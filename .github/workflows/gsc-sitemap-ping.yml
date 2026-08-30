@@ -1,0 +1,30 @@
+# ページが追加・更新されて本番ブランチへ入ったら、GSCへsitemapを再送信する。
+# トップ以外が2か月クロールされなかった反省から、新規ページの「発見」を受け身にしない。
+name: gsc-sitemap-ping
+on:
+  push:
+    branches: [claude/zenkara-gifu-nagara-seo-ukz0er]
+    paths: ['src/pages/**']
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      # Vercelのデプロイ完了を待ってから送る（送信時点で新sitemapが公開されている必要がある）
+      - name: デプロイ猶予
+        run: sleep 120
+      - name: sitemap再送信
+        env:
+          GCP_WORKLOAD_IDENTITY_PROVIDER: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          GCP_SERVICE_ACCOUNT_EMAIL: ${{ vars.GCP_SERVICE_ACCOUNT_EMAIL }}
+        run: node scripts/gsc-submit-sitemap.mjs
