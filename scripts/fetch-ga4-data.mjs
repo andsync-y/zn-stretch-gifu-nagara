@@ -16,6 +16,7 @@
  *   ga4_pages_7d.json     [{date, page_path, session_source_medium, sessions}]
  *   ga4_events_30d.json   （7dと同じ形）
  *   ga4_sessions_30d.json [{date, session_source_medium, sessions}]
+ *   ga4_reserve_hourly_30d.json [{datetime_hour, event_name, session_source_medium, event_count}]
  */
 import { writeFile, mkdir } from 'node:fs/promises';
 import { getAccessToken, ga4DateToIso, mergeSummary } from './lib/google-auth.mjs';
@@ -53,6 +54,31 @@ const REPORTS = [
     metrics: ['sessions'],
     shape: (d, m) => ({ date: ga4DateToIso(d[0]), session_source_medium: d[1], sessions: Number(m[0]) }),
   },
+  {
+    // 予約アクションの発火「時刻」。SALON BOARDの予約通知メールにある「予約受付日時」と
+    // 突き合わせて、クリック→予約成立の歩留まりを時間帯別に見るために使う
+    // （docs/analytics/booking-email-correlation.md）。
+    // dateHour はGA4プロパティのタイムゾーン設定に従う。JST想定だが未検証で、
+    // ズレていると時刻比較が最大9時間ずれる。最初の突き合わせのときに必ず確認すること。
+    // 全イベントを時間粒度で取ると行数が跳ねるため、予約アクション3種に絞っている。
+    name: 'ga4_reserve_hourly_30d',
+    range: { startDate: '30daysAgo', endDate: 'yesterday' },
+    dimensions: ['dateHour', 'eventName', 'sessionSourceMedium'],
+    metrics: ['eventCount'],
+    dimensionFilter: {
+      filter: {
+        fieldName: 'eventName',
+        inListFilter: { values: ['click_reserve', 'click_line', 'click_tel'] },
+      },
+    },
+    orderBys: [{ dimension: { dimensionName: 'dateHour' } }],
+    shape: (d, m) => ({
+      datetime_hour: `${ga4DateToIso(d[0].slice(0, 8))}T${d[0].slice(8, 10)}:00`,
+      event_name: d[1],
+      session_source_medium: d[2],
+      event_count: Number(m[0]),
+    }),
+  },
 ];
 
 async function runReport(token, r) {
@@ -66,8 +92,9 @@ async function runReport(token, r) {
         dateRanges: [r.range],
         dimensions: r.dimensions.map((name) => ({ name })),
         metrics: r.metrics.map((name) => ({ name })),
+        ...(r.dimensionFilter ? { dimensionFilter: r.dimensionFilter } : {}),
         // 日付昇順・件数降順。Windsorの並びに寄せておくと、目視で見比べやすい
-        orderBys: [
+        orderBys: r.orderBys || [
           { dimension: { dimensionName: 'date' } },
           { metric: { metricName: r.metrics[0] }, desc: true },
         ],

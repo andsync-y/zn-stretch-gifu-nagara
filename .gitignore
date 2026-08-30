@@ -34,6 +34,9 @@ phone-book.json
 phone-*.csv
 phone-*.tsv
 
+# 予約通知メールの中間集計（氏名は含めない設計だが、生データはコミットしない）
+tmp-bookings.json
+
 # コラム品質GATEの一時ファイル（ワークフロー実行中のみ存在）
 lint-result.txt
 lint-final.txt
