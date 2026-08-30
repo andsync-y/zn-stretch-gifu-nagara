@@ -3200,3 +3200,11 @@ Coworkの**スケジュールタスクにはリポジトリを紐付ける欄が
 - `astro.config.mjs` の sitemap に `serialize` を追加し、ルート以外の末尾スラッシュを除去。
   canonical（`Base.astro` が末尾スラッシュを落とす）と全URLが一致するようにした
 - 既存の `/lp` 除外 filter は維持。ビルドで全36ページのURL一致と lp 不在を確認
+## 2026-08-30 (Claude Code) GSC URL検査を全35ページに実行 — トップ以外クロールゼロ.と判明
+- 新規 `scripts/gsc-inspect.mjs`＋`gsc-inspect.yml`：URL検査APIの一括実行とsitemap再送信。
+  スラッシュ両形を検査できる（`URL_FORM=slash`）。`windsor-action.yml` にヘッダ調査（`dry_run=head`）も追加
+- **結果：indexされているのはトップページのみ。他34ページは開設以来一度もクロールされていない**
+  （スラッシュ形26ページがDiscovered止まり・8ページ未発見）。詳細は `docs/seo/gsc-inspect-2026-08-30.md`
+- 両URL形とも200直接配信（リダイレクト無し）を確認 → **PR #38 の前提は維持**
+- 「登録リクエスト」に公式APIは無い（Indexing APIは求人・ライブ配信専用）。手動リクエストの優先10件を提示
+- sitemap再送信APIは403：ga4-readerがGSC「制限付き」のため。「フル」へ上げれば自動化できる
