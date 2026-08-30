@@ -3196,6 +3196,10 @@ Coworkの**スケジュールタスクにはリポジトリを紐付ける欄が
 - ⚠️ 引き続き**Lead≠来店**。数字が良すぎるときこそ「安いクリックを買っているだけ」の可能性を疑う。
   判定は9/8〜9/12の店舗実測。フリークエンシーは週明けの14日窓で確認
 
+## 2026-08-30 (Claude Code) SEO修正① sitemapのURL形式をcanonicalに揃える
+- `astro.config.mjs` の sitemap に `serialize` を追加し、ルート以外の末尾スラッシュを除去。
+  canonical（`Base.astro` が末尾スラッシュを落とす）と全URLが一致するようにした
+- 既存の `/lp` 除外 filter は維持。ビルドで全36ページのURL一致と lp 不在を確認
 ## 2026-08-30 (Claude Code) GSC URL検査を全35ページに実行 — トップ以外クロールゼロ.と判明
 - 新規 `scripts/gsc-inspect.mjs`＋`gsc-inspect.yml`：URL検査APIの一括実行とsitemap再送信。
   スラッシュ両形を検査できる（`URL_FORM=slash`）。`windsor-action.yml` にヘッダ調査（`dry_run=head`）も追加
