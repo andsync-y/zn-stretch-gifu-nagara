@@ -3195,3 +3195,9 @@ Coworkの**スケジュールタスクにはリポジトリを紐付ける欄が
   CPC¥143で上限内。総額 ¥11,909/日で上限内
 - ⚠️ 引き続き**Lead≠来店**。数字が良すぎるときこそ「安いクリックを買っているだけ」の可能性を疑う。
   判定は9/8〜9/12の店舗実測。フリークエンシーは週明けの14日窓で確認
+
+## 2026-08-30 (Claude Code) SEO修正③ Search Consoleにページ別取得を追加
+- `fetch-gsc-data.mjs` の `queryAnalytics` を一般化（`dimensions` 指定・`shape(keys,row)`・`postFilter`）し、
+  `gsc_pages_28d`（ページ別）と `gsc_page_queries_28d`（ページ×クエリ・impressions=0除外・上限2000行）を追加
+- **既存の `gsc_queries_28d` / `gsc_queries_prev28d` のスキーマ・キー名・並び順は不変**（分析側が依存）
+- これで記事単位の表示回数・クリック・順位が取れ、コラム施策の成否を記事別に判定できる

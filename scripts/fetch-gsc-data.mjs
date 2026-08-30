@@ -15,8 +15,11 @@
  *   GSC_SITE_URL                … 既定 https://zn-stretch-gifu.com/
  *
  * 出力:
- *   gsc_queries_28d.json     [{query, branded_vs_nonbranded, clicks, impressions, ctr, position}]
- *   gsc_queries_prev28d.json [{query, clicks, impressions, position}]
+ *   gsc_queries_28d.json      [{query, branded_vs_nonbranded, clicks, impressions, ctr, position}]
+ *   gsc_queries_prev28d.json  [{query, clicks, impressions, position}]
+ *   gsc_pages_28d.json        [{page, clicks, impressions, ctr, position}]（2026-08-30追加）
+ *   gsc_page_queries_28d.json [{page, query, branded_vs_nonbranded, clicks, impressions, ctr, position}]
+ *                             （impressions=0を除外・最大2000行。既存2ファイルのスキーマは不変）
  */
 import { writeFile, mkdir } from 'node:fs/promises';
 import { getAccessToken, mergeSummary } from './lib/google-auth.mjs';
@@ -35,7 +38,8 @@ const REPORTS = [
     name: 'gsc_queries_28d',
     startDate: daysAgo(28),
     endDate: daysAgo(1),
-    shape: (q, r) => ({
+    dimensions: ['query'],
+    shape: ([q], r) => ({
       query: q,
       branded_vs_nonbranded: brandedLabel(q),
       clicks: r.clicks,
@@ -49,10 +53,47 @@ const REPORTS = [
     name: 'gsc_queries_prev28d',
     startDate: daysAgo(56),
     endDate: daysAgo(29),
-    shape: (q, r) => ({
+    dimensions: ['query'],
+    shape: ([q], r) => ({
       query: q,
       clicks: r.clicks,
       impressions: r.impressions,
+      position: round4(r.position),
+    }),
+  },
+  {
+    // ページ別。記事単位でSEO施策の成否を判定するために2026-08-30追加
+    // （クエリ次元だけではどの記事が伸びたか分からなかった）
+    name: 'gsc_pages_28d',
+    startDate: daysAgo(28),
+    endDate: daysAgo(1),
+    dimensions: ['page'],
+    shape: ([page], r) => ({
+      page,
+      clicks: r.clicks,
+      impressions: r.impressions,
+      ctr: round4(r.ctr),
+      position: round4(r.position),
+    }),
+  },
+  {
+    // ページ×クエリ。行数が膨らむため impressions=0 を落とし、上限2000行（impressions降順で選抜）
+    name: 'gsc_page_queries_28d',
+    startDate: daysAgo(28),
+    endDate: daysAgo(1),
+    dimensions: ['page', 'query'],
+    postFilter: (rows) => {
+      const kept = rows.filter((x) => x.impressions > 0);
+      if (kept.length <= 2000) return kept;
+      return kept.sort((a, b) => b.impressions - a.impressions).slice(0, 2000);
+    },
+    shape: ([page, q], r) => ({
+      page,
+      query: q,
+      branded_vs_nonbranded: brandedLabel(q),
+      clicks: r.clicks,
+      impressions: r.impressions,
+      ctr: round4(r.ctr),
       position: round4(r.position),
     }),
   },
@@ -70,7 +111,7 @@ async function queryAnalytics(token, r) {
         body: JSON.stringify({
           startDate: r.startDate,
           endDate: r.endDate,
-          dimensions: ['query'],
+          dimensions: r.dimensions,
           rowLimit: ROW_LIMIT,
           startRow,
         }),
@@ -81,13 +122,14 @@ async function queryAnalytics(token, r) {
     if (!res.ok) throw new Error(`HTTP ${res.status}: ${text.slice(0, 300)}`);
     const json = JSON.parse(text);
     const batch = json.rows || [];
-    for (const row of batch) rows.push(r.shape(row.keys[0], row));
+    for (const row of batch) rows.push(r.shape(row.keys, row));
     if (batch.length < ROW_LIMIT) break;
     startRow += ROW_LIMIT;
   }
+  const kept = r.postFilter ? r.postFilter(rows) : rows;
   // クリック降順。Windsorの並びに合わせる
-  rows.sort((a, b) => b.clicks - a.clicks || b.impressions - a.impressions);
-  return rows;
+  kept.sort((a, b) => b.clicks - a.clicks || b.impressions - a.impressions);
+  return kept;
 }
 
 await mkdir('out', { recursive: true });
