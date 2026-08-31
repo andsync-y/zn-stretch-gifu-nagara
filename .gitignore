@@ -41,3 +41,4 @@ tmp-bookings.json
 lint-result.txt
 lint-final.txt
 stretch-spec.json
+tmp-*.json
