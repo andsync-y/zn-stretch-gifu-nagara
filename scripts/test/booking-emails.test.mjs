@@ -90,18 +90,80 @@ test('電話予約の予約番号は channel=phone として区別する', () =>
   assert.equal(r.channel, 'phone');
 });
 
-test('アンケート回答は ご要望・ご相談 から取れる（2026-08-31の経路アンケートの検証用）', () => {
+// 実物（BF60199476・2026-08-31 15:21受付）で判明した形。
+// 回答は「■サロンからお客様への質問」ブロックに入り、■ご要望・ご相談 は `-` のまま。
+const SURVEY_BLOCK = `■サロンからお客様への質問
+　質問：※クーポン割引は、ご来店後に口コミをご投稿いただける方が対象です。
+
+サービス向上のためアンケートにご協力をお願いいたします。
+当店を「最初に」知ったきっかけの番号を下記にご記入ください。
+【1】 ホットペッパーで検索
+【2】 Instagram・Facebookの広告
+【3】 Google検索・広告
+【4】 看板・通りがかり
+【5】 ご紹介
+【6】 その他
+　回答： 【1】
+`;
+
+const withSurvey = (m, block = SURVEY_BLOCK) => ({
+  ...m,
+  plaintextBody: m.plaintextBody.replace('予約受付日時：', `${block}\nPC版SALON BOARD\nhttps://salonboard.com/login/\n\n予約受付日時：`),
+});
+
+// ⚠️ 当初「■ご要望・ご相談 に載る」と想定して実装したが、実データで否定された。
+test('アンケート回答は「サロンからお客様への質問」から取る（ご要望・ご相談ではない）', () => {
   const r = parseBookingEmail(
-    mail({
-      subject: '予約連絡',
-      id: 'BF60000001',
-      name: 'テスト 三郎',
-      visit: '2026年09月01日（火）10:00',
-      accepted: '2026年09月01日（火）09:00',
-      request: '【2】インスタ・フェイスブックの広告',
-    }),
+    withSurvey(
+      mail({
+        subject: '【当日16時30分】直前予約が入りました',
+        id: 'BF60199476',
+        name: 'テスト 三郎',
+        visit: '2026年08月31日（月）16:30',
+        accepted: '2026年08月31日（月）15:21',
+      }),
+    ),
   );
-  assert.equal(r.request, '【2】インスタ・フェイスブックの広告');
+  assert.equal(r.request, null, 'ご要望・ご相談 は空のまま');
+  assert.equal(r.surveyAnswer, '【1】');
+  assert.equal(r.surveyChannel, 1);
+});
+
+test('番号で答えていない自由記述は surveyChannel に落とさない', () => {
+  const block = SURVEY_BLOCK.replace('　回答： 【1】', '　回答： 友人にすすめられて');
+  const r = parseBookingEmail(
+    withSurvey(
+      mail({
+        subject: '予約連絡',
+        id: 'BF60199477',
+        name: 'テスト 八郎',
+        visit: '2026年09月01日（火）10:00',
+        accepted: '2026年09月01日（火）09:00',
+      }),
+      block,
+    ),
+  );
+  assert.equal(r.surveyAnswer, '友人にすすめられて');
+  assert.equal(r.surveyChannel, null);
+});
+
+test('経路アンケートを日別に集計する', () => {
+  const base = {
+    subject: '予約連絡',
+    name: 'テスト 九郎',
+    visit: '2026年09月01日（火）10:00',
+    accepted: '2026年08月31日（月）15:21',
+  };
+  const { rows } = summarize([
+    withSurvey(mail({ ...base, id: 'BF1' })),
+    withSurvey(mail({ ...base, id: 'BF2', name: 'テスト 十郎' }), SURVEY_BLOCK.replace('【1】\n', '【2】\n')),
+    mail({ ...base, id: 'BF3', name: 'テスト 十一郎' }), // アンケート以前の予約
+  ]);
+  const d = rows.find((r) => r.date === '2026-08-31');
+  assert.equal(d.bookings, 3);
+  assert.equal(d.surveyAnswered, 2, 'アンケートが無い通知は数えない');
+  assert.equal(d.byChannel[1], 1);
+  assert.equal(d.byChannel[2], 1);
 });
 
 // 【間違い②の再発防止】キャンセル→取り直しを新規として二重に数えていた

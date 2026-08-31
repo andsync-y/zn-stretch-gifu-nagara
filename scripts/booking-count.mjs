@@ -18,7 +18,7 @@
  */
 
 import { readFileSync } from 'node:fs';
-import { summarize } from './lib/booking-emails.mjs';
+import { summarize, SURVEY_CHANNELS } from './lib/booking-emails.mjs';
 
 const args = process.argv.slice(2);
 const file = args.find((a) => !a.startsWith('--'));
@@ -68,6 +68,18 @@ console.log(
   `合計          ${String(total.bookings).padStart(4)}  ${String(total.rebookings).padStart(8)}  ` +
     `${String(total.net).padStart(6)}  ${String(total.firstVisit).padStart(8)}  ${String(total.cancels).padStart(10)}`,
 );
+
+if (total.surveyAnswered > 0) {
+  console.log('');
+  console.log(`経路アンケート（回答 ${total.surveyAnswered} 件）`);
+  for (const [n, label] of Object.entries(SURVEY_CHANNELS)) {
+    const c = total.byChannel[n] ?? 0;
+    if (c > 0) console.log(`  【${n}】${label}  ${c}`);
+  }
+} else {
+  console.log('');
+  console.log('経路アンケート：回答なし（2026-08-31 表示開始。それ以前の予約には設問が出ていない）');
+}
 
 console.log('');
 console.log(`⚠️ ${notes.warning}`);

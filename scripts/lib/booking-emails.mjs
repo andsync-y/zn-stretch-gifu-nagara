@@ -49,6 +49,39 @@ export function mailReceivedJst(mail) {
   return { date: iso.slice(0, 10), time: iso.slice(11, 16) };
 }
 
+/**
+ * 経路アンケート（2026-08-31 表示開始）の選択肢。
+ * 設問文は `docs/ops-change-log.md` の同日の行を参照。
+ */
+export const SURVEY_CHANNELS = {
+  1: 'ホットペッパーで検索',
+  2: 'Instagram・Facebookの広告',
+  3: 'Google検索・広告',
+  4: '看板・通りがかり',
+  5: 'ご紹介',
+  6: 'その他',
+};
+
+/**
+ * アンケート回答を取り出す。
+ *
+ * ⚠️ **`■ご要望・ご相談` ではない。** 2026-08-31 に「そこに載るはず」と想定して実装したが、
+ * 実際の1通目（BF60199476）で否定された。回答は `■サロンからお客様への質問` ブロックの
+ * 末尾の「回答：」行に入り、`■ご要望・ご相談` は `-` のままだった。
+ */
+export function parseSurveyAnswer(body) {
+  const block = body.match(/■サロンからお客様への質問([\s\S]*?)(?=\n■|\nPC版SALON BOARD|\n予約受付日時|$)/);
+  if (!block) return { surveyAnswer: null, surveyChannel: null };
+  const raw = block[1].match(/回答：\s*(.+)/)?.[1]?.trim() ?? null;
+  if (!raw || raw === '-') return { surveyAnswer: null, surveyChannel: null };
+  const n = raw.match(/【\s*(\d)\s*】/)?.[1];
+  return {
+    surveyAnswer: raw,
+    // 番号で答えていない自由記述もあり得るので、番号が取れたときだけ経路に落とす
+    surveyChannel: n && SURVEY_CHANNELS[n] ? Number(n) : null,
+  };
+}
+
 /** 初回クーポンかどうか。クーポン名の表記ゆれに強くしておく。 */
 function isFirstVisitCoupon(coupon) {
   if (!coupon) return false;
@@ -91,9 +124,9 @@ export function parseBookingEmail(mail) {
     acceptedDate: accepted?.date ?? null,
     acceptedTime: accepted?.time ?? null,
     firstVisit: isFirstVisitCoupon(coupon),
-    // アンケート回答はここに載る想定（2026-08-31 に経路アンケートを表示開始）。
-    // `-` は未回答。回答が入るかどうかの検証にそのまま使える
+    // 「ご要望・ご相談」はお客様の自由記述。アンケート回答はここではない（下記 survey*）
     request: request === '-' ? null : request,
+    ...parseSurveyAnswer(body),
     personKey: name ? createHash('sha256').update(name).digest('hex').slice(0, 16) : null,
   };
 }
@@ -149,7 +182,7 @@ export function summarize(mails, { from = null, to = null, windowDays = 14 } = {
   const bump = (date, key, n = 1) => {
     if (!inRange(date)) return;
     if (!days.has(date)) {
-      days.set(date, { date, bookings: 0, rebookings: 0, net: 0, cancels: 0, firstVisit: 0 });
+      days.set(date, { date, bookings: 0, rebookings: 0, net: 0, cancels: 0, firstVisit: 0, byChannel: {}, surveyAnswered: 0 });
     }
     days.get(date)[key] += n;
   };
@@ -168,6 +201,11 @@ export function summarize(mails, { from = null, to = null, windowDays = 14 } = {
     if (r.rebooking) bump(r.acceptedDate, 'rebookings');
     else bump(r.acceptedDate, 'net');
     if (r.firstVisit && !r.rebooking) bump(r.acceptedDate, 'firstVisit');
+    if (r.surveyAnswer && inRange(r.acceptedDate)) {
+      const day = days.get(r.acceptedDate);
+      day.surveyAnswered += 1;
+      if (r.surveyChannel) day.byChannel[r.surveyChannel] = (day.byChannel[r.surveyChannel] ?? 0) + 1;
+    }
   }
 
   const rows = [...days.values()].sort((a, b) => (a.date < b.date ? -1 : 1));
@@ -178,8 +216,13 @@ export function summarize(mails, { from = null, to = null, windowDays = 14 } = {
       net: a.net + r.net,
       cancels: a.cancels + r.cancels,
       firstVisit: a.firstVisit + r.firstVisit,
+      surveyAnswered: a.surveyAnswered + r.surveyAnswered,
+      byChannel: Object.entries(r.byChannel).reduce(
+        (acc, [k, v]) => ({ ...acc, [k]: (acc[k] ?? 0) + v }),
+        a.byChannel,
+      ),
     }),
-    { bookings: 0, rebookings: 0, net: 0, cancels: 0, firstVisit: 0 },
+    { bookings: 0, rebookings: 0, net: 0, cancels: 0, firstVisit: 0, surveyAnswered: 0, byChannel: {} },
   );
 
   return {
