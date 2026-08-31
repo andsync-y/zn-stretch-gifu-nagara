@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { parseBookingEmail, summarize } from '../lib/booking-emails.mjs';
 
 // 実物のフォーマットに合わせた検体。氏名はダミー（リポジトリに実名を置かないため）。
-const mail = ({ subject, id, name, visit, accepted, coupon = null, request = '-', cancel = false }) => ({
+const mail = ({ subject, id, name, visit, accepted, coupon = null, menu = '整体＋骨盤矯正', request = '-', cancel = false }) => ({
   subject,
   plaintextBody: [
     '全力ストレッチ岐阜長良店【全身もみほぐしマッサージ&ストレッチ整体】様',
@@ -22,7 +22,7 @@ const mail = ({ subject, id, name, visit, accepted, coupon = null, request = '-'
     '■指名スタッフ',
     '　指名なし',
     '■メニュー',
-    '　整体＋骨盤矯正',
+    `　${menu}`,
     '　（所要時間目安：2時間）',
     ...(coupon ? ['■ご利用クーポン', `　${coupon}`, '　［説明文］'] : []),
     '',
@@ -129,6 +129,63 @@ test('アンケート回答は「サロンからお客様への質問」から�
   assert.equal(r.surveyChannel, 1);
 });
 
+// 実物の1通目は回数券保有者だった。既存客の「最初に知ったきっかけ」を
+// 新規の来店経路として集計すると広告の評価が壊れる
+test('回数券メニューの予約は既存客（repeat）に分類する', () => {
+  const r = parseBookingEmail(
+    mail({
+      subject: '【当日16時30分】直前予約が入りました',
+      id: 'BF60199476',
+      name: 'テスト 三郎',
+      visit: '2026年08月31日（月）16:30',
+      accepted: '2026年08月31日（月）15:21',
+      menu: '男性60分チケット1枚',
+      coupon: '利用クーポンなし',
+    }),
+  );
+  assert.equal(r.customerType, 'repeat');
+  assert.equal(r.firstVisit, false);
+});
+
+test('初回クーポンの予約は初回客（first）に分類する', () => {
+  const r = parseBookingEmail(
+    mail({
+      subject: '予約連絡',
+      id: 'BF1',
+      name: 'テスト 太郎',
+      visit: '2026年09月01日（火）10:00',
+      accepted: '2026年09月01日（火）09:00',
+      coupon: '☆お試しコース☆【初回限定】全力ストレッチ&もみほぐし!60分',
+    }),
+  );
+  assert.equal(r.customerType, 'first');
+});
+
+test('既存客のアンケート回答は経路の分母に入れない', () => {
+  const { rows, total } = summarize([
+    withSurvey(
+      mail({
+        subject: '予約連絡', id: 'BF_REPEAT', name: 'リピーター',
+        visit: '2026年09月01日（火）10:00', accepted: '2026年08月31日（月）15:21',
+        menu: '男性60分チケット1枚', coupon: '利用クーポンなし',
+      }),
+    ),
+    withSurvey(
+      mail({
+        subject: '予約連絡', id: 'BF_NEW', name: '初回のひと',
+        visit: '2026年09月01日（火）11:00', accepted: '2026年08月31日（月）16:00',
+        coupon: '☆お試しコース☆【初回限定】全力ストレッチ60分',
+      }),
+      SURVEY_BLOCK.replace('【1】\n', '【2】\n'),
+    ),
+  ]);
+  const d = rows.find((r) => r.date === '2026-08-31');
+  assert.equal(d.surveyAnswered, 2, '回答自体は2件');
+  assert.equal(d.surveyFromNonFirst, 1, 'うち1件は既存客');
+  assert.deepEqual(d.byChannel, { 2: 1 }, '経路に入るのは初回客の1件だけ');
+  assert.equal(total.byChannel[1], undefined, '既存客の【1】は混ざらない');
+});
+
 test('番号で答えていない自由記述は surveyChannel に落とさない', () => {
   const block = SURVEY_BLOCK.replace('　回答： 【1】', '　回答： 友人にすすめられて');
   const r = parseBookingEmail(
@@ -147,12 +204,13 @@ test('番号で答えていない自由記述は surveyChannel に落とさな�
   assert.equal(r.surveyChannel, null);
 });
 
-test('経路アンケートを日別に集計する', () => {
+test('経路アンケートを日別に集計する（初回客のみ）', () => {
   const base = {
     subject: '予約連絡',
     name: 'テスト 九郎',
     visit: '2026年09月01日（火）10:00',
     accepted: '2026年08月31日（月）15:21',
+    coupon: '☆お試しコース☆【初回限定】全力ストレッチ60分',
   };
   const { rows } = summarize([
     withSurvey(mail({ ...base, id: 'BF1' })),
@@ -161,6 +219,7 @@ test('経路アンケートを日別に集計する', () => {
   ]);
   const d = rows.find((r) => r.date === '2026-08-31');
   assert.equal(d.bookings, 3);
+  assert.equal(d.firstVisit, 3);
   assert.equal(d.surveyAnswered, 2, 'アンケートが無い通知は数えない');
   assert.equal(d.byChannel[1], 1);
   assert.equal(d.byChannel[2], 1);

@@ -70,12 +70,18 @@ console.log(
 );
 
 if (total.surveyAnswered > 0) {
+  const firstAnswers = Object.values(total.byChannel).reduce((a, b) => a + b, 0);
   console.log('');
-  console.log(`経路アンケート（回答 ${total.surveyAnswered} 件）`);
+  console.log(`経路アンケート（初回客の回答 ${firstAnswers} 件）`);
   for (const [n, label] of Object.entries(SURVEY_CHANNELS)) {
     const c = total.byChannel[n] ?? 0;
     if (c > 0) console.log(`  【${n}】${label}  ${c}`);
   }
+  if (total.surveyFromNonFirst > 0) {
+    console.log(`  （既存客・判別不能の回答 ${total.surveyFromNonFirst} 件は経路に数えていません）`);
+  }
+  console.log('  ⚠️ 【1】は「HPBで検索」以外に、LINE・看板から来てHPBで予約した人も吸収します。');
+  console.log('     広告の効果は【1】の多さではなく【2】【3】の増減で見てください。');
 } else {
   console.log('');
   console.log('経路アンケート：回答なし（2026-08-31 表示開始。それ以前の予約には設問が出ていない）');

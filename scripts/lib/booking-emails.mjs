@@ -89,6 +89,23 @@ function isFirstVisitCoupon(coupon) {
 }
 
 /**
+ * 初回客か既存客かを分ける。**経路アンケートの集計に必須。**
+ *
+ * 2026-08-31 の1通目（BF60199476）は**回数券保有者がHPBから予約したもの**で、
+ * 新規の来店経路ではなかった。既存客の「最初に知ったきっかけ」は何年も前の出来事なので、
+ * これを経路の分母に入れると広告の評価が壊れる。
+ *
+ * - `first`   初回限定クーポンを使っている
+ * - `repeat`  メニューが回数券・チケット消化
+ * - `unknown` どちらとも言えない（通常メニューをクーポンなしで予約した等）
+ */
+function classifyCustomer({ coupon, menu }) {
+  if (isFirstVisitCoupon(coupon)) return 'first';
+  if (menu && /チケット|回数券/.test(menu)) return 'repeat';
+  return 'unknown';
+}
+
+/**
  * メール1通を構造化する。予約でもキャンセルでもなければ null（未対応予約のお知らせ等）。
  * @param {{subject?: string, plaintextBody?: string}} mail
  */
@@ -111,6 +128,7 @@ export function parseBookingEmail(mail) {
 
   const name = field(body, '氏名');
   const coupon = field(body, 'ご利用クーポン');
+  const menu = field(body, 'メニュー');
   const request = field(body, 'ご要望・ご相談');
 
   return {
@@ -124,6 +142,7 @@ export function parseBookingEmail(mail) {
     acceptedDate: accepted?.date ?? null,
     acceptedTime: accepted?.time ?? null,
     firstVisit: isFirstVisitCoupon(coupon),
+    customerType: classifyCustomer({ coupon, menu }),
     // 「ご要望・ご相談」はお客様の自由記述。アンケート回答はここではない（下記 survey*）
     request: request === '-' ? null : request,
     ...parseSurveyAnswer(body),
@@ -182,7 +201,10 @@ export function summarize(mails, { from = null, to = null, windowDays = 14 } = {
   const bump = (date, key, n = 1) => {
     if (!inRange(date)) return;
     if (!days.has(date)) {
-      days.set(date, { date, bookings: 0, rebookings: 0, net: 0, cancels: 0, firstVisit: 0, byChannel: {}, surveyAnswered: 0 });
+      days.set(date, {
+        date, bookings: 0, rebookings: 0, net: 0, cancels: 0, firstVisit: 0,
+        byChannel: {}, surveyAnswered: 0, surveyFromNonFirst: 0,
+      });
     }
     days.get(date)[key] += n;
   };
@@ -204,7 +226,12 @@ export function summarize(mails, { from = null, to = null, windowDays = 14 } = {
     if (r.surveyAnswer && inRange(r.acceptedDate)) {
       const day = days.get(r.acceptedDate);
       day.surveyAnswered += 1;
-      if (r.surveyChannel) day.byChannel[r.surveyChannel] = (day.byChannel[r.surveyChannel] ?? 0) + 1;
+      // **経路の分母は初回客だけ。** 既存客の「最初に知ったきっかけ」は今回の経路ではない
+      if (r.customerType === 'first') {
+        if (r.surveyChannel) day.byChannel[r.surveyChannel] = (day.byChannel[r.surveyChannel] ?? 0) + 1;
+      } else {
+        day.surveyFromNonFirst += 1;
+      }
     }
   }
 
@@ -217,12 +244,13 @@ export function summarize(mails, { from = null, to = null, windowDays = 14 } = {
       cancels: a.cancels + r.cancels,
       firstVisit: a.firstVisit + r.firstVisit,
       surveyAnswered: a.surveyAnswered + r.surveyAnswered,
+      surveyFromNonFirst: a.surveyFromNonFirst + r.surveyFromNonFirst,
       byChannel: Object.entries(r.byChannel).reduce(
         (acc, [k, v]) => ({ ...acc, [k]: (acc[k] ?? 0) + v }),
         a.byChannel,
       ),
     }),
-    { bookings: 0, rebookings: 0, net: 0, cancels: 0, firstVisit: 0, surveyAnswered: 0, byChannel: {} },
+    { bookings: 0, rebookings: 0, net: 0, cancels: 0, firstVisit: 0, surveyAnswered: 0, surveyFromNonFirst: 0, byChannel: {} },
   );
 
   return {
