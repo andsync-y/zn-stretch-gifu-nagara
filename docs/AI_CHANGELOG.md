@@ -3263,3 +3263,21 @@ Coworkの**スケジュールタスクにはリポジトリを紐付ける欄が
 - ⚠️ **未検証**：回答が予約通知メールの `■ご要望・ご相談` に載るか。設定後の予約がまだ0件。
   次の予約通知で確認する（載らなければクーポン出し分け案へ切り替え）
 - ⚠️ 導入後2週間、初回予約の件数が落ちていないか監視する。基準は8月の純初回予約 月80件（週約18.6件）
+
+## 2026-08-31 (Claude Code) コラム新規1本追加（肩甲骨はがしのセルフストレッチ／authority型）
+- ブランチ：`claude/column-auto`
+- 関連PR：なし（コラム専用ブランチへのコミットのみ。マージはユーザーが実施）
+- 変更内容：
+  - `docs/column-backlog.md` の `authority` 枠から未対応の最上位「kenkokotsu-hagashi-self（肩甲骨はがし セルフ 安全）」を選び、新規コラム記事を1本作成。
+  - 結論先出し（強く押し込まず呼吸に合わせて動かす範囲にとどめるのが安全のコツという1文）→肩甲骨が動きにくくなる仕組み→セルフで行う際の3つの注意点（バキバキを目的に強くひねらない／道具で骨の縁を押し込まない／鋭い痛みやしびれが出たら中止）→安全な肩甲骨はがしストレッチ4選（肩回し／開く／寄せる／スレッド・ザ・ニードル。`stretchPoses.ts` 既存ポーズ pose-26/14/06/12 を使用）→セルフケアの限界と当店のアプローチ、の構成。既存記事「katakori-desk-stretch」（デスクワークの肩こり全般）・「nekoze-makigata」（猫背・巻き肩）・「katakori-zutsu」（肩こり頭痛）とは検索意図が異なり重複なし。次のバックログ「shijukata-chuui（四十肩・五十肩）」と競合しないよう、注意点は一般的な範囲にとどめ深追いしなかった。
+  - FAQ5問、`/method`（体感軸調整法・初出リンク）・`/symptoms/katakori` への内部リンクを設置。
+  - `src/data/columns.ts` の `COLUMNS` 先頭に新記事のメタデータ（slug/heading/desc/date/tags/relatedSymptoms/selfCare）を追加。
+  - `docs/column-backlog.md` の該当行を `- [x]` に更新。
+  - アイキャッチは `scripts/fetch-column-image.mjs --source ai` でAI生成（明るいオフィスで席を立ち肩を回す日本人男性、朝の陽光）。`imageCredit` に「※画像はイメージです」を設定済み。
+- 主な変更ファイル：
+  - `src/pages/column/kenkokotsu-hagashi-self.astro`（新規）
+  - `public/images/column/kenkokotsu-hagashi-self.webp`（新規）
+  - `src/data/columns.ts`
+  - `docs/column-backlog.md`
+- 確認結果：`node scripts/yakkihou-ng.mjs src/pages/column/kenkokotsu-hagashi-self.astro` と `node scripts/lint-column.mjs src/pages/column/kenkokotsu-hagashi-self.astro` いずれもPASS。`npm run build` 成功（36→37ページ生成）。
+- 未対応・次の作業：なし。
