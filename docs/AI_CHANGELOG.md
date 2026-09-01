@@ -3545,3 +3545,19 @@ Coworkの**スケジュールタスクにはリポジトリを紐付ける欄が
   - `docs/column-backlog.md`
 - 確認結果：`node scripts/yakkihou-ng.mjs src/pages/column/kenkokotsu-hagashi-self.astro` と `node scripts/lint-column.mjs src/pages/column/kenkokotsu-hagashi-self.astro` いずれもPASS。`npm run build` 成功（36→37ページ生成）。
 - 未対応・次の作業：なし。
+
+## 2026-09-01 (Claude Code) GBPフォト8枚の投入と、PR #40のマージ可否の確認
+- PR #42 の本番反映を Actions（`windsor-action.yml` / `dry_run=head`）で確認したうえで、
+  GBPへ写真8枚を `upload_media` で投入した（`AT_WORK` 4枚・`TEAMS` 4枚）。掲載枚数は5枚→13枚。
+- あわせて学んだ制約を `docs/gbp-ops.md` §4 に追記：
+  - `execute_action` は `account`（`locations/3707203216578503879`）が必須。`get_data` は逆に受け付けない
+  - Windsorの Media テーブルは投入直後には反映されない（キャッシュ。失敗ではない）
+  - 公開URLの疎通確認はサンドボックスからできないため必ずActions経由で行う
+- PR #40（GSCのページ別取得）を調査。`scripts/fetch-gsc-data.mjs` への追加のみで既存スキーマは不変。
+  GitHub APIは `mergeable_state: dirty` を返すが、手元で実マージすると競合ゼロ
+  （`docs/AI_CHANGELOG.md` は `.gitattributes` の `merge=union` で両方残る）。マージ推奨と回答した。
+- 主な変更ファイル：`docs/gbp-ops.md`、`docs/ops-change-log.md`
+- 確認結果：`upload_media` 8回すべて成功しGoogleのメディアリソース名を返した。
+  GBP管理画面での見え方はオーナー確認待ち。
+- 未対応・次の作業：ロゴ(PROFILE)・外観・駐車場の写真（素材なし）、
+  完全個室・女性スタッフの属性（GBP管理画面でオーナー設定）、GBP投稿が8/20から止まっている件。

@@ -101,3 +101,26 @@ JPGまたはPNG、250x250px以上・10KB以上。長辺1600px・品質86・プ�
 
 ⚠️ **`upload_media` は「公開URL」しか受け付けない。** Driveのファイルは直接渡せない。
 `public/images/gbp/` へ置いて**本番へデプロイしてから** `https://zn-stretch-gifu.com/images/gbp/<名前>` を渡す。
+
+### 投入結果（2026-09-01 実施済み）
+
+PR #42 が本番へ入り、`https://zn-stretch-gifu.com/images/gbp/gbp-trainer-01.jpg` が
+HTTP/2 200・`content-type: image/jpeg`・124,221バイトで配信されているのを
+Actions（`windsor-action.yml` の `dry_run=head`）経由で確認してから投入した。
+**サンドボックスからは当該ドメインへ出られないため、この確認は必ずActions経由で行うこと。**
+
+| ファイル | カテゴリ |
+|---|---|
+| `gbp-treatment-01〜04.jpg` | `AT_WORK`（施術中の様子） |
+| `gbp-trainer-01〜04.jpg` | `TEAMS`（スタッフ） |
+
+`upload_media` は8回とも成功し、Googleのメディアリソース名（`AF1Qip…`）を返した。
+`COVER` と `PROFILE` は既存を置き換えてしまうため触っていない。
+
+⚠️ **Windsorの読み取り側（Mediaテーブル）は投入直後には反映されない。** 投入直後に
+`media_id` を引くと従来の5枚しか返らないが、これはキャッシュであって失敗ではない。
+実際に並んだかはGBPの管理画面か、翌日以降の `windsor-data` で確認する。
+
+⚠️ **`execute_action` は `account` が必須。** 値は `locations/3707203216578503879`
+（`get_data` の `account_id` で取れる）。省略すると
+`Missing required argument` で落ちる。`get_data` のほうは逆に `account` を受け付けない。
