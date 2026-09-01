@@ -1,0 +1,5 @@
+connector: google_my_business
+action:    https://zn-stretch-gifu.com/images/gbp/gbp-trainer-01.jpg
+dry_run:   head
+run:       33513278795
+---

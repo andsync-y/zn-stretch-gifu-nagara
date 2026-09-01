@@ -1,0 +1,7 @@
+{
+  "git": {
+    "deploymentEnabled": {
+      "windsor-log": false
+    }
+  }
+}
