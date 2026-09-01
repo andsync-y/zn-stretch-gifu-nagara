@@ -69,7 +69,8 @@ git show FETCH_HEAD:facebook_7d.json
 | `gsc_queries_28d` / `gsc_queries_prev28d` | Search Console。自然検索の順位・表示回数。**`branded_vs_nonbranded` は2026-08-27以降だけ信用できる**（Windsor時代は全件 `nonbranded` を返していた） |
 | `gmb_insights_30d` | GBPの露出・サイトクリック・電話・**経路案内リクエスト**。ローカル検索の効果はここでしか測れない |
 | `gmb_keywords_30d` | GBPで**どんな検索語で見つかっているか**。地図枠SEOの直接の材料 |
-| `gmb_reviews` | 口コミと返信状況。**`review_reply_comment` が空＝未返信** |
+| `gmb_reviews` | 口コミと返信状況。**`review_reply_comment` が空＝未返信**。⚠️ **直近28日ぶんしか入らない。** 返信率を「◯件中◯件」で言うときは総数を `gmb_profile_state.review_total_count` で確認する（2026-09-01に18件と80件を取り違えた） |
+| `gmb_profile_state` | **プロフィールの現況**（2026-09-01追加）。`location_title` が `全力ストレッチ岐阜長良店` でない／`has_pending_edits` が true／`has_voice_of_merchant` が false のいずれかなら異常。名前の巻き戻りを目視に頼らず検知するため |
 | `ga4_events_7d` / `ga4_events_30d` | GA4イベント。`click_reserve` / `click_line` / `click_tel`。**サイト全体（全流入）** |
 | `ga4_pages_7d` / `ga4_sessions_30d` | GA4のページ・セッション |
 | `clarity_7d` | Microsoft Clarity の行動データ（下記） |
