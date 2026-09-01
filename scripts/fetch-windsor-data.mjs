@@ -22,11 +22,17 @@ const QUERIES = [
   { name: 'facebook_budget', connector: 'facebook', params: { date_preset: 'last_3d', fields: 'date,campaign,adset_name,adset_daily_budget,adset_budget_remaining,spend' } },
   { name: 'google_search_terms_7d', connector: 'google_ads', params: { date_preset: 'last_7d', fields: 'date,search_term,clicks,conversions' } },
   // Googleビジネスプロフィール（接続されるまでは失敗するが、リレーは失敗を許容する設計）
-  { name: 'gmb_reviews', connector: 'google_my_business', params: { date_preset: 'last_28d', fields: 'review_id,review_create_time,review_star_rating,review_comment,review_reply_comment,review_reviewer' } },
+  { name: 'gmb_reviews', connector: 'google_my_business', params: { date_preset: 'last_28d', /* ⚠️ 直近28日ぶんしか来ない。返信率を「◯件中◯件」で言うときは総数を gmb_profile_state.review_total_count で確認すること（2026-09-01に18件と80件を取り違えた） */ fields: 'review_id,review_create_time,review_star_rating,review_comment,review_reply_comment,review_reviewer' } },
   // GBPの実績。地図枠での露出と行動を測る。2026-08-23まで一度も取得していなかった
   { name: 'gmb_insights_30d', connector: 'google_my_business', params: { date_preset: 'last_30d', fields: 'date,impressions,impressions_mobile_maps,impressions_mobile_search,website_clicks,call_clicks,direction_requests' } },
   // GBPがどんな検索語で見つかっているか。地図枠のSEOに直結する
   { name: 'gmb_keywords_30d', connector: 'google_my_business', params: { date_preset: 'last_30d', fields: 'search_keyword,search_keyword_value' } },
+  // プロフィールの現況。**名前の巻き戻りと審査待ちを自動で検知するため**（2026-09-01 追加）。
+  // 2026-08 に「ビジネス名が 全力ストレッチ岐阜長良店 → 全力ストレッチ店 へ繰り返し戻る」事象があり、
+  // 気づくのも、収まったのを確かめるのも、毎回オーナーの目視だった。
+  // `location_title` が正でなくなる／`has_pending_edits` が立つ／`has_voice_of_merchant` が false になる、
+  // のいずれかが起きたら異常。日次で記録して時刻ごと残す。
+  { name: 'gmb_profile_state', connector: 'google_my_business', params: { fields: 'location_title,location_primary_category_name,location_website_uri,location_primary_phone,location_metadata_has_pending_edits,location_metadata_has_google_updated,location_metadata_has_voice_of_merchant,location_metadata_duplicate_location,review_total_count,review_average_rating_total' } },
   // GA4（ga4_*）と Search Console（gsc_*）はここには無い。2026-08-27に公式APIへ移した。
   // 取得は fetch-ga4-data.mjs / fetch-gsc-data.mjs が行う。**Windsor側の接続も解除済み**なので、
   // ここに書き戻しても404になるだけ。移行時の突き合わせでは1,743行すべて一致している。
