@@ -3545,3 +3545,22 @@ Coworkの**スケジュールタスクにはリポジトリを紐付ける欄が
   - `docs/column-backlog.md`
 - 確認結果：`node scripts/yakkihou-ng.mjs src/pages/column/kenkokotsu-hagashi-self.astro` と `node scripts/lint-column.mjs src/pages/column/kenkokotsu-hagashi-self.astro` いずれもPASS。`npm run build` 成功（36→37ページ生成）。
 - 未対応・次の作業：なし。
+## 2026-09-02 (Claude Code) コラム新規1本追加（四十肩・五十肩とストレッチの注意点／authority型）
+- ブランチ：`claude/column-auto`
+- 関連PR：なし（コラム専用ブランチへのコミットのみ。マージはユーザーが実施）
+- 変更内容：
+  - `docs/column-backlog.md` の `authority` 枠から未対応の最上位「shijukata-chuui（四十肩 五十肩 ストレッチ 注意点）」を選び、新規コラム記事を1本作成。type=`注意喚起`のため、通常記事以上に医療機関への相談を前面に出す構成にした。
+  - 結論先出し（強い痛みがあるときは無理に伸ばさず医療機関へ相談、という1文）→ただの肩こりとの見分け方→痛みの時期による対応の違い→ストレッチで避けたい動き4つ→痛みが少ない時のみ行うごく軽いセルフケア3選（肩回し／肩甲骨引き寄せ／首・肩のストレッチ。`stretchPoses.ts` 既存ポーズ pose-26/17/01を使用。いずれも腕を高く上げない・小さな範囲にとどめる動きを選定）→医療機関への相談目安→セルフケアの限界と当店のアプローチ、の構成。
+  - 薬機法チェックで「治療」がNG判定（医療機関の役割を説明する文脈でも機械的に検出される仕様のため）→「診断や今後の対応」「医業類似行為を行う施術所ではなく」に言い換えて再検査しPASS。当店が四十肩・五十肩そのものを診断・改善できるとは書かず、医療機関の領域であることを明記した。
+  - 既存記事「kenkokotsu-hagashi-self」（肩甲骨はがし・一般的な肩こりのセルフケア）とは、四十肩・五十肩という医学的な状態への注意喚起である点で検索意図が異なり重複なし。
+  - FAQ5問、`/method`（体感軸調整法・初出リンク）・`/symptoms/katakori`・`/symptoms/shisei` への内部リンクを設置。
+  - `src/data/columns.ts` の `COLUMNS` 先頭に新記事のメタデータ（slug/heading/desc/date/tags/relatedSymptoms/selfCare）を追加。selfCareには本文と一致する3手順＋医療機関への相談目安を注意点として追加。
+  - `docs/column-backlog.md` の該当行を `- [x]` に更新。
+  - アイキャッチは `scripts/fetch-column-image.mjs --source ai` でAI生成（明るい部屋で無理のない範囲で腕を上げてストレッチする日本人男性、朝の陽光）。`imageCredit` に「※画像はイメージです」を設定済み。
+- 主な変更ファイル：
+  - `src/pages/column/shijukata-chuui.astro`（新規）
+  - `public/images/column/shijukata-chuui.webp`（新規）
+  - `src/data/columns.ts`
+  - `docs/column-backlog.md`
+- 確認結果：`node scripts/yakkihou-ng.mjs src/pages/column/shijukata-chuui.astro` と `node scripts/lint-column.mjs src/pages/column/shijukata-chuui.astro` いずれもPASS。`npm run build` 成功（37→38ページ生成）。
+- 未対応・次の作業：なし。
