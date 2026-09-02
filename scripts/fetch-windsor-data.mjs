@@ -6,6 +6,7 @@
  * MCPコネクタの接続断に依存しないための中継レイヤー。
  */
 import { writeFile, mkdir } from 'node:fs/promises';
+import { readGuardrails } from './lib/guardrails.mjs';
 
 const KEY = process.env.WINDSOR_API_KEY;
 if (!KEY) { console.error('WINDSOR_API_KEY がありません'); process.exit(1); }
@@ -70,6 +71,11 @@ for (const q of QUERIES) {
     console.error(`${outName}: 失敗 - ${e}`);
   }
 }
+
+// 広告デイリー監視のプロンプトは古いガードレール値（総額 ¥11,000・Meta ¥3,000）を持っているが、
+// 専用セッションへ発火する設定のため update_trigger からプロンプトを直せない。
+// 監視が毎朝いちばん最初に読むのがこの _summary.json なので、現行値をここへ載せる。
+summary.guardrails = await readGuardrails();
 
 await writeFile('out/_summary.json', JSON.stringify(summary, null, 1));
 // 全クエリ失敗のときだけ異常終了（一部失敗は許容し、取れた分を保存する）
