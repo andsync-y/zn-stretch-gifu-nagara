@@ -3578,3 +3578,17 @@ Coworkの**スケジュールタスクにはリポジトリを紐付ける欄が
   （¥11,000/日・Meta ¥3,000・Google ¥8,000 ／ 現行は ¥12,000・¥7,200・¥4,800）。
   毎日 pause_ad まで自動実行するため優先度が高い。オーナー判断待ち。
   Instagram投稿ドラフトは9/8ごろに試用継続の判断が要る。
+
+## 2026-09-01 (Claude Code) 古いガードレール値の無効化と、月曜ダッシュボード更新の移管
+- `広告デイリー監視` のプロンプトが古い予算・CPA基準を抱えていた件。専用セッションへ発火する設定のため
+  `update_trigger` でプロンプトを直せず、代わりに監視が毎朝最初に読む `_summary.json` へ現行値を載せる経路をつくった。
+- `scripts/lib/guardrails.mjs`（新規）が `docs/ads-ops-guardrails.md` を毎回読み直して転記する。値はコードに書かない。
+- 節の区切りで `### 過去の値` の表を拾い、廃止済みの ¥3,000 が現行値として出るバグを踏んだので回帰テストを追加。
+- 月曜のダッシュボード更新が抜けていた穴を、月曜レポート側へ手順を足して塞いだ。
+- 主な変更ファイル：`scripts/lib/guardrails.mjs`（新規）、`scripts/fetch-windsor-data.mjs`、
+  `scripts/test/guardrails.test.mjs`（新規）、`docs/ops-change-log.md`
+- 確認結果：テスト71件すべて通過。Actionsで実際に実行し、`origin/windsor-data:_summary.json` に
+  Meta ¥7,200／Google ¥4,800／合計 ¥12,000 が載ることを確認した（fetched_at 2026-09-02T05:22Z）。
+  `npm run build` は依存が未インストールで実行できていないが、変更は `scripts/` 配下のみ。
+- 未対応・次の作業：⚠️ デイリー監視のプロンプト本体は古いまま。claude.ai のRoutine画面からの差し替えが必要（オーナー作業）。
+  Instagram投稿ドラフトは9/8ごろに試用継続の判断。
