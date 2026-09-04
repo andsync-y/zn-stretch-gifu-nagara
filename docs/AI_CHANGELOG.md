@@ -3564,3 +3564,22 @@ Coworkの**スケジュールタスクにはリポジトリを紐付ける欄が
   - `docs/column-backlog.md`
 - 確認結果：`node scripts/yakkihou-ng.mjs src/pages/column/shijukata-chuui.astro` と `node scripts/lint-column.mjs src/pages/column/shijukata-chuui.astro` いずれもPASS。`npm run build` 成功（37→38ページ生成）。
 - 未対応・次の作業：なし。
+## 2026-09-04 (Claude Code / GitHub Actions) コラム新規1本追加（ストレッチ専門店と整体の違い／compare型）
+- ブランチ：`claude/column-auto`
+- 関連PR：なし（コラム専用ブランチへのコミットのみ。マージはユーザーが実施）
+- 変更内容：
+  - 実行日は金曜枠＝`compare`。`docs/column-backlog.md` の `compare` 枠から未対応の最上位「stretch-seitai-erabikata（ストレッチ専門店 整体 選び方）」を選び、新規コラム記事を1本作成。
+  - `compare`型ルールに従い、結論先出し（動く範囲を広げたいならストレッチ専門店、姿勢や骨盤の崩れが気になるなら整体、という使い分けの1文）→違いの解説→比較表（観点／ストレッチ専門店／整体を5観点で整理、`/method`と同じ`overflow-x-auto`＋`min-w-[640px]`のマークアップ）→肩こり・腰痛・姿勢別のどちらが向いているか→自分でできるセルフストレッチ3選（肩甲骨のストレッチ／腰まわり膝抱え込み／お尻のツイスト。`stretchPoses.ts` 既存ポーズ pose-14/09/07を使用）→セルフケアと専門的なアプローチの使い分け、の構成。他社（整体）を貶める表現は避け「向き・不向きがある」という書き方に統一。
+  - 薬機法チェックで「矯正」がNG判定（整体の施術内容を中立的に説明する文脈でも機械的に検出される仕様のため）→表内・FAQ・本文とも「ボキボキ鳴らす（ような）施術」に言い換えて再検査しPASS。
+  - 既存compare記事「stretch-momihogushi-chigai」（ストレッチ vs もみほぐし）・「personal-stretch-towa」（パーソナルストレッチとは）とは検索意図が異なり重複なし。
+  - FAQ5問（「結局どちらを選べばいいですか？」含む）、`/method`（体感軸調整法・初出リンク）・`/symptoms/katakori`・`/symptoms/youtsu`・`/symptoms/shisei` への内部リンクを設置。
+  - `src/data/columns.ts` の `COLUMNS` 先頭に新記事のメタデータ（slug/heading/desc/date/tags/relatedSymptoms/selfCare）を追加。
+  - `docs/column-backlog.md` の該当行を `- [x]` に更新。
+  - アイキャッチは `scripts/fetch-column-image.mjs --source ai` でAI生成（明るいオフィスで席を立って伸びをする日本人男性、朝の陽光）。`imageCredit` に「※画像はイメージです」を設定済み。
+- 主な変更ファイル：
+  - `src/pages/column/stretch-seitai-erabikata.astro`（新規）
+  - `public/images/column/stretch-seitai-erabikata.webp`（新規）
+  - `src/data/columns.ts`
+  - `docs/column-backlog.md`
+- 確認結果：`node scripts/yakkihou-ng.mjs src/pages/column/stretch-seitai-erabikata.astro` と `node scripts/lint-column.mjs src/pages/column/stretch-seitai-erabikata.astro` いずれもPASS。`npm run build` 成功（38→39ページ生成）。
+- 未対応・次の作業：なし。
