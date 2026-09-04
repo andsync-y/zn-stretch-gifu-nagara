@@ -1,0 +1,41 @@
+[
+ {
+  "date": "2026-09-04",
+  "campaign": "2609_岐阜長良店_Lead_初回体験",
+  "adset_name": "男性25-65+_岐阜15km_Lead",
+  "ad_name": "A_kibun_video",
+  "ad_id": "120251114564490015",
+  "effective_status": "ACTIVE",
+  "spend": 598,
+  "impressions": 395,
+  "clicks": 10,
+  "actions_landing_page_view": 4,
+  "actions_offsite_conversion_fb_pixel_lead": 2
+ },
+ {
+  "date": "2026-09-04",
+  "campaign": "2609_岐阜長良店_Lead_初回体験",
+  "adset_name": "男性25-65+_岐阜15km_Lead",
+  "ad_name": "D_hatsujoriku_banner",
+  "ad_id": "120251114574070015",
+  "effective_status": "ACTIVE",
+  "spend": 6020,
+  "impressions": 4010,
+  "clicks": 94,
+  "actions_landing_page_view": 68,
+  "actions_offsite_conversion_fb_pixel_lead": 16
+ },
+ {
+  "date": "2026-09-04",
+  "campaign": "2609_岐阜長良店_Lead_初回体験",
+  "adset_name": "男性25-65+_岐阜15km_Lead",
+  "ad_name": "B_golf_image",
+  "ad_id": "120251114582810015",
+  "effective_status": "ACTIVE",
+  "spend": 82,
+  "impressions": 57,
+  "clicks": 2,
+  "actions_landing_page_view": 2,
+  "actions_offsite_conversion_fb_pixel_lead": 2
+ }
+]

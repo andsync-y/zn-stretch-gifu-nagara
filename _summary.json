@@ -1,0 +1,116 @@
+{
+ "fetched_at": "2026-09-04T22:21:01.131Z",
+ "results": {
+  "facebook_yesterday": {
+   "ok": true,
+   "rows": 3
+  },
+  "facebook_7d": {
+   "ok": true,
+   "rows": 21
+  },
+  "google_ads_yesterday": {
+   "ok": true,
+   "rows": 1
+  },
+  "google_ads_7d": {
+   "ok": true,
+   "rows": 7
+  },
+  "google_budget_7d": {
+   "ok": true,
+   "rows": 7
+  },
+  "facebook_budget": {
+   "ok": true,
+   "rows": 3
+  },
+  "google_search_terms_7d": {
+   "ok": true,
+   "rows": 130
+  },
+  "gmb_reviews": {
+   "ok": true,
+   "rows": 18
+  },
+  "gmb_insights_30d": {
+   "ok": true,
+   "rows": 30
+  },
+  "gmb_keywords_30d": {
+   "ok": true,
+   "rows": 0
+  },
+  "gmb_profile_state": {
+   "ok": true,
+   "rows": 1
+  },
+  "google_ads_30d": {
+   "ok": true,
+   "rows": 30
+  },
+  "facebook_30d": {
+   "ok": true,
+   "rows": 70
+  },
+  "facebook_frequency_14d": {
+   "ok": true,
+   "rows": 39
+  },
+  "probe_bid_a": {
+   "ok": true,
+   "rows": 3
+  },
+  "probe_bid_b": {
+   "ok": true,
+   "rows": 3
+  },
+  "probe_bid_c": {
+   "ok": true,
+   "rows": 3
+  },
+  "ga4_events_7d": {
+   "ok": true,
+   "rows": 294,
+   "source": "ga4_api"
+  },
+  "ga4_pages_7d": {
+   "ok": true,
+   "rows": 150,
+   "source": "ga4_api"
+  },
+  "ga4_events_30d": {
+   "ok": true,
+   "rows": 1103,
+   "source": "ga4_api"
+  },
+  "ga4_sessions_30d": {
+   "ok": true,
+   "rows": 159,
+   "source": "ga4_api"
+  },
+  "ga4_reserve_hourly_30d": {
+   "ok": true,
+   "rows": 441,
+   "source": "ga4_api"
+  },
+  "gsc_queries_28d": {
+   "ok": true,
+   "rows": 172,
+   "source": "gsc_api"
+  },
+  "gsc_queries_prev28d": {
+   "ok": true,
+   "rows": 81,
+   "source": "gsc_api"
+  },
+  "clarity_7d": {
+   "ok": true,
+   "fetched_at": "2026-09-04T22:21:39.035Z",
+   "days": 8,
+   "no_data": false,
+   "latest_data_date": "2026-09-05",
+   "requests_used": 2
+  }
+ }
+}

@@ -1,0 +1,23 @@
+[
+ {
+  "date": "2026-09-02",
+  "campaign": "集客_検索_2026.07",
+  "bidding_strategy": null,
+  "average_cpc": 144.5454,
+  "campaign_status": "ENABLED"
+ },
+ {
+  "date": "2026-09-03",
+  "campaign": "集客_検索_2026.07",
+  "bidding_strategy": null,
+  "average_cpc": 145.4286,
+  "campaign_status": "ENABLED"
+ },
+ {
+  "date": "2026-09-04",
+  "campaign": "集客_検索_2026.07",
+  "bidding_strategy": null,
+  "average_cpc": 142.8056,
+  "campaign_status": "ENABLED"
+ }
+]
