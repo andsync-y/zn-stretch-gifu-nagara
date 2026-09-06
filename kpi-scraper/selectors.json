@@ -27,7 +27,7 @@
       "waitMs": 3000,
       "navClick": "勤務時間",
       "fills": [{ "selector": "input[type='month']:visible", "value": "{month}" }],
-      "waitAfterFillMs": 3000
+      "waitAfterFillMs": 5000
     }
   ],
   "metrics": [

@@ -153,6 +153,11 @@ async function doFills(page, pconf, week) {
       // 勤務時間ページは月単位なので、対象週が属する月（YYYY-MM）も渡せるようにする
       .replaceAll('{month}', week.start.slice(0, 7));
     await input.fill(value);
+    // fill() だけでは change を拾わない実装があるため、input/change を明示的に発火させる
+    await input.evaluate((el) => {
+      el.dispatchEvent(new Event('input', { bubbles: true }));
+      el.dispatchEvent(new Event('change', { bubbles: true }));
+    });
     filled[f.selector] = value;
   }
   if ((pconf.fills || []).length > 0) {
