@@ -5,11 +5,19 @@ name: 広告データ取得（Windsor中継）
 # あわせてMicrosoft Clarityの行動データ（clarity_7d.json）も同じブランチへ置く。
 on:
   schedule:
-    - cron: '0 23 * * *' # JST 8:00（監視Routineの1時間前）
+    # JST 5:17。監視Routine（JST 9:00）の3時間40分前に置いている。
+    # 以前は 0 23（JST 8:00）だったが、GitHubのスケジュール実行は混雑時に数時間ずれる。
+    # 実際 8/26分は5時間遅れて 8/27 04:08 に走り、8/27分は監視の時刻までに走らなかった。
+    # 毎時0分は混みやすいので分もずらしてある。
+    - cron: '17 20 * * *'
   workflow_dispatch:
 
 permissions:
   contents: write
+  # GA4 / Search Console の認証に使う。Workload Identity 連携で
+  # GitHubのOIDCトークンをGoogleのトークンへ交換するため、これが無いと取得できない。
+  # （andsync.jp の組織ポリシーでサービスアカウントキーの発行が禁止されており、鍵方式が使えない）
+  id-token: write
 
 jobs:
   fetch:
@@ -49,6 +57,22 @@ jobs:
           fi
 
       - run: node scripts/fetch-windsor-data.mjs
+
+      # GA4とSearch Consoleは公式APIから直接取る（2026-08-27に移行）。
+      # Windsorの料金はデータソース数で決まるため、この2つを外して接続を5→3にしBasicへ落とした。
+      # 移行時にWindsor版と1行ずつ突き合わせ、1,743行すべて一致を確認済み。
+      - name: GA4の実績を取得（公式API）
+        env:
+          GCP_WORKLOAD_IDENTITY_PROVIDER: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          GCP_SERVICE_ACCOUNT_EMAIL: ${{ vars.GCP_SERVICE_ACCOUNT_EMAIL }}
+          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+        run: node scripts/fetch-ga4-data.mjs
+      - name: Search Consoleの実績を取得（公式API）
+        env:
+          GCP_WORKLOAD_IDENTITY_PROVIDER: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          GCP_SERVICE_ACCOUNT_EMAIL: ${{ vars.GCP_SERVICE_ACCOUNT_EMAIL }}
+          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+        run: node scripts/fetch-gsc-data.mjs
 
       # Clarityの行動データ。取得できなくても異常終了しない設計
       # （広告データの取得結果まで巻き添えでコミットされなくなるため）。

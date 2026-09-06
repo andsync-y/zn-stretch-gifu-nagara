@@ -48,5 +48,7 @@ const out = await post({ jsonrpc: '2.0', id: 2, method: 'tools/call', params: { 
 if (out?.error) { console.error('tools/call失敗:', JSON.stringify(out.error)); process.exit(1); }
 const content = out?.result?.content;
 const text = Array.isArray(content) ? content.map((c) => c.text ?? JSON.stringify(c)).join('\n') : JSON.stringify(out?.result ?? out);
-console.log(text.slice(0, 8000));
+// 切り詰め幅は --max で指定できる（既定8000）。スキーマ調査時は大きくする
+const MAX = Number(get('--max') || 8000);
+console.log(MAX > 0 ? text.slice(0, MAX) : text);
 if (out?.result?.isError) process.exit(1);

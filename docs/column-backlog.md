@@ -49,12 +49,12 @@
 ### 自律神経・疲れ・睡眠
 - [x] neruma-shinkokyu ｜ authority ｜ 寝る前 ストレッチ 睡眠の質 ｜ セルフケア ｜ /symptoms/jiritsu
 - [x] tsukare-nukenai ｜ authority ｜ 疲れ 抜けない 自律神経 ストレッチ ｜ 悩み特化 ｜ /symptoms/jiritsu
-- [ ] asa-sukkiri ｜ authority ｜ 朝 すっきり ストレッチ 目覚め ｜ セルフケア ｜ /symptoms/jiritsu
+- [x] asa-sukkiri ｜ authority ｜ 朝 すっきり ストレッチ 目覚め ｜ セルフケア ｜ /symptoms/jiritsu
 
 ### 肩こり（既存と意図を分ける）
-- [ ] katakori-zutsu ｜ authority ｜ 肩こり 頭痛 ストレッチ ｜ 悩み特化 ｜ /symptoms/katakori, /symptoms/kubi-ganseihiro
-- [ ] kenkokotsu-hagashi-self ｜ authority ｜ 肩甲骨はがし セルフ 安全 ｜ やり方 ｜ /symptoms/katakori
-- [ ] shijukata-chuui ｜ authority ｜ 四十肩 五十肩 ストレッチ 注意点 ｜ 注意喚起 ｜ /symptoms/katakori
+- [x] katakori-zutsu ｜ authority ｜ 肩こり 頭痛 ストレッチ ｜ 悩み特化 ｜ /symptoms/katakori, /symptoms/kubi-ganseihiro
+- [x] kenkokotsu-hagashi-self ｜ authority ｜ 肩甲骨はがし セルフ 安全 ｜ やり方 ｜ /symptoms/katakori
+- [x] shijukata-chuui ｜ authority ｜ 四十肩 五十肩 ストレッチ 注意点 ｜ 注意喚起 ｜ /symptoms/katakori
 
 ### 腰痛（既存と意図を分ける）
 - [ ] gikkurigoshi-after ｜ authority ｜ ぎっくり腰 後 ストレッチ いつから ｜ 注意喚起 ｜ /symptoms/youtsu
@@ -67,8 +67,8 @@
 
 ### 比較・選び方（`compare` 枠／金曜に消化）
 - [x] stretch-momihogushi-chigai ｜ compare ｜ ストレッチ もみほぐし 違い ｜ 使い分け ｜ /method, /menu
-- [ ] personal-stretch-towa ｜ compare ｜ パーソナルストレッチ とは 初めて ｜ 入門 ｜ /method, /reserve
-- [ ] stretch-seitai-erabikata ｜ compare ｜ ストレッチ専門店 整体 選び方 ｜ 使い分け ｜ /method, /symptoms
+- [x] personal-stretch-towa ｜ compare ｜ パーソナルストレッチ とは 初めて ｜ 入門 ｜ /method, /reserve
+- [x] stretch-seitai-erabikata ｜ compare ｜ ストレッチ専門店 整体 選び方 ｜ 使い分け ｜ /method, /symptoms
 - [ ] dynamic-static-chigai ｜ compare ｜ 動的ストレッチ 静的ストレッチ 違い 使い分け ｜ 解説 ｜ /symptoms/sports
 - [ ] kaisuken-tsuikata ｜ compare ｜ ストレッチ 通う頻度 目安 選び方 ｜ 検討 ｜ /menu, /reserve
 - [ ] jitaku-vs-pro ｜ compare ｜ セルフストレッチ プロ 違い ｜ 使い分け ｜ /method, /symptoms
