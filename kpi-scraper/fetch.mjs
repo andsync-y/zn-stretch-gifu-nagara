@@ -258,7 +258,7 @@ async function discovery(page, loginResult) {
 
     // サイドバーの業務ナビ（a.nav-item）を開いて構造を記録する。
     // 顧客情報系（顧客管理・来店記録・問い合わせ一覧）は開かない
-    for (const label of ['勤務時間', 'スタッフ管理', '日報', '店舗設定']) {
+    for (const label of ['勤務時間', 'スタッフ管理', '給与', '給与明細', '勤怠', '日報', '店舗設定']) {
       const clicked = await page.evaluate((lbl) => {
         const el = [...document.querySelectorAll('a.nav-item')].find(
           (e) => (e.textContent || '').trim() === lbl
@@ -273,7 +273,7 @@ async function discovery(page, loginResult) {
     }
 
     // KPIに関係しそうなリンクを最大8ページまで辿って構造を記録する
-    const KEYWORDS = /売上|来店|予約|集計|レポート|実績|分析|ダッシュボード|CSV|回数券|顧客|エクスポート|ダウンロード/;
+    const KEYWORDS = /売上|来店|予約|集計|レポート|実績|分析|ダッシュボード|CSV|回数券|顧客|エクスポート|ダウンロード|給与|勤怠|勤務|シフト|人件費/;
     const base = new URL(page.url());
     const seen = new Set([page.url()]);
     const candidates = (report.pages[0].links || [])

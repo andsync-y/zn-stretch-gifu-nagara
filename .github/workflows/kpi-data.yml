@@ -55,6 +55,25 @@ jobs:
           node fetch.mjs
           mkdir -p ../out
           cp -r out/* ../out/ 2>/dev/null || true
+      - name: 既存のkpi-data成果物を引き継ぐ（今回生成しなかったファイルを消さない）
+        # kpi-dataは毎回force pushで作り直すため、discoveryモードだけを回すと
+        # weekly_kpi.json がブランチから消えてしまう。今回生成しなかったファイルは
+        # 既存ブランチから拾って残す。
+        run: |
+          if ! git fetch --depth=1 origin kpi-data 2>/dev/null; then
+            echo "kpi-dataブランチなし。引き継ぎスキップ"
+            exit 0
+          fi
+          mkdir -p out
+          for f in $(git ls-tree -r --name-only FETCH_HEAD); do
+            [ "$f" = "vercel.json" ] && continue
+            if [ ! -e "out/$f" ]; then
+              mkdir -p "out/$(dirname "$f")"
+              git show "FETCH_HEAD:$f" > "out/$f"
+              echo "引き継ぎ: $f"
+            fi
+          done
+
       - name: kpi-dataブランチへ強制コミット（履歴は持たない・Vercelビルドはスキップ）
         run: |
           cd out
