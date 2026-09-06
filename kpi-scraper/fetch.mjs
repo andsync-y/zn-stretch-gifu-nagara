@@ -122,7 +122,7 @@ async function doClicks(page, clicks) {
   }
 }
 
-// 入力欄への記入（期間指定など）。valueの {week_start}/{week_end} は前週の日付に置換される。
+// 入力欄への記入（期間指定など）。valueの {week_start}/{week_end}/{month} は前週の日付・月に置換される。
 // 全fill後にEnterを押し、applyClickがあればそのボタンも押して反映させる。
 // 見つからないセレクタはfilledに記録されないため、呼び出し側で反映確認に使える
 async function doFills(page, pconf, week) {
@@ -132,7 +132,9 @@ async function doFills(page, pconf, week) {
     if ((await input.count()) === 0) continue;
     const value = String(f.value)
       .replaceAll('{week_start}', week.start)
-      .replaceAll('{week_end}', week.end);
+      .replaceAll('{week_end}', week.end)
+      // 勤務時間ページは月単位なので、対象週が属する月（YYYY-MM）も渡せるようにする
+      .replaceAll('{month}', week.start.slice(0, 7));
     await input.fill(value);
     filled[f.selector] = value;
   }

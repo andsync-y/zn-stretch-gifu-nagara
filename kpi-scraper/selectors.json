@@ -19,6 +19,15 @@
       ],
       "applyClick": "button:has-text(\"更新\")",
       "waitAfterFillMs": 3000
+    },
+    {
+      "_comment": "勤務時間ページ。SPAなのでサイドバーの a.nav-item をクリックして開き、month入力に対象週の月を入れる。人件費の基礎（実働時間）を取るためだけに使い、担当者名は保存しない。",
+      "name": "worktime_month",
+      "url": "https://system.zn-stretch.com/",
+      "waitMs": 3000,
+      "clicks": ["a.nav-item:text-is(\"勤務時間\")"],
+      "fills": [{ "selector": "input[type='month']:visible", "value": "{month}" }],
+      "waitAfterFillMs": 3000
     }
   ],
   "metrics": [
@@ -39,6 +48,16 @@
     { "key": "new_churn_rate", "label": "新規離客率（週）", "page": "dashboard_week", "method": "table_row", "tableMatch": ["新規離客", "新規来店", "更新来店"], "column": "新規率", "derive": ["new_churn", "new_visits"] },
 
     { "_comment": "担当別。合計では消える成約率のばらつきを見る。担当者名は保存しない（行の順番だけ）", "key": "by_staff", "label": "担当別（氏名は除外）", "page": "dashboard_week", "method": "table_rows", "tableMatch": ["担当", "新規販売率", "来店数"], "dropColumns": ["担当"] },
-    { "_comment": "来店経路別。どの経路の新規が回数券につながっているか。経路名は個人情報ではないので残す", "key": "by_channel", "label": "来店経路別", "page": "dashboard_week", "method": "table_rows", "tableMatch": ["来店経路", "新規来店数", "販売率"] }
+    { "_comment": "来店経路別。どの経路の新規が回数券につながっているか。経路名は個人情報ではないので残す", "key": "by_channel", "label": "来店経路別", "page": "dashboard_week", "method": "table_rows", "tableMatch": ["来店経路", "新規来店数", "販売率"] },
+
+    { "_comment": "売上の内訳。2026-09-01の恒久ルール『施術＋回数券＋指名 が sales_total と一致するか検算する』を自動化するための3項目。一致しなければ払い戻し未反映を疑う。", "key": "sales_treatment", "label": "施術売上（週計）", "page": "dashboard_week", "method": "table_row", "tableMatch": ["売上", "施術", "回数券", "指名"], "column": "施術" },
+    { "key": "sales_ticket", "label": "回数券売上（週計）", "page": "dashboard_week", "method": "table_row", "tableMatch": ["売上", "施術", "回数券", "指名"], "column": "回数券" },
+    { "key": "sales_shimei", "label": "指名売上（週計）", "page": "dashboard_week", "method": "table_row", "tableMatch": ["売上", "施術", "回数券", "指名"], "column": "指名" },
+
+    { "_comment": "稼働。店舗システムが自分で計算している稼働(h)・営業(h)・稼働率。分母はベッド4台×日数×12hで、docs/capacity-analysis.md の『設備は制約になっていない』と整合するか毎週確認できる。", "key": "capacity_used_h", "label": "稼働時間（週計）", "page": "dashboard_week", "method": "table_row", "tableMatch": ["ベッド", "稼働", "営業"], "column": "稼働(h)" },
+    { "key": "capacity_open_h", "label": "営業時間（週計）", "page": "dashboard_week", "method": "table_row", "tableMatch": ["ベッド", "稼働", "営業"], "column": "営業(h)" },
+    { "key": "capacity_rate", "label": "稼働率（週）", "page": "dashboard_week", "method": "table_row", "tableMatch": ["ベッド", "稼働", "営業"], "column": "稼働率" },
+
+    { "_comment": "勤務時間（月次）。人件費の基礎。基本給＝実働×最低保証1,600円なので、実働時間の合計が総支給のほぼ全部を説明する。担当者名は落とす（dropColumns）。", "key": "worktime_by_staff", "label": "勤務時間（月次・氏名は除外）", "page": "worktime_month", "method": "table_rows", "tableMatch": ["勤務時間", "勤務日数"], "dropColumns": ["担当", "備考"] }
   ]
 }
