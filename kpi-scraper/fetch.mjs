@@ -499,7 +499,11 @@ async function parse(page, loginResult) {
             const n = toNumber(v);
             return n != null ? n : String(v ?? '').trim();
           }));
-        if (rows.length === 0) throw new Error('no data rows');
+        if (rows.length === 0) {
+          // 原因切り分け用。行の「長さ」だけを出す（セル値は出さないので個人情報は漏れない）
+          const shape = table.rows.map((r) => r.length).join(',');
+          throw new Error(`no data rows (raw=${table.rows.length}, lengths=[${shape}], cols=${table.headers.length})`);
+        }
         result.metrics[m.key] = { headers, rows };
       } else if (m.method === 'table') {
         // tableMatchの見出しをすべて含むテーブルから、前週の日付行を集計する
