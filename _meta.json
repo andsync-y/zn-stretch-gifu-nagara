@@ -1,0 +1,9 @@
+{
+  "mode": "parse",
+  "fetched_at": "2026-09-06T23:30:24.447Z",
+  "login": {
+    "attempted": true,
+    "success": true,
+    "url": "https://system.zn-stretch.com/"
+  }
+}
