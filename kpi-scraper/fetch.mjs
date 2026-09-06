@@ -112,6 +112,23 @@ async function login(page) {
 }
 
 // 表示切替ボタンなどのクリック操作。見つからないセレクタは黙ってスキップする
+// SPAのサイドバー（a.nav-item）をテキスト完全一致でクリックする。
+// Playwrightの :text-is() は空白・絵文字の入り方で外すことがあるため、
+// discoveryと同じ evaluate 方式に揃えてある。
+async function doNavClick(page, label) {
+  if (!label) return false;
+  const clicked = await page.evaluate((lbl) => {
+    const el = [...document.querySelectorAll('a.nav-item')].find(
+      (e) => (e.textContent || '').trim() === lbl
+    );
+    if (!el) return false;
+    el.click();
+    return true;
+  }, label);
+  if (clicked) await page.waitForTimeout(2500);
+  return clicked;
+}
+
 async function doClicks(page, clicks) {
   for (const sel of clicks || []) {
     const btn = page.locator(sel).first();
@@ -397,6 +414,10 @@ async function parse(page, loginResult) {
     await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 30000 });
     await page.waitForTimeout(pconf.waitMs || 2500);
     await doClicks(page, pconf.clicks);
+    if (pconf.navClick) {
+      const ok = await doNavClick(page, pconf.navClick);
+      if (!ok) throw new Error(`nav-item not found: ${pconf.navClick}`);
+    }
     const filled = await doFills(page, pconf, week);
     if (Object.keys(filled).length > 0) result.fills_applied[pconf.name] = filled;
     opened.add(pconf.name);

@@ -25,7 +25,7 @@
       "name": "worktime_month",
       "url": "https://system.zn-stretch.com/",
       "waitMs": 3000,
-      "clicks": ["a.nav-item:text-is(\"勤務時間\")"],
+      "navClick": "勤務時間",
       "fills": [{ "selector": "input[type='month']:visible", "value": "{month}" }],
       "waitAfterFillMs": 3000
     }
@@ -54,9 +54,7 @@
     { "key": "sales_ticket", "label": "回数券売上（週計）", "page": "dashboard_week", "method": "table_row", "tableMatch": ["売上", "施術", "回数券", "指名"], "column": "回数券" },
     { "key": "sales_shimei", "label": "指名売上（週計）", "page": "dashboard_week", "method": "table_row", "tableMatch": ["売上", "施術", "回数券", "指名"], "column": "指名" },
 
-    { "_comment": "稼働。店舗システムが自分で計算している稼働(h)・営業(h)・稼働率。分母はベッド4台×日数×12hで、docs/capacity-analysis.md の『設備は制約になっていない』と整合するか毎週確認できる。", "key": "capacity_used_h", "label": "稼働時間（週計）", "page": "dashboard_week", "method": "table_row", "tableMatch": ["ベッド", "稼働", "営業"], "column": "稼働(h)" },
-    { "key": "capacity_open_h", "label": "営業時間（週計）", "page": "dashboard_week", "method": "table_row", "tableMatch": ["ベッド", "稼働", "営業"], "column": "営業(h)" },
-    { "key": "capacity_rate", "label": "稼働率（週）", "page": "dashboard_week", "method": "table_row", "tableMatch": ["ベッド", "稼働", "営業"], "column": "稼働率" },
+    { "_comment": "稼働。⚠️このテーブルは期間指定(dashFrom/To)が効かず月次のまま返る（営業1,464h＝ベッド4台×約30.5日×12h）。週の値ではないので、年月ラベルごと保存してどの月かを明示する。", "key": "capacity_by_month", "label": "稼働（月次・年月ラベル付き）", "page": "dashboard_week", "method": "table_rows", "tableMatch": ["ベッド", "稼働", "営業"] },
 
     { "_comment": "勤務時間（月次）。人件費の基礎。基本給＝実働×最低保証1,600円なので、実働時間の合計が総支給のほぼ全部を説明する。担当者名は落とす（dropColumns）。", "key": "worktime_by_staff", "label": "勤務時間（月次・氏名は除外）", "page": "worktime_month", "method": "table_rows", "tableMatch": ["勤務時間", "勤務日数"], "dropColumns": ["担当", "備考"] }
   ]
