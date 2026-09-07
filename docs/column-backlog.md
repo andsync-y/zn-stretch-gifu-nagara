@@ -57,7 +57,7 @@
 - [x] shijukata-chuui ｜ authority ｜ 四十肩 五十肩 ストレッチ 注意点 ｜ 注意喚起 ｜ /symptoms/katakori
 
 ### 腰痛（既存と意図を分ける）
-- [ ] gikkurigoshi-after ｜ authority ｜ ぎっくり腰 後 ストレッチ いつから ｜ 注意喚起 ｜ /symptoms/youtsu
+- [x] gikkurigoshi-after ｜ authority ｜ ぎっくり腰 後 ストレッチ いつから ｜ 注意喚起 ｜ /symptoms/youtsu
 - [ ] unten-youtsu ｜ authority ｜ 長時間 運転 腰痛 ストレッチ ｜ 悩み特化 ｜ /symptoms/youtsu
 - [ ] sango-youtsu ｜ authority ｜ 産後 腰痛 骨盤 セルフケア ｜ 悩み特化 ｜ /symptoms/youtsu
 
