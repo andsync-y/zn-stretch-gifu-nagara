@@ -3583,3 +3583,22 @@ Coworkの**スケジュールタスクにはリポジトリを紐付ける欄が
   - `docs/column-backlog.md`
 - 確認結果：`node scripts/yakkihou-ng.mjs src/pages/column/stretch-seitai-erabikata.astro` と `node scripts/lint-column.mjs src/pages/column/stretch-seitai-erabikata.astro` いずれもPASS。`npm run build` 成功（38→39ページ生成）。
 - 未対応・次の作業：なし。
+## 2026-09-07 (Claude Code / GitHub Actions) コラム新規1本追加（ぎっくり腰の後のストレッチ再開目安／authority型）
+- ブランチ：`claude/column-auto`
+- 関連PR：なし（コラム専用ブランチへのコミットのみ。マージはユーザーが実施）
+- 変更内容：
+  - 実行日は月曜枠＝`authority`。`docs/column-backlog.md` の `authority` 枠から未対応の最上位「gikkurigoshi-after（ぎっくり腰 後 ストレッチ いつから）」を選び、新規コラム記事を1本作成。type=`注意喚起`のため、shijukata-chuui同様に医療機関への相談を前面に出す構成にした。
+  - 結論先出し（鋭い痛みが落ち着き日常動作がこなせるようになってからごく軽い範囲で、という1文）→再開の目安→痛みの「質」による見分け方→再開初期に避けたい動き4つ→ごく軽いセルフケア3選（膝抱えストレッチ／お尻のストレッチ／深呼吸ストレッチ。`stretchPoses.ts` 既存ポーズ pose-09/07/30を使用。いずれも急性期後の負荷の小さい動きを選定）→再発を防ぐ姿勢の癖3点→医療機関への相談目安→セルフケアの限界と当店のアプローチ、の構成。
+  - 薬機法チェックで「治療」がNG判定（医療機関の役割を説明する文脈でも機械的に検出される仕様のため）→FAQ・本文とも「診断や対応」「診断や医療的な対応」に言い換えて再検査しPASS。
+  - 既存記事「youtsu-morning-stretch」（朝の腰の重だるさ・慢性的な張り）・「sorikoshi-check」（反り腰の姿勢チェック）とは、ぎっくり腰という急性のエピソード後の再開タイミングを扱う点で検索意図が異なり重複なし。
+  - FAQ5問、`/method`（体感軸調整法・初出リンク）・`/symptoms/youtsu`・`/symptoms/shisei` への内部リンク、関連に既存の `golf-stretch-routine` コラムへの導線も設置。
+  - `src/data/columns.ts` の `COLUMNS` 先頭に新記事のメタデータ（slug/heading/desc/date/tags/relatedSymptoms/selfCare）を追加。
+  - `docs/column-backlog.md` の該当行を `- [x]` に更新。
+  - アイキャッチは `scripts/fetch-column-image.mjs --source ai` でAI生成（明るいリビングで椅子からゆっくり立ち上がる40〜50代の日本人男性、朝の陽光）。`imageCredit` に「※画像はイメージです」を設定済み。
+- 主な変更ファイル：
+  - `src/pages/column/gikkurigoshi-after.astro`（新規）
+  - `public/images/column/gikkurigoshi-after.webp`（新規）
+  - `src/data/columns.ts`
+  - `docs/column-backlog.md`
+- 確認結果：`node scripts/yakkihou-ng.mjs src/pages/column/gikkurigoshi-after.astro` と `node scripts/lint-column.mjs src/pages/column/gikkurigoshi-after.astro` いずれもPASS。`npm run build` 成功（39→40ページ生成）。
+- 未対応・次の作業：なし。
