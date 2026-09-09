@@ -3602,3 +3602,22 @@ Coworkの**スケジュールタスクにはリポジトリを紐付ける欄が
   - `docs/column-backlog.md`
 - 確認結果：`node scripts/yakkihou-ng.mjs src/pages/column/gikkurigoshi-after.astro` と `node scripts/lint-column.mjs src/pages/column/gikkurigoshi-after.astro` いずれもPASS。`npm run build` 成功（39→40ページ生成）。
 - 未対応・次の作業：なし。
+## 2026-09-09 (Claude Code / GitHub Actions) コラム新規1本追加（長時間運転の腰痛対策／authority型）
+- ブランチ：`claude/column-auto`
+- 関連PR：なし（コラム専用ブランチへのコミットのみ。マージはユーザーが実施）
+- 変更内容：
+  - 実行日は水曜枠＝`authority`。`docs/column-backlog.md` の `authority` 枠から未対応の最上位「unten-youtsu（長時間 運転 腰痛 ストレッチ）」を選び、新規コラム記事を1本作成。type=`悩み特化`。営業やゴルフの行き帰りなど車移動が多い40〜60代男性を想定読者にした。
+  - 結論先出し（股関節を曲げたまま同じ姿勢が続き殿筋・腰まわりが固まりやすいこと、休憩ごとのストレッチで区切れること、という1文）→なぜ運転で腰が重くなるか（骨盤後傾・左右非対称な操作）→運転中にできる工夫（座面調整・1〜2時間に1回の休憩目安。走行中のストレッチは安全のため行わない旨を明記）→休憩時にできるセルフストレッチ5選（座ったままの腰ひねり／股関節前面／お尻／足首まわし／自宅での太もも裏。`stretchPoses.ts` 既存ポーズ pose-27/08/07/32/02を使用）→セルフケアの限界と当店のアプローチ、の構成。
+  - 薬機法チェック：NG表現なしで一発PASS。
+  - 既存記事「youtsu-morning-stretch」（朝の腰の重だるさ）・「gikkurigoshi-after」（ぎっくり腰後の再開目安）とは、長時間の運転という状況・原因に特化した悩みである点で検索意図が異なり重複なし。
+  - FAQ5問（走行中にストレッチをしてよいかという安全面のQも含む）、`/method`（体感軸調整法・初出リンク）・`/symptoms/youtsu`・`/symptoms/shisei`・`/symptoms/mukumi` への内部リンクを設置。
+  - `src/data/columns.ts` の `COLUMNS` 先頭に新記事のメタデータ（slug/heading/desc/date/tags/relatedSymptoms/selfCare）を追加。
+  - `docs/column-backlog.md` の該当行を `- [x]` に更新。
+  - アイキャッチは `scripts/fetch-column-image.mjs --source ai` でAI生成（晴れた朝の高速道路の休憩エリアで車から降りて体を伸ばす50代の日本人男性）。`imageCredit` に「※画像はイメージです」を設定済み。
+- 主な変更ファイル：
+  - `src/pages/column/unten-youtsu.astro`（新規）
+  - `public/images/column/unten-youtsu.webp`（新規）
+  - `src/data/columns.ts`
+  - `docs/column-backlog.md`
+- 確認結果：`node scripts/yakkihou-ng.mjs src/pages/column/unten-youtsu.astro` と `node scripts/lint-column.mjs src/pages/column/unten-youtsu.astro` いずれもPASS。`npm run build` 成功（40→41ページ生成）。
+- 未対応・次の作業：なし。
