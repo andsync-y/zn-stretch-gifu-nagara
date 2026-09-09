@@ -58,7 +58,7 @@
 
 ### 腰痛（既存と意図を分ける）
 - [x] gikkurigoshi-after ｜ authority ｜ ぎっくり腰 後 ストレッチ いつから ｜ 注意喚起 ｜ /symptoms/youtsu
-- [ ] unten-youtsu ｜ authority ｜ 長時間 運転 腰痛 ストレッチ ｜ 悩み特化 ｜ /symptoms/youtsu
+- [x] unten-youtsu ｜ authority ｜ 長時間 運転 腰痛 ストレッチ ｜ 悩み特化 ｜ /symptoms/youtsu
 - [ ] sango-youtsu ｜ authority ｜ 産後 腰痛 骨盤 セルフケア ｜ 悩み特化 ｜ /symptoms/youtsu
 
 ### スポーツ（既存と意図を分ける）
