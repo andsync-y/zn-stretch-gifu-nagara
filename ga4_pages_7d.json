@@ -1,0 +1,536 @@
+[
+ {
+  "date": "2026-09-05",
+  "page_path": "/lp",
+  "session_source_medium": "meta / cpc",
+  "sessions": 125
+ },
+ {
+  "date": "2026-09-05",
+  "page_path": "/lp",
+  "session_source_medium": "google / cpc",
+  "sessions": 20
+ },
+ {
+  "date": "2026-09-05",
+  "page_path": "/",
+  "session_source_medium": "google / organic",
+  "sessions": 9
+ },
+ {
+  "date": "2026-09-05",
+  "page_path": "/",
+  "session_source_medium": "(direct) / (none)",
+  "sessions": 2
+ },
+ {
+  "date": "2026-09-05",
+  "page_path": "/",
+  "session_source_medium": "google / cpc",
+  "sessions": 2
+ },
+ {
+  "date": "2026-09-05",
+  "page_path": "/menu",
+  "session_source_medium": "google / cpc",
+  "sessions": 2
+ },
+ {
+  "date": "2026-09-05",
+  "page_path": "/lp",
+  "session_source_medium": "ig / social",
+  "sessions": 1
+ },
+ {
+  "date": "2026-09-05",
+  "page_path": "/menu",
+  "session_source_medium": "(direct) / (none)",
+  "sessions": 1
+ },
+ {
+  "date": "2026-09-05",
+  "page_path": "/staff",
+  "session_source_medium": "(direct) / (none)",
+  "sessions": 1
+ },
+ {
+  "date": "2026-09-05",
+  "page_path": "/staff",
+  "session_source_medium": "google / cpc",
+  "sessions": 1
+ },
+ {
+  "date": "2026-09-05",
+  "page_path": "/voice",
+  "session_source_medium": "google / cpc",
+  "sessions": 1
+ },
+ {
+  "date": "2026-09-06",
+  "page_path": "/lp",
+  "session_source_medium": "meta / cpc",
+  "sessions": 148
+ },
+ {
+  "date": "2026-09-06",
+  "page_path": "/lp",
+  "session_source_medium": "google / cpc",
+  "sessions": 30
+ },
+ {
+  "date": "2026-09-06",
+  "page_path": "/",
+  "session_source_medium": "google / organic",
+  "sessions": 4
+ },
+ {
+  "date": "2026-09-06",
+  "page_path": "/",
+  "session_source_medium": "google / cpc",
+  "sessions": 3
+ },
+ {
+  "date": "2026-09-06",
+  "page_path": "/menu",
+  "session_source_medium": "google / organic",
+  "sessions": 3
+ },
+ {
+  "date": "2026-09-06",
+  "page_path": "/",
+  "session_source_medium": "(direct) / (none)",
+  "sessions": 2
+ },
+ {
+  "date": "2026-09-06",
+  "page_path": "/menu",
+  "session_source_medium": "google / cpc",
+  "sessions": 2
+ },
+ {
+  "date": "2026-09-06",
+  "page_path": "/method",
+  "session_source_medium": "google / organic",
+  "sessions": 1
+ },
+ {
+  "date": "2026-09-06",
+  "page_path": "/reserve",
+  "session_source_medium": "google / organic",
+  "sessions": 1
+ },
+ {
+  "date": "2026-09-06",
+  "page_path": "/staff",
+  "session_source_medium": "(direct) / (none)",
+  "sessions": 1
+ },
+ {
+  "date": "2026-09-06",
+  "page_path": "/staff",
+  "session_source_medium": "google / cpc",
+  "sessions": 1
+ },
+ {
+  "date": "2026-09-06",
+  "page_path": "/staff",
+  "session_source_medium": "google / organic",
+  "sessions": 1
+ },
+ {
+  "date": "2026-09-06",
+  "page_path": "/symptoms/katakori",
+  "session_source_medium": "google / organic",
+  "sessions": 1
+ },
+ {
+  "date": "2026-09-06",
+  "page_path": "/symptoms/youtsu",
+  "session_source_medium": "(direct) / (none)",
+  "sessions": 1
+ },
+ {
+  "date": "2026-09-07",
+  "page_path": "/lp",
+  "session_source_medium": "meta / cpc",
+  "sessions": 102
+ },
+ {
+  "date": "2026-09-07",
+  "page_path": "/",
+  "session_source_medium": "google / organic",
+  "sessions": 9
+ },
+ {
+  "date": "2026-09-07",
+  "page_path": "/lp",
+  "session_source_medium": "google / cpc",
+  "sessions": 9
+ },
+ {
+  "date": "2026-09-07",
+  "page_path": "/menu",
+  "session_source_medium": "(direct) / (none)",
+  "sessions": 4
+ },
+ {
+  "date": "2026-09-07",
+  "page_path": "/staff",
+  "session_source_medium": "google / organic",
+  "sessions": 4
+ },
+ {
+  "date": "2026-09-07",
+  "page_path": "/",
+  "session_source_medium": "(direct) / (none)",
+  "sessions": 3
+ },
+ {
+  "date": "2026-09-07",
+  "page_path": "/menu",
+  "session_source_medium": "google / organic",
+  "sessions": 2
+ },
+ {
+  "date": "2026-09-07",
+  "page_path": "/reserve",
+  "session_source_medium": "google / organic",
+  "sessions": 2
+ },
+ {
+  "date": "2026-09-07",
+  "page_path": "/staff",
+  "session_source_medium": "(direct) / (none)",
+  "sessions": 2
+ },
+ {
+  "date": "2026-09-07",
+  "page_path": "/symptoms",
+  "session_source_medium": "google / organic",
+  "sessions": 2
+ },
+ {
+  "date": "2026-09-07",
+  "page_path": "/access",
+  "session_source_medium": "google / organic",
+  "sessions": 1
+ },
+ {
+  "date": "2026-09-07",
+  "page_path": "/reserve",
+  "session_source_medium": "(direct) / (none)",
+  "sessions": 1
+ },
+ {
+  "date": "2026-09-07",
+  "page_path": "/symptoms",
+  "session_source_medium": "(direct) / (none)",
+  "sessions": 1
+ },
+ {
+  "date": "2026-09-07",
+  "page_path": "/symptoms/shisei",
+  "session_source_medium": "(direct) / (none)",
+  "sessions": 1
+ },
+ {
+  "date": "2026-09-07",
+  "page_path": "/symptoms/shisei",
+  "session_source_medium": "google / organic",
+  "sessions": 1
+ },
+ {
+  "date": "2026-09-07",
+  "page_path": "/symptoms/sports",
+  "session_source_medium": "google / organic",
+  "sessions": 1
+ },
+ {
+  "date": "2026-09-07",
+  "page_path": "/symptoms/youtsu",
+  "session_source_medium": "(direct) / (none)",
+  "sessions": 1
+ },
+ {
+  "date": "2026-09-07",
+  "page_path": "/voice",
+  "session_source_medium": "(direct) / (none)",
+  "sessions": 1
+ },
+ {
+  "date": "2026-09-07",
+  "page_path": "/voice",
+  "session_source_medium": "google / organic",
+  "sessions": 1
+ },
+ {
+  "date": "2026-09-08",
+  "page_path": "/lp",
+  "session_source_medium": "meta / cpc",
+  "sessions": 114
+ },
+ {
+  "date": "2026-09-08",
+  "page_path": "/",
+  "session_source_medium": "google / organic",
+  "sessions": 4
+ },
+ {
+  "date": "2026-09-08",
+  "page_path": "/staff",
+  "session_source_medium": "google / organic",
+  "sessions": 4
+ },
+ {
+  "date": "2026-09-08",
+  "page_path": "/",
+  "session_source_medium": "(direct) / (none)",
+  "sessions": 2
+ },
+ {
+  "date": "2026-09-08",
+  "page_path": "/voice",
+  "session_source_medium": "google / organic",
+  "sessions": 2
+ },
+ {
+  "date": "2026-09-08",
+  "page_path": "/",
+  "session_source_medium": "yahoo / organic",
+  "sessions": 1
+ },
+ {
+  "date": "2026-09-08",
+  "page_path": "/column/asa-sukkiri",
+  "session_source_medium": "google / organic",
+  "sessions": 1
+ },
+ {
+  "date": "2026-09-08",
+  "page_path": "/lp",
+  "session_source_medium": "google / organic",
+  "sessions": 1
+ },
+ {
+  "date": "2026-09-08",
+  "page_path": "/lp",
+  "session_source_medium": "ig / social",
+  "sessions": 1
+ },
+ {
+  "date": "2026-09-08",
+  "page_path": "/menu",
+  "session_source_medium": "google / organic",
+  "sessions": 1
+ },
+ {
+  "date": "2026-09-08",
+  "page_path": "/menu",
+  "session_source_medium": "yahoo / organic",
+  "sessions": 1
+ },
+ {
+  "date": "2026-09-08",
+  "page_path": "/voice",
+  "session_source_medium": "(direct) / (none)",
+  "sessions": 1
+ },
+ {
+  "date": "2026-09-09",
+  "page_path": "/lp",
+  "session_source_medium": "meta / cpc",
+  "sessions": 112
+ },
+ {
+  "date": "2026-09-09",
+  "page_path": "/",
+  "session_source_medium": "google / organic",
+  "sessions": 4
+ },
+ {
+  "date": "2026-09-09",
+  "page_path": "/staff",
+  "session_source_medium": "google / organic",
+  "sessions": 4
+ },
+ {
+  "date": "2026-09-09",
+  "page_path": "/",
+  "session_source_medium": "(direct) / (none)",
+  "sessions": 1
+ },
+ {
+  "date": "2026-09-09",
+  "page_path": "/access",
+  "session_source_medium": "(direct) / (none)",
+  "sessions": 1
+ },
+ {
+  "date": "2026-09-09",
+  "page_path": "/menu",
+  "session_source_medium": "(direct) / (none)",
+  "sessions": 1
+ },
+ {
+  "date": "2026-09-09",
+  "page_path": "/voice",
+  "session_source_medium": "google / organic",
+  "sessions": 1
+ },
+ {
+  "date": "2026-09-10",
+  "page_path": "/lp",
+  "session_source_medium": "meta / cpc",
+  "sessions": 153
+ },
+ {
+  "date": "2026-09-10",
+  "page_path": "/",
+  "session_source_medium": "google / organic",
+  "sessions": 2
+ },
+ {
+  "date": "2026-09-10",
+  "page_path": "/lp",
+  "session_source_medium": "ig / social",
+  "sessions": 2
+ },
+ {
+  "date": "2026-09-10",
+  "page_path": "/menu",
+  "session_source_medium": "(direct) / (none)",
+  "sessions": 2
+ },
+ {
+  "date": "2026-09-10",
+  "page_path": "/",
+  "session_source_medium": "(direct) / (none)",
+  "sessions": 1
+ },
+ {
+  "date": "2026-09-10",
+  "page_path": "/access",
+  "session_source_medium": "(direct) / (none)",
+  "sessions": 1
+ },
+ {
+  "date": "2026-09-10",
+  "page_path": "/access",
+  "session_source_medium": "google / organic",
+  "sessions": 1
+ },
+ {
+  "date": "2026-09-10",
+  "page_path": "/lp",
+  "session_source_medium": "facebook.com / referral",
+  "sessions": 1
+ },
+ {
+  "date": "2026-09-10",
+  "page_path": "/reserve",
+  "session_source_medium": "google / organic",
+  "sessions": 1
+ },
+ {
+  "date": "2026-09-11",
+  "page_path": "/lp",
+  "session_source_medium": "meta / cpc",
+  "sessions": 62
+ },
+ {
+  "date": "2026-09-11",
+  "page_path": "/lp",
+  "session_source_medium": "(data not available)",
+  "sessions": 31
+ },
+ {
+  "date": "2026-09-11",
+  "page_path": "/lp",
+  "session_source_medium": "(not set)",
+  "sessions": 28
+ },
+ {
+  "date": "2026-09-11",
+  "page_path": "/",
+  "session_source_medium": "(not set)",
+  "sessions": 7
+ },
+ {
+  "date": "2026-09-11",
+  "page_path": "/",
+  "session_source_medium": "(direct) / (none)",
+  "sessions": 5
+ },
+ {
+  "date": "2026-09-11",
+  "page_path": "/menu",
+  "session_source_medium": "(not set)",
+  "sessions": 4
+ },
+ {
+  "date": "2026-09-11",
+  "page_path": "/symptoms",
+  "session_source_medium": "(direct) / (none)",
+  "sessions": 4
+ },
+ {
+  "date": "2026-09-11",
+  "page_path": "/",
+  "session_source_medium": "google / organic",
+  "sessions": 3
+ },
+ {
+  "date": "2026-09-11",
+  "page_path": "/voice",
+  "session_source_medium": "(direct) / (none)",
+  "sessions": 3
+ },
+ {
+  "date": "2026-09-11",
+  "page_path": "/",
+  "session_source_medium": "(data not available)",
+  "sessions": 2
+ },
+ {
+  "date": "2026-09-11",
+  "page_path": "/voice",
+  "session_source_medium": "(not set)",
+  "sessions": 2
+ },
+ {
+  "date": "2026-09-11",
+  "page_path": "/menu",
+  "session_source_medium": "(direct) / (none)",
+  "sessions": 1
+ },
+ {
+  "date": "2026-09-11",
+  "page_path": "/reserve",
+  "session_source_medium": "(not set)",
+  "sessions": 1
+ },
+ {
+  "date": "2026-09-11",
+  "page_path": "/staff",
+  "session_source_medium": "(not set)",
+  "sessions": 1
+ },
+ {
+  "date": "2026-09-11",
+  "page_path": "/voice",
+  "session_source_medium": "(data not available)",
+  "sessions": 1
+ },
+ {
+  "date": "2026-09-11",
+  "page_path": "/voice",
+  "session_source_medium": "google / organic",
+  "sessions": 1
+ },
+ {
+  "date": "2026-09-11",
+  "page_path": "/voice",
+  "session_source_medium": "yahoo / organic",
+  "sessions": 1
+ }
+]

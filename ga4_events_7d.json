@@ -1,0 +1,1352 @@
+[
+ {
+  "date": "2026-09-05",
+  "event_name": "page_view",
+  "event_count": 132,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-05",
+  "event_name": "session_start",
+  "event_count": 126,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-05",
+  "event_name": "first_visit",
+  "event_count": 88,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-05",
+  "event_name": "click",
+  "event_count": 36,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-05",
+  "event_name": "page_view",
+  "event_count": 32,
+  "session_source_medium": "google / cpc"
+ },
+ {
+  "date": "2026-09-05",
+  "event_name": "scroll",
+  "event_count": 32,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-05",
+  "event_name": "click_reserve",
+  "event_count": 29,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-05",
+  "event_name": "hpb_click",
+  "event_count": 29,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-05",
+  "event_name": "session_start",
+  "event_count": 22,
+  "session_source_medium": "google / cpc"
+ },
+ {
+  "date": "2026-09-05",
+  "event_name": "first_visit",
+  "event_count": 20,
+  "session_source_medium": "google / cpc"
+ },
+ {
+  "date": "2026-09-05",
+  "event_name": "user_engagement",
+  "event_count": 15,
+  "session_source_medium": "google / cpc"
+ },
+ {
+  "date": "2026-09-05",
+  "event_name": "scroll",
+  "event_count": 10,
+  "session_source_medium": "google / cpc"
+ },
+ {
+  "date": "2026-09-05",
+  "event_name": "session_start",
+  "event_count": 9,
+  "session_source_medium": "google / organic"
+ },
+ {
+  "date": "2026-09-05",
+  "event_name": "page_view",
+  "event_count": 8,
+  "session_source_medium": "google / organic"
+ },
+ {
+  "date": "2026-09-05",
+  "event_name": "click",
+  "event_count": 7,
+  "session_source_medium": "google / cpc"
+ },
+ {
+  "date": "2026-09-05",
+  "event_name": "click_reserve",
+  "event_count": 7,
+  "session_source_medium": "google / cpc"
+ },
+ {
+  "date": "2026-09-05",
+  "event_name": "hpb_click",
+  "event_count": 7,
+  "session_source_medium": "google / cpc"
+ },
+ {
+  "date": "2026-09-05",
+  "event_name": "click_line",
+  "event_count": 5,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-05",
+  "event_name": "line_click",
+  "event_count": 5,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-05",
+  "event_name": "user_engagement",
+  "event_count": 5,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-05",
+  "event_name": "first_visit",
+  "event_count": 4,
+  "session_source_medium": "google / organic"
+ },
+ {
+  "date": "2026-09-05",
+  "event_name": "page_view",
+  "event_count": 4,
+  "session_source_medium": "(direct) / (none)"
+ },
+ {
+  "date": "2026-09-05",
+  "event_name": "session_start",
+  "event_count": 3,
+  "session_source_medium": "(direct) / (none)"
+ },
+ {
+  "date": "2026-09-05",
+  "event_name": "user_engagement",
+  "event_count": 3,
+  "session_source_medium": "google / organic"
+ },
+ {
+  "date": "2026-09-05",
+  "event_name": "first_visit",
+  "event_count": 2,
+  "session_source_medium": "(direct) / (none)"
+ },
+ {
+  "date": "2026-09-05",
+  "event_name": "user_engagement",
+  "event_count": 2,
+  "session_source_medium": "(direct) / (none)"
+ },
+ {
+  "date": "2026-09-05",
+  "event_name": "click",
+  "event_count": 1,
+  "session_source_medium": "(direct) / (none)"
+ },
+ {
+  "date": "2026-09-05",
+  "event_name": "click",
+  "event_count": 1,
+  "session_source_medium": "google / organic"
+ },
+ {
+  "date": "2026-09-05",
+  "event_name": "click_reserve",
+  "event_count": 1,
+  "session_source_medium": "(direct) / (none)"
+ },
+ {
+  "date": "2026-09-05",
+  "event_name": "click_reserve",
+  "event_count": 1,
+  "session_source_medium": "google / organic"
+ },
+ {
+  "date": "2026-09-05",
+  "event_name": "first_visit",
+  "event_count": 1,
+  "session_source_medium": "ig / social"
+ },
+ {
+  "date": "2026-09-05",
+  "event_name": "hpb_click",
+  "event_count": 1,
+  "session_source_medium": "(direct) / (none)"
+ },
+ {
+  "date": "2026-09-05",
+  "event_name": "hpb_click",
+  "event_count": 1,
+  "session_source_medium": "google / organic"
+ },
+ {
+  "date": "2026-09-05",
+  "event_name": "page_view",
+  "event_count": 1,
+  "session_source_medium": "ig / social"
+ },
+ {
+  "date": "2026-09-05",
+  "event_name": "scroll",
+  "event_count": 1,
+  "session_source_medium": "(direct) / (none)"
+ },
+ {
+  "date": "2026-09-05",
+  "event_name": "scroll",
+  "event_count": 1,
+  "session_source_medium": "ig / social"
+ },
+ {
+  "date": "2026-09-05",
+  "event_name": "session_start",
+  "event_count": 1,
+  "session_source_medium": "ig / social"
+ },
+ {
+  "date": "2026-09-06",
+  "event_name": "page_view",
+  "event_count": 157,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-06",
+  "event_name": "session_start",
+  "event_count": 148,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-06",
+  "event_name": "first_visit",
+  "event_count": 121,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-06",
+  "event_name": "scroll",
+  "event_count": 55,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-06",
+  "event_name": "page_view",
+  "event_count": 44,
+  "session_source_medium": "google / cpc"
+ },
+ {
+  "date": "2026-09-06",
+  "event_name": "click",
+  "event_count": 41,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-06",
+  "event_name": "session_start",
+  "event_count": 32,
+  "session_source_medium": "google / cpc"
+ },
+ {
+  "date": "2026-09-06",
+  "event_name": "click_reserve",
+  "event_count": 30,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-06",
+  "event_name": "hpb_click",
+  "event_count": 30,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-06",
+  "event_name": "first_visit",
+  "event_count": 27,
+  "session_source_medium": "google / cpc"
+ },
+ {
+  "date": "2026-09-06",
+  "event_name": "user_engagement",
+  "event_count": 20,
+  "session_source_medium": "google / cpc"
+ },
+ {
+  "date": "2026-09-06",
+  "event_name": "scroll",
+  "event_count": 13,
+  "session_source_medium": "google / cpc"
+ },
+ {
+  "date": "2026-09-06",
+  "event_name": "click",
+  "event_count": 12,
+  "session_source_medium": "google / cpc"
+ },
+ {
+  "date": "2026-09-06",
+  "event_name": "page_view",
+  "event_count": 12,
+  "session_source_medium": "google / organic"
+ },
+ {
+  "date": "2026-09-06",
+  "event_name": "user_engagement",
+  "event_count": 12,
+  "session_source_medium": "google / organic"
+ },
+ {
+  "date": "2026-09-06",
+  "event_name": "click_reserve",
+  "event_count": 10,
+  "session_source_medium": "google / cpc"
+ },
+ {
+  "date": "2026-09-06",
+  "event_name": "hpb_click",
+  "event_count": 10,
+  "session_source_medium": "google / cpc"
+ },
+ {
+  "date": "2026-09-06",
+  "event_name": "user_engagement",
+  "event_count": 10,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-06",
+  "event_name": "session_start",
+  "event_count": 5,
+  "session_source_medium": "google / organic"
+ },
+ {
+  "date": "2026-09-06",
+  "event_name": "click_line",
+  "event_count": 4,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-06",
+  "event_name": "line_click",
+  "event_count": 4,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-06",
+  "event_name": "page_view",
+  "event_count": 4,
+  "session_source_medium": "(direct) / (none)"
+ },
+ {
+  "date": "2026-09-06",
+  "event_name": "first_visit",
+  "event_count": 3,
+  "session_source_medium": "google / organic"
+ },
+ {
+  "date": "2026-09-06",
+  "event_name": "scroll",
+  "event_count": 3,
+  "session_source_medium": "google / organic"
+ },
+ {
+  "date": "2026-09-06",
+  "event_name": "user_engagement",
+  "event_count": 3,
+  "session_source_medium": "(direct) / (none)"
+ },
+ {
+  "date": "2026-09-06",
+  "event_name": "first_visit",
+  "event_count": 2,
+  "session_source_medium": "(direct) / (none)"
+ },
+ {
+  "date": "2026-09-06",
+  "event_name": "session_start",
+  "event_count": 2,
+  "session_source_medium": "(direct) / (none)"
+ },
+ {
+  "date": "2026-09-06",
+  "event_name": "click",
+  "event_count": 1,
+  "session_source_medium": "(direct) / (none)"
+ },
+ {
+  "date": "2026-09-06",
+  "event_name": "click",
+  "event_count": 1,
+  "session_source_medium": "google / organic"
+ },
+ {
+  "date": "2026-09-06",
+  "event_name": "click_line",
+  "event_count": 1,
+  "session_source_medium": "google / cpc"
+ },
+ {
+  "date": "2026-09-06",
+  "event_name": "click_reserve",
+  "event_count": 1,
+  "session_source_medium": "(direct) / (none)"
+ },
+ {
+  "date": "2026-09-06",
+  "event_name": "click_reserve",
+  "event_count": 1,
+  "session_source_medium": "google / organic"
+ },
+ {
+  "date": "2026-09-06",
+  "event_name": "click_tel",
+  "event_count": 1,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-06",
+  "event_name": "hpb_click",
+  "event_count": 1,
+  "session_source_medium": "(direct) / (none)"
+ },
+ {
+  "date": "2026-09-06",
+  "event_name": "hpb_click",
+  "event_count": 1,
+  "session_source_medium": "google / organic"
+ },
+ {
+  "date": "2026-09-06",
+  "event_name": "line_click",
+  "event_count": 1,
+  "session_source_medium": "google / cpc"
+ },
+ {
+  "date": "2026-09-06",
+  "event_name": "scroll",
+  "event_count": 1,
+  "session_source_medium": "(direct) / (none)"
+ },
+ {
+  "date": "2026-09-07",
+  "event_name": "page_view",
+  "event_count": 108,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-07",
+  "event_name": "session_start",
+  "event_count": 102,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-07",
+  "event_name": "first_visit",
+  "event_count": 85,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-07",
+  "event_name": "scroll",
+  "event_count": 41,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-07",
+  "event_name": "page_view",
+  "event_count": 33,
+  "session_source_medium": "google / organic"
+ },
+ {
+  "date": "2026-09-07",
+  "event_name": "user_engagement",
+  "event_count": 26,
+  "session_source_medium": "google / organic"
+ },
+ {
+  "date": "2026-09-07",
+  "event_name": "click",
+  "event_count": 22,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-07",
+  "event_name": "click_reserve",
+  "event_count": 15,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-07",
+  "event_name": "hpb_click",
+  "event_count": 15,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-07",
+  "event_name": "page_view",
+  "event_count": 15,
+  "session_source_medium": "(direct) / (none)"
+ },
+ {
+  "date": "2026-09-07",
+  "event_name": "user_engagement",
+  "event_count": 15,
+  "session_source_medium": "(direct) / (none)"
+ },
+ {
+  "date": "2026-09-07",
+  "event_name": "page_view",
+  "event_count": 11,
+  "session_source_medium": "google / cpc"
+ },
+ {
+  "date": "2026-09-07",
+  "event_name": "scroll",
+  "event_count": 10,
+  "session_source_medium": "google / organic"
+ },
+ {
+  "date": "2026-09-07",
+  "event_name": "session_start",
+  "event_count": 9,
+  "session_source_medium": "google / cpc"
+ },
+ {
+  "date": "2026-09-07",
+  "event_name": "session_start",
+  "event_count": 9,
+  "session_source_medium": "google / organic"
+ },
+ {
+  "date": "2026-09-07",
+  "event_name": "first_visit",
+  "event_count": 8,
+  "session_source_medium": "google / cpc"
+ },
+ {
+  "date": "2026-09-07",
+  "event_name": "click",
+  "event_count": 7,
+  "session_source_medium": "google / organic"
+ },
+ {
+  "date": "2026-09-07",
+  "event_name": "first_visit",
+  "event_count": 7,
+  "session_source_medium": "google / organic"
+ },
+ {
+  "date": "2026-09-07",
+  "event_name": "user_engagement",
+  "event_count": 7,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-07",
+  "event_name": "session_start",
+  "event_count": 6,
+  "session_source_medium": "(direct) / (none)"
+ },
+ {
+  "date": "2026-09-07",
+  "event_name": "click_reserve",
+  "event_count": 5,
+  "session_source_medium": "google / organic"
+ },
+ {
+  "date": "2026-09-07",
+  "event_name": "first_visit",
+  "event_count": 5,
+  "session_source_medium": "(direct) / (none)"
+ },
+ {
+  "date": "2026-09-07",
+  "event_name": "hpb_click",
+  "event_count": 5,
+  "session_source_medium": "google / organic"
+ },
+ {
+  "date": "2026-09-07",
+  "event_name": "scroll",
+  "event_count": 4,
+  "session_source_medium": "google / cpc"
+ },
+ {
+  "date": "2026-09-07",
+  "event_name": "user_engagement",
+  "event_count": 3,
+  "session_source_medium": "google / cpc"
+ },
+ {
+  "date": "2026-09-07",
+  "event_name": "scroll",
+  "event_count": 2,
+  "session_source_medium": "(direct) / (none)"
+ },
+ {
+  "date": "2026-09-07",
+  "event_name": "click",
+  "event_count": 1,
+  "session_source_medium": "google / cpc"
+ },
+ {
+  "date": "2026-09-07",
+  "event_name": "click_line",
+  "event_count": 1,
+  "session_source_medium": "google / organic"
+ },
+ {
+  "date": "2026-09-07",
+  "event_name": "click_line",
+  "event_count": 1,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-07",
+  "event_name": "click_reserve",
+  "event_count": 1,
+  "session_source_medium": "google / cpc"
+ },
+ {
+  "date": "2026-09-07",
+  "event_name": "hpb_click",
+  "event_count": 1,
+  "session_source_medium": "google / cpc"
+ },
+ {
+  "date": "2026-09-07",
+  "event_name": "line_click",
+  "event_count": 1,
+  "session_source_medium": "google / organic"
+ },
+ {
+  "date": "2026-09-07",
+  "event_name": "line_click",
+  "event_count": 1,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-08",
+  "event_name": "page_view",
+  "event_count": 121,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-08",
+  "event_name": "session_start",
+  "event_count": 115,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-08",
+  "event_name": "first_visit",
+  "event_count": 89,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-08",
+  "event_name": "scroll",
+  "event_count": 41,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-08",
+  "event_name": "click",
+  "event_count": 26,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-08",
+  "event_name": "click_reserve",
+  "event_count": 21,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-08",
+  "event_name": "hpb_click",
+  "event_count": 21,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-08",
+  "event_name": "page_view",
+  "event_count": 13,
+  "session_source_medium": "google / organic"
+ },
+ {
+  "date": "2026-09-08",
+  "event_name": "user_engagement",
+  "event_count": 10,
+  "session_source_medium": "google / organic"
+ },
+ {
+  "date": "2026-09-08",
+  "event_name": "session_start",
+  "event_count": 9,
+  "session_source_medium": "google / organic"
+ },
+ {
+  "date": "2026-09-08",
+  "event_name": "first_visit",
+  "event_count": 6,
+  "session_source_medium": "google / organic"
+ },
+ {
+  "date": "2026-09-08",
+  "event_name": "user_engagement",
+  "event_count": 6,
+  "session_source_medium": "yahoo / organic"
+ },
+ {
+  "date": "2026-09-08",
+  "event_name": "page_view",
+  "event_count": 5,
+  "session_source_medium": "yahoo / organic"
+ },
+ {
+  "date": "2026-09-08",
+  "event_name": "user_engagement",
+  "event_count": 4,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-08",
+  "event_name": "page_view",
+  "event_count": 3,
+  "session_source_medium": "(direct) / (none)"
+ },
+ {
+  "date": "2026-09-08",
+  "event_name": "session_start",
+  "event_count": 3,
+  "session_source_medium": "(direct) / (none)"
+ },
+ {
+  "date": "2026-09-08",
+  "event_name": "click_line",
+  "event_count": 2,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-08",
+  "event_name": "line_click",
+  "event_count": 2,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-08",
+  "event_name": "click",
+  "event_count": 1,
+  "session_source_medium": "(direct) / (none)"
+ },
+ {
+  "date": "2026-09-08",
+  "event_name": "click",
+  "event_count": 1,
+  "session_source_medium": "ig / social"
+ },
+ {
+  "date": "2026-09-08",
+  "event_name": "click_reserve",
+  "event_count": 1,
+  "session_source_medium": "(direct) / (none)"
+ },
+ {
+  "date": "2026-09-08",
+  "event_name": "click_reserve",
+  "event_count": 1,
+  "session_source_medium": "ig / social"
+ },
+ {
+  "date": "2026-09-08",
+  "event_name": "first_visit",
+  "event_count": 1,
+  "session_source_medium": "(direct) / (none)"
+ },
+ {
+  "date": "2026-09-08",
+  "event_name": "first_visit",
+  "event_count": 1,
+  "session_source_medium": "ig / social"
+ },
+ {
+  "date": "2026-09-08",
+  "event_name": "first_visit",
+  "event_count": 1,
+  "session_source_medium": "yahoo / organic"
+ },
+ {
+  "date": "2026-09-08",
+  "event_name": "hpb_click",
+  "event_count": 1,
+  "session_source_medium": "(direct) / (none)"
+ },
+ {
+  "date": "2026-09-08",
+  "event_name": "hpb_click",
+  "event_count": 1,
+  "session_source_medium": "ig / social"
+ },
+ {
+  "date": "2026-09-08",
+  "event_name": "page_view",
+  "event_count": 1,
+  "session_source_medium": "ig / social"
+ },
+ {
+  "date": "2026-09-08",
+  "event_name": "scroll",
+  "event_count": 1,
+  "session_source_medium": "google / organic"
+ },
+ {
+  "date": "2026-09-08",
+  "event_name": "session_start",
+  "event_count": 1,
+  "session_source_medium": "ig / social"
+ },
+ {
+  "date": "2026-09-08",
+  "event_name": "session_start",
+  "event_count": 1,
+  "session_source_medium": "yahoo / organic"
+ },
+ {
+  "date": "2026-09-09",
+  "event_name": "page_view",
+  "event_count": 121,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-09",
+  "event_name": "session_start",
+  "event_count": 111,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-09",
+  "event_name": "first_visit",
+  "event_count": 92,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-09",
+  "event_name": "scroll",
+  "event_count": 44,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-09",
+  "event_name": "click",
+  "event_count": 23,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-09",
+  "event_name": "user_engagement",
+  "event_count": 17,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-09",
+  "event_name": "click_reserve",
+  "event_count": 12,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-09",
+  "event_name": "hpb_click",
+  "event_count": 12,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-09",
+  "event_name": "page_view",
+  "event_count": 9,
+  "session_source_medium": "google / organic"
+ },
+ {
+  "date": "2026-09-09",
+  "event_name": "click_line",
+  "event_count": 6,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-09",
+  "event_name": "line_click",
+  "event_count": 6,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-09",
+  "event_name": "session_start",
+  "event_count": 6,
+  "session_source_medium": "google / organic"
+ },
+ {
+  "date": "2026-09-09",
+  "event_name": "user_engagement",
+  "event_count": 4,
+  "session_source_medium": "google / organic"
+ },
+ {
+  "date": "2026-09-09",
+  "event_name": "first_visit",
+  "event_count": 3,
+  "session_source_medium": "google / organic"
+ },
+ {
+  "date": "2026-09-09",
+  "event_name": "page_view",
+  "event_count": 3,
+  "session_source_medium": "(direct) / (none)"
+ },
+ {
+  "date": "2026-09-09",
+  "event_name": "first_visit",
+  "event_count": 2,
+  "session_source_medium": "(direct) / (none)"
+ },
+ {
+  "date": "2026-09-09",
+  "event_name": "session_start",
+  "event_count": 2,
+  "session_source_medium": "(direct) / (none)"
+ },
+ {
+  "date": "2026-09-09",
+  "event_name": "user_engagement",
+  "event_count": 2,
+  "session_source_medium": "(direct) / (none)"
+ },
+ {
+  "date": "2026-09-10",
+  "event_name": "page_view",
+  "event_count": 162,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-10",
+  "event_name": "session_start",
+  "event_count": 153,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-10",
+  "event_name": "first_visit",
+  "event_count": 130,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-10",
+  "event_name": "scroll",
+  "event_count": 62,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-10",
+  "event_name": "click",
+  "event_count": 36,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-10",
+  "event_name": "click_reserve",
+  "event_count": 29,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-10",
+  "event_name": "hpb_click",
+  "event_count": 29,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-10",
+  "event_name": "user_engagement",
+  "event_count": 6,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-10",
+  "event_name": "page_view",
+  "event_count": 4,
+  "session_source_medium": "(direct) / (none)"
+ },
+ {
+  "date": "2026-09-10",
+  "event_name": "page_view",
+  "event_count": 4,
+  "session_source_medium": "google / organic"
+ },
+ {
+  "date": "2026-09-10",
+  "event_name": "session_start",
+  "event_count": 4,
+  "session_source_medium": "(direct) / (none)"
+ },
+ {
+  "date": "2026-09-10",
+  "event_name": "session_start",
+  "event_count": 3,
+  "session_source_medium": "google / organic"
+ },
+ {
+  "date": "2026-09-10",
+  "event_name": "user_engagement",
+  "event_count": 3,
+  "session_source_medium": "google / organic"
+ },
+ {
+  "date": "2026-09-10",
+  "event_name": "click_line",
+  "event_count": 2,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-10",
+  "event_name": "first_visit",
+  "event_count": 2,
+  "session_source_medium": "(direct) / (none)"
+ },
+ {
+  "date": "2026-09-10",
+  "event_name": "first_visit",
+  "event_count": 2,
+  "session_source_medium": "google / organic"
+ },
+ {
+  "date": "2026-09-10",
+  "event_name": "first_visit",
+  "event_count": 2,
+  "session_source_medium": "ig / social"
+ },
+ {
+  "date": "2026-09-10",
+  "event_name": "line_click",
+  "event_count": 2,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-10",
+  "event_name": "page_view",
+  "event_count": 2,
+  "session_source_medium": "ig / social"
+ },
+ {
+  "date": "2026-09-10",
+  "event_name": "scroll",
+  "event_count": 2,
+  "session_source_medium": "ig / social"
+ },
+ {
+  "date": "2026-09-10",
+  "event_name": "session_start",
+  "event_count": 2,
+  "session_source_medium": "ig / social"
+ },
+ {
+  "date": "2026-09-10",
+  "event_name": "click",
+  "event_count": 1,
+  "session_source_medium": "(direct) / (none)"
+ },
+ {
+  "date": "2026-09-10",
+  "event_name": "click",
+  "event_count": 1,
+  "session_source_medium": "google / organic"
+ },
+ {
+  "date": "2026-09-10",
+  "event_name": "click_reserve",
+  "event_count": 1,
+  "session_source_medium": "(direct) / (none)"
+ },
+ {
+  "date": "2026-09-10",
+  "event_name": "click_reserve",
+  "event_count": 1,
+  "session_source_medium": "google / organic"
+ },
+ {
+  "date": "2026-09-10",
+  "event_name": "first_visit",
+  "event_count": 1,
+  "session_source_medium": "facebook.com / referral"
+ },
+ {
+  "date": "2026-09-10",
+  "event_name": "hpb_click",
+  "event_count": 1,
+  "session_source_medium": "(direct) / (none)"
+ },
+ {
+  "date": "2026-09-10",
+  "event_name": "hpb_click",
+  "event_count": 1,
+  "session_source_medium": "google / organic"
+ },
+ {
+  "date": "2026-09-10",
+  "event_name": "page_view",
+  "event_count": 1,
+  "session_source_medium": "facebook.com / referral"
+ },
+ {
+  "date": "2026-09-10",
+  "event_name": "scroll",
+  "event_count": 1,
+  "session_source_medium": "facebook.com / referral"
+ },
+ {
+  "date": "2026-09-10",
+  "event_name": "session_start",
+  "event_count": 1,
+  "session_source_medium": "facebook.com / referral"
+ },
+ {
+  "date": "2026-09-10",
+  "event_name": "user_engagement",
+  "event_count": 1,
+  "session_source_medium": "ig / social"
+ },
+ {
+  "date": "2026-09-11",
+  "event_name": "session_start",
+  "event_count": 62,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-11",
+  "event_name": "page_view",
+  "event_count": 61,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-11",
+  "event_name": "first_visit",
+  "event_count": 42,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-11",
+  "event_name": "first_visit",
+  "event_count": 34,
+  "session_source_medium": "(data not available)"
+ },
+ {
+  "date": "2026-09-11",
+  "event_name": "page_view",
+  "event_count": 34,
+  "session_source_medium": "(data not available)"
+ },
+ {
+  "date": "2026-09-11",
+  "event_name": "session_start",
+  "event_count": 34,
+  "session_source_medium": "(data not available)"
+ },
+ {
+  "date": "2026-09-11",
+  "event_name": "user_engagement",
+  "event_count": 20,
+  "session_source_medium": "(not set)"
+ },
+ {
+  "date": "2026-09-11",
+  "event_name": "scroll",
+  "event_count": 18,
+  "session_source_medium": "(not set)"
+ },
+ {
+  "date": "2026-09-11",
+  "event_name": "page_view",
+  "event_count": 15,
+  "session_source_medium": "(not set)"
+ },
+ {
+  "date": "2026-09-11",
+  "event_name": "page_view",
+  "event_count": 13,
+  "session_source_medium": "(direct) / (none)"
+ },
+ {
+  "date": "2026-09-11",
+  "event_name": "session_start",
+  "event_count": 13,
+  "session_source_medium": "(direct) / (none)"
+ },
+ {
+  "date": "2026-09-11",
+  "event_name": "click",
+  "event_count": 11,
+  "session_source_medium": "(not set)"
+ },
+ {
+  "date": "2026-09-11",
+  "event_name": "first_visit",
+  "event_count": 11,
+  "session_source_medium": "(direct) / (none)"
+ },
+ {
+  "date": "2026-09-11",
+  "event_name": "click_reserve",
+  "event_count": 10,
+  "session_source_medium": "(not set)"
+ },
+ {
+  "date": "2026-09-11",
+  "event_name": "hpb_click",
+  "event_count": 9,
+  "session_source_medium": "(not set)"
+ },
+ {
+  "date": "2026-09-11",
+  "event_name": "click_reserve",
+  "event_count": 8,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-11",
+  "event_name": "scroll",
+  "event_count": 7,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-11",
+  "event_name": "click",
+  "event_count": 6,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-11",
+  "event_name": "hpb_click",
+  "event_count": 5,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-11",
+  "event_name": "page_view",
+  "event_count": 4,
+  "session_source_medium": "google / organic"
+ },
+ {
+  "date": "2026-09-11",
+  "event_name": "scroll",
+  "event_count": 4,
+  "session_source_medium": "(data not available)"
+ },
+ {
+  "date": "2026-09-11",
+  "event_name": "session_start",
+  "event_count": 3,
+  "session_source_medium": "google / organic"
+ },
+ {
+  "date": "2026-09-11",
+  "event_name": "user_engagement",
+  "event_count": 3,
+  "session_source_medium": "(data not available)"
+ },
+ {
+  "date": "2026-09-11",
+  "event_name": "click",
+  "event_count": 2,
+  "session_source_medium": "(data not available)"
+ },
+ {
+  "date": "2026-09-11",
+  "event_name": "user_engagement",
+  "event_count": 2,
+  "session_source_medium": "meta / cpc"
+ },
+ {
+  "date": "2026-09-11",
+  "event_name": "click",
+  "event_count": 1,
+  "session_source_medium": "(direct) / (none)"
+ },
+ {
+  "date": "2026-09-11",
+  "event_name": "click_line",
+  "event_count": 1,
+  "session_source_medium": "(not set)"
+ },
+ {
+  "date": "2026-09-11",
+  "event_name": "click_reserve",
+  "event_count": 1,
+  "session_source_medium": "(direct) / (none)"
+ },
+ {
+  "date": "2026-09-11",
+  "event_name": "click_tel",
+  "event_count": 1,
+  "session_source_medium": "(not set)"
+ },
+ {
+  "date": "2026-09-11",
+  "event_name": "first_visit",
+  "event_count": 1,
+  "session_source_medium": "google / organic"
+ },
+ {
+  "date": "2026-09-11",
+  "event_name": "hpb_click",
+  "event_count": 1,
+  "session_source_medium": "(data not available)"
+ },
+ {
+  "date": "2026-09-11",
+  "event_name": "hpb_click",
+  "event_count": 1,
+  "session_source_medium": "(direct) / (none)"
+ },
+ {
+  "date": "2026-09-11",
+  "event_name": "line_click",
+  "event_count": 1,
+  "session_source_medium": "(not set)"
+ },
+ {
+  "date": "2026-09-11",
+  "event_name": "page_view",
+  "event_count": 1,
+  "session_source_medium": "yahoo / organic"
+ },
+ {
+  "date": "2026-09-11",
+  "event_name": "scroll",
+  "event_count": 1,
+  "session_source_medium": "(direct) / (none)"
+ },
+ {
+  "date": "2026-09-11",
+  "event_name": "session_start",
+  "event_count": 1,
+  "session_source_medium": "yahoo / organic"
+ },
+ {
+  "date": "2026-09-11",
+  "event_name": "user_engagement",
+  "event_count": 1,
+  "session_source_medium": "(direct) / (none)"
+ }
+]

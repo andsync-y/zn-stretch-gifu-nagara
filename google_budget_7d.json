@@ -1,0 +1,26 @@
+[
+ {
+  "date": "2026-09-05",
+  "campaign": "集客_検索_2026.07",
+  "campaign_budget": 4800,
+  "search_impression_share": 0.2051,
+  "search_budget_lost_impression_share": 0,
+  "search_rank_lost_impression_share": 0.7949
+ },
+ {
+  "date": "2026-09-06",
+  "campaign": "集客_検索_2026.07",
+  "campaign_budget": 4800,
+  "search_impression_share": 0.1937,
+  "search_budget_lost_impression_share": 0.2664,
+  "search_rank_lost_impression_share": 0.5399
+ },
+ {
+  "date": "2026-09-07",
+  "campaign": "集客_検索_2026.07",
+  "campaign_budget": 4800,
+  "search_impression_share": 0.209,
+  "search_budget_lost_impression_share": 0.0161,
+  "search_rank_lost_impression_share": 0.7749
+ }
+]
