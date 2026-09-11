@@ -3621,3 +3621,35 @@ Coworkの**スケジュールタスクにはリポジトリを紐付ける欄が
   - `docs/column-backlog.md`
 - 確認結果：`node scripts/yakkihou-ng.mjs src/pages/column/unten-youtsu.astro` と `node scripts/lint-column.mjs src/pages/column/unten-youtsu.astro` いずれもPASS。`npm run build` 成功（40→41ページ生成）。
 - 未対応・次の作業：なし。
+## 2026-09-11 (Claude Code / GitHub Actions) コラム新規1本追加（動的ストレッチと静的ストレッチの違い／compare型）
+- ブランチ：`claude/column-auto`
+- 関連PR：なし（コラム専用ブランチへのコミットのみ。マージはユーザーが実施）
+- 変更内容：
+  - 実行日は金曜枠＝`compare`。`docs/column-backlog.md` の `compare` 枠から未対応の最上位「dynamic-static-chigai（動的ストレッチ 静的ストレッチ 違い 使い分け）」を選び、新規コラム記事を1本作成。
+  - `compare`型ルールに従い、結論先出し（運動前は動的、運動後・普段のセルフケアは静的、という使い分けの1文）→動的・静的の定義解説→比較表（観点／動的ストレッチ／静的ストレッチを5観点で整理、`/method`と同じ`overflow-x-auto`＋`min-w-[640px]`のマークアップ）→ゴルフ・ランニング前後のシーン別使い分け（既存コラム`golf-stretch-routine`への内部リンクも設置）→自分でできる実践例（動的2種目・静的2種目。`stretchPoses.ts` 既存ポーズ pose-05/32/04/08を使用、重複なし）→セルフケアの限界と当店のアプローチ、の構成。他社・他手法を貶める表現なし。
+  - 薬機法チェック：NG表現なしで一発PASS。
+  - 既存compare記事「stretch-momihogushi-chigai」「personal-stretch-towa」「stretch-seitai-erabikata」とは検索意図が異なり重複なし。既存authority記事「golf-stretch-routine」（ゴルフ前後の具体的ルーティン）とは、動的・静的という分類軸で使い分けを解説する点で意図が異なり、内部リンクで補強する関係にした。
+  - FAQ5問（「結局どちらをすればいいですか？」含む）、`/method`（体感軸調整法・初出リンク）・`/symptoms/sports`・`/symptoms/youtsu` への内部リンクを設置。
+  - `src/data/columns.ts` の `COLUMNS` 先頭に新記事のメタデータ（slug/heading/desc/date/tags/relatedSymptoms/selfCare）を追加。
+  - `docs/column-backlog.md` の該当行を `- [x]` に更新。
+  - アイキャッチは `scripts/fetch-column-image.mjs --source ai` でAI生成（晴れた朝の公園で腕を伸ばしてウォームアップする40〜50代の日本人男性）。`imageCredit` に「※画像はイメージです」を設定済み。
+- 主な変更ファイル：
+  - `src/pages/column/dynamic-static-chigai.astro`（新規）
+  - `public/images/column/dynamic-static-chigai.webp`（新規）
+  - `src/data/columns.ts`
+  - `docs/column-backlog.md`
+- 確認結果：`node scripts/yakkihou-ng.mjs src/pages/column/dynamic-static-chigai.astro` と `node scripts/lint-column.mjs src/pages/column/dynamic-static-chigai.astro` いずれもPASS。`npm run build` 成功（41→42ページ生成）。
+- 未対応・次の作業：なし。
+## 2026-09-11 (Claude Code / GitHub Actions) レビュー：dynamic-static-chigai.astro の薬機法・景表法チェック
+- ブランチ：`claude/column-auto`
+- 関連PR：なし（コラム専用ブランチへのコミットのみ。マージはユーザーが実施）
+- 変更内容：
+  - `lint-result.txt` は品質GATE PASS、`node scripts/yakkihou-ng.mjs` もNG表現なしで、機械チェックはいずれも問題なし。
+  - `docs/yakkihou-ng-ok.md` の言い換え表に照らして本文を読み、婉曲的な効能断定（「痛みが消えていく」等の類）は見当たらず。
+  - リード文（冒頭）は「運動前は動的、運動後・セルフケアは静的」という使い分けの結論をタイトルの検索意図に対して即答しており問題なし。
+  - 「岐阜市長良の専門店のトレーナーが解説」という当店の立場表現について、直近の他コラム（`gikkurigoshi-after`等）では`description`に「...全力ストレッチ岐阜長良店のトレーナーが解説します。」まで含めているのに対し、本記事の`description`は「トレーナー」が抜けていたため、他記事と表現をそろえる修正を行った。
+  - セルフケア手順・figcaption「イラストはイメージです」は全て既存の基準どおりで修正不要。
+- 主な変更ファイル：
+  - `src/pages/column/dynamic-static-chigai.astro`（`description`の文言を修正）
+- 確認結果：`node scripts/lint-column.mjs src/pages/column/dynamic-static-chigai.astro` と `node scripts/yakkihou-ng.mjs src/pages/column/dynamic-static-chigai.astro` いずれもPASS。`npm run build` 成功（42ページ生成）。
+- 未対応・次の作業：なし。
