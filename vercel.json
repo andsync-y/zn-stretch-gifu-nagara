@@ -1,0 +1,7 @@
+{
+  "git": {
+    "deploymentEnabled": {
+      "kpi-data": false
+    }
+  }
+}
