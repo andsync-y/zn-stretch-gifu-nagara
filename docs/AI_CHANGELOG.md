@@ -3653,3 +3653,38 @@ Coworkの**スケジュールタスクにはリポジトリを紐付ける欄が
   - `src/pages/column/dynamic-static-chigai.astro`（`description`の文言を修正）
 - 確認結果：`node scripts/lint-column.mjs src/pages/column/dynamic-static-chigai.astro` と `node scripts/yakkihou-ng.mjs src/pages/column/dynamic-static-chigai.astro` いずれもPASS。`npm run build` 成功（42ページ生成）。
 - 未対応・次の作業：なし。
+## 2026-09-14 (Claude Code / GitHub Actions) コラム新規1本追加（ランニング前後のストレッチ｜故障予防／authority型）
+- ブランチ：`claude/column-auto`
+- 関連PR：なし（コラム専用ブランチへのコミットのみ。マージはユーザーが実施）
+- 変更内容：
+  - 実行日は月曜枠＝`authority`。`docs/column-backlog.md` の `authority` 枠で最上位の未対応は「sango-youtsu（産後 腰痛 骨盤 セルフケア）」だったが、想定読者（岐阜市周辺の40〜60代男性）と検索意図が一致しないため見送り、次点の「running-zengo（ランニング ストレッチ 前後 故障予防）」を選定。type=セルフケア。
+  - 結論先出し（走る前は動的、走った後は静的という使い分けの1文）→なぜ前後で使い分けるとよいか（冷えた筋肉を長く伸ばすと力が入りにくい／走った後は緊張した筋肉をリセットしたい）→ランニング前の動的ストレッチ3選（足首回し／股関節の開閉／キャット&カウ）→ランニング後の静的ストレッチ3選（ふくらはぎ／大腿四頭筋／ハムストリング）→故障予防のために気をつけたいこと（走行距離・休養、鋭い痛みがある場合は受診を検討）→セルフケアの限界と当店のアプローチ、の構成。既存の`dynamic-static-chigai`（動的・静的の一般的な違い）とは、ランニングの故障予防という具体的な状況・種目に絞った点で意図を分け、重複を避けた。
+  - 薬機法チェック：NG表現なしで一発PASS。
+  - 既存記事「golf-stretch-routine」（ゴルフ前後）とはスポーツの種目が異なり、「dynamic-static-chigai」とは焦点（一般解説 vs ランニング特化の実践メニュー）が異なるため重複なし。
+  - FAQ5問（「ストレッチだけで故障を防げるか」等含む）、`/method`（体感軸調整法・初出リンク）・`/symptoms/sports`・`/symptoms/youtsu`・`/symptoms/shisei` への内部リンクを設置。
+  - `stretchPoses.ts` 既存ポーズ pose-32/11/05（動的の代用として）/pose-04/08/02（静的）を使用。ライブラリに無い「その場ランジウォーク」等の専用の動的種目は使わず、既存ポーズのdescと矛盾しない範囲で構成したためポーズ未収載の連絡事項はなし。
+  - `src/data/columns.ts` の `COLUMNS` 先頭に新記事のメタデータ（slug/heading/desc/date/tags/relatedSymptoms/selfCare）を追加。
+  - `docs/column-backlog.md` の該当行を `- [x]` に更新。
+  - アイキャッチは `scripts/fetch-column-image.mjs --source ai` でAI生成（晴れた朝、公園で走り出す前に木を使ってふくらはぎを伸ばす40〜50代の日本人男性）。`imageCredit` に「※画像はイメージです」を設定済み。
+- 主な変更ファイル：
+  - `src/pages/column/running-zengo.astro`（新規）
+  - `public/images/column/running-zengo.webp`（新規）
+  - `src/data/columns.ts`
+  - `docs/column-backlog.md`
+- 確認結果：`node scripts/yakkihou-ng.mjs src/pages/column/running-zengo.astro` と `node scripts/lint-column.mjs src/pages/column/running-zengo.astro` いずれもPASS。`npm run build` 成功（42→43ページ生成）。
+- 未対応・次の作業：なし。
+
+## 2026-09-14 (Claude Code / GitHub Actions) レビュー：running-zengo.astro の薬機法・景表法チェック
+- ブランチ：`claude/column-auto`
+- 関連PR：なし（コラム専用ブランチへのコミットのみ。マージはユーザーが実施）
+- 変更内容：
+  - `lint-result.txt` は品質GATE PASS、機械チェックは問題なし。
+  - `docs/yakkihou-ng-ok.md` の言い換え表に照らして本文を読み、正規表現の機械チェックはすり抜けるが文脈的に効能を断定している箇所として、静的ストレッチ「ふくらはぎ」の段落に「シンスプリントなどの故障予防のためにも入念に伸ばしておきたい部位です」という一文があった。特定の傷病名（シンスプリント）を挙げてストレッチがその予防になると直接結びつける書き方は、当店が医業類似行為を行わないリラクゼーション目的の店であるという方針（同ドキュメント冒頭）に反するおそれがあるため、傷病名を削り「張りをためやすい部位のひとつと言われているため、入念に伸ばしておきたいところです」という一般的な表現に修正した。
+  - リード文（冒頭）は「走る前は動的、走った後は静的」という使い分けの結論と故障予防メニューという検索意図に、200字以内で直接回答しており問題なし。
+  - 「岐阜市長良の専門店のトレーナーが解説」という当店の立場、独自メソッド「体感軸調整法」への言及（`/method`への初出リンク付き）は一貫しており修正不要。
+  - セルフケア手順は「反動をつけない」「痛みの出ない範囲で」「鋭い痛みが出たら医療機関へ」等、無理な負荷や我慢を強いる指示はなく安全。
+  - 挿絵6点すべてのfigcaptionに「イラストはイメージです」の注記あり。
+- 主な変更ファイル：
+  - `src/pages/column/running-zengo.astro`（本文1文を修正）
+- 確認結果：`node scripts/lint-column.mjs src/pages/column/running-zengo.astro` PASS。`npm run build` 成功（43ページ生成）。
+- 未対応・次の作業：なし。
