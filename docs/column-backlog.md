@@ -63,7 +63,7 @@
 
 ### スポーツ（既存と意図を分ける）
 - [x] running-zengo ｜ authority ｜ ランニング ストレッチ 前後 故障予防 ｜ セルフケア ｜ /symptoms/sports
-- [ ] undousoku-5min ｜ authority ｜ 運動不足 解消 1日5分 ストレッチ ｜ 入門 ｜ /symptoms/sports, /symptoms/jiritsu
+- [x] undousoku-5min ｜ authority ｜ 運動不足 解消 1日5分 ストレッチ ｜ 入門 ｜ /symptoms/sports, /symptoms/jiritsu
 
 ### 比較・選び方（`compare` 枠／金曜に消化）
 - [x] stretch-momihogushi-chigai ｜ compare ｜ ストレッチ もみほぐし 違い ｜ 使い分け ｜ /method, /menu
