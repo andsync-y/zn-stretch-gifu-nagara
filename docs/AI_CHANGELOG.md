@@ -3688,3 +3688,23 @@ Coworkの**スケジュールタスクにはリポジトリを紐付ける欄が
   - `src/pages/column/running-zengo.astro`（本文1文を修正）
 - 確認結果：`node scripts/lint-column.mjs src/pages/column/running-zengo.astro` PASS。`npm run build` 成功（43ページ生成）。
 - 未対応・次の作業：なし。
+
+## 2026-09-16 (Claude Code / GitHub Actions) コラム新規1本追加（運動不足対策の1日5分ストレッチ／authority型）
+- ブランチ：`claude/column-auto`
+- 関連PR：なし（コラム専用ブランチへのコミットのみ。マージはユーザーが実施）
+- 変更内容：
+  - 実行日は水曜枠＝`authority`。`docs/column-backlog.md` の `authority` 枠で最上位の未対応は「sango-youtsu（産後 腰痛 骨盤 セルフケア）」だったが、09-14回と同じ理由（想定読者＝岐阜市周辺の40〜60代男性と検索意図が一致しない）で見送り、次点の「undousoku-5min（運動不足 解消 1日5分 ストレッチ）」を選定。type=入門。
+  - 結論先出し（いきなり運動よりまず1日5分のストレッチから、という1文）→なぜ運動不足だと体が硬くなりやすいか→1日5分でも始めやすい理由→1日5分の全身ストレッチ5選（ばんざい伸び／キャット&カウ／胸を開く／股関節の開脚前屈／ふくらはぎ壁ストレッチ）→いつ・どのくらいの頻度で続けるか→セルフケアの限界と当店のアプローチ、の構成。既存記事とは「運動不足そのものへの入門」という意図で重複なし。
+  - 薬機法チェック：初回検査で「解消」がタイトル・見出し・FAQ・本文に計7件検出（NG語）。バックログのキーワード表記は「解消」だが、公開文面としては薬機法チェックのNG語のため、意味を保ったまま「対策」「見直す」に置き換えて修正し、再検査でNG表現なしを確認。`docs/column-backlog.md` 側のキーワード表記はバックログの内部メモであり公開文面ではないため、原文の「解消」表記のまま残した。
+  - FAQ5問、`/method`（体感軸調整法・初出リンク）・`/symptoms/jiritsu`・`/symptoms/sports` への内部リンクを設置。
+  - `stretchPoses.ts` 既存ポーズ pose-16（ばんざい）／pose-05（キャット&カウ）／pose-06（胸を開く）／pose-03（開脚前屈）／pose-04（ふくらはぎ壁）を使用。同一記事内で重複なし。ライブラリに無い動きは使っていないため、ポーズ未収載の連絡事項はなし。
+  - `src/data/columns.ts` の `COLUMNS` 先頭に新記事のメタデータ（slug/heading/desc/date/tags/relatedSymptoms/selfCare）を追加。
+  - `docs/column-backlog.md` の該当行を `- [x]` に更新。
+  - アイキャッチは `scripts/fetch-column-image.mjs --source ai` でAI生成（明るいオフィスでデスクから立ち上がり伸びをする40〜50代の日本人男性）。`imageCredit` に「※画像はイメージです」を設定済み。
+- 主な変更ファイル：
+  - `src/pages/column/undousoku-5min.astro`（新規）
+  - `public/images/column/undousoku-5min.webp`（新規）
+  - `src/data/columns.ts`
+  - `docs/column-backlog.md`
+- 確認結果：`node scripts/yakkihou-ng.mjs src/pages/column/undousoku-5min.astro` と `node scripts/lint-column.mjs src/pages/column/undousoku-5min.astro` いずれもPASS。`npm run build` 成功（43→44ページ生成）。
+- 未対応・次の作業：なし。
