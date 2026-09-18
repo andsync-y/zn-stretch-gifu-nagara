@@ -3708,3 +3708,23 @@ Coworkの**スケジュールタスクにはリポジトリを紐付ける欄が
   - `docs/column-backlog.md`
 - 確認結果：`node scripts/yakkihou-ng.mjs src/pages/column/undousoku-5min.astro` と `node scripts/lint-column.mjs src/pages/column/undousoku-5min.astro` いずれもPASS。`npm run build` 成功（43→44ページ生成）。
 - 未対応・次の作業：なし。
+
+## 2026-09-18 (Claude Code / GitHub Actions) コラム新規1本追加（ストレッチに通う頻度の目安／compare型）
+- ブランチ：`claude/column-auto`
+- 関連PR：なし（コラム専用ブランチへのコミットのみ。マージはユーザーが実施）
+- 変更内容：
+  - 実行日は金曜枠＝`compare`。`docs/column-backlog.md` の `compare` 枠で最上位の未対応「kaisuken-tsuikata（ストレッチ 通う頻度 目安 選び方）」を選定。type=検討。既存4本のcompare記事（もみほぐし違い／パーソナルストレッチとは／整体選び方／動的静的の違い）とは「通う頻度・間隔」という検索意図で重複なし。
+  - 結論先出し（頻度は目的で使い分けるという1文。優劣ではなく使い分けを提示）→通う頻度に決まりはあるか→目的別（集中して整えたい時期／状態を維持したい時期／スポット的に使いたい時期）の比較表（観点：目安の頻度／向いている人／目安の期間／お支払いの目安）→通う間隔があく期間のセルフケア3種目（肩甲骨／体側／お尻）→結局どのくらいの頻度で通えばいいか（セルフケアの限界と当店のアプローチ）、の構成。比較表は`/method`ページと同じ`overflow-x-auto`＋`min-w-[640px]`のマークアップに統一。他社を貶める表現は使わず「向き・不向き」の書き方に統一。
+  - 薬機法チェック：NG表現なしで一発PASS。回数券の具体的な料金・割引率は本文中に数値を書かず「詳細は/menuでご確認ください」と誘導し、`src/pages/menu.astro`の実際の料金表と矛盾しないようにした。
+  - FAQ5問（「結局、どのくらいの頻度で通えばいいですか？」を含む）、`/method`（体感軸調整法・初出リンク）・`/menu`・`/reserve`への内部リンクを設置。relatedSymptomsは通う頻度全般のテーマのため`katakori`/`shisei`/`sports`を設定。
+  - `stretchPoses.ts` 既存ポーズ pose-14（肩甲骨）／pose-28（体側）／pose-07（お尻・ツイスト）を使用。ライブラリに無い動きは使っていないため、ポーズ未収載の連絡事項はなし。
+  - `src/data/columns.ts` の `COLUMNS` 先頭に新記事のメタデータ（slug/heading/desc/date/tags/relatedSymptoms/selfCare）を追加。
+  - `docs/column-backlog.md` の該当行を `- [x]` に更新。
+  - アイキャッチは `scripts/fetch-column-image.mjs --source ai` でAI生成（明るいリビングで壁掛けカレンダーに予定を書き込む40代の日本人男性）。`imageCredit` に「※画像はイメージです」を設定済み。
+- 主な変更ファイル：
+  - `src/pages/column/kaisuken-tsuikata.astro`（新規）
+  - `public/images/column/kaisuken-tsuikata.webp`（新規）
+  - `src/data/columns.ts`
+  - `docs/column-backlog.md`
+- 確認結果：`node scripts/yakkihou-ng.mjs src/pages/column/kaisuken-tsuikata.astro` と `node scripts/lint-column.mjs src/pages/column/kaisuken-tsuikata.astro` いずれもPASS。`npm run build` 成功（44→45ページ生成）。
+- 未対応・次の作業：なし。
