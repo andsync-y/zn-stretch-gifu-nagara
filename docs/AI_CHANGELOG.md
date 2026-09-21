@@ -4202,3 +4202,148 @@ Council評決の提言どおり、`trig_019WAvAngrAd559nAjDjTj6H` のプロン�
 - 成約率（回数券）は別トラックとして並走。個人的事情は記録しない方針を維持
 
 - `docs/plans/new-customer-3month-2026-09.md`（新規・薬機法チェック済み）
+## 2026-09-07 (Claude Code / GitHub Actions) コラム新規1本追加（ぎっくり腰の後のストレッチ再開目安／authority型）
+- ブランチ：`claude/column-auto`
+- 関連PR：なし（コラム専用ブランチへのコミットのみ。マージはユーザーが実施）
+- 変更内容：
+  - 実行日は月曜枠＝`authority`。`docs/column-backlog.md` の `authority` 枠から未対応の最上位「gikkurigoshi-after（ぎっくり腰 後 ストレッチ いつから）」を選び、新規コラム記事を1本作成。type=`注意喚起`のため、shijukata-chuui同様に医療機関への相談を前面に出す構成にした。
+  - 結論先出し（鋭い痛みが落ち着き日常動作がこなせるようになってからごく軽い範囲で、という1文）→再開の目安→痛みの「質」による見分け方→再開初期に避けたい動き4つ→ごく軽いセルフケア3選（膝抱えストレッチ／お尻のストレッチ／深呼吸ストレッチ。`stretchPoses.ts` 既存ポーズ pose-09/07/30を使用。いずれも急性期後の負荷の小さい動きを選定）→再発を防ぐ姿勢の癖3点→医療機関への相談目安→セルフケアの限界と当店のアプローチ、の構成。
+  - 薬機法チェックで「治療」がNG判定（医療機関の役割を説明する文脈でも機械的に検出される仕様のため）→FAQ・本文とも「診断や対応」「診断や医療的な対応」に言い換えて再検査しPASS。
+  - 既存記事「youtsu-morning-stretch」（朝の腰の重だるさ・慢性的な張り）・「sorikoshi-check」（反り腰の姿勢チェック）とは、ぎっくり腰という急性のエピソード後の再開タイミングを扱う点で検索意図が異なり重複なし。
+  - FAQ5問、`/method`（体感軸調整法・初出リンク）・`/symptoms/youtsu`・`/symptoms/shisei` への内部リンク、関連に既存の `golf-stretch-routine` コラムへの導線も設置。
+  - `src/data/columns.ts` の `COLUMNS` 先頭に新記事のメタデータ（slug/heading/desc/date/tags/relatedSymptoms/selfCare）を追加。
+  - `docs/column-backlog.md` の該当行を `- [x]` に更新。
+  - アイキャッチは `scripts/fetch-column-image.mjs --source ai` でAI生成（明るいリビングで椅子からゆっくり立ち上がる40〜50代の日本人男性、朝の陽光）。`imageCredit` に「※画像はイメージです」を設定済み。
+- 主な変更ファイル：
+  - `src/pages/column/gikkurigoshi-after.astro`（新規）
+  - `public/images/column/gikkurigoshi-after.webp`（新規）
+  - `src/data/columns.ts`
+  - `docs/column-backlog.md`
+- 確認結果：`node scripts/yakkihou-ng.mjs src/pages/column/gikkurigoshi-after.astro` と `node scripts/lint-column.mjs src/pages/column/gikkurigoshi-after.astro` いずれもPASS。`npm run build` 成功（39→40ページ生成）。
+- 未対応・次の作業：なし。
+## 2026-09-09 (Claude Code / GitHub Actions) コラム新規1本追加（長時間運転の腰痛対策／authority型）
+- ブランチ：`claude/column-auto`
+- 関連PR：なし（コラム専用ブランチへのコミットのみ。マージはユーザーが実施）
+- 変更内容：
+  - 実行日は水曜枠＝`authority`。`docs/column-backlog.md` の `authority` 枠から未対応の最上位「unten-youtsu（長時間 運転 腰痛 ストレッチ）」を選び、新規コラム記事を1本作成。type=`悩み特化`。営業やゴルフの行き帰りなど車移動が多い40〜60代男性を想定読者にした。
+  - 結論先出し（股関節を曲げたまま同じ姿勢が続き殿筋・腰まわりが固まりやすいこと、休憩ごとのストレッチで区切れること、という1文）→なぜ運転で腰が重くなるか（骨盤後傾・左右非対称な操作）→運転中にできる工夫（座面調整・1〜2時間に1回の休憩目安。走行中のストレッチは安全のため行わない旨を明記）→休憩時にできるセルフストレッチ5選（座ったままの腰ひねり／股関節前面／お尻／足首まわし／自宅での太もも裏。`stretchPoses.ts` 既存ポーズ pose-27/08/07/32/02を使用）→セルフケアの限界と当店のアプローチ、の構成。
+  - 薬機法チェック：NG表現なしで一発PASS。
+  - 既存記事「youtsu-morning-stretch」（朝の腰の重だるさ）・「gikkurigoshi-after」（ぎっくり腰後の再開目安）とは、長時間の運転という状況・原因に特化した悩みである点で検索意図が異なり重複なし。
+  - FAQ5問（走行中にストレッチをしてよいかという安全面のQも含む）、`/method`（体感軸調整法・初出リンク）・`/symptoms/youtsu`・`/symptoms/shisei`・`/symptoms/mukumi` への内部リンクを設置。
+  - `src/data/columns.ts` の `COLUMNS` 先頭に新記事のメタデータ（slug/heading/desc/date/tags/relatedSymptoms/selfCare）を追加。
+  - `docs/column-backlog.md` の該当行を `- [x]` に更新。
+  - アイキャッチは `scripts/fetch-column-image.mjs --source ai` でAI生成（晴れた朝の高速道路の休憩エリアで車から降りて体を伸ばす50代の日本人男性）。`imageCredit` に「※画像はイメージです」を設定済み。
+- 主な変更ファイル：
+  - `src/pages/column/unten-youtsu.astro`（新規）
+  - `public/images/column/unten-youtsu.webp`（新規）
+  - `src/data/columns.ts`
+  - `docs/column-backlog.md`
+- 確認結果：`node scripts/yakkihou-ng.mjs src/pages/column/unten-youtsu.astro` と `node scripts/lint-column.mjs src/pages/column/unten-youtsu.astro` いずれもPASS。`npm run build` 成功（40→41ページ生成）。
+- 未対応・次の作業：なし。
+## 2026-09-11 (Claude Code / GitHub Actions) コラム新規1本追加（動的ストレッチと静的ストレッチの違い／compare型）
+- ブランチ：`claude/column-auto`
+- 関連PR：なし（コラム専用ブランチへのコミットのみ。マージはユーザーが実施）
+- 変更内容：
+  - 実行日は金曜枠＝`compare`。`docs/column-backlog.md` の `compare` 枠から未対応の最上位「dynamic-static-chigai（動的ストレッチ 静的ストレッチ 違い 使い分け）」を選び、新規コラム記事を1本作成。
+  - `compare`型ルールに従い、結論先出し（運動前は動的、運動後・普段のセルフケアは静的、という使い分けの1文）→動的・静的の定義解説→比較表（観点／動的ストレッチ／静的ストレッチを5観点で整理、`/method`と同じ`overflow-x-auto`＋`min-w-[640px]`のマークアップ）→ゴルフ・ランニング前後のシーン別使い分け（既存コラム`golf-stretch-routine`への内部リンクも設置）→自分でできる実践例（動的2種目・静的2種目。`stretchPoses.ts` 既存ポーズ pose-05/32/04/08を使用、重複なし）→セルフケアの限界と当店のアプローチ、の構成。他社・他手法を貶める表現なし。
+  - 薬機法チェック：NG表現なしで一発PASS。
+  - 既存compare記事「stretch-momihogushi-chigai」「personal-stretch-towa」「stretch-seitai-erabikata」とは検索意図が異なり重複なし。既存authority記事「golf-stretch-routine」（ゴルフ前後の具体的ルーティン）とは、動的・静的という分類軸で使い分けを解説する点で意図が異なり、内部リンクで補強する関係にした。
+  - FAQ5問（「結局どちらをすればいいですか？」含む）、`/method`（体感軸調整法・初出リンク）・`/symptoms/sports`・`/symptoms/youtsu` への内部リンクを設置。
+  - `src/data/columns.ts` の `COLUMNS` 先頭に新記事のメタデータ（slug/heading/desc/date/tags/relatedSymptoms/selfCare）を追加。
+  - `docs/column-backlog.md` の該当行を `- [x]` に更新。
+  - アイキャッチは `scripts/fetch-column-image.mjs --source ai` でAI生成（晴れた朝の公園で腕を伸ばしてウォームアップする40〜50代の日本人男性）。`imageCredit` に「※画像はイメージです」を設定済み。
+- 主な変更ファイル：
+  - `src/pages/column/dynamic-static-chigai.astro`（新規）
+  - `public/images/column/dynamic-static-chigai.webp`（新規）
+  - `src/data/columns.ts`
+  - `docs/column-backlog.md`
+- 確認結果：`node scripts/yakkihou-ng.mjs src/pages/column/dynamic-static-chigai.astro` と `node scripts/lint-column.mjs src/pages/column/dynamic-static-chigai.astro` いずれもPASS。`npm run build` 成功（41→42ページ生成）。
+- 未対応・次の作業：なし。
+## 2026-09-11 (Claude Code / GitHub Actions) レビュー：dynamic-static-chigai.astro の薬機法・景表法チェック
+- ブランチ：`claude/column-auto`
+- 関連PR：なし（コラム専用ブランチへのコミットのみ。マージはユーザーが実施）
+- 変更内容：
+  - `lint-result.txt` は品質GATE PASS、`node scripts/yakkihou-ng.mjs` もNG表現なしで、機械チェックはいずれも問題なし。
+  - `docs/yakkihou-ng-ok.md` の言い換え表に照らして本文を読み、婉曲的な効能断定（「痛みが消えていく」等の類）は見当たらず。
+  - リード文（冒頭）は「運動前は動的、運動後・セルフケアは静的」という使い分けの結論をタイトルの検索意図に対して即答しており問題なし。
+  - 「岐阜市長良の専門店のトレーナーが解説」という当店の立場表現について、直近の他コラム（`gikkurigoshi-after`等）では`description`に「...全力ストレッチ岐阜長良店のトレーナーが解説します。」まで含めているのに対し、本記事の`description`は「トレーナー」が抜けていたため、他記事と表現をそろえる修正を行った。
+  - セルフケア手順・figcaption「イラストはイメージです」は全て既存の基準どおりで修正不要。
+- 主な変更ファイル：
+  - `src/pages/column/dynamic-static-chigai.astro`（`description`の文言を修正）
+- 確認結果：`node scripts/lint-column.mjs src/pages/column/dynamic-static-chigai.astro` と `node scripts/yakkihou-ng.mjs src/pages/column/dynamic-static-chigai.astro` いずれもPASS。`npm run build` 成功（42ページ生成）。
+- 未対応・次の作業：なし。
+## 2026-09-14 (Claude Code / GitHub Actions) コラム新規1本追加（ランニング前後のストレッチ｜故障予防／authority型）
+- ブランチ：`claude/column-auto`
+- 関連PR：なし（コラム専用ブランチへのコミットのみ。マージはユーザーが実施）
+- 変更内容：
+  - 実行日は月曜枠＝`authority`。`docs/column-backlog.md` の `authority` 枠で最上位の未対応は「sango-youtsu（産後 腰痛 骨盤 セルフケア）」だったが、想定読者（岐阜市周辺の40〜60代男性）と検索意図が一致しないため見送り、次点の「running-zengo（ランニング ストレッチ 前後 故障予防）」を選定。type=セルフケア。
+  - 結論先出し（走る前は動的、走った後は静的という使い分けの1文）→なぜ前後で使い分けるとよいか（冷えた筋肉を長く伸ばすと力が入りにくい／走った後は緊張した筋肉をリセットしたい）→ランニング前の動的ストレッチ3選（足首回し／股関節の開閉／キャット&カウ）→ランニング後の静的ストレッチ3選（ふくらはぎ／大腿四頭筋／ハムストリング）→故障予防のために気をつけたいこと（走行距離・休養、鋭い痛みがある場合は受診を検討）→セルフケアの限界と当店のアプローチ、の構成。既存の`dynamic-static-chigai`（動的・静的の一般的な違い）とは、ランニングの故障予防という具体的な状況・種目に絞った点で意図を分け、重複を避けた。
+  - 薬機法チェック：NG表現なしで一発PASS。
+  - 既存記事「golf-stretch-routine」（ゴルフ前後）とはスポーツの種目が異なり、「dynamic-static-chigai」とは焦点（一般解説 vs ランニング特化の実践メニュー）が異なるため重複なし。
+  - FAQ5問（「ストレッチだけで故障を防げるか」等含む）、`/method`（体感軸調整法・初出リンク）・`/symptoms/sports`・`/symptoms/youtsu`・`/symptoms/shisei` への内部リンクを設置。
+  - `stretchPoses.ts` 既存ポーズ pose-32/11/05（動的の代用として）/pose-04/08/02（静的）を使用。ライブラリに無い「その場ランジウォーク」等の専用の動的種目は使わず、既存ポーズのdescと矛盾しない範囲で構成したためポーズ未収載の連絡事項はなし。
+  - `src/data/columns.ts` の `COLUMNS` 先頭に新記事のメタデータ（slug/heading/desc/date/tags/relatedSymptoms/selfCare）を追加。
+  - `docs/column-backlog.md` の該当行を `- [x]` に更新。
+  - アイキャッチは `scripts/fetch-column-image.mjs --source ai` でAI生成（晴れた朝、公園で走り出す前に木を使ってふくらはぎを伸ばす40〜50代の日本人男性）。`imageCredit` に「※画像はイメージです」を設定済み。
+- 主な変更ファイル：
+  - `src/pages/column/running-zengo.astro`（新規）
+  - `public/images/column/running-zengo.webp`（新規）
+  - `src/data/columns.ts`
+  - `docs/column-backlog.md`
+- 確認結果：`node scripts/yakkihou-ng.mjs src/pages/column/running-zengo.astro` と `node scripts/lint-column.mjs src/pages/column/running-zengo.astro` いずれもPASS。`npm run build` 成功（42→43ページ生成）。
+- 未対応・次の作業：なし。
+
+## 2026-09-14 (Claude Code / GitHub Actions) レビュー：running-zengo.astro の薬機法・景表法チェック
+- ブランチ：`claude/column-auto`
+- 関連PR：なし（コラム専用ブランチへのコミットのみ。マージはユーザーが実施）
+- 変更内容：
+  - `lint-result.txt` は品質GATE PASS、機械チェックは問題なし。
+  - `docs/yakkihou-ng-ok.md` の言い換え表に照らして本文を読み、正規表現の機械チェックはすり抜けるが文脈的に効能を断定している箇所として、静的ストレッチ「ふくらはぎ」の段落に「シンスプリントなどの故障予防のためにも入念に伸ばしておきたい部位です」という一文があった。特定の傷病名（シンスプリント）を挙げてストレッチがその予防になると直接結びつける書き方は、当店が医業類似行為を行わないリラクゼーション目的の店であるという方針（同ドキュメント冒頭）に反するおそれがあるため、傷病名を削り「張りをためやすい部位のひとつと言われているため、入念に伸ばしておきたいところです」という一般的な表現に修正した。
+  - リード文（冒頭）は「走る前は動的、走った後は静的」という使い分けの結論と故障予防メニューという検索意図に、200字以内で直接回答しており問題なし。
+  - 「岐阜市長良の専門店のトレーナーが解説」という当店の立場、独自メソッド「体感軸調整法」への言及（`/method`への初出リンク付き）は一貫しており修正不要。
+  - セルフケア手順は「反動をつけない」「痛みの出ない範囲で」「鋭い痛みが出たら医療機関へ」等、無理な負荷や我慢を強いる指示はなく安全。
+  - 挿絵6点すべてのfigcaptionに「イラストはイメージです」の注記あり。
+- 主な変更ファイル：
+  - `src/pages/column/running-zengo.astro`（本文1文を修正）
+- 確認結果：`node scripts/lint-column.mjs src/pages/column/running-zengo.astro` PASS。`npm run build` 成功（43ページ生成）。
+- 未対応・次の作業：なし。
+
+## 2026-09-16 (Claude Code / GitHub Actions) コラム新規1本追加（運動不足対策の1日5分ストレッチ／authority型）
+- ブランチ：`claude/column-auto`
+- 関連PR：なし（コラム専用ブランチへのコミットのみ。マージはユーザーが実施）
+- 変更内容：
+  - 実行日は水曜枠＝`authority`。`docs/column-backlog.md` の `authority` 枠で最上位の未対応は「sango-youtsu（産後 腰痛 骨盤 セルフケア）」だったが、09-14回と同じ理由（想定読者＝岐阜市周辺の40〜60代男性と検索意図が一致しない）で見送り、次点の「undousoku-5min（運動不足 解消 1日5分 ストレッチ）」を選定。type=入門。
+  - 結論先出し（いきなり運動よりまず1日5分のストレッチから、という1文）→なぜ運動不足だと体が硬くなりやすいか→1日5分でも始めやすい理由→1日5分の全身ストレッチ5選（ばんざい伸び／キャット&カウ／胸を開く／股関節の開脚前屈／ふくらはぎ壁ストレッチ）→いつ・どのくらいの頻度で続けるか→セルフケアの限界と当店のアプローチ、の構成。既存記事とは「運動不足そのものへの入門」という意図で重複なし。
+  - 薬機法チェック：初回検査で「解消」がタイトル・見出し・FAQ・本文に計7件検出（NG語）。バックログのキーワード表記は「解消」だが、公開文面としては薬機法チェックのNG語のため、意味を保ったまま「対策」「見直す」に置き換えて修正し、再検査でNG表現なしを確認。`docs/column-backlog.md` 側のキーワード表記はバックログの内部メモであり公開文面ではないため、原文の「解消」表記のまま残した。
+  - FAQ5問、`/method`（体感軸調整法・初出リンク）・`/symptoms/jiritsu`・`/symptoms/sports` への内部リンクを設置。
+  - `stretchPoses.ts` 既存ポーズ pose-16（ばんざい）／pose-05（キャット&カウ）／pose-06（胸を開く）／pose-03（開脚前屈）／pose-04（ふくらはぎ壁）を使用。同一記事内で重複なし。ライブラリに無い動きは使っていないため、ポーズ未収載の連絡事項はなし。
+  - `src/data/columns.ts` の `COLUMNS` 先頭に新記事のメタデータ（slug/heading/desc/date/tags/relatedSymptoms/selfCare）を追加。
+  - `docs/column-backlog.md` の該当行を `- [x]` に更新。
+  - アイキャッチは `scripts/fetch-column-image.mjs --source ai` でAI生成（明るいオフィスでデスクから立ち上がり伸びをする40〜50代の日本人男性）。`imageCredit` に「※画像はイメージです」を設定済み。
+- 主な変更ファイル：
+  - `src/pages/column/undousoku-5min.astro`（新規）
+  - `public/images/column/undousoku-5min.webp`（新規）
+  - `src/data/columns.ts`
+  - `docs/column-backlog.md`
+- 確認結果：`node scripts/yakkihou-ng.mjs src/pages/column/undousoku-5min.astro` と `node scripts/lint-column.mjs src/pages/column/undousoku-5min.astro` いずれもPASS。`npm run build` 成功（43→44ページ生成）。
+- 未対応・次の作業：なし。
+
+## 2026-09-18 (Claude Code / GitHub Actions) コラム新規1本追加（ストレッチに通う頻度の目安／compare型）
+- ブランチ：`claude/column-auto`
+- 関連PR：なし（コラム専用ブランチへのコミットのみ。マージはユーザーが実施）
+- 変更内容：
+  - 実行日は金曜枠＝`compare`。`docs/column-backlog.md` の `compare` 枠で最上位の未対応「kaisuken-tsuikata（ストレッチ 通う頻度 目安 選び方）」を選定。type=検討。既存4本のcompare記事（もみほぐし違い／パーソナルストレッチとは／整体選び方／動的静的の違い）とは「通う頻度・間隔」という検索意図で重複なし。
+  - 結論先出し（頻度は目的で使い分けるという1文。優劣ではなく使い分けを提示）→通う頻度に決まりはあるか→目的別（集中して整えたい時期／状態を維持したい時期／スポット的に使いたい時期）の比較表（観点：目安の頻度／向いている人／目安の期間／お支払いの目安）→通う間隔があく期間のセルフケア3種目（肩甲骨／体側／お尻）→結局どのくらいの頻度で通えばいいか（セルフケアの限界と当店のアプローチ）、の構成。比較表は`/method`ページと同じ`overflow-x-auto`＋`min-w-[640px]`のマークアップに統一。他社を貶める表現は使わず「向き・不向き」の書き方に統一。
+  - 薬機法チェック：NG表現なしで一発PASS。回数券の具体的な料金・割引率は本文中に数値を書かず「詳細は/menuでご確認ください」と誘導し、`src/pages/menu.astro`の実際の料金表と矛盾しないようにした。
+  - FAQ5問（「結局、どのくらいの頻度で通えばいいですか？」を含む）、`/method`（体感軸調整法・初出リンク）・`/menu`・`/reserve`への内部リンクを設置。relatedSymptomsは通う頻度全般のテーマのため`katakori`/`shisei`/`sports`を設定。
+  - `stretchPoses.ts` 既存ポーズ pose-14（肩甲骨）／pose-28（体側）／pose-07（お尻・ツイスト）を使用。ライブラリに無い動きは使っていないため、ポーズ未収載の連絡事項はなし。
+  - `src/data/columns.ts` の `COLUMNS` 先頭に新記事のメタデータ（slug/heading/desc/date/tags/relatedSymptoms/selfCare）を追加。
+  - `docs/column-backlog.md` の該当行を `- [x]` に更新。
+  - アイキャッチは `scripts/fetch-column-image.mjs --source ai` でAI生成（明るいリビングで壁掛けカレンダーに予定を書き込む40代の日本人男性）。`imageCredit` に「※画像はイメージです」を設定済み。
+- 主な変更ファイル：
+  - `src/pages/column/kaisuken-tsuikata.astro`（新規）
+  - `public/images/column/kaisuken-tsuikata.webp`（新規）
+  - `src/data/columns.ts`
+  - `docs/column-backlog.md`
+- 確認結果：`node scripts/yakkihou-ng.mjs src/pages/column/kaisuken-tsuikata.astro` と `node scripts/lint-column.mjs src/pages/column/kaisuken-tsuikata.astro` いずれもPASS。`npm run build` 成功（44→45ページ生成）。
+- 未対応・次の作業：なし。
