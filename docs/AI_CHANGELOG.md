@@ -4347,3 +4347,20 @@ Council評決の提言どおり、`trig_019WAvAngrAd559nAjDjTj6H` のプロン�
   - `docs/column-backlog.md`
 - 確認結果：`node scripts/yakkihou-ng.mjs src/pages/column/kaisuken-tsuikata.astro` と `node scripts/lint-column.mjs src/pages/column/kaisuken-tsuikata.astro` いずれもPASS。`npm run build` 成功（44→45ページ生成）。
 - 未対応・次の作業：なし。
+
+## 2026-09-21 — 9/20 Meta判定を実行：維持。予約メール集計の取りこぼしを訂正
+
+Routine `trig_019WAvAngrAd559nAjDjTj6H` が発火。Council評決の設計（減額トリガーのみ・累計・営業日あたり）で判定した。
+
+- 店舗システムを workflow_dispatch で 8/1〜8/27 と 8/28〜9/20 の2範囲取得。営業日は Supabase `shifts` から（23日／24日）
+- **Meta系新規／営業日 0.39 → 0.71（1.81倍）。減額トリガー非該当、¥7,200/日を維持**
+- 予約メール第2系列：【2】初回・キャンセル除外 13件／21日＝0.62/日（切替前は比較不能）
+- 新規総数は 3.09→2.71/営業日で減少。新規販売率 22.5%→9.2%、9/14〜20は新規14人に回数券0本
+- 9/28 Google中間値：マップ＋HP 9人/24日（月11ペース）、メール【3】4件。判定線（月6人未満で再開）を上回る
+- 次の1変数「年齢下限25→35復帰」を承認提案（自動実行しない）
+- 🔴 訂正：9/14のメール集計は `subject:予約連絡` の検索で当日予約（「直前予約が入りました」）を取りこぼしていた。全件読み直して 8/31〜9/20 初回43件（2.05/日）。結論は不変、件数は倍近く違う
+- 最後に `weekly_kpi.json` を 9/14〜9/20 で取り直し、月曜の週次レビューが読む状態に戻した
+
+- `docs/ads/meta-judgment-2026-09-20.md`（新規）
+- `docs/analytics/hpb-mail-survey-2026-09.md`（訂正を追記）、`scripts/analytics/hpb-mail-tally.py`（全面差し替え）
+- `docs/ads-ops-guardrails.md`、`.claude/skills/zenryoku-facts/SKILL.md`
