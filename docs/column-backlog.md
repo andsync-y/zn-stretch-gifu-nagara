@@ -74,7 +74,7 @@
 - [ ] jitaku-vs-pro ｜ compare ｜ セルフストレッチ プロ 違い ｜ 使い分け ｜ /method, /symptoms
 
 ### 検討系（`authority`）
-- [ ] stretch-hindo-kouka ｜ authority ｜ ストレッチ 頻度 効果 続け方 ｜ 解説 ｜ /symptoms/jiritsu
+- [x] stretch-hindo-kouka ｜ authority ｜ ストレッチ 頻度 効果 続け方 ｜ 解説 ｜ /symptoms/jiritsu
 - [ ] karada-katai-kotsu ｜ authority ｜ 体 硬い 柔らかく コツ 無理なく ｜ 入門 ｜ /symptoms/shisei
 
 ### 季節

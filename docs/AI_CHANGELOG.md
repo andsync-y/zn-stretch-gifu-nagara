@@ -4364,3 +4364,22 @@ Routine `trig_019WAvAngrAd559nAjDjTj6H` が発火。Council評決の設計（減
 - `docs/ads/meta-judgment-2026-09-20.md`（新規）
 - `docs/analytics/hpb-mail-survey-2026-09.md`（訂正を追記）、`scripts/analytics/hpb-mail-tally.py`（全面差し替え）
 - `docs/ads-ops-guardrails.md`、`.claude/skills/zenryoku-facts/SKILL.md`
+## 2026-09-21 (Claude Code / GitHub Actions) コラム新規1本追加（ストレッチの頻度と続け方／authority型）
+- ブランチ：`claude/column-auto`
+- 関連PR：なし（コラム専用ブランチへのコミットのみ。マージはユーザーが実施）
+- 変更内容：
+  - 今回の枠は指示により`authority`。`docs/column-backlog.md` の `authority` 枠で最上位の未対応は「sango-youtsu（産後 腰痛 骨盤 セルフケア）」だったが、想定読者＝岐阜市周辺の40〜60代男性と検索意図が一致しないため、これまでの回（2026-09-14／2026-09-16）と同じ理由で見送り、次点の「stretch-hindo-kouka（ストレッチ 頻度 効果 続け方）」を選定。type=解説。
+  - 結論先出し（毎日少しずつが基本で2〜3週間で体感の変化に気づきやすいという1文）→頻度の目安→なぜ「週1回まとめて」より「毎日少しずつ」が良いのか（緊張は毎日たまるため）→何日くらいで変化に気づけるか→続けやすいストレッチ3選（首肩／胸を開く／全身ばんざい）→続けるコツ3つ（習慣に紐づける／種目を絞る／できなかった日を責めない）→セルフケアの限界と当店のアプローチ、の構成。同じ「頻度」を扱う既存のcompare記事kaisuken-tsuikata（＝店に通う頻度）とは「セルフストレッチを続ける頻度」という別の検索意図のため重複なしと判断し、relatedにも当該記事をクロスリンクした。
+  - 薬機法チェック：初回検査で本文中の「（緊張を）解消しようとする」がNG語「解消」として1件検出。「ゆるめようとする」に置き換えて再検査しNG表現なしを確認。
+  - FAQ5問（頻度・毎日でなくてよいか・変化までの日数・続かない場合・セルフケアの限界の5問）、`/method`（体感軸調整法・初出リンク）・`/symptoms/jiritsu`への内部リンクを設置。
+  - `stretchPoses.ts` 既存ポーズ pose-01（首・肩）／pose-06（胸を開く）／pose-16（ばんざい）を使用。同一記事内で重複なし。ライブラリに無い動きは使っていないため、ポーズ未収載の連絡事項はなし。
+  - `src/data/columns.ts` の `COLUMNS` 先頭に新記事のメタデータ（slug/heading/desc/date/tags/relatedSymptoms/selfCare）を追加。
+  - `docs/column-backlog.md` の該当行を `- [x]` に更新。
+  - アイキャッチは `scripts/fetch-column-image.mjs --source ai` でAI生成（朝、明るい窓辺で腕を伸ばしてストレッチする40代の日本人男性）。`imageCredit` に「※画像はイメージです」を設定済み。
+- 主な変更ファイル：
+  - `src/pages/column/stretch-hindo-kouka.astro`（新規）
+  - `public/images/column/stretch-hindo-kouka.webp`（新規）
+  - `src/data/columns.ts`
+  - `docs/column-backlog.md`
+- 確認結果：`node scripts/yakkihou-ng.mjs src/pages/column/stretch-hindo-kouka.astro` と `node scripts/lint-column.mjs src/pages/column/stretch-hindo-kouka.astro` いずれもPASS。`npm run build` 成功（45→46ページ生成）。
+- 未対応・次の作業：なし。
