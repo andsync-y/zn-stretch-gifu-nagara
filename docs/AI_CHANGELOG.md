@@ -3748,3 +3748,23 @@ Coworkの**スケジュールタスクにはリポジトリを紐付ける欄が
   - `docs/column-backlog.md`
 - 確認結果：`node scripts/yakkihou-ng.mjs src/pages/column/stretch-hindo-kouka.astro` と `node scripts/lint-column.mjs src/pages/column/stretch-hindo-kouka.astro` いずれもPASS。`npm run build` 成功（45→46ページ生成）。
 - 未対応・次の作業：なし。
+
+## 2026-09-23 (Claude Code / GitHub Actions) コラム新規1本追加（体が硬い原因とコツ／authority型）
+- ブランチ：`claude/column-auto`
+- 関連PR：なし（コラム専用ブランチへのコミットのみ。マージはユーザーが実施）
+- 変更内容：
+  - 今回の枠は指示により`authority`。`docs/column-backlog.md` の `authority` 枠で最上位の未対応は「sango-youtsu（産後 腰痛 骨盤 セルフケア）」だったが、想定読者＝岐阜市周辺の40〜60代男性と検索意図が一致しないため、これまでの回（2026-09-14／2026-09-16／2026-09-21）と同じ理由で見送り、次点の「karada-katai-kotsu（体 硬い 柔らかく コツ 無理なく）」を選定。type=入門。季節枠の「haru-jiritsu-shinkei（春 不調）」は9月公開のため季節が合わず見送り。
+  - 結論先出し（体が硬いのは動かす習慣の減少が主因で、無理なく毎日少しずつで体感は変わりやすいという1文）→なぜ体は硬くなるか（加齢だけでなくデスクワーク・ゴルフの動きの偏り・痛みを我慢して伸ばすクセ）→硬いままだとどんな影響があるか（靴下・爪切り等の日常動作、ゴルフのスイング）→無理なく柔らかくする3つのコツ（痛気持ちいいで止める／反動をつけない／体が温まっているときに毎日）→セルフストレッチ4選（股関節開脚前屈／肩甲骨／体側／大腿四頭筋）→変化を感じるまでの目安→セルフケアの限界と当店のアプローチ、の構成。既存記事とは「体の硬さそのものへの入門」という意図で重複なし。
+  - 薬機法チェック：初回検査で本文中の「じんわりと効きます」がNG語「効きます」として1件検出。「じんわりとアプローチできます」に置き換えて再検査しNG表現なしを確認。
+  - FAQ5問（生まれつきか／毎日やらないと意味がないか／我慢して伸ばすべきか／ゴルフとの関係／変化までの期間）、`/method`（体感軸調整法・初出リンク）・`/symptoms/shisei`・`/symptoms/sports`・`/symptoms/katakori`への内部リンクを設置。
+  - `stretchPoses.ts` 既存ポーズ pose-03（股関節開脚前屈）／pose-14（肩甲骨）／pose-10（体側）／pose-08（大腿四頭筋）を使用。同一記事内で重複なし。ライブラリに無い動きは使っていないため、ポーズ未収載の連絡事項はなし。
+  - `src/data/columns.ts` の `COLUMNS` 先頭に新記事のメタデータ（slug/heading/desc/date/tags/relatedSymptoms/selfCare）を追加。
+  - `docs/column-backlog.md` の該当行を `- [x]` に更新。
+  - アイキャッチは `scripts/fetch-column-image.mjs --source ai` でAI生成（明るいリビングで朝、体を前に倒してストレッチする50代の日本人男性）。`imageCredit` に「※画像はイメージです」を設定済み。
+- 主な変更ファイル：
+  - `src/pages/column/karada-katai-kotsu.astro`（新規）
+  - `public/images/column/karada-katai-kotsu.webp`（新規）
+  - `src/data/columns.ts`
+  - `docs/column-backlog.md`
+- 確認結果：`node scripts/yakkihou-ng.mjs src/pages/column/karada-katai-kotsu.astro` と `node scripts/lint-column.mjs src/pages/column/karada-katai-kotsu.astro` いずれもPASS（1件の薬機法NG語を修正後）。`npm run build` 成功（46→47ページ生成）。
+- 未対応・次の作業：なし。
