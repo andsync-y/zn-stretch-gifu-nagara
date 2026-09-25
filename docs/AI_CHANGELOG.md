@@ -4423,3 +4423,19 @@ Routine `trig_019WAvAngrAd559nAjDjTj6H` が発火。Council評決の設計（減
 
 - `docs/ads/meta-optimal-settings-2026-09-25.md`（新規）
 - `docs/ads-ops-guardrails.md`、`.claude/skills/zenryoku-facts/SKILL.md`
+
+## 2026-09-25（続き）— 年齢下限35はMetaに拒否された。設定は無変更
+
+オーナー承認を受けて `update_adset` で age_min 25→35 を実行したが、Metaがエラーを返した（code 100 / subcode 1870188）。
+「Advantage+ オーディエンスを使用する広告セットでは、下限年齢のオーディエンス制御を25歳より高く設定することはできません」。
+**実行後に `adset_targeting` を読み直し、age_min 25 のまま他項目も無傷であることを確認した。**
+
+- **分析の前提が1つ崩れた。** 本文の「年齢だけを1変数として変える」はMetaの仕様上できない。
+  Advantage+ ONの間、年齢も性別も制約ではなく提案。7月に性別「男性」設定で表示の12.6%が女性だったのは仕様どおりの動作だった
+- 選択肢は2つ。**案A** Advantage+ OFF＋年齢35（8/1〜8/27と同一構成。当時のMeta新規は0.39/営業日＝現在の55%で、損益分岐8.8%減を大きく割る賭け）。
+  **案B** 設定を触らず、クリエイティブで年齢を寄せる
+- **推奨は案B。** Advantage+ は反応した人で学習するため、設定で絞れない以上クリエイティブが唯一の実効的ターゲティング手段。
+  3か月プラン第2月の「50代向けクリエイティブ1本」は訴求改善ではなく**年齢に触れる唯一の方法**だったので、優先度を上げる
+- 安全策を記録：`update_adset` の targeting はオブジェクト全体を置換する。必ず現状を読んでから1項目だけ差し替える
+
+- `docs/ads/meta-optimal-settings-2026-09-25.md`（追記）、`docs/ads-ops-guardrails.md`、`.claude/skills/zenryoku-facts/SKILL.md`
