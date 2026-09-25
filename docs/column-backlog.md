@@ -75,7 +75,7 @@
 
 ### 検討系（`authority`）
 - [x] stretch-hindo-kouka ｜ authority ｜ ストレッチ 頻度 効果 続け方 ｜ 解説 ｜ /symptoms/jiritsu
-- [ ] karada-katai-kotsu ｜ authority ｜ 体 硬い 柔らかく コツ 無理なく ｜ 入門 ｜ /symptoms/shisei
+- [x] karada-katai-kotsu ｜ authority ｜ 体 硬い 柔らかく コツ 無理なく ｜ 入門 ｜ /symptoms/shisei
 
 ### 季節
 - [ ] haru-jiritsu-shinkei ｜ authority ｜ 春 不調 自律神経 ストレッチ ｜ 季節 ｜ /symptoms/jiritsu
