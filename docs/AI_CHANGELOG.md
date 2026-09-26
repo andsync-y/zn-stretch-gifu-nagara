@@ -4460,3 +4460,15 @@ Routine `trig_019WAvAngrAd559nAjDjTj6H` が発火。Council評決の設計（減
   - `docs/column-backlog.md`
 - 確認結果：`node scripts/yakkihou-ng.mjs src/pages/column/jitaku-vs-pro.astro` と `node scripts/lint-column.mjs src/pages/column/jitaku-vs-pro.astro` いずれもPASS。`npm run build` 成功（47→48ページ生成）。
 - 未対応・次の作業：`compare` 枠の未対応が0件になったため、次回の金曜枠は `authority` へフォールバックする必要がある（本ガイド4章の規定通り）。
+
+## 2026-09-26 — 経路別の表に注記が抜けていた（自己訂正）
+
+前日に経路別 新規/営業日の表を注記なしでチャットに出し、「HPB直が減った」と読める状態にしていた。訂正する。
+
+- 店舗システムの「ホットペッパービューティー」は**予約経路であって認知経路ではない**。予約メールではHPB予約の初回客のうちHPB検索で知った人は48.7%（39件中19件）
+- 8/1-8/27 vs 8/28-9/20 の比較は**8/31のアンケート導入をまたいでいる**。未記入 −0.19／Meta +0.32 で、HPB −0.34 から移った分が混ざっている可能性を排除できない
+- **2026-09-13に「Metaだけ増えた／犯人はHPB」と書いて9/14に撤回済み。同じ誤りを繰り返しかけた**
+- 分類に依存せず言えるのは**新規の総数が減っていること**（3.09→2.71/営業日、長期では6.45→3.84→3.22→2.45）
+- HPBの独立した根拠はACR 0.81倍と、予約メールのアンケート【1】の週次（10→4→5、nが小さく判断は2〜3週後）。この系列を週次レビューに載せる
+
+- `docs/ads/meta-optimal-settings-2026-09-25.md`（追記2）、`.claude/skills/zenryoku-facts/SKILL.md`
