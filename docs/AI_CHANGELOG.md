@@ -4439,3 +4439,24 @@ Routine `trig_019WAvAngrAd559nAjDjTj6H` が発火。Council評決の設計（減
 - 安全策を記録：`update_adset` の targeting はオブジェクト全体を置換する。必ず現状を読んでから1項目だけ差し替える
 
 - `docs/ads/meta-optimal-settings-2026-09-25.md`（追記）、`docs/ads-ops-guardrails.md`、`.claude/skills/zenryoku-facts/SKILL.md`
+## 2026-09-25 (Claude Code / GitHub Actions) コラム新規1本追加（セルフストレッチとプロの違い／compare型）
+
+- ブランチ：`claude/column-auto`
+- 関連PR：なし（コラム専用ブランチへのコミットのみ。マージはユーザーが実施）
+- 変更内容：
+  - 今回の枠は指示により`compare`（金曜枠）。`docs/column-backlog.md` の `compare` 未対応を確認したところ「jitaku-vs-pro（セルフストレッチ プロ 違い）」が最上位かつ唯一の未対応だったため選定。
+  - 冒頭で「セルフストレッチは日常のケア、プロは戻りやすい張り・姿勢のクセに」という使い分けを1文で言い切るリードを設置。比較表（観点：目的／伸ばせる深さ・範囲／姿勢のクセへの気づき／続けやすさ・頻度／向いている場面）を `/method` ページと同じ `overflow-x-auto` + `min-w-[640px]` のマークアップで作成。他社・他業種を貶める表現は使わず「向き・不向き」の書き方に統一。
+  - 構成：結論先出し→セルフとプロは何が違うか→比較表→自分でできるセルフストレッチ3選（壁で胸を開く／体側／お尻ツイスト、いずれもデスクワーク・ゴルフ層向け）→プロに任せたほうがいいときの3パターン（戻りやすい張り／姿勢の崩れ／伸ばし方がわからない部位）→結局どちらを選ぶか、の流れ。既存の比較5本（もみほぐし／パーソナルストレッチとは／整体選び方／動的静的／通う頻度）とは「セルフ実践 vs プロ利用」という切り口で重複なし。
+  - FAQ5問（結局どちらか／セルフだけで足りるか／プロに任せる目安／併用の可否／強い痛み時の注意）、`/method`（体感軸調整法・初出リンク）・`/symptoms/katakori`・`/symptoms/shisei`への内部リンクを本文中とrelatedに設置。
+  - 薬機法チェック：初回検査でNG表現なし。
+  - `stretchPoses.ts` 既存ポーズ pose-22（壁で胸を開く）／pose-10（体側）／pose-07（お尻ツイスト）を使用。同一記事内で重複なし。ライブラリに無い動きは使っていないため、ポーズ未収載の連絡事項はなし。
+  - `src/data/columns.ts` の `COLUMNS` 先頭に新記事のメタデータ（slug/heading/desc/date/tags/relatedSymptoms/selfCare）を追加。
+  - `docs/column-backlog.md` の該当行を `- [x]` に更新。
+  - アイキャッチは `scripts/fetch-column-image.mjs --source ai` でAI生成（明るいリビングの窓辺で朝に腕を伸ばしてストレッチする40〜50代の日本人男性）。`imageCredit` に「※画像はイメージです」を設定済み。
+- 主な変更ファイル：
+  - `src/pages/column/jitaku-vs-pro.astro`（新規）
+  - `public/images/column/jitaku-vs-pro.webp`（新規）
+  - `src/data/columns.ts`
+  - `docs/column-backlog.md`
+- 確認結果：`node scripts/yakkihou-ng.mjs src/pages/column/jitaku-vs-pro.astro` と `node scripts/lint-column.mjs src/pages/column/jitaku-vs-pro.astro` いずれもPASS。`npm run build` 成功（47→48ページ生成）。
+- 未対応・次の作業：`compare` 枠の未対応が0件になったため、次回の金曜枠は `authority` へフォールバックする必要がある（本ガイド4章の規定通り）。

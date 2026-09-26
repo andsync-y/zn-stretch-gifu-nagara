@@ -71,7 +71,7 @@
 - [x] stretch-seitai-erabikata ｜ compare ｜ ストレッチ専門店 整体 選び方 ｜ 使い分け ｜ /method, /symptoms
 - [x] dynamic-static-chigai ｜ compare ｜ 動的ストレッチ 静的ストレッチ 違い 使い分け ｜ 解説 ｜ /symptoms/sports
 - [x] kaisuken-tsuikata ｜ compare ｜ ストレッチ 通う頻度 目安 選び方 ｜ 検討 ｜ /menu, /reserve
-- [ ] jitaku-vs-pro ｜ compare ｜ セルフストレッチ プロ 違い ｜ 使い分け ｜ /method, /symptoms
+- [x] jitaku-vs-pro ｜ compare ｜ セルフストレッチ プロ 違い ｜ 使い分け ｜ /method, /symptoms
 
 ### 検討系（`authority`）
 - [x] stretch-hindo-kouka ｜ authority ｜ ストレッチ 頻度 効果 続け方 ｜ 解説 ｜ /symptoms/jiritsu
