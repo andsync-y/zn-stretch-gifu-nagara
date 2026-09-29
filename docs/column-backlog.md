@@ -84,4 +84,4 @@
 - [ ] stretch-seitai-chigai ｜ local ｜ ストレッチ 整体 マッサージ 違い 岐阜 ｜ 比較検討 ｜ /menu, /symptoms/katakori
 - [ ] gifu-stretch-senmonten ｜ local ｜ 岐阜市 ストレッチ 専門店 選び方 ｜ ローカル指名 ｜ /access, /staff
 - [ ] fuyu-katakori-mukumi ｜ local ｜ 冬 肩こり むくみ 岐阜 対策 ｜ 季節×地域 ｜ /symptoms/katakori, /symptoms/mukumi
-- [ ] hirune-yasumi-office ｜ local ｜ 昼休み オフィス ストレッチ 岐阜 デスクワーク ｜ 属性×地域 ｜ /symptoms/katakori, /symptoms/shisei
+- [x] hirune-yasumi-office ｜ local ｜ 昼休み オフィス ストレッチ 岐阜 デスクワーク ｜ 属性×地域 ｜ /symptoms/katakori, /symptoms/shisei

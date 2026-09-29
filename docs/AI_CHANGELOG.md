@@ -4489,3 +4489,38 @@ Routine `trig_011s1n1bAjEfo66ibb4qU9G3` が発火。9/7に停止したGoogle検�
 
 - `docs/ads/google-judgment-2026-09-28.md`（新規）
 - `docs/ads-ops-guardrails.md`、`.claude/skills/zenryoku-facts/SKILL.md`
+## 2026-09-28 (Claude Code / GitHub Actions) コラム新規1本追加（昼休みオフィスストレッチ／local型フォールバック）
+
+- ブランチ：`claude/column-auto`
+- 関連PR：なし（コラム専用ブランチへのコミットのみ。マージはユーザーが実施）
+- 変更内容：
+  - 今回の枠は指示により`authority`。`docs/column-backlog.md` の `authority` 未対応を確認したところ「sango-youtsu（産後 腰痛 骨盤）」と「haru-jiritsu-shinkei（春 不調）」の2件のみが残っていたが、前者は想定読者（岐阜市周辺の40〜60代男性）と検索意図が一致せず既に4回分の実行（09-14／09-16／09-21／09-23）で継続的に見送り済み、後者は季節キーワード「春」が9月公開と合わないため、いずれも今回は選定不可と判断。`authority` 枠が実質的に消化済みとみなし、ガイド4章の規定に従い `local` へフォールバック。
+  - `local` 未対応のうち、最上位の「stretch-seitai-chigai（ストレッチ 整体 マッサージ 違い 岐阜）」は既存の比較記事2本（stretch-momihogushi-chigai／stretch-seitai-erabikata）と検索意図が重なる恐れがあるため見送り、次点の「gifu-stretch-senmonten（岐阜市 ストレッチ専門店 選び方）」も店舗選びガイドという性質上セルフケア中心の記事テンプレートと相性が悪く、既存のpersonal-stretch-towaと意図が近接する恐れがあるため見送った。「fuyu-katakori-mukumi（冬 対策）」は季節ミスマッチのため見送り、「hirune-yasumi-office（昼休み オフィス ストレッチ 岐阜 デスクワーク）」を選定。デスクワーク層（岐阜市内オフィス）と対象読者が一致し、既存記事と重複しない切り口（昼休みという時間帯限定）のため。
+  - 構成：結論先出し（昼休み5分で肩甲骨・体側・股関節を動かすと午後が変わりやすいという1文）→なぜ昼休みのストレッチが午後を変えるのか→座ったままできるオフィスストレッチ4選（肩甲骨引き寄せ／座ったままツイスト／脇・体側／椅子で脱力前屈）→外の光を浴びて歩く習慣（自律神経との関連）→昼休みだけで足りない時のセルフケアの限界と当店のアプローチ、の流れ。
+  - FAQ5問（昼休みの目安時間／食後すぐの可否／人目が気になる場合／週数回でも意味があるか／セルフケアで抜けない場合）、`/method`（体感軸調整法・初出リンク）・`/symptoms/katakori`・`/symptoms/shisei`・`/symptoms/jiritsu`への内部リンクを本文中とrelatedに設置。
+  - 薬機法チェック：初回検査でNG表現なし。
+  - `stretchPoses.ts` 既存ポーズ pose-17（肩甲骨引き寄せ）／pose-27（座ったままツイスト）／pose-23（脇・体側）／pose-29（椅子で脱力前屈）を使用。同一記事内で重複なし。ライブラリに無い動きは使っていないため、ポーズ未収載の連絡事項はなし。
+  - `src/data/columns.ts` の `COLUMNS` 先頭に新記事のメタデータ（slug/heading/desc/date/tags/relatedSymptoms/selfCare）を追加。
+  - `docs/column-backlog.md` の該当行を `- [x]` に更新。
+  - アイキャッチは `scripts/fetch-column-image.mjs --source ai` でAI生成（明るいオフィスで昼休みに席を立ってストレッチする40〜50代の日本人男性）。`imageCredit` に「※画像はイメージです」を設定済み。
+- 主な変更ファイル：
+  - `src/pages/column/hirune-yasumi-office.astro`（新規）
+  - `public/images/column/hirune-yasumi-office.webp`（新規）
+  - `src/data/columns.ts`
+  - `docs/column-backlog.md`
+- 確認結果：`node scripts/yakkihou-ng.mjs src/pages/column/hirune-yasumi-office.astro` と `node scripts/lint-column.mjs src/pages/column/hirune-yasumi-office.astro` いずれもPASS。`npm run build` 成功（48→49ページ生成）。
+- 未対応・次の作業：`authority` 枠は実質的に選定不可能な2件（sango-youtsu／haru-jiritsu-shinkei）のみが残存している。sango-youtsuは対象読者と根本的に合わないため、オーナー判断でバックログから除外するか、読者層を再定義するかの検討を推奨。haru-jiritsu-shinkeiは来年2〜3月頃の公開であれば選定可能。`local` 枠は今回選んだ hirune-yasumi-office 以外に3件（stretch-seitai-chigai／gifu-stretch-senmonten／fuyu-katakori-mukumi）が残存。
+
+## 2026-09-28 (Claude Code / GitHub Actions) レビュー：昼休みオフィスストレッチ記事の文脈チェックと修正
+
+- ブランチ：`claude/column-auto`
+- 関連PR：なし（コラム専用ブランチへのコミットのみ。マージはユーザーが実施）
+- 変更内容：
+  - `src/pages/column/hirune-yasumi-office.astro` を薬機法・景表法レビュー観点でチェック。`lint-result.txt` は事前PASS、機械チェック（NGパターン正規表現）も検出0件だったが、正規表現をすり抜ける婉曲的な断定表現を目視で2箇所発見し修正。
+  - リード文冒頭「午後の肩こりやだるさは感じにくくなります。」→「軽く感じられやすくなります。」に修正。他の既存コラム（karada-katai-kotsu／asa-sukkiri等）は効果に関する文をすべて「〜やすくなります」等の非断定ヘッジで統一しているのに対し、この一文だけヘッジなしの断定形になっていたため揃えた。
+  - 「椅子で脱力前屈」の説明文「リセットする感覚が得られます。」→「得られやすくなります。」に修正。同様に断定を避けるハウススタイルに合わせた。
+  - その他の確認項目（リード文200字での検索意図回答／「岐阜市長良の専門店のトレーナーが解説」の一貫性／体感軸調整法への言及とリンク／セルフケア手順の安全性／全挿絵のfigcaption「イラストはイメージです」）は問題なし。
+- 主な変更ファイル：
+  - `src/pages/column/hirune-yasumi-office.astro`
+- 確認結果：`node scripts/lint-column.mjs src/pages/column/hirune-yasumi-office.astro` PASS。`npm run build` 成功（49ページ生成）。
+- 未対応・次の作業：なし。
