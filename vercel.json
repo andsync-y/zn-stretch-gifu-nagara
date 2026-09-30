@@ -1,0 +1,7 @@
+{
+  "git": {
+    "deploymentEnabled": {
+      "ticket-stats": false
+    }
+  }
+}
