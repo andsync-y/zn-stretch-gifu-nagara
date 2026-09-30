@@ -1,0 +1,52 @@
+name: 回数券の実売集計（オープンから現在・集計値のみ）
+
+# 来店記録CSVから、券種別の実売本数・実単価・顧客あたり累計購入額を集計し、
+# ticket-stats ブランチに JSON（集計値のみ・顧客名/IDなし）を置く。
+# 手動実行、または ticket-stats-run ブランチへの push で動く。
+on:
+  workflow_dispatch:
+  push:
+    branches: [ticket-stats-run]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ticket-stats
+  cancel-in-progress: false
+
+jobs:
+  stats:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: 依存関係とブラウザの準備
+        run: |
+          cd kpi-scraper
+          npm install --no-audit --no-fund
+          npx playwright install --with-deps chromium
+      - name: 集計
+        env:
+          ZN_SYSTEM_USER: ${{ secrets.ZN_SYSTEM_USER }}
+          ZN_SYSTEM_PASS: ${{ secrets.ZN_SYSTEM_PASS }}
+        run: |
+          cd kpi-scraper
+          node ticket-stats.mjs
+      - name: ticket-statsブランチへ強制コミット（集計値のみ・Vercelビルドはスキップ）
+        run: |
+          mkdir -p pub && cp kpi-scraper/out/ticket_stats.json pub/
+          rm -rf kpi-scraper/out
+          cd pub
+          printf '{\n  "git": {\n    "deploymentEnabled": {\n      "ticket-stats": false\n    }\n  }\n}\n' > vercel.json
+          git init -b ticket-stats
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "ticket-stats: $(date -u +%Y-%m-%dT%H:%M)Z [skip ci]"
+          git push --force "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" ticket-stats
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

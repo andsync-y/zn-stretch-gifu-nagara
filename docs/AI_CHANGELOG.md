@@ -3826,3 +3826,13 @@ Coworkの**スケジュールタスクにはリポジトリを紐付ける欄が
   - `src/pages/column/hirune-yasumi-office.astro`
 - 確認結果：`node scripts/lint-column.mjs src/pages/column/hirune-yasumi-office.astro` PASS。`npm run build` 成功（49ページ生成）。
 - 未対応・次の作業：なし。
+
+## 2026-09-30 (Claude Code) 回数券の実売集計ジョブを追加
+
+- 背景：オーナーから「価格表上の最多販売ではなく、券種・単価・LTVを店舗システムの実数で出して」との依頼。
+- 追加：`kpi-scraper/ticket-stats.mjs` と `.github/workflows/ticket-stats.yml`。来店記録CSVを「先月」「今月」「今年」プリセット＋
+  月単位の期間入力（CSVの中身の日付で検証し、合わなければ不採用）で集め、券種別の本数・実単価・何本目の購入か・
+  購入者あたり累計購入額を集計して `ticket-stats` ブランチに JSON で置く。**顧客名・顧客IDは出力しない**。
+- 起動：手動、または `ticket-stats-run` ブランチへの push。
+- 注意：「今年」は件数上限で古い行が落ちるため、オープン日から覆えなかった場合は `complete:false` と `uncovered` を出す。
+- 未対応・次の作業：初回実行の結果で期間の取りこぼしを確認する。
