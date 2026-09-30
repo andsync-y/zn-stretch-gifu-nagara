@@ -78,7 +78,7 @@
 - [x] karada-katai-kotsu ｜ authority ｜ 体 硬い 柔らかく コツ 無理なく ｜ 入門 ｜ /symptoms/shisei
 
 ### 季節
-- [ ] haru-jiritsu-shinkei ｜ authority ｜ 春 不調 自律神経 ストレッチ ｜ 季節 ｜ /symptoms/jiritsu
+- [x] haru-jiritsu-shinkei ｜ authority ｜ 春 不調 自律神経 ストレッチ ｜ 季節 ｜ /symptoms/jiritsu （kisetsu-kawarime-jiritsu として公開。9月公開に合わせ「春」限定ではなく「季節の変わり目」全般に広げた）
 
 ### 地域（local型・流入が育ってから着手）
 - [ ] stretch-seitai-chigai ｜ local ｜ ストレッチ 整体 マッサージ 違い 岐阜 ｜ 比較検討 ｜ /menu, /symptoms/katakori

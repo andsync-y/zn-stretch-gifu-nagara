@@ -3826,3 +3826,37 @@ Coworkの**スケジュールタスクにはリポジトリを紐付ける欄が
   - `src/pages/column/hirune-yasumi-office.astro`
 - 確認結果：`node scripts/lint-column.mjs src/pages/column/hirune-yasumi-office.astro` PASS。`npm run build` 成功（49ページ生成）。
 - 未対応・次の作業：なし。
+
+## 2026-09-30 12:59 JST — GitHub Actions（Claude）
+
+- ブランチ：`claude/column-auto`
+- 関連PR：なし（コラム専用ブランチへのコミットのみ。マージはユーザーが実施）
+- 変更内容：
+  - コラム新規記事「季節の変わり目に疲れが取れない方へ｜自律神経を整えるストレッチ習慣」を作成（`authority` 枠）。
+  - バックログの`authority`未対応は sango-youtsu（産後 腰痛）と haru-jiritsu-shinkei（春 自律神経）の2件のみで、sango-youtsuは対象読者（岐阜市周辺の40〜60代男性）と根本的に噛み合わないため、前回記録（2026-09-28欄）の推奨どおり見送り。haru-jiritsu-shinkeiを採用したが、9月末公開で「春」限定は季節感が合わないため、キーワードを「季節の変わり目」に広げ、内容も夏→秋の変わり目に即したものにして公開（backlogの該当行は元のキーワードのまま[x]化し、変更内容を注記）。
+  - アイキャッチはOpenAI画像生成（`node scripts/fetch-column-image.mjs --source ai`）で、明るい室内で伸びをする日本人ミドル男性の朝のシーンを生成。
+  - ストレッチ挿絵は`src/data/stretchPoses.ts`から5点（深呼吸／胸を開く／キャット&カウ／体側／腰まわり膝抱え込み）を選定、ライブラリ未収載の動きはなし。
+- 主な変更ファイル：
+  - `src/pages/column/kisetsu-kawarime-jiritsu.astro`（新規）
+  - `public/images/column/kisetsu-kawarime-jiritsu.webp`（新規）
+  - `src/data/columns.ts`
+  - `docs/column-backlog.md`
+- 判断・注意点：sango-youtsu（産後腰痛）は今後も同じ理由でauthority枠の消化順から外れ続ける見込み。オーナー判断でバックログから除外するか、読者層とは別枠として扱うかの整理を推奨（前回記録から継続の未対応事項）。
+- 確認結果：`node scripts/yakkihou-ng.mjs src/pages/column/kisetsu-kawarime-jiritsu.astro` および `node scripts/lint-column.mjs src/pages/column/kisetsu-kawarime-jiritsu.astro` いずれもPASS。`npm run build` 成功（49→50ページ生成）。
+- 未対応・次の作業：`authority`枠のバックログ未対応は実質0件（sango-youtsuのみ残存、選定困難）。次回はフォールバックで`local`枠（stretch-seitai-chigai／gifu-stretch-senmonten／fuyu-katakori-mukumi）の着手検討、またはsango-youtsuの扱い方針の確認が必要。
+
+## 2026-09-30 13:01 JST — GitHub Actions（Claude）レビュー：季節の変わり目記事の文脈チェックと修正
+
+- ブランチ：`claude/column-auto`
+- 関連PR：なし（コラム専用ブランチへのコミットのみ。マージはユーザーが実施）
+- 変更内容：
+  - `src/pages/column/kisetsu-kawarime-jiritsu.astro` を薬機法・景表法レビュー観点でチェック。`lint-result.txt` は事前PASSで機械チェック（NGパターン正規表現）も検出0件だったが、正規表現をすり抜ける断定表現を目視で発見し修正。
+  - タイトル・description・heading・本文h2の4箇所で使われていた「自律神経を整えるストレッチ（習慣／5選）」を「自律神経ケアのストレッチ（習慣／5選）」に修正。`docs/yakkihou-ng-ok.md` は「自律神経を整える（断定）」をNG例として明記しており、既存の類似記事（tsukare-nukenai.astro等）も「自律神経ストレッチ」という名詞形で断定を避けているため、それに揃えた。同じ文言を重複掲載している`src/data/columns.ts`のheading／descも合わせて修正。
+  - リード文冒頭「血流とリズムを整えるストレッチ」→「血流のめぐりをサポートしながら生活リズムを整えるストレッチ」に修正（`docs/yakkihou-ng-ok.md`の「血行が良くなる（断定）」→「めぐりをサポート」の言い換えに合わせ、血流に関する部分のみヘッジ化）。
+  - キャット&カウの説明文「こわばった体幹まわりをリセットします。」→「こわばった体幹まわりがほぐれやすくなります。」に修正（ヘッジなしの断定形だったため、他の効果文と同じ「〜やすくなります」に統一）。
+  - その他の確認項目（リード文200字での検索意図回答／「岐阜市長良の専門店のトレーナーが解説」の一貫性／体感軸調整法への言及とリンク／セルフケア手順の安全性／全挿絵のfigcaption「イラストはイメージです」／内部リンク先の実在）は問題なし。
+- 主な変更ファイル：
+  - `src/pages/column/kisetsu-kawarime-jiritsu.astro`
+  - `src/data/columns.ts`
+- 確認結果：`node scripts/lint-column.mjs src/pages/column/kisetsu-kawarime-jiritsu.astro` PASS。`npm run build` 成功（50ページ生成）。
+- 未対応・次の作業：なし。
