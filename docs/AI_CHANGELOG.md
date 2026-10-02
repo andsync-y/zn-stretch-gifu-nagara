@@ -3860,3 +3860,39 @@ Coworkの**スケジュールタスクにはリポジトリを紐付ける欄が
   - `src/data/columns.ts`
 - 確認結果：`node scripts/lint-column.mjs src/pages/column/kisetsu-kawarime-jiritsu.astro` PASS。`npm run build` 成功（50ページ生成）。
 - 未対応・次の作業：なし。
+
+## 2026-10-02 — GitHub Actions（Claude）
+
+- ブランチ：`claude/column-auto`
+- 関連PR：なし（コラム専用ブランチへのコミットのみ。マージはユーザーが実施）
+- 変更内容：
+  - コラム新規記事「マッサージガンとストレッチの違い｜使い分けの目安3つ」を作成（`compare` 枠）。
+  - `compare` 枠のバックログ未対応は0件だったため、ガイドのフォールバック順（authority→local）に進む前に、バックログの「追加は自由」の記載にもとづき新規の比較キーワードを追加して執筆した。フォールバック先の`authority`唯一の未対応 sango-youtsu（産後 腰痛 骨盤）は、過去2回（2026-09-28／2026-09-30付記録）と同じ理由で対象読者（岐阜市周辺の40〜60代男性）と根本的に噛み合わないため今回も見送り。
+  - 新キーワード「マッサージガン ストレッチ 違い 使い分け」は、デスクワーク・ゴルフをする40〜60代男性に馴染みのある題材で、既存compare記事（もみほぐし／整体／パーソナルストレッチ／動的静的／通う頻度／セルフvsプロ）と意図が重複しないことを確認。
+  - 比較表は観点5つ（主なアプローチ／得意なこと／使うタイミング／使う人の関わり方／注意点）で構成。
+  - アイキャッチはOpenAI画像生成（`node scripts/fetch-column-image.mjs --source ai`）で、日の差すリビングでくつろぎながら伸びをする日本人ミドル男性の明るいシーンを生成。
+  - `stretchPoses.ts` 既存ポーズ pose-17（肩甲骨引き寄せ）／pose-08（大腿四頭筋）／pose-04（ふくらはぎ・壁）を使用。同一記事内で重複なし。ポーズ未収載の動きはなし。
+  - `src/data/columns.ts` の `COLUMNS` 先頭に新記事のメタデータ（slug/heading/desc/date/tags/relatedSymptoms/selfCare）を追加。
+  - `docs/column-backlog.md` に新規行を追加し `- [x]` で記載（既存行の書式に合わせ、追加理由を注記）。
+- 主な変更ファイル：
+  - `src/pages/column/massage-gun-stretch-chigai.astro`（新規）
+  - `public/images/column/massage-gun-stretch-chigai.webp`（新規）
+  - `src/data/columns.ts`
+  - `docs/column-backlog.md`
+- 判断・注意点：sango-youtsu（産後腰痛）は3回連続で選定を見送っている。オーナー判断で、(a) バックログから除外する、(b) 読者層の例外として別枠で扱う、(c) 記述を男性視点（パートナーの産後腰痛をサポートする等）に書き換えて再提案する、のいずれかの整理を推奨（前回記録から継続の未対応事項）。
+- 確認結果：`node scripts/yakkihou-ng.mjs src/pages/column/massage-gun-stretch-chigai.astro` と `node scripts/lint-column.mjs src/pages/column/massage-gun-stretch-chigai.astro` いずれもPASS。`npm run build` 成功（50→51ページ生成）。
+- 未対応・次の作業：`compare` 枠は新規追加分も含め未対応0件。次回の金曜枠では新たな比較キーワードの追加検討が必要。`authority` 枠は sango-youtsu のみ残存（上記の整理待ち）。`local` 枠は3件（stretch-seitai-chigai／gifu-stretch-senmonten／fuyu-katakori-mukumi）が未対応のまま。
+
+## 2026-10-02 13:05 JST — GitHub Actions（Claude）レビュー：マッサージガン記事の表記統一チェックと修正
+
+- ブランチ：`claude/column-auto`
+- 関連PR：なし（コラム専用ブランチへのコミットのみ。マージはユーザーが実施）
+- 変更内容：
+  - `src/pages/column/massage-gun-stretch-chigai.astro` を薬機法・景表法・一貫性の観点でレビュー。`lint-result.txt`は事前PASS、FAIL指摘なし。
+  - 機械チェックをすり抜ける文脈的な効能断定（婉曲的な断定・保証表現）は本文中に見当たらず、修正なし。
+  - meta descriptionが「...全力ストレッチ岐阜長良店が解説します。」となっており、既存コラム34本中22本が採用している「...全力ストレッチ岐阜長良店のトレーナーが解説します。」という定型と異なっていたため、表記を揃えて修正（本文中の「当店（...）が解説します」の文は既存のcompare枠記事と同一表現のため変更なし）。
+  - その他の確認項目（リード文200字での検索意図回答／「体感軸調整法」への言及とリンク／セルフケア手順の安全性／全挿絵のfigcaption「イラストはイメージです」／内部リンク先`/method` `/menu` `/symptoms/sports` `/symptoms/katakori`の実在）は問題なし。
+- 主な変更ファイル：
+  - `src/pages/column/massage-gun-stretch-chigai.astro`
+- 確認結果：`node scripts/lint-column.mjs src/pages/column/massage-gun-stretch-chigai.astro` PASS、`node scripts/yakkihou-ng.mjs src/pages/column/massage-gun-stretch-chigai.astro` PASS。`npm run build` 成功（51ページ生成）。
+- 未対応・次の作業：`hirune-yasumi-office.astro`（2026-09-28公開）のmeta descriptionも同様に「のトレーナー」が欠けているため、次回以降に表記統一の修正を推奨。
