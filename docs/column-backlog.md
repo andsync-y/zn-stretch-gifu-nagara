@@ -64,6 +64,7 @@
 ### スポーツ（既存と意図を分ける）
 - [x] running-zengo ｜ authority ｜ ランニング ストレッチ 前後 故障予防 ｜ セルフケア ｜ /symptoms/sports
 - [x] undousoku-5min ｜ authority ｜ 運動不足 解消 1日5分 ストレッチ ｜ 入門 ｜ /symptoms/sports, /symptoms/jiritsu
+- [x] golf-hikyori-stretch ｜ authority ｜ ゴルフ 飛距離 柔軟性 ストレッチ ｜ 悩み特化 ｜ /symptoms/sports, /symptoms/shisei （2026-10-05公開。authority枠の既存未対応がsango-youtsu（産後腰痛）のみで対象読者40〜60代男性と噛み合わないため、過去のcompare枠と同様にバックログへ新規追加して執筆）
 
 ### 比較・選び方（`compare` 枠／金曜に消化）
 - [x] stretch-momihogushi-chigai ｜ compare ｜ ストレッチ もみほぐし 違い ｜ 使い分け ｜ /method, /menu
