@@ -3896,3 +3896,25 @@ Coworkの**スケジュールタスクにはリポジトリを紐付ける欄が
   - `src/pages/column/massage-gun-stretch-chigai.astro`
 - 確認結果：`node scripts/lint-column.mjs src/pages/column/massage-gun-stretch-chigai.astro` PASS、`node scripts/yakkihou-ng.mjs src/pages/column/massage-gun-stretch-chigai.astro` PASS。`npm run build` 成功（51ページ生成）。
 - 未対応・次の作業：`hirune-yasumi-office.astro`（2026-09-28公開）のmeta descriptionも同様に「のトレーナー」が欠けているため、次回以降に表記統一の修正を推奨。
+
+## 2026-10-05 — GitHub Actions（Claude）
+
+- ブランチ：`claude/column-auto`
+- 関連PR：なし（コラム専用ブランチへのコミットのみ。マージはユーザーが実施）
+- 変更内容：
+  - コラム新規記事「ゴルフの飛距離が伸びない原因は柔軟性？回旋を高めるストレッチ4選」を作成（`authority` 枠）。
+  - `authority` 枠の未対応は sango-youtsu（産後 腰痛 骨盤）1件のみだったが、対象読者（岐阜市周辺の40〜60代男性・デスクワーク中心・ゴルフをする層）と根本的に噛み合わないため、過去4回（2026-09-28／2026-09-30／2026-10-02×2）と同じ理由で今回も見送り。`compare` 枠で前例のある「バックログへの新規追加」にならい、対象読者に合う新しい authority キーワード「ゴルフ 飛距離 柔軟性 ストレッチ」を追加して執筆した。
+  - 既存のゴルフ関連記事（golf-stretch-routine＝ラウンド前後の一般ルーティン、karada-katai-kotsu＝体の硬さ全般、dynamic-static-chigai＝動的静的の使い分け）と検索意図が重複しないよう、「柔軟性不足が飛距離に与える影響」という切り口に絞った。
+  - 本文は結論先出し→柔軟性と飛距離の関係→体が硬いとスイングに与える影響→セルフストレッチ4選→頻度の目安→当店のアプローチの構成。効果の断定を避け「〜と考えられています」「〜につながることがあります」等のヘッジ表現で統一。
+  - アイキャッチはOpenAI画像生成（`node scripts/fetch-column-image.mjs --source ai`）で、晴れた屋外でゴルフウェア姿の男性が腕を上げて伸びをする明るいシーンを生成。
+  - `stretchPoses.ts` 既存ポーズ pose-12（スレッド・ザ・ニードル）／pose-03（股関節開脚前屈）／pose-14（肩甲骨のストレッチ）／pose-28（立って体側伸ばし）を使用。同一記事内で重複なし。ポーズ未収載の動きはなし。
+  - `src/data/columns.ts` の `COLUMNS` 先頭に新記事のメタデータ（slug/heading/desc/date/tags/relatedSymptoms/selfCare）を追加。
+  - `docs/column-backlog.md` に新規行を追加し `- [x]` で記載（既存行の書式に合わせ、追加理由を注記）。sango-youtsu の行自体は見送りのため `- [ ]` のまま変更していない。
+- 主な変更ファイル：
+  - `src/pages/column/golf-hikyori-stretch.astro`（新規）
+  - `public/images/column/golf-hikyori-stretch.webp`（新規）
+  - `src/data/columns.ts`
+  - `docs/column-backlog.md`
+- 判断・注意点：sango-youtsu（産後腰痛）は5回連続で選定を見送っている。毎回「新規キーワード追加で代替」する運用がバックログを肥大化させているため、オーナー判断で (a) バックログから除外する、(b) 読者層の例外として別枠で扱う、(c) 男性視点（パートナーの産後腰痛をサポートする等）に書き換えて再提案する、のいずれかの整理を推奨（前回までの記録から継続の未対応事項）。また `public/images/column/golf-hiraku-stretch.webp` という、スラッグ確定前の誤生成画像が1点残っている（最終的に `golf-hikyori-stretch.webp` を使用）。ファイル削除の承認が得られなかったため未削除。本番マージ前にオーナー側で削除を推奨。
+- 確認結果：`node scripts/yakkihou-ng.mjs src/pages/column/golf-hikyori-stretch.astro` PASS、`node scripts/lint-column.mjs src/pages/column/golf-hikyori-stretch.astro` PASS。`npm run build` 成功（51→52ページ生成）。
+- 未対応・次の作業：sango-youtsu の扱い方針の確認（上記）。不要画像 `public/images/column/golf-hiraku-stretch.webp` の削除。`local` 枠は3件（stretch-seitai-chigai／gifu-stretch-senmonten／fuyu-katakori-mukumi）が未対応のまま。
