@@ -82,6 +82,9 @@
 ### 季節
 - [x] haru-jiritsu-shinkei ｜ authority ｜ 春 不調 自律神経 ストレッチ ｜ 季節 ｜ /symptoms/jiritsu （kisetsu-kawarime-jiritsu として公開。9月公開に合わせ「春」限定ではなく「季節の変わり目」全般に広げた）
 
+### バランス・転倒予防（既存と意図を分ける）
+- [x] kataashidachi-furatsuki ｜ authority ｜ 片足立ち ふらつく 原因 ストレッチ ｜ 悩み特化 ｜ /symptoms/shisei, /symptoms/sports （2026-10-07公開。authority枠の既存未対応がsango-youtsu（産後腰痛）のみで対象読者40〜60代男性と噛み合わないため、golf-hikyori-stretchと同様の理由でバックログへ新規追加して執筆）
+
 ### 地域（local型・流入が育ってから着手）
 - [ ] stretch-seitai-chigai ｜ local ｜ ストレッチ 整体 マッサージ 違い 岐阜 ｜ 比較検討 ｜ /menu, /symptoms/katakori
 - [ ] gifu-stretch-senmonten ｜ local ｜ 岐阜市 ストレッチ 専門店 選び方 ｜ ローカル指名 ｜ /access, /staff

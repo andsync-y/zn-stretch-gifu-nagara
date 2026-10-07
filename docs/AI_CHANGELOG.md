@@ -3918,3 +3918,25 @@ Coworkの**スケジュールタスクにはリポジトリを紐付ける欄が
 - 判断・注意点：sango-youtsu（産後腰痛）は5回連続で選定を見送っている。毎回「新規キーワード追加で代替」する運用がバックログを肥大化させているため、オーナー判断で (a) バックログから除外する、(b) 読者層の例外として別枠で扱う、(c) 男性視点（パートナーの産後腰痛をサポートする等）に書き換えて再提案する、のいずれかの整理を推奨（前回までの記録から継続の未対応事項）。また `public/images/column/golf-hiraku-stretch.webp` という、スラッグ確定前の誤生成画像が1点残っている（最終的に `golf-hikyori-stretch.webp` を使用）。ファイル削除の承認が得られなかったため未削除。本番マージ前にオーナー側で削除を推奨。
 - 確認結果：`node scripts/yakkihou-ng.mjs src/pages/column/golf-hikyori-stretch.astro` PASS、`node scripts/lint-column.mjs src/pages/column/golf-hikyori-stretch.astro` PASS。`npm run build` 成功（51→52ページ生成）。
 - 未対応・次の作業：sango-youtsu の扱い方針の確認（上記）。不要画像 `public/images/column/golf-hiraku-stretch.webp` の削除。`local` 枠は3件（stretch-seitai-chigai／gifu-stretch-senmonten／fuyu-katakori-mukumi）が未対応のまま。
+
+## 2026-10-07 — GitHub Actions（Claude）
+
+- ブランチ：`claude/column-auto`
+- 関連PR：なし（コラム専用ブランチへのコミットのみ。マージはユーザーが実施）
+- 変更内容：
+  - コラム新規記事「片足立ちでふらつくのは体の硬さが原因？バランス力を保つストレッチ4選」を作成（`authority` 枠・水曜）。
+  - `authority` 枠の既存未対応は sango-youtsu（産後 腰痛 骨盤）1件のみ。対象読者（岐阜市周辺の40〜60代男性・デスクワーク中心・ゴルフをする層）と噛み合わないため、2026-09-28／09-30／10-02×2／10-05に続き今回（6回目）も見送り、golf-hikyori-stretchと同じ対応方針で対象読者に合う新しい authority キーワード「片足立ち ふらつく 原因 ストレッチ」をバックログへ追加して執筆した。
+  - 既存の股関節・柔軟性系記事（karada-katai-kotsu＝体の硬さ全般、sorikoshi-check＝反り腰、golf-hikyori-stretch＝ゴルフの回旋可動域）と検索意図が重複しないよう、「片脚で体を支えるバランス力の低下」という切り口に絞った。
+  - 本文は結論先出し→片足立ちでふらつく理由→片足立ちの秒数の目安→セルフストレッチ4選→頻度の目安→当店のアプローチの構成。秒数の基準を断定せず「個人差がある」「変化に気づくことが大切」という表現にとどめ、転倒防止のため壁や机を使うよう安全面の注意も明記した。
+  - アイキャッチはOpenAI画像生成（`node scripts/fetch-column-image.mjs --source ai`）で、晴れた屋外の階段を軽やかに歩く40〜50代男性の明るいシーンを生成。
+  - `stretchPoses.ts` 既存ポーズ pose-32（足首回し）／pose-08（大腿四頭筋のストレッチ）／pose-07（お尻のストレッチ）／pose-03（股関節開脚前屈）を使用。同一記事内で重複なし。ポーズ未収載の動きはなし。
+  - `src/data/columns.ts` の `COLUMNS` 先頭に新記事のメタデータ（slug/heading/desc/date/tags/relatedSymptoms/selfCare）を追加。
+  - `docs/column-backlog.md` に新規セクション「バランス・転倒予防」を追加し `- [x]` で記載（追加理由を注記）。sango-youtsu の行自体は見送りのため `- [ ]` のまま変更していない。
+- 主な変更ファイル：
+  - `src/pages/column/kataashidachi-furatsuki.astro`（新規）
+  - `public/images/column/kataashidachi-furatsuki.webp`（新規）
+  - `src/data/columns.ts`
+  - `docs/column-backlog.md`
+- 判断・注意点：sango-youtsu（産後腰痛）は6回連続で選定を見送っている。前回記録と同じく、オーナー判断で (a) バックログから除外する、(b) 読者層の例外として別枠で扱う、(c) 男性視点に書き換えて再提案する、のいずれかの整理を推奨（継続の未対応事項）。また前回から持ち越しの不要画像 `public/images/column/golf-hiraku-stretch.webp`（スラッグ確定前の誤生成）も今回のセッションでは削除の承認を得ていないため未削除のまま。
+- 確認結果：`node scripts/yakkihou-ng.mjs src/pages/column/kataashidachi-furatsuki.astro` PASS、`node scripts/lint-column.mjs src/pages/column/kataashidachi-furatsuki.astro` PASS。`npm run build` 成功（52→53ページ生成）。
+- 未対応・次の作業：sango-youtsu の扱い方針の確認（上記）。不要画像 `public/images/column/golf-hiraku-stretch.webp` の削除。`local` 枠は3件（stretch-seitai-chigai／gifu-stretch-senmonten／fuyu-katakori-mukumi）が未対応のまま。
