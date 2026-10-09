@@ -74,6 +74,7 @@
 - [x] kaisuken-tsuikata ｜ compare ｜ ストレッチ 通う頻度 目安 選び方 ｜ 検討 ｜ /menu, /reserve
 - [x] jitaku-vs-pro ｜ compare ｜ セルフストレッチ プロ 違い ｜ 使い分け ｜ /method, /symptoms
 - [x] massage-gun-stretch-chigai ｜ compare ｜ マッサージガン ストレッチ 違い 使い分け ｜ 使い分け ｜ /method, /symptoms/sports, /symptoms/katakori （2026-10-02公開。compare枠の既存バックログが消化済みのため新規追加。読者ターゲット40〜60代男性に合う題材として選定）
+- [x] kintore-stretch-chigai ｜ compare ｜ 筋トレ ストレッチ 違い 使い分け ｜ 使い分け ｜ /method, /symptoms/sports, /symptoms/shisei （2026-10-09公開。compare枠の既存バックログが消化済みのため新規追加。既存のdynamic-static-chigai（動的/静的ストレッチの使い分け）とは意図を分け、筋トレという別運動カテゴリとの使い分けに絞って執筆。順番の詳細はdynamic-static-chigaiへ内部リンクし重複を回避）
 
 ### 検討系（`authority`）
 - [x] stretch-hindo-kouka ｜ authority ｜ ストレッチ 頻度 効果 続け方 ｜ 解説 ｜ /symptoms/jiritsu
