@@ -86,6 +86,9 @@
 ### バランス・転倒予防（既存と意図を分ける）
 - [x] kataashidachi-furatsuki ｜ authority ｜ 片足立ち ふらつく 原因 ストレッチ ｜ 悩み特化 ｜ /symptoms/shisei, /symptoms/sports （2026-10-07公開。authority枠の既存未対応がsango-youtsu（産後腰痛）のみで対象読者40〜60代男性と噛み合わないため、golf-hikyori-stretchと同様の理由でバックログへ新規追加して執筆）
 
+### 足・ふくらはぎ（既存と意図を分ける）
+- [x] komuragaeri-yobou-stretch ｜ authority ｜ 足がつる こむら返り 予防 ストレッチ ｜ 悩み特化 ｜ /symptoms/mukumi, /symptoms/sports, /symptoms/youtsu （2026-10-12公開。authority枠の既存未対応がsango-youtsu（産後腰痛）のみで対象読者40〜60代男性と噛み合わないため、kataashidachi-furatsukiと同様の理由でバックログへ新規追加して執筆。既存のmukumi-yugata-ashi（夕方のむくみ）・hiesho-shimohanshin（冷え性）とは「つる・痙攣」という別の検索意図に絞った）
+
 ### 地域（local型・流入が育ってから着手）
 - [ ] stretch-seitai-chigai ｜ local ｜ ストレッチ 整体 マッサージ 違い 岐阜 ｜ 比較検討 ｜ /menu, /symptoms/katakori
 - [ ] gifu-stretch-senmonten ｜ local ｜ 岐阜市 ストレッチ 専門店 選び方 ｜ ローカル指名 ｜ /access, /staff

@@ -3977,3 +3977,25 @@ Coworkの**スケジュールタスクにはリポジトリを紐付ける欄が
   - `src/pages/column/kintore-stretch-chigai.astro`
 - 確認結果：`node scripts/lint-column.mjs src/pages/column/kintore-stretch-chigai.astro` PASS。`npm run build` 成功（54ページ生成）。
 - 未対応・次の作業：meta descriptionの「のトレーナーが解説します」欠落が複数回発生しているため、新規コラム生成プロンプトまたはlintスクリプト側でのチェック追加を検討（継続課題）。sango-youtsu・`local` 枠3件・不要画像削除は引き続き未対応。
+
+## 2026-10-12 — GitHub Actions（Claude）
+
+- ブランチ：`claude/column-auto`
+- 関連PR：なし（コラム専用ブランチへのコミットのみ。マージはユーザーが実施）
+- 変更内容：
+  - コラム新規記事「足がつる・こむら返りを予防するストレッチ4選｜寝る前のケア」を作成（`authority` 枠・月曜）。
+  - `authority` 枠の既存未対応は sango-youtsu（産後 腰痛 骨盤）1件のみ。対象読者（岐阜市周辺の40〜60代男性・デスクワーク中心・ゴルフをする層）と噛み合わないため、2026-09-28／09-30／10-02×2／10-05／10-07に続き今回（7回目）も見送り、kataashidachi-furatsukiと同じ対応方針で対象読者に合う新しい authority キーワード「足がつる こむら返り 予防 ストレッチ」をバックログへ追加して執筆した。
+  - 既存のむくみ・冷え系記事（mukumi-yugata-ashi＝夕方のむくみ、hiesho-shimohanshin＝冷え性と下半身の血流）とは検索意図が重複しないよう、「筋肉が強く収縮してつる・痙攣する」という別の悩みに切り口を絞った。
+  - 本文は結論先出し→こむら返りが起きる理由→加齢で起きやすくなる理由（体感軸調整法に言及）→寝る前のセルフストレッチ4選→頻度の目安（夜間につった際の対処も明記）→当店のアプローチの構成。水分・ミネラル不足など自店で確認できない医学的要因は断定せず「と言われています」「と考えられています」のヘッジ表現にとどめ、頻繁に繰り返す場合は医療機関への相談を案内した。
+  - アイキャッチはOpenAI画像生成（`node scripts/fetch-column-image.mjs --source ai`）で、朝の明るい寝室で窓辺に立ちふくらはぎを伸ばす50代の日本人男性の明るいシーンを生成。
+  - `stretchPoses.ts` 既存ポーズ pose-04（ふくらはぎ・壁）／pose-15（足首のストレッチ）／pose-32（足首回し）／pose-02（ハムストリングのストレッチ）を使用。同一記事内で重複なし。ポーズ未収載の動きはなし。
+  - `src/data/columns.ts` の `COLUMNS` 先頭に新記事のメタデータ（slug/heading/desc/date/tags/relatedSymptoms/selfCare）を追加。
+  - `docs/column-backlog.md` に新規セクション「足・ふくらはぎ」を追加し `- [x]` で記載（追加理由を注記）。sango-youtsu の行自体は見送りのため `- [ ]` のまま変更していない。
+- 主な変更ファイル：
+  - `src/pages/column/komuragaeri-yobou-stretch.astro`（新規）
+  - `public/images/column/komuragaeri-yobou-stretch.webp`（新規）
+  - `src/data/columns.ts`
+  - `docs/column-backlog.md`
+- 判断・注意点：sango-youtsu（産後腰痛）は7回連続で選定を見送っている。前回までの記録と同じく、オーナー判断で (a) バックログから除外する、(b) 読者層の例外として別枠で扱う、(c) 男性視点に書き換えて再提案する、のいずれかの整理を推奨（継続の未対応事項）。また前回から持ち越しの不要画像 `public/images/column/golf-hiraku-stretch.webp`（スラッグ確定前の誤生成）も今回のセッションでは削除の承認を得ていないため未削除のまま。
+- 確認結果：`node scripts/yakkihou-ng.mjs src/pages/column/komuragaeri-yobou-stretch.astro` PASS、`node scripts/lint-column.mjs src/pages/column/komuragaeri-yobou-stretch.astro` PASS。`npm run build` 成功（54→55ページ生成）。
+- 未対応・次の作業：sango-youtsu の扱い方針の確認（継続）。不要画像 `public/images/column/golf-hiraku-stretch.webp` の削除（継続）。`local` 枠は3件（stretch-seitai-chigai／gifu-stretch-senmonten／fuyu-katakori-mukumi）が未対応のまま。`compare` 枠は新規追加分も含め未対応0件。
