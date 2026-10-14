@@ -3999,3 +3999,39 @@ Coworkの**スケジュールタスクにはリポジトリを紐付ける欄が
 - 判断・注意点：sango-youtsu（産後腰痛）は7回連続で選定を見送っている。前回までの記録と同じく、オーナー判断で (a) バックログから除外する、(b) 読者層の例外として別枠で扱う、(c) 男性視点に書き換えて再提案する、のいずれかの整理を推奨（継続の未対応事項）。また前回から持ち越しの不要画像 `public/images/column/golf-hiraku-stretch.webp`（スラッグ確定前の誤生成）も今回のセッションでは削除の承認を得ていないため未削除のまま。
 - 確認結果：`node scripts/yakkihou-ng.mjs src/pages/column/komuragaeri-yobou-stretch.astro` PASS、`node scripts/lint-column.mjs src/pages/column/komuragaeri-yobou-stretch.astro` PASS。`npm run build` 成功（54→55ページ生成）。
 - 未対応・次の作業：sango-youtsu の扱い方針の確認（継続）。不要画像 `public/images/column/golf-hiraku-stretch.webp` の削除（継続）。`local` 枠は3件（stretch-seitai-chigai／gifu-stretch-senmonten／fuyu-katakori-mukumi）が未対応のまま。`compare` 枠は新規追加分も含め未対応0件。
+
+## 2026-10-14 — GitHub Actions（Claude）
+
+- ブランチ：`claude/column-auto`
+- 関連PR：なし（コラム専用ブランチへのコミットのみ。マージはユーザーが実施）
+- 変更内容：
+  - コラム新規記事「階段でひざが痛い原因は？ひざを支えるセルフストレッチ4選」を作成（`authority` 枠・水曜）。
+  - `authority` 枠の既存未対応は sango-youtsu（産後 腰痛 骨盤）1件のみ。対象読者（岐阜市周辺の40〜60代男性・デスクワーク中心・ゴルフをする層）と噛み合わないため、2026-09-28／09-30／10-02×2／10-05／10-07／10-12に続き今回（8回目）も見送り、komuragaeri-yobou-stretchと同じ対応方針で対象読者に合う新しい authority キーワード「階段 ひざ 痛み ストレッチ」をバックログへ追加して執筆した。
+  - 既存のゴルフ・バランス系記事（golf-hikyori-stretch＝回旋可動域と飛距離、kataashidachi-furatsuki＝片足立ちのバランス）とは検索意図が重複しないよう、「階段の上り下りでひざに違和感が出やすくなる」という別の悩みに切り口を絞った。
+  - 本文は結論先出し→階段でひざに違和感が出やすくなる理由（太もも前後・股関節の柔軟性低下）→ひざを支えるセルフストレッチ4選→頻度の目安（強い痛み・腫れがある場合の医療機関相談を明記）→当店のアプローチの構成。ひざの痛みの医学的な原因（変形性膝関節症等）は断定せず踏み込まず、「柔軟性低下が関係していると考えられる」というヘッジ表現にとどめた。
+  - アイキャッチはOpenAI画像生成（`node scripts/fetch-column-image.mjs --source ai`）で、晴れた屋外の階段を上る50代の日本人男性の明るいシーンを生成。
+  - `stretchPoses.ts` 既存ポーズ pose-08（大腿四頭筋のストレッチ）／pose-02（ハムストリングのストレッチ）／pose-07（お尻のストレッチ）／pose-11（内もものストレッチ）を使用。同一記事内で重複なし。ポーズ未収載の動きはなし。
+  - `src/data/columns.ts` の `COLUMNS` 先頭に新記事のメタデータ（slug/heading/desc/date/tags/relatedSymptoms/selfCare）を追加。
+  - `docs/column-backlog.md` に新規セクション「ひざ・太もも」を追加し `- [x]` で記載（追加理由を注記）。sango-youtsu の行自体は見送りのため `- [ ]` のまま変更していない。
+- 主な変更ファイル：
+  - `src/pages/column/hiza-itami-kaidan-stretch.astro`（新規）
+  - `public/images/column/hiza-itami-kaidan-stretch.webp`（新規）
+  - `src/data/columns.ts`
+  - `docs/column-backlog.md`
+- 判断・注意点：sango-youtsu（産後腰痛）は8回連続で選定を見送っている。前回までの記録と同じく、オーナー判断で (a) バックログから除外する、(b) 読者層の例外として別枠で扱う、(c) 男性視点に書き換えて再提案する、のいずれかの整理を推奨（継続の未対応事項）。また前回から持ち越しの不要画像 `public/images/column/golf-hiraku-stretch.webp`（スラッグ確定前の誤生成）も今回のセッションでは削除の承認を得ていないため未削除のまま。
+- 確認結果：`node scripts/yakkihou-ng.mjs src/pages/column/hiza-itami-kaidan-stretch.astro` PASS、`node scripts/lint-column.mjs src/pages/column/hiza-itami-kaidan-stretch.astro` PASS。`npm run build` 成功（55→56ページ生成）。
+- 未対応・次の作業：sango-youtsu の扱い方針の確認（継続）。不要画像 `public/images/column/golf-hiraku-stretch.webp` の削除（継続）。`local` 枠は3件（stretch-seitai-chigai／gifu-stretch-senmonten／fuyu-katakori-mukumi）が未対応のまま。`compare` 枠は新規追加分も含め未対応0件。
+
+## 2026-10-14 （レビュー） — GitHub Actions（Claude）レビュー：ひざ・階段記事のtitleとheadingの不一致を修正
+
+- ブランチ：`claude/column-auto`
+- 関連PR：なし（コラム専用ブランチへのコミットのみ。マージはユーザーが実施）
+- 変更内容：
+  - `src/pages/column/hiza-itami-kaidan-stretch.astro` を薬機法・景表法・一貫性の観点でレビュー。`lint-result.txt`は事前PASS、FAIL指摘なし。
+  - 機械チェックをすり抜ける文脈的な効能断定（婉曲的な断定・保証表現）は本文中に見当たらず、修正なし。
+  - `title` 属性が「太もも裏を伸ばすセルフストレッチ4選」となっており、実際の本文（大腿四頭筋＝前側／ハムストリング＝後ろ側／お尻／内ももの4種目）と不一致、かつ `heading`・`description` の「ひざを支えるセルフストレッチ4選」とも表記が揃っていなかったため、`title` を「階段でひざが痛い原因は？ひざを支えるセルフストレッチ4選【岐阜市長良のストレッチ専門店が解説】」に修正して統一した。
+  - その他の確認項目（リード文200字以内での検索意図「階段でひざが痛い原因は？」への回答／「体感軸調整法」への言及とリンク／セルフケア手順の安全性＝強い痛み・腫れがある場合は控え医療機関へ相談する旨を明記／全4点の挿絵に figcaption「イラストはイメージです」／内部リンク先 `/method` `/symptoms/sports` `/symptoms/shisei` `/symptoms/youtsu` および `stretchPoses.ts` の pose-08/02/07/11 の実在）は問題なし。
+- 主な変更ファイル：
+  - `src/pages/column/hiza-itami-kaidan-stretch.astro`
+- 確認結果：`node scripts/yakkihou-ng.mjs src/pages/column/hiza-itami-kaidan-stretch.astro` PASS、`node scripts/lint-column.mjs src/pages/column/hiza-itami-kaidan-stretch.astro` PASS。`npm run build` 成功（56ページ生成）。
+- 未対応・次の作業：sango-youtsu の扱い方針の確認（継続）。不要画像 `public/images/column/golf-hiraku-stretch.webp` の削除（継続）。`local` 枠は3件（stretch-seitai-chigai／gifu-stretch-senmonten／fuyu-katakori-mukumi）が未対応のまま。`compare` 枠は新規追加分も含め未対応0件。
