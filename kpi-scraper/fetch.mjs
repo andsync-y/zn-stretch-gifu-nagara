@@ -112,6 +112,23 @@ async function login(page) {
 }
 
 // 表示切替ボタンなどのクリック操作。見つからないセレクタは黙ってスキップする
+// SPAのサイドバー（a.nav-item）をテキスト完全一致でクリックする。
+// Playwrightの :text-is() は空白・絵文字の入り方で外すことがあるため、
+// discoveryと同じ evaluate 方式に揃えてある。
+async function doNavClick(page, label) {
+  if (!label) return false;
+  const clicked = await page.evaluate((lbl) => {
+    const el = [...document.querySelectorAll('a.nav-item')].find(
+      (e) => (e.textContent || '').trim() === lbl
+    );
+    if (!el) return false;
+    el.click();
+    return true;
+  }, label);
+  if (clicked) await page.waitForTimeout(2500);
+  return clicked;
+}
+
 async function doClicks(page, clicks) {
   for (const sel of clicks || []) {
     const btn = page.locator(sel).first();
@@ -122,7 +139,7 @@ async function doClicks(page, clicks) {
   }
 }
 
-// 入力欄への記入（期間指定など）。valueの {week_start}/{week_end} は前週の日付に置換される。
+// 入力欄への記入（期間指定など）。valueの {week_start}/{week_end}/{month} は前週の日付・月に置換される。
 // 全fill後にEnterを押し、applyClickがあればそのボタンも押して反映させる。
 // 見つからないセレクタはfilledに記録されないため、呼び出し側で反映確認に使える
 async function doFills(page, pconf, week) {
@@ -132,8 +149,15 @@ async function doFills(page, pconf, week) {
     if ((await input.count()) === 0) continue;
     const value = String(f.value)
       .replaceAll('{week_start}', week.start)
-      .replaceAll('{week_end}', week.end);
+      .replaceAll('{week_end}', week.end)
+      // 勤務時間ページは月単位なので、対象週が属する月（YYYY-MM）も渡せるようにする
+      .replaceAll('{month}', week.start.slice(0, 7));
     await input.fill(value);
+    // fill() だけでは change を拾わない実装があるため、input/change を明示的に発火させる
+    await input.evaluate((el) => {
+      el.dispatchEvent(new Event('input', { bubbles: true }));
+      el.dispatchEvent(new Event('change', { bubbles: true }));
+    });
     filled[f.selector] = value;
   }
   if ((pconf.fills || []).length > 0) {
@@ -258,7 +282,7 @@ async function discovery(page, loginResult) {
 
     // サイドバーの業務ナビ（a.nav-item）を開いて構造を記録する。
     // 顧客情報系（顧客管理・来店記録・問い合わせ一覧）は開かない
-    for (const label of ['勤務時間', 'スタッフ管理', '日報', '店舗設定']) {
+    for (const label of ['勤務時間', 'スタッフ管理', '給与', '給与明細', '勤怠', '日報', '店舗設定']) {
       const clicked = await page.evaluate((lbl) => {
         const el = [...document.querySelectorAll('a.nav-item')].find(
           (e) => (e.textContent || '').trim() === lbl
@@ -273,7 +297,7 @@ async function discovery(page, loginResult) {
     }
 
     // KPIに関係しそうなリンクを最大8ページまで辿って構造を記録する
-    const KEYWORDS = /売上|来店|予約|集計|レポート|実績|分析|ダッシュボード|CSV|回数券|顧客|エクスポート|ダウンロード/;
+    const KEYWORDS = /売上|来店|予約|集計|レポート|実績|分析|ダッシュボード|CSV|回数券|顧客|エクスポート|ダウンロード|給与|勤怠|勤務|シフト|人件費/;
     const base = new URL(page.url());
     const seen = new Set([page.url()]);
     const candidates = (report.pages[0].links || [])
@@ -395,6 +419,10 @@ async function parse(page, loginResult) {
     await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 30000 });
     await page.waitForTimeout(pconf.waitMs || 2500);
     await doClicks(page, pconf.clicks);
+    if (pconf.navClick) {
+      const ok = await doNavClick(page, pconf.navClick);
+      if (!ok) throw new Error(`nav-item not found: ${pconf.navClick}`);
+    }
     const filled = await doFills(page, pconf, week);
     if (Object.keys(filled).length > 0) result.fills_applied[pconf.name] = filled;
     opened.add(pconf.name);
@@ -471,7 +499,11 @@ async function parse(page, loginResult) {
             const n = toNumber(v);
             return n != null ? n : String(v ?? '').trim();
           }));
-        if (rows.length === 0) throw new Error('no data rows');
+        if (rows.length === 0) {
+          // 原因切り分け用。行の「長さ」だけを出す（セル値は出さないので個人情報は漏れない）
+          const shape = table.rows.map((r) => r.length).join(',');
+          throw new Error(`no data rows (raw=${table.rows.length}, lengths=[${shape}], cols=${table.headers.length})`);
+        }
         result.metrics[m.key] = { headers, rows };
       } else if (m.method === 'table') {
         // tableMatchの見出しをすべて含むテーブルから、前週の日付行を集計する
