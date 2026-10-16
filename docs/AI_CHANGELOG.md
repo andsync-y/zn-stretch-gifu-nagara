@@ -4035,3 +4035,26 @@ Coworkの**スケジュールタスクにはリポジトリを紐付ける欄が
   - `src/pages/column/hiza-itami-kaidan-stretch.astro`
 - 確認結果：`node scripts/yakkihou-ng.mjs src/pages/column/hiza-itami-kaidan-stretch.astro` PASS、`node scripts/lint-column.mjs src/pages/column/hiza-itami-kaidan-stretch.astro` PASS。`npm run build` 成功（56ページ生成）。
 - 未対応・次の作業：sango-youtsu の扱い方針の確認（継続）。不要画像 `public/images/column/golf-hiraku-stretch.webp` の削除（継続）。`local` 枠は3件（stretch-seitai-chigai／gifu-stretch-senmonten／fuyu-katakori-mukumi）が未対応のまま。`compare` 枠は新規追加分も含め未対応0件。
+
+## 2026-10-16 — GitHub Actions（Claude）
+
+- ブランチ：`claude/column-auto`
+- 関連PR：なし（コラム専用ブランチへのコミットのみ。マージはユーザーが実施）
+- 変更内容：
+  - コラム新規記事「ウォーキングとストレッチの違い｜歩く・伸ばすの使い分け3つ」を作成（`compare` 枠・金曜）。
+  - `compare` 枠の既存バックログは全件消化済みのため、kintore-stretch-chigai（2026-10-09）・massage-gun-stretch-chigai（2026-10-02）と同様の対応方針で新しい比較キーワード「ウォーキング ストレッチ 違い 使い分け」をバックログへ追加して執筆した。
+  - 既存の `dynamic-static-chigai`（動的ストレッチ/静的ストレッチの使い分け＝ストレッチ内部の種類比較）・`kintore-stretch-chigai`（筋トレとストレッチの使い分け）とは意図が重ならないよう、「ウォーキング（有酸素運動）」と「ストレッチ（柔軟性向上の運動）」という別カテゴリの運動同士の比較に絞った。歩く前後の順番については結論だけ触れ、詳細は `dynamic-static-chigai` への内部リンクに委ねて内容の重複を避けた。
+  - 比較・選び方型のルールに従い、冒頭で「どちらが優れているかではなく使い分け」を一文で言い切り、観点5つ（目的／体に起きやすい変化／向いている悩み／1回の負荷感／当店での位置づけ）の比較表を設置。他業種（ウォーキング自体）を貶める表現は使わず「目的が異なる」という書き方に統一。
+  - 本文は結論先出し→比較表→ウォーキング・ストレッチ単体では足りない点→順番の目安（別記事へリンク）→ウォーキング後向けセルフストレッチ3選→当店のアプローチの構成。対象読者（デスクワーク中心・ゴルフをする40〜60代男性）に合わせ、18ホールを歩く体力やデスクワークの姿勢との関連に触れた。
+  - アイキャッチはOpenAI画像生成（`node scripts/fetch-column-image.mjs --source ai`）で、晴れた朝に川沿いの遊歩道を歩く50代の日本人男性の明るいシーンを生成。
+  - `stretchPoses.ts` 既存ポーズ pose-04（ふくらはぎのストレッチ・壁）／pose-08（大腿四頭筋のストレッチ）／pose-07（お尻のストレッチ・ツイスト）を使用。同一記事内で重複なし。ポーズ未収載の動きはなし。
+  - `src/data/columns.ts` の `COLUMNS` 先頭に新記事のメタデータ（slug/heading/desc/date/tags/relatedSymptoms/selfCare）を追加。
+  - `docs/column-backlog.md` の「比較・選び方」セクションに新規行を追加し `- [x]` で記載（追加理由を注記）。
+- 主な変更ファイル：
+  - `src/pages/column/walking-stretch-chigai.astro`（新規）
+  - `public/images/column/walking-stretch-chigai.webp`（新規）
+  - `src/data/columns.ts`
+  - `docs/column-backlog.md`
+- 判断・注意点：sango-youtsu（産後腰痛）・`local` 枠3件（stretch-seitai-chigai／gifu-stretch-senmonten／fuyu-katakori-mukumi）は今回も未着手（前回までの記録を継続）。前回から持ち越しの不要画像 `public/images/column/golf-hiraku-stretch.webp` も今回のセッションでは削除の承認を得ていないため未削除のまま。
+- 確認結果：`node scripts/yakkihou-ng.mjs src/pages/column/walking-stretch-chigai.astro` PASS、`node scripts/lint-column.mjs src/pages/column/walking-stretch-chigai.astro` PASS。`npm run build` 成功（56→57ページ生成）。
+- 未対応・次の作業：sango-youtsu の扱い方針の確認（継続）。不要画像 `public/images/column/golf-hiraku-stretch.webp` の削除（継続）。`local` 枠は3件（stretch-seitai-chigai／gifu-stretch-senmonten／fuyu-katakori-mukumi）が未対応のまま。`compare` 枠は新規追加分も含め未対応0件。
