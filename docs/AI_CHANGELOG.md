@@ -4697,3 +4697,21 @@ Routine `trig_011s1n1bAjEfo66ibb4qU9G3` が発火。9/7に停止したGoogle検�
 - 判断・注意点：sango-youtsu（産後腰痛）は7回連続で選定を見送っている。前回までの記録と同じく、オーナー判断で (a) バックログから除外する、(b) 読者層の例外として別枠で扱う、(c) 男性視点に書き換えて再提案する、のいずれかの整理を推奨（継続の未対応事項）。また前回から持ち越しの不要画像 `public/images/column/golf-hiraku-stretch.webp`（スラッグ確定前の誤生成）も今回のセッションでは削除の承認を得ていないため未削除のまま。
 - 確認結果：`node scripts/yakkihou-ng.mjs src/pages/column/komuragaeri-yobou-stretch.astro` PASS、`node scripts/lint-column.mjs src/pages/column/komuragaeri-yobou-stretch.astro` PASS。`npm run build` 成功（54→55ページ生成）。
 - 未対応・次の作業：sango-youtsu の扱い方針の確認（継続）。不要画像 `public/images/column/golf-hiraku-stretch.webp` の削除（継続）。`local` 枠は3件（stretch-seitai-chigai／gifu-stretch-senmonten／fuyu-katakori-mukumi）が未対応のまま。`compare` 枠は新規追加分も含め未対応0件。
+
+## 2026-10-16 — Claude Code（セッション: 広告・SNS運用）
+
+- ブランチ：`claude/new-session-prk4n9`
+- 関連PR：なし
+- 変更内容：
+  - **ブランチ復旧のマージ。** コンテナ入れ替えでローカルの `claude/new-session-prk4n9` がデフォルトブランチのHEADから作り直されており、9/14〜9/28に作成した広告判断ドキュメント類がローカルから消えていた。この状態でプッシュするとリモートの `claude/new-session-prk4n9` を上書きして全て失うため、`git reset` ではなく `git merge origin/claude/new-session-prk4n9` で両方を残す形に合流させた（コンフリクトなし）。復旧したのは `docs/ads/meta-judgment-2026-09-20.md` `docs/ads/meta-optimal-settings-2026-09-25.md` `docs/ads/google-judgment-2026-09-28.md` `docs/analytics/hpb-mail-survey-2026-09.md` `docs/plans/new-customer-3month-2026-09.md` `docs/ticket-rate-analysis-2026-09.md` `scripts/analytics/hpb-mail-tally.py` ほか19ファイル。
+  - 10/6〜10/16のInstagram投稿ドラフト4本をDrive 00_Inboxへ保存（リポジトリ外）。テーマは 朝の体の重さ（`asa-sukkiri`）／目の奥の重さと首（`ganseihiro-kubikori`）／体が硬いから向いていない（`karada-katai-kotsu`）／もみほぐしとの使い分け（`stretch-momihogushi-chigai`）。全て `scripts/yakkihou-ng.mjs` EXIT=0。
+  - 10/13以降、ドラフトのテーマ選定方針を変更した。症状別の未使用枠を埋める方式から、**予約のためらいを外すテーマを優先する**方式へ。ルーチンの目的が「予約を迷っている人に信用を伝える」ことであり、症状の網羅よりためらいの除去のほうが目的に直結すると判断した。
+- 判断・注意点：
+  - **記録の訂正。** 「50代向けクリエイティブ4点を作成済み」とオーナーへ複数回報告していたが、実物は作業用ディレクトリに置いていたためコンテナ入れ替えで消失している。残っている記録は `docs/ads/meta-optimal-settings-2026-09-25.md` のコピー方向性2本（「前は、もっと楽に動けた。」「50代からの体には…」）のみ。再作成は可能だが、完成品が手元にある状態ではない。**今後、承認待ちの成果物は作業用ディレクトリに置かずリポジトリへコミットする。**
+  - GitHubのプッシュ権限が9/30ごろから10/16まで読み取り専用（`push: false`）だった。10/16に復旧を確認（`push: true`）。この間のコミットは全てローカル滞留していた。
+  - Googleクレジット¥67,000は失効11/8。日¥3,000案での消化は10/17開始が限界で、未承認のまま期限に接近している（オーナー判断待ち）。
+- 主な変更ファイル：
+  - `docs/AI_CHANGELOG.md`
+  - （マージによる復旧分は上記「変更内容」に記載）
+- 確認結果：`node scripts/yakkihou-ng.mjs docs/AI_CHANGELOG.md` の結果を下記に記載。マージはコンフリクトなしで完了。
+- 未対応・次の作業：50代向けクリエイティブ4案の再作成（オーナーのゴー待ち。投入判定には9/12以降の来店記録CSV再出力が必要）。Googleクレジット消化の承認。`utm_content` のクリエイティブ別付与。HPBアンケート選択肢の修正（【3】をGoogle検索とGoogleマップに分割、【7】LINEを追加）。スタッフ名の記号化と対応表のDrive移管。Instagram試用判定（実投稿4本に到達したかはオーナーのみ確認可能）。
