@@ -16,9 +16,15 @@ export interface Props {
   jsonld?: Record<string, unknown>[];
   /** 広告LP用：ヘッダー・フッター・共通モバイルCTAバーを出さない（計測タグは共通のまま） */
   minimal?: boolean;
+  /**
+   * 集客用のモバイル固定CTA（電話・LINE・WEB予約）だけを出さない。ヘッダー・フッターは残す。
+   * 採用ページ用：求職者がWEB予約をタップするとGA4のclick_reserveとMetaのSchedule＋Leadが発火し、
+   * 集客の判定に採用流入が混ざるため
+   */
+  hideMobileCta?: boolean;
 }
 
-const { title, description, path = '/', ogImage = '/images/ogp.jpg', jsonld = [], minimal = false } = Astro.props;
+const { title, description, path = '/', ogImage = '/images/ogp.jpg', jsonld = [], minimal = false, hideMobileCta = false } = Astro.props;
 
 const canonical = new URL(path, Astro.site).href.replace(/\/$/, '') || Astro.site!.href;
 const ogImageUrl = new URL(ogImage, Astro.site).href;
@@ -114,7 +120,7 @@ const schemas = [localBusiness, ...jsonld];
       gtag('js', new Date());
       gtag('config', 'G-L88N21PDK8');
 
-      // キーイベント計測：WEB予約（ホットペッパー）・LINE・電話のクリック
+      // キーイベント計測：WEB予約（ホットペッパー）・LINE・電話・採用応募（Indeed）のクリック
       document.addEventListener(
         'click',
         function (e) {
@@ -125,6 +131,9 @@ const schemas = [localBusiness, ...jsonld];
           if (href.indexOf('beauty.hotpepper.jp') !== -1) name = 'click_reserve';
           else if (href.indexOf('lin.ee') !== -1) name = 'click_line';
           else if (href.indexOf('tel:') === 0) name = 'click_tel';
+          // 採用：/recruit からIndeed求人への遷移。GA4のみで計測し、Metaピクセル（下）には送らない。
+          // 送ると集客用のLeadに採用クリックが混ざり、Metaの最適化と来店の判定が狂うため
+          else if (href.indexOf('indeed.com') !== -1) name = 'click_recruit_apply';
           if (name) {
             // CTAの設置場所（ReserveCTA等が data-cta-source で申告する）。
             // どのコラム・どのCTA位置から予約クリックされたかを内訳で見るために送る
@@ -143,7 +152,7 @@ const schemas = [localBusiness, ...jsonld];
     <!-- ページ固有のhead要素（noindex等）の差し込み口 -->
     <slot name="head" />
   </head>
-  <body>
+  <body class={hideMobileCta ? 'no-mobile-cta' : undefined}>
     <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:m-2 focus:bg-ink focus:px-4 focus:py-2 focus:text-base">本文へスキップ</a>
     {!minimal && <Header />}
     <main id="main">
@@ -152,7 +161,7 @@ const schemas = [localBusiness, ...jsonld];
     {!minimal && <Footer />}
 
     <!-- モバイル固定CTA（電話・WEB予約）。SPのみ表示。GA4のclick_tel/click_reserveは委譲で自動計測 -->
-    {!minimal && (
+    {!minimal && !hideMobileCta && (
       <nav class="mobile-cta" aria-label="電話・WEB予約" data-cta-source="sticky-mobile">
         <a href={`tel:${SITE.telLink}`} class="mobile-cta-tel">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.2.2 2.4.6 3.6.1.4 0 .8-.3 1l-2.2 2.2z"/></svg>

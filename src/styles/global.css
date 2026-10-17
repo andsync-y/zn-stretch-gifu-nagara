@@ -843,4 +843,6 @@
 
 @media (max-width: 767px) {
   body { padding-bottom: calc(54px + env(safe-area-inset-bottom, 0px)); }
+  /* 固定CTAを出さないページ（採用ページ）では下の余白も要らない */
+  body.no-mobile-cta { padding-bottom: env(safe-area-inset-bottom, 0px); }
 }
