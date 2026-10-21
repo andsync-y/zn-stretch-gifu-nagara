@@ -4094,3 +4094,26 @@ Coworkの**スケジュールタスクにはリポジトリを紐付ける欄が
 - 判断・注意点：なし。
 - 確認結果：`node scripts/lint-column.mjs src/pages/column/oshiri-shibire-suwarippanashi.astro` PASS。`npm run build` 成功（58ページ生成）。
 - 未対応・次の作業：なし（このレビュー範囲では完了）。
+
+## 2026-10-21 — GitHub Actions（Claude）
+
+- ブランチ：`claude/column-auto`
+- 関連PR：なし（コラム専用ブランチへのコミットのみ。マージはユーザーが実施）
+- 変更内容：
+  - コラム新規記事「デスクワークで手首がこわばる原因は？前腕をゆるめるセルフストレッチ4選」を作成（`authority` 枠・水曜）。
+  - `authority` 枠の既存未対応は sango-youtsu（産後 腰痛 骨盤）1件のみ。対象読者（岐阜市周辺の40〜60代男性・デスクワーク中心・ゴルフをする層）と噛み合わないため、前回までと同じ理由で今回（10回目）も見送り、oshiri-shibire-suwarippanashiと同様の対応方針で新しい authority キーワード「手首 こわばり デスクワーク ストレッチ」をバックログへ追加して執筆した。
+  - 既存の肩こり系（katakori-desk-stretch等）・姿勢系とは部位・検索意図が重ならないよう、「パソコン作業による手首・前腕のこわばり」という別部位に切り口を絞った。対象読者にゴルフをする層が多いことを踏まえ、クラブのグリップ動作との関連にも触れた。しびれ・夜間痛などの症状がある場合は自己判断を避け医療機関へ相談する旨をFAQと本文に明記した。
+  - 本文は結論先出し→なぜデスクワークで手首・前腕がこわばるのか（前腕の筋肉バランスの崩れ）→手首・前腕をゆるめるセルフストレッチ4選→デスクワーク中にできる手軽な習慣→どんな場合に医療機関へ相談すべきか→当店のアプローチの構成。
+  - アイキャッチはOpenAI画像生成（`node scripts/fetch-column-image.mjs --source ai`）で、明るいオフィスでデスクに座り手首・前腕をやさしく伸ばす50代の日本人男性のシーンを生成。
+  - `stretchPoses.ts` 既存ポーズ pose-21（手首・前腕のストレッチ）／pose-26（肩回し）を使用。同一記事内で重複なし。
+  - ポーズ未収載：「手の甲側を伸ばす手首・前腕のストレッチ」「グーパー運動（指の曲げ伸ばし）」はライブラリに該当ポーズがないため挿絵なしで掲載した。
+  - `src/data/columns.ts` の `COLUMNS` 先頭に新記事のメタデータ（slug/heading/desc/date/tags/relatedSymptoms/selfCare）を追加。
+  - `docs/column-backlog.md` に新規セクション「手首・前腕」を追加し `- [x]` で記載（追加理由を注記）。sango-youtsu の行自体は見送りのため `- [ ]` のまま変更していない。
+- 主な変更ファイル：
+  - `src/pages/column/tekubi-kowabari-pc-stretch.astro`（新規）
+  - `public/images/column/tekubi-kowabari-pc-stretch.webp`（新規）
+  - `src/data/columns.ts`
+  - `docs/column-backlog.md`
+- 判断・注意点：sango-youtsu（産後腰痛）は10回連続で選定を見送っている。引き続きオーナー判断での整理を推奨（継続の未対応事項）。前回から持ち越しの不要画像 `public/images/column/golf-hiraku-stretch.webp` も今回のセッションでは削除の承認を得ていないため未削除のまま。ポーズ未収載の2点（手の甲側の手首ストレッチ／グーパー運動）はオーナーがChatGPTで追加生成する場合の候補として連絡事項に残す。
+- 確認結果：`node scripts/yakkihou-ng.mjs src/pages/column/tekubi-kowabari-pc-stretch.astro` PASS、`node scripts/lint-column.mjs src/pages/column/tekubi-kowabari-pc-stretch.astro` PASS。`npm run build` 成功（58→59ページ生成）。
+- 未対応・次の作業：sango-youtsu の扱い方針の確認（継続）。不要画像 `public/images/column/golf-hiraku-stretch.webp` の削除（継続）。`local` 枠は3件（stretch-seitai-chigai／gifu-stretch-senmonten／fuyu-katakori-mukumi）が未対応のまま。`compare` 枠は新規追加分も含め未対応0件。ポーズライブラリへの追加候補：「手の甲側を伸ばす手首・前腕のストレッチ」「グーパー運動（指の曲げ伸ばし）」。
