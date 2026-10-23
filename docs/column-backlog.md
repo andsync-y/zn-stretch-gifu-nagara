@@ -76,6 +76,7 @@
 - [x] massage-gun-stretch-chigai ｜ compare ｜ マッサージガン ストレッチ 違い 使い分け ｜ 使い分け ｜ /method, /symptoms/sports, /symptoms/katakori （2026-10-02公開。compare枠の既存バックログが消化済みのため新規追加。読者ターゲット40〜60代男性に合う題材として選定）
 - [x] kintore-stretch-chigai ｜ compare ｜ 筋トレ ストレッチ 違い 使い分け ｜ 使い分け ｜ /method, /symptoms/sports, /symptoms/shisei （2026-10-09公開。compare枠の既存バックログが消化済みのため新規追加。既存のdynamic-static-chigai（動的/静的ストレッチの使い分け）とは意図を分け、筋トレという別運動カテゴリとの使い分けに絞って執筆。順番の詳細はdynamic-static-chigaiへ内部リンクし重複を回避）
 - [x] walking-stretch-chigai ｜ compare ｜ ウォーキング ストレッチ 違い 使い分け ｜ 使い分け ｜ /method, /symptoms/sports, /symptoms/shisei （2026-10-16公開。compare枠の既存バックログが消化済みのため、kintore-stretch-chigaiと同様の対応方針で新規追加して執筆。既存のdynamic-static-chigai・kintore-stretch-chigaiとは「有酸素運動（ウォーキング）とストレッチ」という別カテゴリの運動同士の比較に絞り、順番の詳細はdynamic-static-chigaiへ内部リンクして重複を回避）
+- [x] yoga-stretch-chigai ｜ compare ｜ ヨガ ストレッチ 違い 使い分け ｜ 使い分け ｜ /method, /symptoms/sports, /symptoms/shisei （2026-10-23公開。compare枠の既存バックログが消化済みのため、walking-stretch-chigaiと同様の対応方針で新規追加して執筆。既存のdynamic-static-chigai・kintore-stretch-chigai・walking-stretch-chigaiとは「ヨガ（呼吸・バランス・一連のポーズ）とストレッチ」という別カテゴリの運動同士の比較に絞って重複を回避）
 
 ### 検討系（`authority`）
 - [x] stretch-hindo-kouka ｜ authority ｜ ストレッチ 頻度 効果 続け方 ｜ 解説 ｜ /symptoms/jiritsu
