@@ -1,0 +1,722 @@
+[
+ {
+  "date": "2026-09-24",
+  "ad_name": "A_kibun_video",
+  "spend": 281,
+  "clicks": 11,
+  "actions_landing_page_view": 6,
+  "actions_offsite_conversion_fb_pixel_lead": 1
+ },
+ {
+  "date": "2026-09-24",
+  "ad_name": "D_hatsujoriku_banner",
+  "spend": 4973,
+  "clicks": 72,
+  "actions_landing_page_view": 50,
+  "actions_offsite_conversion_fb_pixel_lead": 16
+ },
+ {
+  "date": "2026-09-24",
+  "ad_name": "B_golf_image",
+  "spend": 222,
+  "clicks": 2,
+  "actions_landing_page_view": 1,
+  "actions_offsite_conversion_fb_pixel_lead": 0
+ },
+ {
+  "date": "2026-09-25",
+  "ad_name": "A_kibun_video",
+  "spend": 19,
+  "clicks": 0,
+  "actions_landing_page_view": 0,
+  "actions_offsite_conversion_fb_pixel_lead": 0
+ },
+ {
+  "date": "2026-09-25",
+  "ad_name": "D_hatsujoriku_banner",
+  "spend": 6489,
+  "clicks": 91,
+  "actions_landing_page_view": 67,
+  "actions_offsite_conversion_fb_pixel_lead": 13
+ },
+ {
+  "date": "2026-09-25",
+  "ad_name": "B_golf_image",
+  "spend": 313,
+  "clicks": 4,
+  "actions_landing_page_view": 2,
+  "actions_offsite_conversion_fb_pixel_lead": 0
+ },
+ {
+  "date": "2026-09-26",
+  "ad_name": "A_kibun_video",
+  "spend": 375,
+  "clicks": 5,
+  "actions_landing_page_view": 4,
+  "actions_offsite_conversion_fb_pixel_lead": 1
+ },
+ {
+  "date": "2026-09-26",
+  "ad_name": "D_hatsujoriku_banner",
+  "spend": 5772,
+  "clicks": 102,
+  "actions_landing_page_view": 76,
+  "actions_offsite_conversion_fb_pixel_lead": 15
+ },
+ {
+  "date": "2026-09-26",
+  "ad_name": "B_golf_image",
+  "spend": 144,
+  "clicks": 0,
+  "actions_landing_page_view": 0,
+  "actions_offsite_conversion_fb_pixel_lead": 0
+ },
+ {
+  "date": "2026-09-27",
+  "ad_name": "A_kibun_video",
+  "spend": 2438,
+  "clicks": 34,
+  "actions_landing_page_view": 20,
+  "actions_offsite_conversion_fb_pixel_lead": 5
+ },
+ {
+  "date": "2026-09-27",
+  "ad_name": "D_hatsujoriku_banner",
+  "spend": 4637,
+  "clicks": 73,
+  "actions_landing_page_view": 52,
+  "actions_offsite_conversion_fb_pixel_lead": 10
+ },
+ {
+  "date": "2026-09-27",
+  "ad_name": "B_golf_image",
+  "spend": 1083,
+  "clicks": 15,
+  "actions_landing_page_view": 14,
+  "actions_offsite_conversion_fb_pixel_lead": 4
+ },
+ {
+  "date": "2026-09-28",
+  "ad_name": "A_kibun_video",
+  "spend": 1915,
+  "clicks": 26,
+  "actions_landing_page_view": 19,
+  "actions_offsite_conversion_fb_pixel_lead": 8
+ },
+ {
+  "date": "2026-09-28",
+  "ad_name": "D_hatsujoriku_banner",
+  "spend": 2654,
+  "clicks": 44,
+  "actions_landing_page_view": 27,
+  "actions_offsite_conversion_fb_pixel_lead": 4
+ },
+ {
+  "date": "2026-09-28",
+  "ad_name": "B_golf_image",
+  "spend": 798,
+  "clicks": 20,
+  "actions_landing_page_view": 15,
+  "actions_offsite_conversion_fb_pixel_lead": 4
+ },
+ {
+  "date": "2026-09-29",
+  "ad_name": "A_kibun_video",
+  "spend": 1509,
+  "clicks": 23,
+  "actions_landing_page_view": 15,
+  "actions_offsite_conversion_fb_pixel_lead": 0
+ },
+ {
+  "date": "2026-09-29",
+  "ad_name": "D_hatsujoriku_banner",
+  "spend": 5086,
+  "clicks": 64,
+  "actions_landing_page_view": 48,
+  "actions_offsite_conversion_fb_pixel_lead": 11
+ },
+ {
+  "date": "2026-09-29",
+  "ad_name": "B_golf_image",
+  "spend": 530,
+  "clicks": 2,
+  "actions_landing_page_view": 2,
+  "actions_offsite_conversion_fb_pixel_lead": 2
+ },
+ {
+  "date": "2026-09-30",
+  "ad_name": "A_kibun_video",
+  "spend": 2022,
+  "clicks": 33,
+  "actions_landing_page_view": 21,
+  "actions_offsite_conversion_fb_pixel_lead": 5
+ },
+ {
+  "date": "2026-09-30",
+  "ad_name": "D_hatsujoriku_banner",
+  "spend": 4756,
+  "clicks": 67,
+  "actions_landing_page_view": 51,
+  "actions_offsite_conversion_fb_pixel_lead": 16
+ },
+ {
+  "date": "2026-09-30",
+  "ad_name": "B_golf_image",
+  "spend": 238,
+  "clicks": 2,
+  "actions_landing_page_view": 0,
+  "actions_offsite_conversion_fb_pixel_lead": 0
+ },
+ {
+  "date": "2026-10-01",
+  "ad_name": "A_kibun_video",
+  "spend": 1562,
+  "clicks": 19,
+  "actions_landing_page_view": 14,
+  "actions_offsite_conversion_fb_pixel_lead": 3
+ },
+ {
+  "date": "2026-10-01",
+  "ad_name": "D_hatsujoriku_banner",
+  "spend": 6241,
+  "clicks": 82,
+  "actions_landing_page_view": 60,
+  "actions_offsite_conversion_fb_pixel_lead": 7
+ },
+ {
+  "date": "2026-10-01",
+  "ad_name": "B_golf_image",
+  "spend": 142,
+  "clicks": 5,
+  "actions_landing_page_view": 3,
+  "actions_offsite_conversion_fb_pixel_lead": 1
+ },
+ {
+  "date": "2026-10-02",
+  "ad_name": "A_kibun_video",
+  "spend": 2653,
+  "clicks": 35,
+  "actions_landing_page_view": 25,
+  "actions_offsite_conversion_fb_pixel_lead": 6
+ },
+ {
+  "date": "2026-10-02",
+  "ad_name": "D_hatsujoriku_banner",
+  "spend": 3655,
+  "clicks": 54,
+  "actions_landing_page_view": 31,
+  "actions_offsite_conversion_fb_pixel_lead": 10
+ },
+ {
+  "date": "2026-10-02",
+  "ad_name": "B_golf_image",
+  "spend": 464,
+  "clicks": 8,
+  "actions_landing_page_view": 6,
+  "actions_offsite_conversion_fb_pixel_lead": 1
+ },
+ {
+  "date": "2026-10-03",
+  "ad_name": "A_kibun_video",
+  "spend": 2941,
+  "clicks": 41,
+  "actions_landing_page_view": 36,
+  "actions_offsite_conversion_fb_pixel_lead": 6
+ },
+ {
+  "date": "2026-10-03",
+  "ad_name": "D_hatsujoriku_banner",
+  "spend": 3981,
+  "clicks": 60,
+  "actions_landing_page_view": 47,
+  "actions_offsite_conversion_fb_pixel_lead": 15
+ },
+ {
+  "date": "2026-10-03",
+  "ad_name": "B_golf_image",
+  "spend": 1095,
+  "clicks": 16,
+  "actions_landing_page_view": 13,
+  "actions_offsite_conversion_fb_pixel_lead": 2
+ },
+ {
+  "date": "2026-10-04",
+  "ad_name": "A_kibun_video",
+  "spend": 2793,
+  "clicks": 28,
+  "actions_landing_page_view": 18,
+  "actions_offsite_conversion_fb_pixel_lead": 5
+ },
+ {
+  "date": "2026-10-04",
+  "ad_name": "D_hatsujoriku_banner",
+  "spend": 4699,
+  "clicks": 71,
+  "actions_landing_page_view": 51,
+  "actions_offsite_conversion_fb_pixel_lead": 9
+ },
+ {
+  "date": "2026-10-04",
+  "ad_name": "B_golf_image",
+  "spend": 1279,
+  "clicks": 16,
+  "actions_landing_page_view": 9,
+  "actions_offsite_conversion_fb_pixel_lead": 1
+ },
+ {
+  "date": "2026-10-05",
+  "ad_name": "A_kibun_video",
+  "spend": 1868,
+  "clicks": 29,
+  "actions_landing_page_view": 17,
+  "actions_offsite_conversion_fb_pixel_lead": 2
+ },
+ {
+  "date": "2026-10-05",
+  "ad_name": "D_hatsujoriku_banner",
+  "spend": 3263,
+  "clicks": 31,
+  "actions_landing_page_view": 26,
+  "actions_offsite_conversion_fb_pixel_lead": 7
+ },
+ {
+  "date": "2026-10-05",
+  "ad_name": "B_golf_image",
+  "spend": 1118,
+  "clicks": 11,
+  "actions_landing_page_view": 9,
+  "actions_offsite_conversion_fb_pixel_lead": 2
+ },
+ {
+  "date": "2026-10-06",
+  "ad_name": "A_kibun_video",
+  "spend": 1727,
+  "clicks": 28,
+  "actions_landing_page_view": 20,
+  "actions_offsite_conversion_fb_pixel_lead": 2
+ },
+ {
+  "date": "2026-10-06",
+  "ad_name": "D_hatsujoriku_banner",
+  "spend": 3161,
+  "clicks": 43,
+  "actions_landing_page_view": 31,
+  "actions_offsite_conversion_fb_pixel_lead": 6
+ },
+ {
+  "date": "2026-10-06",
+  "ad_name": "B_golf_image",
+  "spend": 1021,
+  "clicks": 13,
+  "actions_landing_page_view": 13,
+  "actions_offsite_conversion_fb_pixel_lead": 4
+ },
+ {
+  "date": "2026-10-07",
+  "ad_name": "A_kibun_video",
+  "spend": 2544,
+  "clicks": 31,
+  "actions_landing_page_view": 23,
+  "actions_offsite_conversion_fb_pixel_lead": 5
+ },
+ {
+  "date": "2026-10-07",
+  "ad_name": "D_hatsujoriku_banner",
+  "spend": 3966,
+  "clicks": 64,
+  "actions_landing_page_view": 48,
+  "actions_offsite_conversion_fb_pixel_lead": 14
+ },
+ {
+  "date": "2026-10-07",
+  "ad_name": "B_golf_image",
+  "spend": 1019,
+  "clicks": 7,
+  "actions_landing_page_view": 5,
+  "actions_offsite_conversion_fb_pixel_lead": 0
+ },
+ {
+  "date": "2026-10-08",
+  "ad_name": "A_kibun_video",
+  "spend": 1994,
+  "clicks": 34,
+  "actions_landing_page_view": 24,
+  "actions_offsite_conversion_fb_pixel_lead": 9
+ },
+ {
+  "date": "2026-10-08",
+  "ad_name": "D_hatsujoriku_banner",
+  "spend": 4743,
+  "clicks": 79,
+  "actions_landing_page_view": 56,
+  "actions_offsite_conversion_fb_pixel_lead": 20
+ },
+ {
+  "date": "2026-10-08",
+  "ad_name": "B_golf_image",
+  "spend": 753,
+  "clicks": 9,
+  "actions_landing_page_view": 7,
+  "actions_offsite_conversion_fb_pixel_lead": 2
+ },
+ {
+  "date": "2026-10-09",
+  "ad_name": "A_kibun_video",
+  "spend": 2390,
+  "clicks": 31,
+  "actions_landing_page_view": 23,
+  "actions_offsite_conversion_fb_pixel_lead": 6
+ },
+ {
+  "date": "2026-10-09",
+  "ad_name": "D_hatsujoriku_banner",
+  "spend": 4456,
+  "clicks": 60,
+  "actions_landing_page_view": 41,
+  "actions_offsite_conversion_fb_pixel_lead": 13
+ },
+ {
+  "date": "2026-10-09",
+  "ad_name": "B_golf_image",
+  "spend": 809,
+  "clicks": 9,
+  "actions_landing_page_view": 6,
+  "actions_offsite_conversion_fb_pixel_lead": 0
+ },
+ {
+  "date": "2026-10-10",
+  "ad_name": "A_kibun_video",
+  "spend": 2344,
+  "clicks": 30,
+  "actions_landing_page_view": 20,
+  "actions_offsite_conversion_fb_pixel_lead": 6
+ },
+ {
+  "date": "2026-10-10",
+  "ad_name": "D_hatsujoriku_banner",
+  "spend": 3831,
+  "clicks": 53,
+  "actions_landing_page_view": 36,
+  "actions_offsite_conversion_fb_pixel_lead": 12
+ },
+ {
+  "date": "2026-10-10",
+  "ad_name": "B_golf_image",
+  "spend": 617,
+  "clicks": 5,
+  "actions_landing_page_view": 2,
+  "actions_offsite_conversion_fb_pixel_lead": 0
+ },
+ {
+  "date": "2026-10-11",
+  "ad_name": "A_kibun_video",
+  "spend": 2135,
+  "clicks": 24,
+  "actions_landing_page_view": 14,
+  "actions_offsite_conversion_fb_pixel_lead": 3
+ },
+ {
+  "date": "2026-10-11",
+  "ad_name": "D_hatsujoriku_banner",
+  "spend": 5123,
+  "clicks": 68,
+  "actions_landing_page_view": 42,
+  "actions_offsite_conversion_fb_pixel_lead": 12
+ },
+ {
+  "date": "2026-10-11",
+  "ad_name": "B_golf_image",
+  "spend": 759,
+  "clicks": 5,
+  "actions_landing_page_view": 4,
+  "actions_offsite_conversion_fb_pixel_lead": 2
+ },
+ {
+  "date": "2026-10-12",
+  "ad_name": "A_kibun_video",
+  "spend": 2191,
+  "clicks": 21,
+  "actions_landing_page_view": 9,
+  "actions_offsite_conversion_fb_pixel_lead": 3
+ },
+ {
+  "date": "2026-10-12",
+  "ad_name": "D_hatsujoriku_banner",
+  "spend": 5169,
+  "clicks": 78,
+  "actions_landing_page_view": 58,
+  "actions_offsite_conversion_fb_pixel_lead": 8
+ },
+ {
+  "date": "2026-10-12",
+  "ad_name": "B_golf_image",
+  "spend": 853,
+  "clicks": 12,
+  "actions_landing_page_view": 10,
+  "actions_offsite_conversion_fb_pixel_lead": 3
+ },
+ {
+  "date": "2026-10-13",
+  "ad_name": "A_kibun_video",
+  "spend": 1616,
+  "clicks": 24,
+  "actions_landing_page_view": 18,
+  "actions_offsite_conversion_fb_pixel_lead": 3
+ },
+ {
+  "date": "2026-10-13",
+  "ad_name": "D_hatsujoriku_banner",
+  "spend": 4039,
+  "clicks": 60,
+  "actions_landing_page_view": 41,
+  "actions_offsite_conversion_fb_pixel_lead": 11
+ },
+ {
+  "date": "2026-10-13",
+  "ad_name": "B_golf_image",
+  "spend": 740,
+  "clicks": 6,
+  "actions_landing_page_view": 4,
+  "actions_offsite_conversion_fb_pixel_lead": 0
+ },
+ {
+  "date": "2026-10-14",
+  "ad_name": "A_kibun_video",
+  "spend": 1226,
+  "clicks": 11,
+  "actions_landing_page_view": 4,
+  "actions_offsite_conversion_fb_pixel_lead": 1
+ },
+ {
+  "date": "2026-10-14",
+  "ad_name": "D_hatsujoriku_banner",
+  "spend": 4724,
+  "clicks": 63,
+  "actions_landing_page_view": 47,
+  "actions_offsite_conversion_fb_pixel_lead": 8
+ },
+ {
+  "date": "2026-10-14",
+  "ad_name": "B_golf_image",
+  "spend": 755,
+  "clicks": 9,
+  "actions_landing_page_view": 9,
+  "actions_offsite_conversion_fb_pixel_lead": 2
+ },
+ {
+  "date": "2026-10-15",
+  "ad_name": "A_kibun_video",
+  "spend": 1453,
+  "clicks": 23,
+  "actions_landing_page_view": 15,
+  "actions_offsite_conversion_fb_pixel_lead": 2
+ },
+ {
+  "date": "2026-10-15",
+  "ad_name": "D_hatsujoriku_banner",
+  "spend": 3476,
+  "clicks": 39,
+  "actions_landing_page_view": 22,
+  "actions_offsite_conversion_fb_pixel_lead": 6
+ },
+ {
+  "date": "2026-10-15",
+  "ad_name": "B_golf_image",
+  "spend": 657,
+  "clicks": 4,
+  "actions_landing_page_view": 3,
+  "actions_offsite_conversion_fb_pixel_lead": 0
+ },
+ {
+  "date": "2026-10-16",
+  "ad_name": "A_kibun_video",
+  "spend": 2259,
+  "clicks": 33,
+  "actions_landing_page_view": 26,
+  "actions_offsite_conversion_fb_pixel_lead": 7
+ },
+ {
+  "date": "2026-10-16",
+  "ad_name": "D_hatsujoriku_banner",
+  "spend": 4881,
+  "clicks": 58,
+  "actions_landing_page_view": 44,
+  "actions_offsite_conversion_fb_pixel_lead": 8
+ },
+ {
+  "date": "2026-10-16",
+  "ad_name": "B_golf_image",
+  "spend": 951,
+  "clicks": 8,
+  "actions_landing_page_view": 6,
+  "actions_offsite_conversion_fb_pixel_lead": 1
+ },
+ {
+  "date": "2026-10-17",
+  "ad_name": "A_kibun_video",
+  "spend": 2117,
+  "clicks": 28,
+  "actions_landing_page_view": 22,
+  "actions_offsite_conversion_fb_pixel_lead": 4
+ },
+ {
+  "date": "2026-10-17",
+  "ad_name": "D_hatsujoriku_banner",
+  "spend": 4757,
+  "clicks": 56,
+  "actions_landing_page_view": 43,
+  "actions_offsite_conversion_fb_pixel_lead": 10
+ },
+ {
+  "date": "2026-10-17",
+  "ad_name": "B_golf_image",
+  "spend": 509,
+  "clicks": 2,
+  "actions_landing_page_view": 2,
+  "actions_offsite_conversion_fb_pixel_lead": 0
+ },
+ {
+  "date": "2026-10-18",
+  "ad_name": "A_kibun_video",
+  "spend": 2822,
+  "clicks": 34,
+  "actions_landing_page_view": 23,
+  "actions_offsite_conversion_fb_pixel_lead": 6
+ },
+ {
+  "date": "2026-10-18",
+  "ad_name": "D_hatsujoriku_banner",
+  "spend": 4740,
+  "clicks": 75,
+  "actions_landing_page_view": 53,
+  "actions_offsite_conversion_fb_pixel_lead": 9
+ },
+ {
+  "date": "2026-10-18",
+  "ad_name": "B_golf_image",
+  "spend": 792,
+  "clicks": 9,
+  "actions_landing_page_view": 5,
+  "actions_offsite_conversion_fb_pixel_lead": 1
+ },
+ {
+  "date": "2026-10-19",
+  "ad_name": "A_kibun_video",
+  "spend": 1883,
+  "clicks": 16,
+  "actions_landing_page_view": 12,
+  "actions_offsite_conversion_fb_pixel_lead": 1
+ },
+ {
+  "date": "2026-10-19",
+  "ad_name": "D_hatsujoriku_banner",
+  "spend": 3914,
+  "clicks": 66,
+  "actions_landing_page_view": 38,
+  "actions_offsite_conversion_fb_pixel_lead": 10
+ },
+ {
+  "date": "2026-10-19",
+  "ad_name": "B_golf_image",
+  "spend": 723,
+  "clicks": 9,
+  "actions_landing_page_view": 8,
+  "actions_offsite_conversion_fb_pixel_lead": 3
+ },
+ {
+  "date": "2026-10-20",
+  "ad_name": "A_kibun_video",
+  "spend": 1814,
+  "clicks": 22,
+  "actions_landing_page_view": 11,
+  "actions_offsite_conversion_fb_pixel_lead": 3
+ },
+ {
+  "date": "2026-10-20",
+  "ad_name": "D_hatsujoriku_banner",
+  "spend": 4656,
+  "clicks": 55,
+  "actions_landing_page_view": 37,
+  "actions_offsite_conversion_fb_pixel_lead": 4
+ },
+ {
+  "date": "2026-10-20",
+  "ad_name": "B_golf_image",
+  "spend": 951,
+  "clicks": 12,
+  "actions_landing_page_view": 10,
+  "actions_offsite_conversion_fb_pixel_lead": 3
+ },
+ {
+  "date": "2026-10-21",
+  "ad_name": "A_kibun_video",
+  "spend": 1773,
+  "clicks": 28,
+  "actions_landing_page_view": 14,
+  "actions_offsite_conversion_fb_pixel_lead": 6
+ },
+ {
+  "date": "2026-10-21",
+  "ad_name": "D_hatsujoriku_banner",
+  "spend": 5259,
+  "clicks": 72,
+  "actions_landing_page_view": 43,
+  "actions_offsite_conversion_fb_pixel_lead": 7
+ },
+ {
+  "date": "2026-10-21",
+  "ad_name": "B_golf_image",
+  "spend": 985,
+  "clicks": 9,
+  "actions_landing_page_view": 8,
+  "actions_offsite_conversion_fb_pixel_lead": 2
+ },
+ {
+  "date": "2026-10-22",
+  "ad_name": "A_kibun_video",
+  "spend": 1586,
+  "clicks": 18,
+  "actions_landing_page_view": 14,
+  "actions_offsite_conversion_fb_pixel_lead": 4
+ },
+ {
+  "date": "2026-10-22",
+  "ad_name": "D_hatsujoriku_banner",
+  "spend": 4753,
+  "clicks": 52,
+  "actions_landing_page_view": 43,
+  "actions_offsite_conversion_fb_pixel_lead": 8
+ },
+ {
+  "date": "2026-10-22",
+  "ad_name": "B_golf_image",
+  "spend": 578,
+  "clicks": 4,
+  "actions_landing_page_view": 3,
+  "actions_offsite_conversion_fb_pixel_lead": 1
+ },
+ {
+  "date": "2026-10-23",
+  "ad_name": "A_kibun_video",
+  "spend": 1632,
+  "clicks": 22,
+  "actions_landing_page_view": 18,
+  "actions_offsite_conversion_fb_pixel_lead": 6
+ },
+ {
+  "date": "2026-10-23",
+  "ad_name": "D_hatsujoriku_banner",
+  "spend": 4393,
+  "clicks": 45,
+  "actions_landing_page_view": 28,
+  "actions_offsite_conversion_fb_pixel_lead": 7
+ },
+ {
+  "date": "2026-10-23",
+  "ad_name": "B_golf_image",
+  "spend": 789,
+  "clicks": 13,
+  "actions_landing_page_view": 8,
+  "actions_offsite_conversion_fb_pixel_lead": 3
+ }
+]
