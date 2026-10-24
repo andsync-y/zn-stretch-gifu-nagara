@@ -4140,3 +4140,13 @@ Coworkの**スケジュールタスクにはリポジトリを紐付ける欄が
 - 判断・注意点：`local` 枠は3件（stretch-seitai-chigai／gifu-stretch-senmonten／fuyu-katakori-mukumi）が未対応のまま。前回から持ち越しの不要画像 `public/images/column/golf-hiraku-stretch.webp` の削除は未承認のため未対応。
 - 確認結果：`node scripts/yakkihou-ng.mjs src/pages/column/yoga-stretch-chigai.astro` PASS、`node scripts/lint-column.mjs src/pages/column/yoga-stretch-chigai.astro` PASS。`npm run build` 成功（59→60ページ生成）。
 - 未対応・次の作業：sango-youtsu の扱い方針の確認（継続）。不要画像 `public/images/column/golf-hiraku-stretch.webp` の削除（継続）。`local` 枠は3件が未対応のまま。`compare` 枠は新規追加分も含め未対応0件。
+
+## 2026-10-25 01:49 JST — Claude Code
+
+- ブランチ：`claude/zenkara-gifu-nagara-seo-ukz0er`（既定のブランチへ直接）
+- 関連PR：なし
+- 変更内容：bit-kikaku/repository-template のモデルの使い分けの設定を、既存のファイルを上書きせずに足した。Claude Code は会話を Sonnet、大事な場面だけ Opus に相談（advisor）、調べものは Haiku（Explore）、文脈が20万を超えたら自動で圧縮。Codex は AGENTS.md と .codex/ に同じ考えの設定。
+- 主な変更ファイル：`CLAUDE.md`（末尾に「Advisor の使い方」）、`AGENTS.md`（末尾に「サブエージェントの使い方」）、`.claude/settings.json`・`.claude/agents/Explore.md`・`.codex/config.toml`・`.codex/agents/explorer.toml`・`.codex/agents/reviewer.toml`（新規）
+- 判断・注意点：サイトのコードには触れていない。
+- 確認結果：`.claude/settings.json` が JSON として読めることを確認。ビルドに関わるファイルの変更は無いため、ビルドは回していない。
+- 未対応・次の作業：なし
