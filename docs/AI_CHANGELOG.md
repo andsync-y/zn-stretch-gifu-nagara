@@ -4150,3 +4150,25 @@ Coworkの**スケジュールタスクにはリポジトリを紐付ける欄が
 - 判断・注意点：サイトのコードには触れていない。
 - 確認結果：`.claude/settings.json` が JSON として読めることを確認。ビルドに関わるファイルの変更は無いため、ビルドは回していない。
 - 未対応・次の作業：なし
+
+## 2026-10-26 — GitHub Actions（Claude）
+
+- ブランチ：`claude/column-auto`
+- 関連PR：なし（コラム専用ブランチへのコミットのみ。マージはユーザーが実施）
+- 変更内容：
+  - コラム新規記事「寝違えで首が痛いときのストレッチはいつから？対処法と注意点」を作成（`authority` 枠・月曜）。
+  - `authority` 枠の既存未対応は sango-youtsu（産後 腰痛 骨盤）1件のみ。対象読者（岐阜市周辺の40〜60代男性・デスクワーク中心・ゴルフをする層）と噛み合わないため、これまでと同じ理由で今回も見送り、tekubi-kowabari-pc-stretchと同様の対応方針で新しい authority キーワード「寝違え 首 ストレッチ いつから」をバックログへ追加して執筆した。
+  - 既存の首こり系（smartphone-kubi／ganseihiro-kubikori／pc-kubikori-reset）はデスクワークによる慢性的な首こりが対象だが、本記事は「朝起きたときの急性の首の痛み（寝違え）」という別の検索意図に絞った。ぎっくり腰後の記事（gikkurigoshi-after）・四十肩の記事（shijukata-chuui）と同様、注意喚起型（やってはいけないこと・再開の目安・受診目安）の構成にし、断定的な「いつ治るか」ではなく「いつから動かし始めてよいか」の目安として解説した。
+  - 本文は結論先出し→なぜ寝違えが起こるのか→直後にやってはいけないこと→ストレッチ再開の目安（2つ）→痛みが落ち着いてから行えるセルフケア3選→医療機関への相談目安→当店のアプローチの構成。
+  - アイキャッチはOpenAI画像生成（gpt-image-1）がAPI側で `model does not exist` エラーのため生成できず（2回試行し同一エラーを確認。前回10-23公開分までは同スクリプトで生成成功しているため原因未確認。APIキー・権限・モデル提供状況のいずれかが変わった可能性がある）、フリー素材（Openverse／CC0）にフォールバックして明るい朝の寝室の窓辺の写真を使用（人物なしの静物カットのため海外人物の写りこみ懸念なし）。`imageCredit` に出典を設定済み。
+  - `stretchPoses.ts` 既存ポーズ pose-20（あご引きエクササイズ）／pose-17（肩甲骨引き寄せ）／pose-30（深呼吸ストレッチ）を使用。首の回旋・側屈を伴うポーズ（pose-19等）は急性期の注意喚起記事の趣旨に合わないため使用しなかった。同一記事内で重複なし。ポーズ未収載の動きはなし。
+  - `src/data/columns.ts` の `COLUMNS` 先頭に新記事のメタデータ（slug/heading/desc/date/tags/relatedSymptoms/selfCare）を追加。
+  - `docs/column-backlog.md` に新規セクション「首・寝違え」を追加し `- [x]` で記載（追加理由を注記）。sango-youtsu の行自体は見送りのため `- [ ]` のまま変更していない。
+- 主な変更ファイル：
+  - `src/pages/column/nechigae-stretch-itsukara.astro`（新規）
+  - `public/images/column/nechigae-stretch-itsukara.webp`（新規）
+  - `src/data/columns.ts`
+  - `docs/column-backlog.md`
+- 判断・注意点：sango-youtsu（産後腰痛）は11回連続で選定を見送っている。引き続きオーナー判断での整理を推奨（継続の未対応事項）。OpenAI画像生成APIが `gpt-image-1` モデル不明エラーを返している（原因未確認。前回10-23公開分までは同スクリプトで成功していたため、APIキー・権限・モデル提供状況いずれかの変化が疑われる）。人物を含むアイキャッチが必要な記事では今後も生成できない可能性があり、オーナー確認が必要。持ち越しの不要画像 `public/images/column/golf-hiraku-stretch.webp` の削除は未承認のため未対応のまま。
+- 確認結果：`node scripts/yakkihou-ng.mjs src/pages/column/nechigae-stretch-itsukara.astro` PASS、`node scripts/lint-column.mjs src/pages/column/nechigae-stretch-itsukara.astro` PASS。`npm run build` 成功（60→61ページ生成）。
+- 未対応・次の作業：sango-youtsu の扱い方針の確認（継続）。不要画像 `public/images/column/golf-hiraku-stretch.webp` の削除（継続）。OpenAI画像生成APIの `gpt-image-1` モデルエラーの原因確認・復旧（新規・要オーナー確認）。`local` 枠は3件（stretch-seitai-chigai／gifu-stretch-senmonten／fuyu-katakori-mukumi）が未対応のまま。`compare` 枠は未対応0件。

@@ -100,6 +100,9 @@
 ### 手首・前腕（既存と意図を分ける）
 - [x] tekubi-kowabari-pc-stretch ｜ authority ｜ 手首 こわばり デスクワーク ストレッチ ｜ 悩み特化 ｜ /symptoms/katakori, /symptoms/sports, /symptoms/shisei （2026-10-21公開。authority枠の既存未対応がsango-youtsu（産後腰痛）のみで対象読者40〜60代男性と噛み合わないため、oshiri-shibire-suwarippanashiと同様の理由でバックログへ新規追加して執筆。既存の肩こり・姿勢系とは「パソコン作業による手首・前腕のこわばり」という別部位・別検索意図に絞り、ゴルフのグリップとの関連にも触れた）
 
+### 首・寝違え（既存と意図を分ける）
+- [x] nechigae-stretch-itsukara ｜ authority ｜ 寝違え 首 ストレッチ いつから ｜ 注意喚起 ｜ /symptoms/kubi-ganseihiro, /symptoms/shisei, /symptoms/katakori （2026-10-26公開。authority枠の既存未対応がsango-youtsu（産後腰痛）のみで対象読者40〜60代男性と噛み合わないため、tekubi-kowabari-pc-stretchと同様の理由でバックログへ新規追加して執筆。既存のsmartphone-kubi／ganseihiro-kubikori／pc-kubikori-resetは慢性的な首こりが対象だが、本記事は「朝起きたときの急性の首の痛み」という別の検索意図に絞り、gikkurigoshi-after・shijukata-chuuiと同様の注意喚起型の構成にした）
+
 ### 地域（local型・流入が育ってから着手）
 - [ ] stretch-seitai-chigai ｜ local ｜ ストレッチ 整体 マッサージ 違い 岐阜 ｜ 比較検討 ｜ /menu, /symptoms/katakori
 - [ ] gifu-stretch-senmonten ｜ local ｜ 岐阜市 ストレッチ 専門店 選び方 ｜ ローカル指名 ｜ /access, /staff
