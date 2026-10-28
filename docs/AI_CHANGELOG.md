@@ -4172,3 +4172,25 @@ Coworkの**スケジュールタスクにはリポジトリを紐付ける欄が
 - 判断・注意点：sango-youtsu（産後腰痛）は11回連続で選定を見送っている。引き続きオーナー判断での整理を推奨（継続の未対応事項）。OpenAI画像生成APIが `gpt-image-1` モデル不明エラーを返している（原因未確認。前回10-23公開分までは同スクリプトで成功していたため、APIキー・権限・モデル提供状況いずれかの変化が疑われる）。人物を含むアイキャッチが必要な記事では今後も生成できない可能性があり、オーナー確認が必要。持ち越しの不要画像 `public/images/column/golf-hiraku-stretch.webp` の削除は未承認のため未対応のまま。
 - 確認結果：`node scripts/yakkihou-ng.mjs src/pages/column/nechigae-stretch-itsukara.astro` PASS、`node scripts/lint-column.mjs src/pages/column/nechigae-stretch-itsukara.astro` PASS。`npm run build` 成功（60→61ページ生成）。
 - 未対応・次の作業：sango-youtsu の扱い方針の確認（継続）。不要画像 `public/images/column/golf-hiraku-stretch.webp` の削除（継続）。OpenAI画像生成APIの `gpt-image-1` モデルエラーの原因確認・復旧（新規・要オーナー確認）。`local` 枠は3件（stretch-seitai-chigai／gifu-stretch-senmonten／fuyu-katakori-mukumi）が未対応のまま。`compare` 枠は未対応0件。
+
+## 2026-10-28 13:02 JST — GitHub Actions（Claude）
+
+- ブランチ：`claude/column-auto`
+- 関連PR：なし（コラム専用ブランチへのコミットのみ。マージはユーザーが実施）
+- 変更内容：
+  - コラム新規記事「朝一歩目にかかとが痛いのはなぜ？足裏をゆるめるセルフストレッチ4選」を作成（`authority` 枠・水曜）。
+  - `authority` 枠の既存未対応は sango-youtsu（産後 腰痛 骨盤）1件のみ。対象読者（岐阜市周辺の40〜60代男性・デスクワーク中心・ゴルフをする層）と噛み合わないため、これまでと同じ理由で今回も見送り、nechigae-stretch-itsukaraと同様の対応方針で新しい authority キーワード「朝 一歩目 かかと 痛い」をバックログへ追加して執筆した。
+  - 最初に「ゴルフ 腰痛 予防 ストレッチ」を検討したが、advisorとの相談で既存のgolf-stretch-routine（翌日に張りを残しにくくするクールダウンを謳う）・golf-hikyori-stretch（回旋・飛距離）とカニバリゼーションの懸念が強いと判断し見送った。代わりに未着手の部位である「足裏・かかと」に変更。既存のkomuragaeri-yobou-stretch（こむら返り）・mukumi-yugata-ashi（夕方のむくみ）・hiza-itami-kaidan-stretch（ひざ）とは、「朝起きて最初の一歩でのかかとの痛み（足底筋膜・ふくらはぎの朝のこわばり）」という別の検索意図に絞り、gikkurigoshi-after・nechigae-stretch-itsukaraと同様の注意喚起型（やってはいけないこと寄りではなく、受診目安を明示する構成）にした。ゴルフで18ホール歩く読者層を意識しFAQにも1問入れ、/symptoms/sportsへ導線を張った。
+  - 本文は結論先出し→なぜ朝の一歩目だけ痛むのか（足底筋膜とふくらはぎの朝のこわばり）→起きる前にベッドの中でできるセルフケア2選→日中・入浴後にできるストレッチ2選→医療機関へ相談する目安→当店のアプローチの構成。「足底筋膜」という部位名は説明のみに使用し、診断・治療を断定する表現は使っていない。
+  - アイキャッチ画像：まずAI生成（`node scripts/fetch-column-image.mjs --source ai`）を試したが、前回10-26公開分と同じ `gpt-image-1 model does not exist` エラーで失敗（未解決が継続）。フリー素材（Openverse／CC0）にフォールバックし、朝の光が差し込む明るい寝室の静物カット（人物なし）を採用。`imageCredit` に出典を設定済み。
+  - `stretchPoses.ts` 既存ポーズ pose-32（足首回し）／pose-04（ふくらはぎのストレッチ・壁）／pose-15（足首のストレッチ）を使用。「足裏・足指のストレッチ（指を甲側へ反らせる動き）」はライブラリに該当ポーズがないため挿絵なしで掲載した（ポーズ未収載）。同一記事内で画像の重複なし。
+  - `src/data/columns.ts` の `COLUMNS` 先頭に新記事のメタデータ（slug/heading/desc/date/tags/relatedSymptoms/selfCare）を追加。
+  - `docs/column-backlog.md` に新規セクション「足裏・かかと」を追加し `- [x]` で記載（追加理由を注記）。sango-youtsu の行自体は見送りのため `- [ ]` のまま変更していない。
+- 主な変更ファイル：
+  - `src/pages/column/kakato-asa-itami-stretch.astro`（新規）
+  - `public/images/column/kakato-asa-itami-stretch.webp`（新規）
+  - `src/data/columns.ts`
+  - `docs/column-backlog.md`
+- 判断・注意点：sango-youtsu（産後腰痛）は12回連続で選定を見送っている。引き続きオーナー判断での整理を推奨（継続の未対応事項）。OpenAI画像生成APIの `gpt-image-1` モデルエラーは前回（10-26）に続き再現しており、原因未解決のまま（要オーナー確認）。持ち越しの不要画像 `public/images/column/golf-hiraku-stretch.webp` の削除は未承認のため未対応のまま。ポーズ未収載: 足裏・足指を甲側へ反らせるストレッチ（既存候補の「手の甲側の手首ストレッチ」「グーパー運動」と合わせて3件が未収載のまま）。
+- 確認結果：`node scripts/yakkihou-ng.mjs src/pages/column/kakato-asa-itami-stretch.astro` PASS、`node scripts/lint-column.mjs src/pages/column/kakato-asa-itami-stretch.astro` PASS。`npm run build` 成功（61→62ページ生成）。
+- 未対応・次の作業：sango-youtsu の扱い方針の確認（継続）。不要画像 `public/images/column/golf-hiraku-stretch.webp` の削除（継続）。OpenAI画像生成APIの `gpt-image-1` モデルエラーの原因確認・復旧（継続・2回連続で再現）。ポーズライブラリへの追加候補3件の確認（継続）。`local` 枠は3件（stretch-seitai-chigai／gifu-stretch-senmonten／fuyu-katakori-mukumi）が未対応のまま。`compare` 枠は未対応0件。
