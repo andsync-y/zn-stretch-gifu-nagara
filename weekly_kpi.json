@@ -1,0 +1,180 @@
+{
+  "fetched_at": "2026-11-02T01:17:41.151Z",
+  "mode": "parse",
+  "source": "system.zn-stretch.com",
+  "week_start": "2026-10-26",
+  "week_end": "2026-11-01",
+  "login": {
+    "attempted": true,
+    "success": true,
+    "url": "https://system.zn-stretch.com/"
+  },
+  "status": "ok",
+  "metrics": {
+    "sales_total": 117840,
+    "total_visits": 26,
+    "new_visits": 11,
+    "new_ticket_sales": 0,
+    "renewal_ticket_sales": 1,
+    "next_reservations": 12,
+    "shimei_count": 11,
+    "new_churn": 11,
+    "renewal_base": 2,
+    "by_staff": {
+      "headers": [
+        "来店数",
+        "売上(指名抜き)",
+        "指名バック",
+        "指名数",
+        "指名率",
+        "新規来店数",
+        "新規販売数",
+        "新規販売率",
+        "更新販売数",
+        "更新販売率",
+        "次回予約",
+        "次回予約率"
+      ],
+      "rows": [
+        [
+          6,
+          40540,
+          9000,
+          3,
+          50,
+          3,
+          0,
+          0,
+          1,
+          100,
+          1,
+          16.7
+        ],
+        [
+          5,
+          32900,
+          6000,
+          2,
+          40,
+          3,
+          0,
+          0,
+          0,
+          0,
+          4,
+          80
+        ],
+        [
+          5,
+          11500,
+          6000,
+          2,
+          40,
+          3,
+          0,
+          0,
+          0,
+          0,
+          2,
+          40
+        ],
+        [
+          9,
+          9800,
+          12000,
+          4,
+          44.4,
+          2,
+          0,
+          0,
+          0,
+          0,
+          5,
+          55.6
+        ],
+        [
+          1,
+          0,
+          "—",
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "by_channel": {
+      "headers": [
+        "年月",
+        "店舗名",
+        "来店経路",
+        "新規来店数",
+        "回数券販売数",
+        "販売率"
+      ],
+      "rows": [
+        [
+          "2026年10月",
+          "岐阜長良店",
+          "—",
+          6,
+          0,
+          0
+        ],
+        [
+          "2026年10月",
+          "岐阜長良店",
+          "Googleマップ",
+          2,
+          0,
+          0
+        ],
+        [
+          "2026年10月",
+          "岐阜長良店",
+          "インスタ広告（初上陸）",
+          1,
+          0,
+          0
+        ],
+        [
+          "2026年10月",
+          "岐阜長良店",
+          "インスタ広告（動画）",
+          1,
+          0,
+          0
+        ],
+        [
+          "2026年10月",
+          "岐阜長良店",
+          "ホットペッパービューティー",
+          1,
+          0,
+          0
+        ]
+      ]
+    },
+    "new_ticket_rate": 0,
+    "renewal_ticket_rate": 50,
+    "next_reservation_rate": 46.2,
+    "new_churn_rate": 100
+  },
+  "days_covered": {},
+  "period_labels": {
+    "dashboard_week": "2026年11月 + 2026年10月"
+  },
+  "fills_applied": {
+    "dashboard_week": {
+      "#dashFromInput": "2026-10-26",
+      "#dashToInput": "2026-11-01"
+    }
+  },
+  "missing": [],
+  "rows_summed": 2
+}
