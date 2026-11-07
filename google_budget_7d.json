@@ -1,0 +1,58 @@
+[
+ {
+  "date": "2026-10-31",
+  "campaign": "集客_検索_2026.07",
+  "campaign_budget": 3000,
+  "search_impression_share": 0.1424,
+  "search_budget_lost_impression_share": 0,
+  "search_rank_lost_impression_share": 0.8576
+ },
+ {
+  "date": "2026-11-01",
+  "campaign": "集客_検索_2026.07",
+  "campaign_budget": 3000,
+  "search_impression_share": 0.1679,
+  "search_budget_lost_impression_share": 0.2194,
+  "search_rank_lost_impression_share": 0.6127
+ },
+ {
+  "date": "2026-11-02",
+  "campaign": "集客_検索_2026.07",
+  "campaign_budget": 3000,
+  "search_impression_share": 0.1358,
+  "search_budget_lost_impression_share": 0.1228,
+  "search_rank_lost_impression_share": 0.7414
+ },
+ {
+  "date": "2026-11-03",
+  "campaign": "集客_検索_2026.07",
+  "campaign_budget": 3000,
+  "search_impression_share": 0.1611,
+  "search_budget_lost_impression_share": 0.0513,
+  "search_rank_lost_impression_share": 0.7877
+ },
+ {
+  "date": "2026-11-04",
+  "campaign": "集客_検索_2026.07",
+  "campaign_budget": 3000,
+  "search_impression_share": 0.1975,
+  "search_budget_lost_impression_share": 0.0851,
+  "search_rank_lost_impression_share": 0.7174
+ },
+ {
+  "date": "2026-11-05",
+  "campaign": "集客_検索_2026.07",
+  "campaign_budget": 3000,
+  "search_impression_share": 0.1821,
+  "search_budget_lost_impression_share": 0.2948,
+  "search_rank_lost_impression_share": 0.5231
+ },
+ {
+  "date": "2026-11-06",
+  "campaign": "集客_検索_2026.07",
+  "campaign_budget": 3000,
+  "search_impression_share": 0.166,
+  "search_budget_lost_impression_share": 0.0793,
+  "search_rank_lost_impression_share": 0.7547
+ }
+]

@@ -1,0 +1,51 @@
+[
+ {
+  "date": "2026-10-31",
+  "campaign": "集客_検索_2026.07",
+  "spend": 2190,
+  "clicks": 22,
+  "conversions": 1
+ },
+ {
+  "date": "2026-11-01",
+  "campaign": "集客_検索_2026.07",
+  "spend": 3320,
+  "clicks": 32,
+  "conversions": 5
+ },
+ {
+  "date": "2026-11-02",
+  "campaign": "集客_検索_2026.07",
+  "spend": 3198,
+  "clicks": 29,
+  "conversions": 3
+ },
+ {
+  "date": "2026-11-03",
+  "campaign": "集客_検索_2026.07",
+  "spend": 2936,
+  "clicks": 25,
+  "conversions": 2
+ },
+ {
+  "date": "2026-11-04",
+  "campaign": "集客_検索_2026.07",
+  "spend": 2931,
+  "clicks": 23,
+  "conversions": 1
+ },
+ {
+  "date": "2026-11-05",
+  "campaign": "集客_検索_2026.07",
+  "spend": 3092,
+  "clicks": 27,
+  "conversions": 0
+ },
+ {
+  "date": "2026-11-06",
+  "campaign": "集客_検索_2026.07",
+  "spend": 3033,
+  "clicks": 25,
+  "conversions": 0
+ }
+]
