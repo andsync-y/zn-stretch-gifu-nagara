@@ -4740,3 +4740,14 @@ Routine `trig_011s1n1bAjEfo66ibb4qU9G3` が発火。9/7に停止したGoogle検�
   - `docs/AI_CHANGELOG.md`
 - 確認結果：`npm run build` 成功（55ページ）。`node scripts/yakkihou-ng.mjs src/pages/recruit.astro` EXIT=0、広告文 EXIT=0、設計ドキュメント EXIT=0。広告文は見出し12本すべて30幅以内・説明文4本すべて90幅以内（スクリプトで計測）。ビルド成果物でJSON-LD 4ブロック（店舗／パンくず／JobPosting／FAQPage 5問）がすべてパース可能。固定バーは `/recruit` のみ非表示で、トップ・メニュー・コラムには残っていることを確認。
 - 未対応・次の作業：**採用ページの本番反映（マージ）**。採用キャンペーンの出稿承認。集客キャンペーンへの除外KW追加の承認。本部への商標確認メール送信（下書きは設計ドキュメント内）。FC契約第4条3項について社労士確認。Indeed求人票への「土日勤務歓迎」追記。出稿後は10/24の中間チェックに採用キャンペーンを追加する。
+
+## 2026-11-17 — Claude Code
+
+- 作業者：Claude Code（定期タスク）
+- 変更内容：
+  - Instagram投稿ドラフトを2本作成し、Driveの00_Inboxに保存した（11/13「セルフとプロの違い」元ネタ `jitaku-vs-pro`／11/17「寒い朝の寝違え」元ネタ `nechigae-stretch-itsukara`）。どちらも `scripts/yakkihou-ng.mjs` EXIT=0、画像はコラムのアイキャッチ（優先1）。
+  - `docs/ads-ops-guardrails.md`：Google広告が11/15時点でも配信中であることを記録（現金請求の推定 約¥24,900）。
+- 判断・注意点：停止依頼の通知は11/12で最後にすると伝えているため、今回は通知を送っていない。Windsor MCPからは引き続き店舗アカウントに届かず、こちらから停止できない。
+- 主な変更ファイル：`docs/ads-ops-guardrails.md`、`docs/AI_CHANGELOG.md`
+- 確認結果：ドキュメントのみの変更のためビルドは不要。
+- 未対応・次の作業：Google広告キャンペーン `24029290016` の停止（オーナー操作待ち）。停止日と現金支出の確定額を記録する。
