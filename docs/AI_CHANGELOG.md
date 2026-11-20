@@ -4751,3 +4751,12 @@ Routine `trig_011s1n1bAjEfo66ibb4qU9G3` が発火。9/7に停止したGoogle検�
 - 主な変更ファイル：`docs/ads-ops-guardrails.md`、`docs/AI_CHANGELOG.md`
 - 確認結果：ドキュメントのみの変更のためビルドは不要。
 - 未対応・次の作業：Google広告キャンペーン `24029290016` の停止（オーナー操作待ち）。停止日と現金支出の確定額を記録する。
+
+## 2026-11-20 — Claude Code
+
+- 作業者：Claude Code（定期タスク）
+- 変更内容：Instagram投稿ドラフト「マッサージガンとストレッチの違い」（元ネタ `massage-gun-stretch-chigai`）をDriveの00_Inboxに保存。`docs/ads-ops-guardrails.md` にGoogle広告が11/18時点でも配信中であることを記録（現金請求の推定 約¥34,500）。
+- 判断・注意点：停止依頼の通知は重ねて送っていない。こちらから停止できない状態は続いている。
+- 主な変更ファイル：`docs/ads-ops-guardrails.md`、`docs/AI_CHANGELOG.md`
+- 確認結果：下書きは `scripts/yakkihou-ng.mjs` EXIT=0。ドキュメントのみの変更のためビルド不要。
+- 未対応・次の作業：Google広告キャンペーン `24029290016` の停止（オーナー操作待ち）。
