@@ -4760,3 +4760,12 @@ Routine `trig_011s1n1bAjEfo66ibb4qU9G3` が発火。9/7に停止したGoogle検�
 - 主な変更ファイル：`docs/ads-ops-guardrails.md`、`docs/AI_CHANGELOG.md`
 - 確認結果：下書きは `scripts/yakkihou-ng.mjs` EXIT=0。ドキュメントのみの変更のためビルド不要。
 - 未対応・次の作業：Google広告キャンペーン `24029290016` の停止（オーナー操作待ち）。
+
+## 2026-11-24 — Claude Code
+
+- 作業者：Claude Code（定期タスク）
+- 変更内容：Instagram投稿ドラフト「手首と前腕のこわばり」（元ネタ `tekubi-kowabari-pc-stretch`）をDriveの00_Inboxに保存。`docs/ads-ops-guardrails.md` に、Google広告の消化が11/20途中で途切れ、11/21以降は0であることを記録（現金請求の推定 約¥39,800）。
+- 判断・注意点：消化データからは停止したように見えるが、管理画面で状態を確認していないため「停止完了」とは書いていない。
+- 主な変更ファイル：`docs/ads-ops-guardrails.md`、`docs/AI_CHANGELOG.md`
+- 確認結果：下書きは `scripts/yakkihou-ng.mjs` EXIT=0。ドキュメントのみの変更のためビルド不要。
+- 未対応・次の作業：Google停止の事実と日付をオーナーに確認し、`docs/ops-change-log.md` に記録する。現金請求額は請求書で確定させる。
