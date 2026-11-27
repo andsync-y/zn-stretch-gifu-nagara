@@ -4769,3 +4769,12 @@ Routine `trig_011s1n1bAjEfo66ibb4qU9G3` が発火。9/7に停止したGoogle検�
 - 主な変更ファイル：`docs/ads-ops-guardrails.md`、`docs/AI_CHANGELOG.md`
 - 確認結果：下書きは `scripts/yakkihou-ng.mjs` EXIT=0。ドキュメントのみの変更のためビルド不要。
 - 未対応・次の作業：Google停止の事実と日付をオーナーに確認し、`docs/ops-change-log.md` に記録する。現金請求額は請求書で確定させる。
+
+## 2026-11-27 — Claude Code
+
+- 作業者：Claude Code（定期タスク）
+- 変更内容：Instagram投稿ドラフト「ヨガとストレッチの違い」（元ネタ `yoga-stretch-chigai`）をDriveの00_Inboxに保存。`docs/ads-ops-guardrails.md` にGoogle広告の消化が11/25まで0のままであることを追記。
+- 判断・注意点：管理画面での停止確認はしていないため「停止完了」とは書いていない。
+- 主な変更ファイル：`docs/ads-ops-guardrails.md`、`docs/AI_CHANGELOG.md`
+- 確認結果：下書きは `scripts/yakkihou-ng.mjs` EXIT=0。ドキュメントのみの変更のためビルド不要。
+- 未対応・次の作業：Google停止日をオーナーに確認して `docs/ops-change-log.md` に記録。Instagram試用（2週間で4本投稿）の判定は、実際に投稿された本数をオーナーに確認してから行う。
