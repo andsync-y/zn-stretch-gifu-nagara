@@ -1,0 +1,128 @@
+[
+ {
+  "date": "2026-11-21",
+  "ad_name": "A_kibun_video",
+  "ad_id": "120251114564490015",
+  "spend": 1980,
+  "clicks": 25,
+  "actions_landing_page_view": 14,
+  "actions_offsite_conversion_fb_pixel_lead": 5
+ },
+ {
+  "date": "2026-11-21",
+  "ad_name": "D_hatsujoriku_banner",
+  "ad_id": "120251114574070015",
+  "spend": 3276,
+  "clicks": 39,
+  "actions_landing_page_view": 28,
+  "actions_offsite_conversion_fb_pixel_lead": 9
+ },
+ {
+  "date": "2026-11-22",
+  "ad_name": "A_kibun_video",
+  "ad_id": "120251114564490015",
+  "spend": 2014,
+  "clicks": 36,
+  "actions_landing_page_view": 24,
+  "actions_offsite_conversion_fb_pixel_lead": 7
+ },
+ {
+  "date": "2026-11-22",
+  "ad_name": "D_hatsujoriku_banner",
+  "ad_id": "120251114574070015",
+  "spend": 4539,
+  "clicks": 40,
+  "actions_landing_page_view": 27,
+  "actions_offsite_conversion_fb_pixel_lead": 7
+ },
+ {
+  "date": "2026-11-23",
+  "ad_name": "A_kibun_video",
+  "ad_id": "120251114564490015",
+  "spend": 1448,
+  "clicks": 14,
+  "actions_landing_page_view": 7,
+  "actions_offsite_conversion_fb_pixel_lead": 0
+ },
+ {
+  "date": "2026-11-23",
+  "ad_name": "D_hatsujoriku_banner",
+  "ad_id": "120251114574070015",
+  "spend": 4373,
+  "clicks": 58,
+  "actions_landing_page_view": 37,
+  "actions_offsite_conversion_fb_pixel_lead": 9
+ },
+ {
+  "date": "2026-11-24",
+  "ad_name": "A_kibun_video",
+  "ad_id": "120251114564490015",
+  "spend": 1550,
+  "clicks": 22,
+  "actions_landing_page_view": 13,
+  "actions_offsite_conversion_fb_pixel_lead": 4
+ },
+ {
+  "date": "2026-11-24",
+  "ad_name": "D_hatsujoriku_banner",
+  "ad_id": "120251114574070015",
+  "spend": 4155,
+  "clicks": 37,
+  "actions_landing_page_view": 22,
+  "actions_offsite_conversion_fb_pixel_lead": 4
+ },
+ {
+  "date": "2026-11-25",
+  "ad_name": "A_kibun_video",
+  "ad_id": "120251114564490015",
+  "spend": 1793,
+  "clicks": 21,
+  "actions_landing_page_view": 9,
+  "actions_offsite_conversion_fb_pixel_lead": 7
+ },
+ {
+  "date": "2026-11-25",
+  "ad_name": "D_hatsujoriku_banner",
+  "ad_id": "120251114574070015",
+  "spend": 3652,
+  "clicks": 43,
+  "actions_landing_page_view": 31,
+  "actions_offsite_conversion_fb_pixel_lead": 5
+ },
+ {
+  "date": "2026-11-26",
+  "ad_name": "A_kibun_video",
+  "ad_id": "120251114564490015",
+  "spend": 1871,
+  "clicks": 25,
+  "actions_landing_page_view": 13,
+  "actions_offsite_conversion_fb_pixel_lead": 2
+ },
+ {
+  "date": "2026-11-26",
+  "ad_name": "D_hatsujoriku_banner",
+  "ad_id": "120251114574070015",
+  "spend": 4073,
+  "clicks": 30,
+  "actions_landing_page_view": 23,
+  "actions_offsite_conversion_fb_pixel_lead": 7
+ },
+ {
+  "date": "2026-11-27",
+  "ad_name": "A_kibun_video",
+  "ad_id": "120251114564490015",
+  "spend": 1984,
+  "clicks": 16,
+  "actions_landing_page_view": 9,
+  "actions_offsite_conversion_fb_pixel_lead": 1
+ },
+ {
+  "date": "2026-11-27",
+  "ad_name": "D_hatsujoriku_banner",
+  "ad_id": "120251114574070015",
+  "spend": 3550,
+  "clicks": 46,
+  "actions_landing_page_view": 33,
+  "actions_offsite_conversion_fb_pixel_lead": 6
+ }
+]
